@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: '/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -13,8 +13,8 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Unauthorized: user session expired or missing
-      if (window.location.pathname !== '/auth') {
-        // Option to redirect or notify
+      if (typeof window !== 'undefined' && window.location.pathname !== '/auth' && window.location.pathname !== '/login') {
+        // Handled reactively by AuthProvider/ProtectedRoute
       }
     }
     return Promise.reject(error);

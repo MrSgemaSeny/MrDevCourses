@@ -14,43 +14,76 @@ export interface Course {
   title: string;
   description?: string;
   slug: string;
-  isActive: boolean;
+  active: boolean;
   createdAt: string;
-  lessonsCount?: number;
-  isEnrolled?: boolean;
+  enrolled?: boolean;
+  enrolledAt?: string;
+  totalLessons?: number;
 }
 
-export interface Lesson {
+export interface LessonSummary {
   id: number;
   courseId: number;
+  title: string;
+  dayNumber: number;
+  sortOrder: number;
+  accessible: boolean;
+  opensAt: string;
+  completed: boolean;
+  completedAt?: string;
+}
+
+export interface LessonDetail {
+  id: number;
+  courseId: number;
+  courseTitle: string;
+  courseSlug: string;
   title: string;
   content?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder: number;
-  createdAt: string;
-  isAccessible?: boolean;
-  opensAt?: string;
-  isCompleted?: boolean;
+  accessible: boolean;
+  opensAt: string;
+  completed: boolean;
+  completedAt?: string;
+  prevLessonId?: number;
+  nextLessonId?: number;
 }
 
 export interface Enrollment {
   id: number;
   userId: number;
+  userEmail: string;
+  userName?: string;
   courseId: number;
+  courseTitle: string;
+  courseSlug: string;
   enrolledAt: string;
 }
 
-export interface CourseProgressSummary {
+export interface CourseProgress {
   courseId: number;
   courseTitle: string;
+  courseDescription?: string;
   courseSlug: string;
   enrolledAt: string;
   currentDay: number;
   completedCount: number;
   totalUnlocked: number;
   totalLessons: number;
+  progressPercentage: number;
   nextUnlockAt?: string;
+}
+
+export interface Student {
+  id: number;
+  email: string;
+  name?: string;
+  avatarUrl?: string;
+  role: UserRole;
+  createdAt: string;
+  enrollments: Enrollment[];
 }
 
 export interface ApiResponse<T> {
