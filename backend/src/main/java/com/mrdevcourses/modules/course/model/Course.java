@@ -45,10 +45,30 @@ public class Course {
     @Builder.Default
     private Instant createdAt = Instant.now();
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean getIsActive() {
+        return active;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.active = isActive;
+    }
+
     @PrePersist
     protected void onCreate() {
         if (this.createdAt == null) {
             this.createdAt = Instant.now();
+        }
+    }
+
+    public static class CourseBuilder {
+        public CourseBuilder isActive(boolean isActive) {
+            this.active$value = isActive;
+            this.active$set = true;
+            return this;
         }
     }
 }

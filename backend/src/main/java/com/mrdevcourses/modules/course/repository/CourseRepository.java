@@ -10,7 +10,13 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findByActiveTrueOrderByCreatedAtDesc();
+    default List<Course> findByIsActiveTrueOrderByCreatedAtDesc() {
+        return findByActiveTrueOrderByCreatedAtDesc();
+    }
     Optional<Course> findBySlug(String slug);
     Optional<Course> findBySlugAndActiveTrue(String slug);
+    default Optional<Course> findBySlugAndIsActiveTrue(String slug) {
+        return findBySlugAndActiveTrue(slug);
+    }
     boolean existsBySlug(String slug);
 }

@@ -1,7 +1,7 @@
 package com.mrdevcourses.modules.lesson.service;
 
 import com.mrdevcourses.common.exception.AccessDeniedException;
-import com.mrdevcourses.common.exception.ApiException;
+import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
@@ -49,6 +49,9 @@ class LessonServiceDripTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private AuditService auditService;
 
     @InjectMocks
     private LessonService lessonService;
@@ -115,7 +118,6 @@ class LessonServiceDripTest {
 
     @Test
     void getLessonsForCourse_Day1ShouldBeAccessibleImmediatelyOnEnrollment() {
-        // Enrolled 5 minutes ago
         Instant enrolledAt = Instant.now().minus(Duration.ofMinutes(5));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 
@@ -135,7 +137,6 @@ class LessonServiceDripTest {
 
     @Test
     void getLessonsForCourse_After2Days_Day1AndDay2ShouldBeAccessible() {
-        // Enrolled 2 days ago
         Instant enrolledAt = Instant.now().minus(Duration.ofDays(2));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 
@@ -148,12 +149,11 @@ class LessonServiceDripTest {
 
         assertThat(results.get(0).isAccessible()).isTrue();
         assertThat(results.get(1).isAccessible()).isTrue();
-        assertThat(results.get(2).isAccessible()).isFalse(); // Day 5 requires 4 days
+        assertThat(results.get(2).isAccessible()).isFalse();
     }
 
     @Test
     void getLessonDetail_WhenLessonLocked_ShouldThrowAccessDeniedException() {
-        // Enrolled 1 hour ago -> Day 2 is locked
         Instant enrolledAt = Instant.now().minus(Duration.ofHours(1));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 
@@ -181,7 +181,7 @@ class LessonServiceDripTest {
     }
 
     @Test
-    void completeLesson_WhenAccessible_ShouldSaveProgress() {
+    void completeLesson_WhenAccessible_ShouldSaveProgressAndStreak() {
         Instant enrolledAt = Instant.now().minus(Duration.ofDays(1));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 

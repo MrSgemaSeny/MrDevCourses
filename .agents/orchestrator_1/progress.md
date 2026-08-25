@@ -1,7 +1,7 @@
 # Progress — MrDevCourses Project Orchestration
 
 ## Current Status
-Last visited: 2026-08-25T10:15:25Z
+Last visited: 2026-08-25T10:20:10Z
 
 ## Iteration Status
 Current iteration: 2 / 32
@@ -17,4 +17,4 @@ Current iteration: 2 / 32
 - [ ] Milestone 6 (M6): E2E Verification, Hardening & Second Brain Protocol
 
 ## Active Tasks
-- Worker M2 (`1bc3fa47-fd01-4a84-b338-6e32d8ddb625`) implementing Milestone 2: Courses & Enrollment Engine (backend & frontend).
+- Worker M2 (`1bc3fa47-fd01-4a84-b338-6e32d8ddb625`) implementing backend and frontend courses and enrollment modules.

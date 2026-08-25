@@ -3,6 +3,7 @@ package com.mrdevcourses.modules.lesson.service;
 import com.mrdevcourses.common.exception.AccessDeniedException;
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
+import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
@@ -24,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,6 +42,7 @@ public class LessonService {
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final UserRepository userRepository;
+    private final AuditService auditService;
 
     @Transactional(readOnly = true)
     public List<LessonSummaryDto> getLessonsForCourse(Long courseId, Long userId, Role userRole) {
@@ -206,6 +210,9 @@ public class LessonService {
                     .build();
             progress = lessonProgressRepository.save(progress);
             log.info("User {} marked lesson {} ({}) as complete", userId, lessonId, lesson.getTitle());
+
+            updateUserStreak(user);
+            auditService.logAction(userId, "LESSON_COMPLETE", "Lesson", lessonId, "Completed lesson: " + lesson.getTitle(), null);
         }
 
         Instant opensAt = Instant.now();
@@ -227,5 +234,23 @@ public class LessonService {
             return enrolledAt;
         }
         return enrolledAt.plus(Duration.ofDays(dayNumber - 1L));
+    }
+
+    private void updateUserStreak(User user) {
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
+        LocalDate lastActive = user.getLastActiveDate();
+
+        if (lastActive == null) {
+            user.setCurrentStreak(1);
+            user.setLongestStreak(Math.max(user.getLongestStreak(), 1));
+        } else if (lastActive.equals(today.minusDays(1))) {
+            int newStreak = user.getCurrentStreak() + 1;
+            user.setCurrentStreak(newStreak);
+            user.setLongestStreak(Math.max(user.getLongestStreak(), newStreak));
+        } else if (!lastActive.equals(today)) {
+            user.setCurrentStreak(1);
+        }
+        user.setLastActiveDate(today);
+        userRepository.save(user);
     }
 }

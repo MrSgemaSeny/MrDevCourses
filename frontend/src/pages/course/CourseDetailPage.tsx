@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
 import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { useAuth } from '@/app/providers/AuthProvider';
-import { Lock, Play, CheckCircle2, Calendar, Clock, ArrowRight } from 'lucide-react';
+import { VisualRoadmap } from '@/widgets/roadmap/VisualRoadmap';
+import { CertificateModal } from '@/widgets/certificate/CertificateModal';
+import { Lock, Play, Calendar, Clock, ArrowRight, Award } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const [showCertificate, setShowCertificate] = useState(false);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -57,6 +60,7 @@ export const CourseDetailPage: React.FC = () => {
   }
 
   const firstAccessibleLesson = lessons.find((l) => l.accessible);
+  const isCourseFinished = lessons.length > 0 && lessons.every((l) => l.completed);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -91,10 +95,16 @@ export const CourseDetailPage: React.FC = () => {
 
           {course.enrolled ? (
             <div className="flex items-center gap-3">
-              <span className="text-xs text-emerald-400 font-medium flex items-center gap-1">
-                <CheckCircle2 className="w-4 h-4" />
-                Вы уже записаны
-              </span>
+              {isCourseFinished && (
+                <button
+                  onClick={() => setShowCertificate(true)}
+                  className="px-4 py-2 bg-emerald-950 border border-emerald-700 text-emerald-300 text-xs font-semibold rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Сертификат</span>
+                </button>
+              )}
+
               {firstAccessibleLesson && (
                 <Link
                   to={`/courses/${course.id}/lessons/${firstAccessibleLesson.id}`}
@@ -118,111 +128,55 @@ export const CourseDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Syllabus / Lessons list */}
-      <div className="p-8 rounded-xl bg-[rgba(24,24,27,0.7)] border border-[#27272a] backdrop-blur-md">
-        <h2 className="text-xl font-bold text-white mb-2">Программа курса</h2>
-        <p className="text-xs text-zinc-400 mb-6">
-          {course.enrolled
-            ? 'Список уроков и статус их открытия согласно вашему персональному Drip-графику.'
-            : 'Запишитесь на курс, чтобы открыть первый день и активировать график открытия уроков.'}
-        </p>
+      {/* Visual Roadmap or Syllabus */}
+      {course.enrolled && lessons.length > 0 ? (
+        <div className="space-y-6">
+          <VisualRoadmap courseId={course.id} lessons={lessons} />
+        </div>
+      ) : (
+        <div className="p-8 rounded-xl bg-[rgba(24,24,27,0.7)] border border-[#27272a] backdrop-blur-md">
+          <h2 className="text-xl font-bold text-white mb-2">Программа курса</h2>
+          <p className="text-xs text-zinc-400 mb-6">
+            Запишитесь на курс, чтобы открыть первый день и активировать график открытия уроков.
+          </p>
 
-        {lessonsLoading ? (
-          <div className="py-8 text-center text-zinc-500 text-xs">Загрузка уроков...</div>
-        ) : course.enrolled && lessons.length > 0 ? (
-          <div className="space-y-3">
-            {lessons.map((lesson) => {
-              const formattedDate = new Date(lesson.opensAt).toLocaleDateString('ru-RU', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              });
-
-              return (
+          {lessonsLoading ? (
+            <div className="py-8 text-center text-zinc-500 text-xs">Загрузка уроков...</div>
+          ) : (
+            <div className="space-y-3">
+              {[1, 2, 3, 4, 5].map((day) => (
                 <div
-                  key={lesson.id}
-                  className={`p-4 rounded-lg border flex items-center justify-between transition-all ${
-                    lesson.accessible
-                      ? 'bg-zinc-900/80 border-zinc-700/80 hover:border-zinc-500'
-                      : 'bg-zinc-950/40 border-zinc-900 text-zinc-500'
-                  }`}
+                  key={day}
+                  className="p-4 rounded-lg bg-zinc-900/40 border border-zinc-800/80 flex items-center justify-between text-zinc-400"
                 >
-                  <div className="flex items-center gap-3.5">
-                    <div
-                      className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-mono font-bold ${
-                        lesson.completed
-                          ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                          : lesson.accessible
-                          ? 'bg-zinc-800 text-zinc-200 border border-zinc-700'
-                          : 'bg-zinc-900 text-zinc-600 border border-zinc-900'
-                      }`}
-                    >
-                      {lesson.completed ? <CheckCircle2 className="w-4 h-4" /> : `Д${lesson.dayNumber}`}
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md bg-zinc-800/60 border border-zinc-700/60 flex items-center justify-center text-xs font-mono text-zinc-300">
+                      Д{day}
                     </div>
-
                     <div>
-                      <h3 className={`text-sm font-semibold ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
-                        {lesson.title}
-                      </h3>
-                      <p className="text-[11px] text-zinc-400">
-                        {lesson.accessible ? (
-                          lesson.completed ? (
-                            <span className="text-emerald-400">Пройден</span>
-                          ) : (
-                            <span className="text-zinc-300">Доступен сейчас</span>
-                          )
-                        ) : (
-                          <span>Откроется: {formattedDate}</span>
-                        )}
-                      </p>
+                      <h3 className="text-sm font-medium text-zinc-300">День {day}: Практический модуль</h3>
+                      <p className="text-[11px] text-zinc-400">Открывается на {day} день обучения</p>
                     </div>
                   </div>
+                  <div className="flex items-center gap-1 text-xs text-zinc-400">
+                    <Lock className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-                  <div>
-                    {lesson.accessible ? (
-                      <Link
-                        to={`/courses/${course.id}/lessons/${lesson.id}`}
-                        className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-md flex items-center gap-1.5 transition-colors"
-                      >
-                        <Play className="w-3 h-3 fill-current" />
-                        <span>Смотреть</span>
-                      </Link>
-                    ) : (
-                      <div className="flex items-center gap-1.5 text-xs text-zinc-400 px-3 py-1.5">
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Заблокирован</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((day) => (
-              <div
-                key={day}
-                className="p-4 rounded-lg bg-zinc-900/40 border border-zinc-800/80 flex items-center justify-between text-zinc-400"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-md bg-zinc-800/60 border border-zinc-700/60 flex items-center justify-center text-xs font-mono text-zinc-300">
-                    Д{day}
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-zinc-300">День {day}: Практический модуль</h3>
-                    <p className="text-[11px] text-zinc-400">Открывается на {day} день обучения</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-xs text-zinc-400">
-                  <Lock className="w-3.5 h-3.5" />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* Certificate Modal */}
+      {user && (
+        <CertificateModal
+          isOpen={showCertificate}
+          onClose={() => setShowCertificate(false)}
+          studentName={user.name || user.email}
+          courseTitle={course.title}
+        />
+      )}
     </div>
   );
 };

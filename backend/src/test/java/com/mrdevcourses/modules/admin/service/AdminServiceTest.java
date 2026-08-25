@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.admin.service;
 
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.modules.admin.dto.StudentDto;
+import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
@@ -40,6 +41,9 @@ class AdminServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private AuditService auditService;
 
     @InjectMocks
     private AdminService adminService;

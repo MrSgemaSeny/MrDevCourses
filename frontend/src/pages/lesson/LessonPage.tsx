@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lessonApi } from '@/entities/lesson/api/lessonApi';
+import { MarkdownViewer } from '@/shared/ui/MarkdownViewer';
 import {
   Play,
   CheckCircle2,
@@ -140,9 +141,9 @@ export const LessonPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Lesson Text Content */}
-            <div className="pt-4 border-t border-[#27272a] text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap font-normal">
-              {lesson.content || 'Материалы к уроку отсутствуют.'}
+            {/* Structured Markdown Content */}
+            <div className="pt-4 border-t border-[#27272a]">
+              <MarkdownViewer content={lesson.content} />
             </div>
 
             {/* Prev / Next navigation */}

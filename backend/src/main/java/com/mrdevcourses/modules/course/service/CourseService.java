@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.course.service;
 
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
+import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.course.dto.CourseDto;
@@ -30,6 +31,7 @@ public class CourseService {
     private final EnrollmentRepository enrollmentRepository;
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
+    private final AuditService auditService;
 
     @Transactional(readOnly = true)
     public List<CourseDto> getActiveCourses(Optional<Long> currentUserId) {
@@ -43,13 +45,6 @@ public class CourseService {
     public CourseDto getCourseBySlug(String slug, Optional<Long> currentUserId) {
         Course course = courseRepository.findBySlugAndActiveTrue(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "slug", slug));
-        return toDto(course, currentUserId);
-    }
-
-    @Transactional(readOnly = true)
-    public CourseDto getCourseById(Long courseId, Optional<Long> currentUserId) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
         return toDto(course, currentUserId);
     }
 
@@ -67,29 +62,31 @@ public class CourseService {
 
         Optional<Enrollment> existing = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
         if (existing.isPresent()) {
-            Enrollment enrollment = existing.get();
-            return toEnrollmentDto(enrollment);
+            return toEnrollmentDto(existing.get());
         }
 
-        Enrollment newEnrollment = Enrollment.builder()
+        Enrollment enrollment = Enrollment.builder()
                 .user(user)
                 .course(course)
                 .enrolledAt(Instant.now())
                 .build();
 
-        Enrollment saved = enrollmentRepository.save(newEnrollment);
-        log.info("User ID {} successfully enrolled into course '{}' (ID: {})", userId, course.getTitle(), courseId);
+        Enrollment saved = enrollmentRepository.save(enrollment);
+        log.info("User {} enrolled in course {} at {}", userId, courseId, saved.getEnrolledAt());
+
+        auditService.logAction(userId, "COURSE_ENROLL", "Course", courseId, "Enrolled into: " + course.getTitle(), null);
+
         return toEnrollmentDto(saved);
     }
 
     private CourseDto toDto(Course course, Optional<Long> currentUserId) {
-        boolean isEnrolled = false;
+        boolean enrolled = false;
         Instant enrolledAt = null;
 
         if (currentUserId.isPresent()) {
             Optional<Enrollment> enrollment = enrollmentRepository.findByUserIdAndCourseId(currentUserId.get(), course.getId());
             if (enrollment.isPresent()) {
-                isEnrolled = true;
+                enrolled = true;
                 enrolledAt = enrollment.get().getEnrolledAt();
             }
         }
@@ -103,7 +100,7 @@ public class CourseService {
                 .slug(course.getSlug())
                 .active(course.isActive())
                 .createdAt(course.getCreatedAt())
-                .enrolled(isEnrolled)
+                .enrolled(enrolled)
                 .enrolledAt(enrolledAt)
                 .totalLessons(totalLessons)
                 .build();

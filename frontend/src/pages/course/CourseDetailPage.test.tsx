@@ -20,7 +20,7 @@ vi.mock('@/app/providers/AuthProvider', () => ({
 }));
 
 describe('CourseDetailPage Component', () => {
-  it('renders enrolled course syllabus', async () => {
+  it('renders enrolled course syllabus and roadmap', async () => {
     vi.spyOn(courseApiModule.courseApi, 'getCourseBySlug').mockResolvedValue({
       id: 1,
       title: 'Вайбкодинг с нуля',
@@ -57,6 +57,6 @@ describe('CourseDetailPage Component', () => {
 
     expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
     expect(await screen.findByText('День 1: Настройка окружения')).toBeInTheDocument();
-    expect(screen.getByText(/Смотреть/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Открыть урок/i).length).toBeGreaterThan(0);
   });
 });

@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     Optional<Enrollment> findByUserIdAndCourseId(Long userId, Long courseId);
     boolean existsByUserIdAndCourseId(Long userId, Long courseId);
+    List<Enrollment> findAllByUserIdOrderByEnrolledAtDesc(Long userId);
+    long countByCourseId(Long courseId);
 
     @Query("SELECT e FROM Enrollment e JOIN FETCH e.course WHERE e.user.id = :userId ORDER BY e.enrolledAt DESC")
     List<Enrollment> findAllByUserIdWithCourse(@Param("userId") Long userId);

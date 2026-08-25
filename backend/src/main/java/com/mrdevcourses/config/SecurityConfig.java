@@ -1,5 +1,6 @@
 package com.mrdevcourses.config;
 
+import com.mrdevcourses.common.security.SecurityHeadersFilter;
 import com.mrdevcourses.modules.auth.security.JwtAuthenticationFilter;
 import com.mrdevcourses.modules.auth.security.OAuth2AuthenticationFailureHandler;
 import com.mrdevcourses.modules.auth.security.OAuth2AuthenticationSuccessHandler;
@@ -30,6 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final SecurityHeadersFilter securityHeadersFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
@@ -69,6 +71,7 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
+                .addFilterBefore(securityHeadersFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

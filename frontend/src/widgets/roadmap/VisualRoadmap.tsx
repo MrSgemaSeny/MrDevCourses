@@ -1,0 +1,121 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LessonSummary } from '@/shared/types';
+import { CountdownTimer } from '@/shared/ui/CountdownTimer';
+import { CheckCircle2, Play, Lock } from 'lucide-react';
+
+interface VisualRoadmapProps {
+  courseId: number;
+  lessons: LessonSummary[];
+  currentLessonId?: number;
+}
+
+export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
+  courseId,
+  lessons,
+  currentLessonId,
+}) => {
+  const navigate = useNavigate();
+
+  if (!lessons || lessons.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="py-6 px-4 rounded-xl bg-[rgba(24,24,27,0.8)] border border-[#27272a] backdrop-blur-md">
+      <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#27272a]">
+        <div>
+          <h3 className="text-sm font-bold text-white tracking-tight">Интерактивный Roadmap курса</h3>
+          <p className="text-xs text-zinc-400">1 день — 1 урок. График последовательного открытия.</p>
+        </div>
+        <span className="text-xs font-mono text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+          {lessons.filter((l) => l.completed).length} / {lessons.length} завершено
+        </span>
+      </div>
+
+      {/* Connected Nodes Roadmap */}
+      <div className="relative">
+        <div className="space-y-4">
+          {lessons.map((lesson, idx) => {
+            const isCurrent = lesson.id === currentLessonId;
+            const isLast = idx === lessons.length - 1;
+
+            return (
+              <div key={lesson.id} className="relative flex items-start gap-4">
+                {/* Connecting vertical line */}
+                {!isLast && (
+                  <div
+                    className={`absolute left-4.5 top-9 bottom-[-16px] w-0.5 ${
+                      lesson.completed ? 'bg-emerald-500/60' : 'bg-zinc-800'
+                    }`}
+                  />
+                )}
+
+                {/* Node circle */}
+                <div
+                  onClick={() => {
+                    if (lesson.accessible) {
+                      navigate(`/courses/${courseId}/lessons/${lesson.id}`);
+                    }
+                  }}
+                  className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                    lesson.completed
+                      ? 'bg-emerald-950 border border-emerald-500 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                      : isCurrent
+                      ? 'bg-white text-black border-2 border-white shadow-[0_0_16px_rgba(255,255,255,0.4)] animate-pulse'
+                      : lesson.accessible
+                      ? 'bg-zinc-800 border border-zinc-600 text-white hover:border-white'
+                      : 'bg-zinc-950 border border-zinc-800 text-zinc-600 cursor-not-allowed'
+                  }`}
+                >
+                  {lesson.completed ? (
+                    <CheckCircle2 className="w-4 h-4" />
+                  ) : lesson.accessible ? (
+                    <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                  ) : (
+                    <Lock className="w-3.5 h-3.5" />
+                  )}
+                </div>
+
+                {/* Node details */}
+                <div
+                  onClick={() => {
+                    if (lesson.accessible) {
+                      navigate(`/courses/${courseId}/lessons/${lesson.id}`);
+                    }
+                  }}
+                  className={`flex-1 p-3.5 rounded-lg border transition-all ${
+                    isCurrent
+                      ? 'bg-zinc-800/90 border-zinc-500 text-white'
+                      : lesson.accessible
+                      ? 'bg-zinc-900/60 border-zinc-800/90 hover:border-zinc-700 text-zinc-200 cursor-pointer'
+                      : 'bg-zinc-950/40 border-zinc-900 text-zinc-500 cursor-not-allowed'
+                  }`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-zinc-400">День {lesson.dayNumber}</span>
+                      <h4 className={`text-xs sm:text-sm font-semibold ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
+                        {lesson.title}
+                      </h4>
+                    </div>
+
+                    {lesson.completed ? (
+                      <span className="text-[11px] text-emerald-400 font-medium self-start sm:self-auto">Завершен</span>
+                    ) : lesson.accessible ? (
+                      <span className="text-[11px] text-zinc-300 font-medium self-start sm:self-auto">Открыть урок</span>
+                    ) : (
+                      <div className="self-start sm:self-auto">
+                        <CountdownTimer targetDate={lesson.opensAt} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};

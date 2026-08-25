@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -33,30 +34,38 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column
     private String name;
 
-    @Column(name = "avatar_url", length = 500)
+    @Column(name = "avatar_url")
     private String avatarUrl;
 
     @Column(name = "google_id", unique = true)
     private String googleId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     @Builder.Default
     private Role role = Role.STUDENT;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "current_streak", nullable = false)
     @Builder.Default
-    private Instant createdAt = Instant.now();
+    private int currentStreak = 0;
+
+    @Column(name = "longest_streak", nullable = false)
+    @Builder.Default
+    private int longestStreak = 0;
+
+    @Column(name = "last_active_date")
+    private LocalDate lastActiveDate;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = Instant.now();
-        }
-        if (this.role == null) {
-            this.role = Role.STUDENT;
+        if (createdAt == null) {
+            createdAt = Instant.now();
         }
     }
 }

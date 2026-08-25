@@ -11,7 +11,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseDto {
+public class CourseDetailDto {
     private Long id;
     private String title;
     private String description;

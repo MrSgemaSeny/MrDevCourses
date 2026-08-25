@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.course.service;
 
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
+import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
@@ -44,6 +45,9 @@ class CourseServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private AuditService auditService;
 
     @InjectMocks
     private CourseService courseService;
