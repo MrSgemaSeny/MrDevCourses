@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Award, CheckCircle2, Download, X } from 'lucide-react';
 
 interface CertificateModalProps {
@@ -18,6 +18,19 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   completedAt,
   certificateCode = 'MRDEV-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const formattedDate = completedAt
@@ -33,7 +46,12 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="certificate-title"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+    >
       <div className="relative w-full max-w-2xl p-8 rounded-2xl bg-[#09090b] border-2 border-zinc-700 shadow-2xl overflow-hidden">
         {/* Decorative corner glows */}
         <div className="absolute -top-20 -left-20 w-48 h-48 bg-zinc-700/20 rounded-full blur-3xl pointer-events-none" />
@@ -42,6 +60,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         {/* Close button */}
         <button
           onClick={onClose}
+          aria-label="Закрыть модальное окно"
           className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
@@ -53,7 +72,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <Award className="w-6 h-6" />
           </div>
 
-          <span className="text-[11px] font-mono tracking-widest text-zinc-400 uppercase">
+          <span id="certificate-title" className="text-[11px] font-mono tracking-widest text-zinc-400 uppercase">
             Сертификат об окончании
           </span>
 
@@ -83,6 +102,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <div className="mt-6 flex items-center justify-end gap-3">
           <button
             onClick={() => window.print()}
+            aria-label="Распечатать сертификат или сохранить в PDF"
             className="px-4 py-2 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer"
           >
             <Download className="w-4 h-4" />

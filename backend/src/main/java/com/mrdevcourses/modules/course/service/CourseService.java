@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,8 +38,49 @@ public class CourseService {
     @Transactional(readOnly = true)
     public List<CourseDto> getActiveCourses(Optional<Long> currentUserId) {
         List<Course> courses = courseRepository.findByActiveTrueOrderByCreatedAtDesc();
+        if (courses.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> courseIds = courses.stream().map(Course::getId).toList();
+
+        // Batch fetch lesson counts for all active courses
+        Map<Long, Long> lessonCountMap = lessonRepository.countLessonsByCourseIds(courseIds).stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
+
+        // Batch fetch user enrollments if authenticated
+        Map<Long, Instant> userEnrollmentMap;
+        if (currentUserId.isPresent()) {
+            userEnrollmentMap = enrollmentRepository.findAllByUserIdAndCourseIdIn(currentUserId.get(), courseIds).stream()
+                    .collect(Collectors.toMap(
+                            e -> e.getCourse().getId(),
+                            Enrollment::getEnrolledAt
+                    ));
+        } else {
+            userEnrollmentMap = Map.of();
+        }
+
         return courses.stream()
-                .map(course -> toDto(course, currentUserId))
+                .map(course -> {
+                    boolean enrolled = userEnrollmentMap.containsKey(course.getId());
+                    Instant enrolledAt = userEnrollmentMap.get(course.getId());
+                    long totalLessons = lessonCountMap.getOrDefault(course.getId(), 0L);
+
+                    return CourseDto.builder()
+                            .id(course.getId())
+                            .title(course.getTitle())
+                            .description(course.getDescription())
+                            .slug(course.getSlug())
+                            .active(course.isActive())
+                            .createdAt(course.getCreatedAt())
+                            .enrolled(enrolled)
+                            .enrolledAt(enrolledAt)
+                            .totalLessons(totalLessons)
+                            .build();
+                })
                 .toList();
     }
 

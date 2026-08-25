@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth';
 import { BookOpen, LayoutDashboard, Shield, LogOut, LogIn } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-50 border-b border-[#27272a] bg-[#09090b]/80 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-2 text-base font-bold text-white tracking-wide hover:opacity-90 transition-opacity">
+        <Link to="/" aria-label="MrDevCourses Главная" className="flex items-center gap-2 text-base font-bold text-white tracking-wide hover:opacity-90 transition-opacity">
           <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-black font-black text-xs">
             M
           </div>
@@ -63,8 +63,9 @@ export const Header: React.FC = () => {
               </div>
               <button
                 onClick={handleLogout}
+                aria-label="Выйти"
                 title="Выйти"
-                className="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 rounded-md transition-colors"
+                className="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 rounded-md transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -72,6 +73,7 @@ export const Header: React.FC = () => {
           ) : (
             <Link
               to="/login"
+              aria-label="Войти в аккаунт"
               className="px-3.5 py-1.5 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
               <LogIn className="w-3.5 h-3.5" />

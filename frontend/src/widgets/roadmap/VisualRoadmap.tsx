@@ -21,6 +21,19 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
     return null;
   }
 
+  const handleLessonClick = (lesson: LessonSummary) => {
+    if (lesson.accessible) {
+      navigate(`/courses/${courseId}/lessons/${lesson.id}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, lesson: LessonSummary) => {
+    if ((e.key === 'Enter' || e.key === ' ') && lesson.accessible) {
+      e.preventDefault();
+      handleLessonClick(lesson);
+    }
+  };
+
   return (
     <div className="py-6 px-4 rounded-xl bg-[rgba(24,24,27,0.8)] border border-[#27272a] backdrop-blur-md">
       <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#27272a]">
@@ -39,6 +52,9 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
           {lessons.map((lesson, idx) => {
             const isCurrent = lesson.id === currentLessonId;
             const isLast = idx === lessons.length - 1;
+            const labelText = `День ${lesson.dayNumber}: ${lesson.title}${
+              lesson.completed ? ' (Завершен)' : lesson.accessible ? ' (Доступен)' : ' (Заблокирован)'
+            }`;
 
             return (
               <div key={lesson.id} className="relative flex items-start gap-4">
@@ -53,19 +69,21 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
 
                 {/* Node circle */}
                 <div
-                  onClick={() => {
-                    if (lesson.accessible) {
-                      navigate(`/courses/${courseId}/lessons/${lesson.id}`);
-                    }
-                  }}
-                  className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                  role={lesson.accessible ? 'button' : undefined}
+                  tabIndex={lesson.accessible ? 0 : -1}
+                  aria-label={labelText}
+                  onClick={() => handleLessonClick(lesson)}
+                  onKeyDown={(e) => handleKeyDown(e, lesson)}
+                  className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 ${
+                    lesson.accessible ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-400' : 'cursor-not-allowed'
+                  } ${
                     lesson.completed
                       ? 'bg-emerald-950 border border-emerald-500 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
                       : isCurrent
                       ? 'bg-white text-black border-2 border-white shadow-[0_0_16px_rgba(255,255,255,0.4)] animate-pulse'
                       : lesson.accessible
                       ? 'bg-zinc-800 border border-zinc-600 text-white hover:border-white'
-                      : 'bg-zinc-950 border border-zinc-800 text-zinc-600 cursor-not-allowed'
+                      : 'bg-zinc-950 border border-zinc-800 text-zinc-600'
                   }`}
                 >
                   {lesson.completed ? (
@@ -79,17 +97,19 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
 
                 {/* Node details */}
                 <div
-                  onClick={() => {
-                    if (lesson.accessible) {
-                      navigate(`/courses/${courseId}/lessons/${lesson.id}`);
-                    }
-                  }}
+                  role={lesson.accessible ? 'button' : undefined}
+                  tabIndex={lesson.accessible ? 0 : -1}
+                  aria-label={labelText}
+                  onClick={() => handleLessonClick(lesson)}
+                  onKeyDown={(e) => handleKeyDown(e, lesson)}
                   className={`flex-1 p-3.5 rounded-lg border transition-all ${
+                    lesson.accessible ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-400' : 'cursor-not-allowed'
+                  } ${
                     isCurrent
                       ? 'bg-zinc-800/90 border-zinc-500 text-white'
                       : lesson.accessible
-                      ? 'bg-zinc-900/60 border-zinc-800/90 hover:border-zinc-700 text-zinc-200 cursor-pointer'
-                      : 'bg-zinc-950/40 border-zinc-900 text-zinc-500 cursor-not-allowed'
+                      ? 'bg-zinc-900/60 border-zinc-800/90 hover:border-zinc-700 text-zinc-200'
+                      : 'bg-zinc-950/40 border-zinc-900 text-zinc-500'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">

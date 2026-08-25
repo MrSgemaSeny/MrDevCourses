@@ -93,7 +93,7 @@ class AdminServiceTest {
     @Test
     void getAllStudents_ShouldReturnStudentListWithEnrollments() {
         when(userRepository.findAll()).thenReturn(List.of(student));
-        when(enrollmentRepository.findAllByUserId(20L)).thenReturn(List.of());
+        when(enrollmentRepository.findAllByUserIdsWithCourse(List.of(20L))).thenReturn(List.of());
 
         List<StudentDto> students = adminService.getAllStudents();
 

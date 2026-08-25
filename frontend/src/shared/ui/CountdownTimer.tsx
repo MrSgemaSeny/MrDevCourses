@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Clock } from 'lucide-react';
 
 interface CountdownTimerProps {
@@ -22,16 +22,23 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
     isFinished: boolean;
   }>({ days: 0, hours: 0, minutes: 0, seconds: 0, isFinished: false });
 
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+  const hasCompletedRef = useRef(false);
+
   useEffect(() => {
+    hasCompletedRef.current = false;
+
     const calculateTime = () => {
       const difference = new Date(targetDate).getTime() - new Date().getTime();
 
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isFinished: true });
-        if (onComplete) {
-          onComplete();
+        if (!hasCompletedRef.current) {
+          hasCompletedRef.current = true;
+          onCompleteRef.current?.();
         }
-        return;
+        return false;
       }
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -40,12 +47,21 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
       const seconds = Math.floor((difference / 1000) % 60);
 
       setTimeLeft({ days, hours, minutes, seconds, isFinished: false });
+      return true;
     };
 
-    calculateTime();
-    const interval = setInterval(calculateTime, 1000);
+    const isRunning = calculateTime();
+    if (!isRunning) return;
+
+    const interval = setInterval(() => {
+      const stillRunning = calculateTime();
+      if (!stillRunning) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [targetDate, onComplete]);
+  }, [targetDate]);
 
   if (timeLeft.isFinished) {
     return <span className={`text-emerald-400 font-medium ${className}`}>Доступен сейчас</span>;

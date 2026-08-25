@@ -77,7 +77,7 @@ class CourseServiceTest {
     @Test
     void getActiveCourses_ShouldReturnListOfCourses() {
         when(courseRepository.findByActiveTrueOrderByCreatedAtDesc()).thenReturn(List.of(testCourse));
-        when(lessonRepository.countByCourseId(1L)).thenReturn(5L);
+        when(lessonRepository.countLessonsByCourseIds(List.of(1L))).thenReturn(List.<Object[]>of(new Object[]{1L, 5L}));
 
         List<CourseDto> result = courseService.getActiveCourses(Optional.empty());
 
@@ -90,9 +90,9 @@ class CourseServiceTest {
     @Test
     void getActiveCourses_WithEnrolledUser_ShouldMarkEnrolled() {
         when(courseRepository.findByActiveTrueOrderByCreatedAtDesc()).thenReturn(List.of(testCourse));
-        when(lessonRepository.countByCourseId(1L)).thenReturn(5L);
+        when(lessonRepository.countLessonsByCourseIds(List.of(1L))).thenReturn(List.<Object[]>of(new Object[]{1L, 5L}));
         Enrollment enrollment = Enrollment.builder().id(100L).user(testUser).course(testCourse).enrolledAt(Instant.now()).build();
-        when(enrollmentRepository.findByUserIdAndCourseId(10L, 1L)).thenReturn(Optional.of(enrollment));
+        when(enrollmentRepository.findAllByUserIdAndCourseIdIn(10L, List.of(1L))).thenReturn(List.of(enrollment));
 
         List<CourseDto> result = courseService.getActiveCourses(Optional.of(10L));
 

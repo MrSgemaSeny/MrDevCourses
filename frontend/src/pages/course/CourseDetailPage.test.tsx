@@ -12,7 +12,7 @@ const queryClient = new QueryClient({
   },
 });
 
-vi.mock('@/app/providers/AuthProvider', () => ({
+vi.mock('@/features/auth', () => ({
   useAuth: () => ({
     user: { id: 1, email: 'student@example.com', role: 'STUDENT' },
     isAuthenticated: true,

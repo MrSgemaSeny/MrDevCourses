@@ -20,6 +20,20 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(LessonLockedException.class)
+    public ResponseEntity<ErrorResponse> handleLessonLockedException(LessonLockedException ex, HttpServletRequest request) {
+        log.warn("Lesson locked on {}: {}, opensAt: {}", request.getRequestURI(), ex.getMessage(), ex.getOpensAt());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .opensAt(ex.getOpensAt())
+                .timestamp(Instant.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException ex, HttpServletRequest request) {
         log.warn("API Exception on {}: {}", request.getRequestURI(), ex.getMessage());

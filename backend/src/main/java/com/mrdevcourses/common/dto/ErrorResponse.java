@@ -19,5 +19,6 @@ public class ErrorResponse {
     private String path;
     @Builder.Default
     private Instant timestamp = Instant.now();
+    private Instant opensAt;
     private Map<String, String> validationErrors;
 }

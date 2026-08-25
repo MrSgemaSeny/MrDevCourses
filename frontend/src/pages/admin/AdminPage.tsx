@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi, CreateCoursePayload, CreateLessonPayload } from '@/entities/admin/api/adminApi';
-import { Plus, Trash2, Shield } from 'lucide-react';
+import { Plus, Trash2, Shield, X, AlertTriangle, UserPlus } from 'lucide-react';
 
 export const AdminPage: React.FC = () => {
   const queryClient = useQueryClient();
@@ -25,6 +25,35 @@ export const AdminPage: React.FC = () => {
     dayNumber: 1,
     sortOrder: 1,
   });
+
+  // Custom UI Modals (replacing confirm / prompt)
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    type: 'course' | 'lesson';
+    id: number;
+    title: string;
+  } | null>(null);
+
+  const [enrollModal, setEnrollModal] = useState<{
+    isOpen: boolean;
+    studentId: number;
+    studentEmail: string;
+    courseId: number;
+  } | null>(null);
+
+  // Close modals on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowCourseModal(false);
+        setShowLessonModal(false);
+        setDeleteConfirm(null);
+        setEnrollModal(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Queries
   const { data: courses = [], isLoading: coursesLoading } = useQuery({
@@ -61,6 +90,7 @@ export const AdminPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'courses'] });
       queryClient.invalidateQueries({ queryKey: ['courses'] });
+      setDeleteConfirm(null);
     },
   });
 
@@ -77,6 +107,7 @@ export const AdminPage: React.FC = () => {
     mutationFn: adminApi.deleteLesson,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'lessons', effectiveCourseId] });
+      setDeleteConfirm(null);
     },
   });
 
@@ -85,6 +116,7 @@ export const AdminPage: React.FC = () => {
       adminApi.enrollStudent(userId, courseId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'students'] });
+      setEnrollModal(null);
     },
   });
 
@@ -175,12 +207,16 @@ export const AdminPage: React.FC = () => {
 
                     <button
                       onClick={() => {
-                        if (confirm(`Удалить курс "${course.title}"?`)) {
-                          deleteCourseMutation.mutate(course.id);
-                        }
+                        setDeleteConfirm({
+                          isOpen: true,
+                          type: 'course',
+                          id: course.id,
+                          title: course.title,
+                        });
                       }}
-                      className="p-1.5 text-zinc-500 hover:text-red-400 transition-colors"
+                      className="p-1.5 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
                       title="Удалить"
+                      aria-label={`Удалить курс ${course.title}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -192,9 +228,23 @@ export const AdminPage: React.FC = () => {
 
           {/* Modal Create Course */}
           {showCourseModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-              <div className="w-full max-w-lg p-6 bg-[#161b22] border border-[#27272a] rounded-xl shadow-2xl">
-                <h3 className="text-lg font-bold text-white mb-4">Создать новый курс</h3>
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="create-course-title"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+            >
+              <div className="w-full max-w-lg p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl relative">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+                  <h3 id="create-course-title" className="text-lg font-bold text-white">Создать новый курс</h3>
+                  <button
+                    onClick={() => setShowCourseModal(false)}
+                    aria-label="Закрыть"
+                    className="p-1 text-zinc-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -261,7 +311,7 @@ export const AdminPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowCourseModal(false)}
-                      className="px-4 py-2 text-xs text-zinc-400 hover:text-white"
+                      className="px-4 py-2 text-xs text-zinc-400 hover:text-white cursor-pointer"
                     >
                       Отмена
                     </button>
@@ -286,8 +336,9 @@ export const AdminPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             {/* Course Selector */}
             <div className="flex items-center gap-3">
-              <label className="text-xs text-zinc-400">Выберите курс:</label>
+              <label htmlFor="courseSelect" className="text-xs text-zinc-400">Выберите курс:</label>
               <select
+                id="courseSelect"
                 value={effectiveCourseId || ''}
                 onChange={(e) => setSelectedCourseId(Number(e.target.value))}
                 className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-white focus:outline-none"
@@ -348,12 +399,16 @@ export const AdminPage: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => {
-                        if (confirm(`Удалить урок "${lesson.title}"?`)) {
-                          deleteLessonMutation.mutate(lesson.id);
-                        }
+                        setDeleteConfirm({
+                          isOpen: true,
+                          type: 'lesson',
+                          id: lesson.id,
+                          title: lesson.title,
+                        });
                       }}
-                      className="p-1.5 text-zinc-500 hover:text-red-400 transition-colors"
+                      className="p-1.5 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
                       title="Удалить"
+                      aria-label={`Удалить урок ${lesson.title}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -365,9 +420,23 @@ export const AdminPage: React.FC = () => {
 
           {/* Modal Create Lesson */}
           {showLessonModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-              <div className="w-full max-w-lg p-6 bg-[#161b22] border border-[#27272a] rounded-xl shadow-2xl">
-                <h3 className="text-lg font-bold text-white mb-4">Добавить урок в курс</h3>
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="create-lesson-title"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+            >
+              <div className="w-full max-w-lg p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl relative">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+                  <h3 id="create-lesson-title" className="text-lg font-bold text-white">Добавить урок в курс</h3>
+                  <button
+                    onClick={() => setShowLessonModal(false)}
+                    aria-label="Закрыть"
+                    className="p-1 text-zinc-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -382,7 +451,7 @@ export const AdminPage: React.FC = () => {
                       required
                       value={lessonForm.title}
                       onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
                       placeholder="День 1: Введение и основы"
                     />
                   </div>
@@ -402,7 +471,7 @@ export const AdminPage: React.FC = () => {
                             sortOrder: Number(e.target.value),
                           })
                         }
-                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none"
+                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
                       />
                     </div>
 
@@ -412,7 +481,7 @@ export const AdminPage: React.FC = () => {
                         type="url"
                         value={lessonForm.youtubeUrl || ''}
                         onChange={(e) => setLessonForm({ ...lessonForm, youtubeUrl: e.target.value })}
-                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none"
+                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
                         placeholder="https://youtube.com/watch?v=..."
                       />
                     </div>
@@ -424,7 +493,7 @@ export const AdminPage: React.FC = () => {
                       rows={5}
                       value={lessonForm.content || ''}
                       onChange={(e) => setLessonForm({ ...lessonForm, content: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none font-mono text-xs"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500 font-mono text-xs"
                       placeholder="Markdown конспект урока..."
                     />
                   </div>
@@ -433,7 +502,7 @@ export const AdminPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowLessonModal(false)}
-                      className="px-4 py-2 text-xs text-zinc-400 hover:text-white"
+                      className="px-4 py-2 text-xs text-zinc-400 hover:text-white cursor-pointer"
                     >
                       Отмена
                     </button>
@@ -519,20 +588,17 @@ export const AdminPage: React.FC = () => {
                           {courses.length > 0 && (
                             <button
                               onClick={() => {
-                                const courseId = prompt(
-                                  `Введите ID курса для зачисления ${student.email}:\n` +
-                                    courses.map((c) => `${c.id} - ${c.title}`).join('\n')
-                                );
-                                if (courseId && !isNaN(Number(courseId))) {
-                                  enrollStudentMutation.mutate({
-                                    userId: student.id,
-                                    courseId: Number(courseId),
-                                  });
-                                }
+                                setEnrollModal({
+                                  isOpen: true,
+                                  studentId: student.id,
+                                  studentEmail: student.email,
+                                  courseId: courses[0].id,
+                                });
                               }}
-                              className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded text-[11px] transition-colors cursor-pointer"
+                              className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded text-[11px] transition-colors cursor-pointer flex items-center gap-1"
                             >
-                              Записать на курс
+                              <UserPlus className="w-3 h-3" />
+                              <span>Записать на курс</span>
                             </button>
                           )}
                         </td>
@@ -543,6 +609,137 @@ export const AdminPage: React.FC = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Confirmation Modal for Deletions */}
+      {deleteConfirm && deleteConfirm.isOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-confirm-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+        >
+          <div className="w-full max-w-md p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-9 h-9 rounded-full bg-red-950/80 border border-red-800/80 flex items-center justify-center text-red-400 shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 id="delete-confirm-title" className="text-sm font-bold text-white mb-1">
+                  Подтверждение удаления
+                </h3>
+                <p className="text-xs text-zinc-400">
+                  Вы действительно хотите удалить {deleteConfirm.type === 'course' ? 'курс' : 'урок'} «
+                  <span className="text-zinc-200 font-semibold">{deleteConfirm.title}</span>»? Это действие необратимо.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#27272a]">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirm(null)}
+                className="px-3.5 py-1.5 rounded-md text-xs text-zinc-400 hover:text-white cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (deleteConfirm.type === 'course') {
+                    deleteCourseMutation.mutate(deleteConfirm.id);
+                  } else {
+                    deleteLessonMutation.mutate(deleteConfirm.id);
+                  }
+                }}
+                disabled={deleteCourseMutation.isPending || deleteLessonMutation.isPending}
+                className="px-3.5 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold rounded-md transition-colors cursor-pointer"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Student Enrollment Modal */}
+      {enrollModal && enrollModal.isOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="enroll-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+        >
+          <div className="w-full max-w-md p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl">
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+              <h3 id="enroll-modal-title" className="text-sm font-bold text-white">
+                Зачислить студента на курс
+              </h3>
+              <button
+                onClick={() => setEnrollModal(null)}
+                aria-label="Закрыть"
+                className="p-1 text-zinc-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <span className="block text-xs text-zinc-400 mb-1">Студент</span>
+                <div className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-zinc-200 font-mono">
+                  {enrollModal.studentEmail}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="enrollCourseSelect" className="block text-xs text-zinc-400 mb-1">
+                  Выберите курс для зачисления
+                </label>
+                <select
+                  id="enrollCourseSelect"
+                  value={enrollModal.courseId}
+                  onChange={(e) =>
+                    setEnrollModal({
+                      ...enrollModal,
+                      courseId: Number(e.target.value),
+                    })
+                  }
+                  className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-white focus:outline-none focus:border-zinc-500"
+                >
+                  {courses.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title} (/{c.slug})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#27272a]">
+                <button
+                  type="button"
+                  onClick={() => setEnrollModal(null)}
+                  className="px-3.5 py-1.5 rounded-md text-xs text-zinc-400 hover:text-white cursor-pointer"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    enrollStudentMutation.mutate({
+                      userId: enrollModal.studentId,
+                      courseId: enrollModal.courseId,
+                    });
+                  }}
+                  disabled={enrollStudentMutation.isPending}
+                  className="px-3.5 py-1.5 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md transition-colors cursor-pointer"
+                >
+                  {enrollStudentMutation.isPending ? 'Зачисление...' : 'Зачислить'}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

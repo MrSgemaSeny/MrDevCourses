@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth';
 import { ArrowRight, BookOpen, Clock, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {

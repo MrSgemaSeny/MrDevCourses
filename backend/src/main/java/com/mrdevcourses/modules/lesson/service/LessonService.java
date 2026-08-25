@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.lesson.service;
 
 import com.mrdevcourses.common.exception.AccessDeniedException;
 import com.mrdevcourses.common.exception.ApiException;
+import com.mrdevcourses.common.exception.LessonLockedException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
 import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
@@ -151,7 +152,7 @@ public class LessonService {
         Instant now = Instant.now();
 
         if (now.isBefore(opensAt)) {
-            throw new AccessDeniedException("Урок заблокирован. Он станет доступен: " + opensAt.toString());
+            throw new LessonLockedException("Урок заблокирован. Он станет доступен: " + opensAt.toString(), opensAt);
         }
 
         Optional<LessonProgress> progressOpt = lessonProgressRepository.findByUserIdAndLessonId(userId, lessonId);
@@ -194,7 +195,7 @@ public class LessonService {
 
             Instant opensAt = calculateUnlockTime(enrollment.getEnrolledAt(), lesson.getDayNumber());
             if (Instant.now().isBefore(opensAt)) {
-                throw new AccessDeniedException("Нельзя завершить заблокированный урок");
+                throw new LessonLockedException("Нельзя завершить заблокированный урок", opensAt);
             }
         }
 

@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.admin.service;
 
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
+import com.mrdevcourses.common.util.SecurityUtils;
 import com.mrdevcourses.modules.admin.dto.StudentDto;
 import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
@@ -28,7 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,7 +66,8 @@ public class AdminService {
 
         Course saved = courseRepository.save(course);
         log.info("Admin created course: {} (ID: {})", saved.getTitle(), saved.getId());
-        auditService.logAction(null, "ADMIN_CREATE_COURSE", "Course", saved.getId(), "Title: " + saved.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_CREATE_COURSE", "Course", saved.getId(), "Title: " + saved.getTitle(), null);
         return toCourseDto(saved);
     }
 
@@ -83,7 +87,8 @@ public class AdminService {
 
         Course updated = courseRepository.save(course);
         log.info("Admin updated course ID: {}", courseId);
-        auditService.logAction(null, "ADMIN_UPDATE_COURSE", "Course", courseId, "Updated title: " + updated.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_UPDATE_COURSE", "Course", courseId, "Updated title: " + updated.getTitle(), null);
         return toCourseDto(updated);
     }
 
@@ -93,7 +98,8 @@ public class AdminService {
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
         courseRepository.delete(course);
         log.info("Admin deleted course ID: {}", courseId);
-        auditService.logAction(null, "ADMIN_DELETE_COURSE", "Course", courseId, "Deleted: " + course.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_DELETE_COURSE", "Course", courseId, "Deleted: " + course.getTitle(), null);
     }
 
     @Transactional(readOnly = true)
@@ -126,7 +132,8 @@ public class AdminService {
 
         Lesson saved = lessonRepository.save(lesson);
         log.info("Admin created lesson ID: {} for course ID: {}", saved.getId(), courseId);
-        auditService.logAction(null, "ADMIN_CREATE_LESSON", "Lesson", saved.getId(), "Course: " + course.getTitle() + ", Title: " + saved.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_CREATE_LESSON", "Lesson", saved.getId(), "Course: " + course.getTitle() + ", Title: " + saved.getTitle(), null);
         return toLessonDetailDto(saved, course);
     }
 
@@ -148,7 +155,8 @@ public class AdminService {
 
         Lesson updated = lessonRepository.save(lesson);
         log.info("Admin updated lesson ID: {}", lessonId);
-        auditService.logAction(null, "ADMIN_UPDATE_LESSON", "Lesson", lessonId, "Title: " + updated.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_UPDATE_LESSON", "Lesson", lessonId, "Title: " + updated.getTitle(), null);
         return toLessonDetailDto(updated, lesson.getCourse());
     }
 
@@ -158,15 +166,25 @@ public class AdminService {
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", lessonId));
         lessonRepository.delete(lesson);
         log.info("Admin deleted lesson ID: {}", lessonId);
-        auditService.logAction(null, "ADMIN_DELETE_LESSON", "Lesson", lessonId, "Title: " + lesson.getTitle(), null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        auditService.logAction(adminId, "ADMIN_DELETE_LESSON", "Lesson", lessonId, "Title: " + lesson.getTitle(), null);
     }
 
     @Transactional(readOnly = true)
     public List<StudentDto> getAllStudents() {
         List<User> students = userRepository.findAll();
+        if (students.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> userIds = students.stream().map(User::getId).toList();
+        List<Enrollment> enrollments = enrollmentRepository.findAllByUserIdsWithCourse(userIds);
+        Map<Long, List<Enrollment>> enrollmentsByUser = enrollments.stream()
+                .collect(Collectors.groupingBy(e -> e.getUser().getId()));
+
         return students.stream()
                 .map(user -> {
-                    List<EnrollmentDto> userEnrollments = enrollmentRepository.findAllByUserId(user.getId()).stream()
+                    List<EnrollmentDto> userEnrollments = enrollmentsByUser.getOrDefault(user.getId(), List.of()).stream()
                             .map(e -> EnrollmentDto.builder()
                                     .id(e.getId())
                                     .userId(user.getId())
@@ -213,7 +231,8 @@ public class AdminService {
 
         Enrollment saved = enrollmentRepository.save(enrollment);
         log.info("Admin manually enrolled user ID {} into course ID {}", userId, courseId);
-        auditService.logAction(userId, "ADMIN_MANUAL_ENROLL", "Course", courseId, "Enrolled by admin", null);
+        Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(userId);
+        auditService.logAction(adminId, "ADMIN_MANUAL_ENROLL", "Course", courseId, "Enrolled user ID " + userId + " by admin", null);
         return toEnrollmentDto(saved);
     }
 

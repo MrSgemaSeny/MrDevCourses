@@ -76,3 +76,47 @@ Integrity mode: development
 - [ ] All database timestamps strictly stored and calculated in UTC.
 - [ ] Applied Flyway migrations `V1..V5` remain untouched; any new schema changes use new `V{N}__` scripts.
 - [ ] Second Brain protocol updated (`journal/YYYY-MM-DD/mrdevcourses.md`) and all work pushed to `main`.
+
+## 2026-08-25T11:03:29Z
+
+Comprehensive multi-axis audit, adversarial doubt-driven review, performance optimization, and UI polish for the MrDevCourses learning management platform.
+
+Working directory: c:\Users\murat\IdeaProjects\new_world\MrDevCourses
+Integrity mode: development
+
+## Requirements
+
+### R1. Five-Axis Code Review & Doubt-Driven Adversarial Review
+- Execute a rigorous 5-axis review (Correctness, Readability, Architecture, Security, Performance) on all backend (com.mrdevcourses.**) and frontend (src/**) modules.
+- Subject all critical assumptions (Drip time math, JWT in httpOnly cookie, RLS IDOR protection, Audit logging, Rate limiting, Study streak calculation) to fresh-context adversarial verification.
+
+### R2. Frontend UI Engineering & Accessibility (Envie Aesthetic)
+- Verify strict adherence to the Envie dark aesthetic (#09090b bg, rgba(24, 24, 27, 0.8) cards with backdrop-blur, #27272a borders, #fafafa high-contrast actions, custom scrollbars).
+- Ensure all interactive elements (VisualRoadmap, MarkdownViewer, CountdownTimer, CertificateModal, Header, LessonPlayer) are fully responsive, accessible (keyboard navigable, ARIA labels, semantic HTML), and have zero visual/layout glitching.
+
+### R3. Performance Optimization & Bundle Budget
+- Frontend: Ensure total production gzip bundle is under 150 kB, verify zero redundant re-renders, and ensure lazy loading / optimal query caching with React Query.
+- Backend: Verify zero N+1 database queries via optimized JPA joins (JOIN FETCH), indexed queries, and sub-100ms response times.
+
+### R4. Security Hardening & Zero-Trust Verification
+- Validate all security headers (X-Content-Type-Options: nosniff, X-Frame-Options: DENY, Referrer-Policy, CSP).
+- Verify audit log persistence across auth, enrollments, completions, and admin operations.
+- Ensure strict row-level isolation so no student can view or mutate another student's progress.
+
+## Acceptance Criteria
+
+### Automated Backend Verification
+- [ ] ./gradlew test jacocoTestReport passes 100% green with 0 failures.
+- [ ] Security headers and audit service integration tests pass.
+- [ ] Drip time calculations verified for edge cases (Day 1, Day 2, Leap seconds, UTC timezones).
+
+### Automated Frontend Verification
+- [ ] npm test -- --run passes 100% green with all Vitest test suites.
+- [ ] npm run build succeeds with 0 TypeScript errors and 0 lint warnings.
+- [ ] Visual Roadmap, CountdownTimer, and CertificateModal render without errors in test runners.
+
+### System & Protocol Validation
+- [ ] Docker Compose (docker-compose.yml) config validates cleanly.
+- [ ] Second Brain protocol updated (journal/YYYY-MM-DD/mrdevcourses.md, _status.md) and pushed to main.
+- [ ] Codebase committed and pushed to https://github.com/MrSgemaSeny/MrDevCourses on main.
+

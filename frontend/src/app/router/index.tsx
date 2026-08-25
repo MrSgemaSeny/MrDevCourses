@@ -1,14 +1,27 @@
+import React, { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { App } from '../App';
-import { LandingPage } from '@/pages/landing/LandingPage';
-import { CoursesPage } from '@/pages/courses/CoursesPage';
-import { CourseDetailPage } from '@/pages/course/CourseDetailPage';
-import { LessonPage } from '@/pages/lesson/LessonPage';
-import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { AdminPage } from '@/pages/admin/AdminPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { AuthCallbackPage } from '@/pages/AuthCallbackPage';
 import { ProtectedRoute } from './ProtectedRoute';
+
+// Envie Loading Spinner Fallback
+const PageLoader: React.FC = () => (
+  <div className="flex items-center justify-center min-h-[60vh]" data-testid="page-loader">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-8 h-8 border-2 border-[#27272a] border-t-[#fafafa] rounded-full animate-spin" />
+      <span className="text-xs text-zinc-500 font-mono">Загрузка...</span>
+    </div>
+  </div>
+);
+
+// Lazy Loaded Pages
+const LandingPage = React.lazy(() => import('@/pages/landing/LandingPage').then((m) => ({ default: m.LandingPage })));
+const CoursesPage = React.lazy(() => import('@/pages/courses/CoursesPage').then((m) => ({ default: m.CoursesPage })));
+const CourseDetailPage = React.lazy(() => import('@/pages/course/CourseDetailPage').then((m) => ({ default: m.CourseDetailPage })));
+const LessonPage = React.lazy(() => import('@/pages/lesson/LessonPage').then((m) => ({ default: m.LessonPage })));
+const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })));
+const AdminPage = React.lazy(() => import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })));
+const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
+const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 
 export const router = createBrowserRouter([
   {
@@ -17,33 +30,59 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LandingPage />
+          </Suspense>
+        ),
       },
       {
         path: 'auth',
-        element: <LoginPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LoginPage />
+          </Suspense>
+        ),
       },
       {
         path: 'login',
-        element: <LoginPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LoginPage />
+          </Suspense>
+        ),
       },
       {
         path: 'auth/callback',
-        element: <AuthCallbackPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AuthCallbackPage />
+          </Suspense>
+        ),
       },
       {
         path: 'courses',
-        element: <CoursesPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <CoursesPage />
+          </Suspense>
+        ),
       },
       {
         path: 'courses/:slug',
-        element: <CourseDetailPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <CourseDetailPage />
+          </Suspense>
+        ),
       },
       {
         path: 'courses/:courseId/lessons/:lessonId',
         element: (
           <ProtectedRoute>
-            <LessonPage />
+            <Suspense fallback={<PageLoader />}>
+              <LessonPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -51,7 +90,9 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: (
           <ProtectedRoute>
-            <DashboardPage />
+            <Suspense fallback={<PageLoader />}>
+              <DashboardPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
@@ -59,7 +100,9 @@ export const router = createBrowserRouter([
         path: 'admin',
         element: (
           <ProtectedRoute adminOnly>
-            <AdminPage />
+            <Suspense fallback={<PageLoader />}>
+              <AdminPage />
+            </Suspense>
           </ProtectedRoute>
         ),
       },

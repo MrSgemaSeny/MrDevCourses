@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
 import { lessonApi } from '@/entities/lesson/api/lessonApi';
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth';
 import { VisualRoadmap } from '@/widgets/roadmap/VisualRoadmap';
 import { CertificateModal } from '@/widgets/certificate/CertificateModal';
 import { Lock, Play, Calendar, Clock, ArrowRight, Award } from 'lucide-react';

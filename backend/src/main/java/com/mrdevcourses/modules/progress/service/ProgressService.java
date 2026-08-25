@@ -16,6 +16,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,63 @@ public class ProgressService {
     @Transactional(readOnly = true)
     public List<CourseProgressDto> getAllProgressForUser(Long userId) {
         List<Enrollment> enrollments = enrollmentRepository.findAllByUserIdWithCourse(userId);
+        if (enrollments.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> courseIds = enrollments.stream().map(e -> e.getCourse().getId()).toList();
+
+        // Batch fetch lessons for all enrolled courses
+        List<Lesson> allLessons = lessonRepository.findAllByCourseIdInOrderBySortOrderAscDayNumberAsc(courseIds);
+        Map<Long, List<Lesson>> lessonsByCourse = allLessons.stream()
+                .collect(Collectors.groupingBy(l -> l.getCourse().getId()));
+
+        // Batch calculate completed lesson counts grouped by course
+        Map<Long, Long> completedCounts = lessonProgressRepository.countCompletedLessonsByUserAndCourseIds(userId, courseIds).stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
+
+        Instant now = Instant.now();
+
         return enrollments.stream()
-                .map(this::calculateCourseProgress)
+                .map(enrollment -> {
+                    Long courseId = enrollment.getCourse().getId();
+                    Instant enrolledAt = enrollment.getEnrolledAt();
+                    List<Lesson> lessons = lessonsByCourse.getOrDefault(courseId, List.of());
+                    long totalLessons = lessons.size();
+                    long completedCount = completedCounts.getOrDefault(courseId, 0L);
+
+                    long daysPassed = Duration.between(enrolledAt, now).toDays();
+                    int currentDay = (int) Math.max(1, daysPassed + 1);
+
+                    long totalUnlocked = lessons.stream()
+                            .filter(l -> !now.isBefore(lessonService.calculateUnlockTime(enrolledAt, l.getDayNumber())))
+                            .count();
+
+                    Instant nextUnlockAt = lessons.stream()
+                            .map(l -> lessonService.calculateUnlockTime(enrolledAt, l.getDayNumber()))
+                            .filter(unlockTime -> unlockTime.isAfter(now))
+                            .min(Comparator.naturalOrder())
+                            .orElse(null);
+
+                    double progressPercentage = totalLessons > 0 ? ((double) completedCount / totalLessons) * 100.0 : 0.0;
+
+                    return CourseProgressDto.builder()
+                            .courseId(courseId)
+                            .courseTitle(enrollment.getCourse().getTitle())
+                            .courseDescription(enrollment.getCourse().getDescription())
+                            .courseSlug(enrollment.getCourse().getSlug())
+                            .enrolledAt(enrolledAt)
+                            .currentDay(currentDay)
+                            .completedCount(completedCount)
+                            .totalUnlocked(totalUnlocked)
+                            .totalLessons(totalLessons)
+                            .progressPercentage(Math.round(progressPercentage * 10.0) / 10.0)
+                            .nextUnlockAt(nextUnlockAt)
+                            .build();
+                })
                 .toList();
     }
 

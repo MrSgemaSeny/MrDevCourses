@@ -1,6 +1,7 @@
 package com.mrdevcourses.modules.lesson.service;
 
 import com.mrdevcourses.common.exception.AccessDeniedException;
+import com.mrdevcourses.common.exception.LessonLockedException;
 import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
@@ -153,7 +154,7 @@ class LessonServiceDripTest {
     }
 
     @Test
-    void getLessonDetail_WhenLessonLocked_ShouldThrowAccessDeniedException() {
+    void getLessonDetail_WhenLessonLocked_ShouldThrowLessonLockedException() {
         Instant enrolledAt = Instant.now().minus(Duration.ofHours(1));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 
@@ -163,8 +164,30 @@ class LessonServiceDripTest {
         when(enrollmentRepository.findByUserIdAndCourseId(10L, 1L)).thenReturn(Optional.of(enrollment));
 
         assertThatThrownBy(() -> lessonService.getLessonDetail(1L, 102L, 10L, Role.STUDENT))
-                .isInstanceOf(AccessDeniedException.class)
-                .hasMessageContaining("заблокирован");
+                .isInstanceOf(LessonLockedException.class)
+                .satisfies(ex -> {
+                    LessonLockedException lockedEx = (LessonLockedException) ex;
+                    assertThat(lockedEx.getOpensAt()).isNotNull();
+                    assertThat(lockedEx.getMessage()).contains("заблокирован");
+                });
+    }
+
+    @Test
+    void completeLesson_WhenLessonLocked_ShouldThrowLessonLockedException() {
+        Instant enrolledAt = Instant.now().minus(Duration.ofHours(1));
+        Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
+
+        when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
+        when(lessonRepository.findByIdAndCourseId(102L, 1L)).thenReturn(Optional.of(day2Lesson));
+        when(userRepository.findById(10L)).thenReturn(Optional.of(student));
+        when(enrollmentRepository.findByUserIdAndCourseId(10L, 1L)).thenReturn(Optional.of(enrollment));
+
+        assertThatThrownBy(() -> lessonService.completeLesson(1L, 102L, 10L, Role.STUDENT))
+                .isInstanceOf(LessonLockedException.class)
+                .satisfies(ex -> {
+                    LessonLockedException lockedEx = (LessonLockedException) ex;
+                    assertThat(lockedEx.getOpensAt()).isNotNull();
+                });
     }
 
     @Test

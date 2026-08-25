@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { progressApi } from '@/entities/progress/api/progressApi';
-import { useAuth } from '@/app/providers/AuthProvider';
+import { useAuth } from '@/features/auth';
 import { CountdownTimer } from '@/shared/ui/CountdownTimer';
 import {
   BookOpen,

@@ -67,8 +67,8 @@ class ProgressServiceTest {
     @Test
     void getAllProgressForUser_ShouldCalculateStatsCorrectly() {
         when(enrollmentRepository.findAllByUserIdWithCourse(10L)).thenReturn(List.of(enrollment));
-        when(lessonRepository.findByCourseIdOrderBySortOrderAscDayNumberAsc(1L)).thenReturn(lessons);
-        when(lessonProgressRepository.countCompletedLessonsByUserIdAndCourseId(10L, 1L)).thenReturn(2L);
+        when(lessonRepository.findAllByCourseIdInOrderBySortOrderAscDayNumberAsc(List.of(1L))).thenReturn(lessons);
+        when(lessonProgressRepository.countCompletedLessonsByUserAndCourseIds(10L, List.of(1L))).thenReturn(List.<Object[]>of(new Object[]{1L, 2L}));
 
         when(lessonService.calculateUnlockTime(any(), eq(1))).thenReturn(enrollment.getEnrolledAt());
         when(lessonService.calculateUnlockTime(any(), eq(2))).thenReturn(enrollment.getEnrolledAt().plus(Duration.ofDays(1)));
