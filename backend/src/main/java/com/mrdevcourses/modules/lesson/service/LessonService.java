@@ -237,6 +237,16 @@ public class LessonService {
         return enrolledAt.plus(Duration.ofDays(dayNumber - 1L));
     }
 
+    /**
+     * Updates the student's study streak.
+     *
+     * Contract: streak is incremented only when a lesson is explicitly marked as completed —
+     * NOT on lesson open or video view. This is intentional: streak measures completed work,
+     * not passive browsing. If a student watches a video without clicking "complete", the streak
+     * is not updated. This is by design and documented here to distinguish from a "daily login" streak.
+     *
+     * Timezone: all calculations are in UTC. Streak resets if no lesson is completed for >1 UTC day.
+     */
     private void updateUserStreak(User user) {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
         LocalDate lastActive = user.getLastActiveDate();

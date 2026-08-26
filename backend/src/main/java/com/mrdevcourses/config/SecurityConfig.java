@@ -60,10 +60,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**", "/error", "/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/*", "/api/v1/courses", "/api/v1/courses/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/logout", "/api/v1/auth/logout").permitAll()
-                        .requestMatchers("/v1/admin/**", "/api/v1/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/v1/auth/me", "/api/v1/auth/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/auth/logout").permitAll()
+                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/auth/me").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

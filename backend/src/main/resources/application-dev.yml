@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/mrdevcourses_db}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/mrdevcourses}
+    username: ${DB_USERNAME:test_user}
+    password: ${DB_PASSWORD:pass1}
     driver-class-name: org.postgresql.Driver
   security:
     oauth2:
