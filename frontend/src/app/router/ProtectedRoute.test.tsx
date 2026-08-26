@@ -8,17 +8,22 @@ vi.mock('@/features/auth', () => ({
   useAuth: vi.fn(),
 }));
 
+const mockAuth = (overrides = {}) => ({
+  user: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  isLoading: false,
+  loginWithGoogle: vi.fn(),
+  loginWithEmail: vi.fn(),
+  register: vi.fn(),
+  logout: vi.fn(),
+  checkAuth: vi.fn(),
+  ...overrides,
+});
+
 describe('ProtectedRoute', () => {
   it('shows loading spinner when isLoading is true', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      isAdmin: false,
-      isLoading: true,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(mockAuth({ isLoading: true }));
 
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
@@ -33,15 +38,7 @@ describe('ProtectedRoute', () => {
   });
 
   it('redirects to /auth when unauthenticated', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      isAdmin: false,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(mockAuth());
 
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
@@ -64,15 +61,12 @@ describe('ProtectedRoute', () => {
   });
 
   it('renders children when authenticated', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: { id: 1, email: 'user@test.com', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
-      isAuthenticated: true,
-      isAdmin: false,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(
+      mockAuth({
+        user: { id: 1, email: 'user@test.com', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
+        isAuthenticated: true,
+      })
+    );
 
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
@@ -86,15 +80,13 @@ describe('ProtectedRoute', () => {
   });
 
   it('redirects student to /courses when accessing adminOnly route', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: { id: 1, email: 'student@test.com', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
-      isAuthenticated: true,
-      isAdmin: false,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(
+      mockAuth({
+        user: { id: 1, email: 'student@test.com', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
+        isAuthenticated: true,
+        isAdmin: false,
+      })
+    );
 
     render(
       <MemoryRouter initialEntries={['/admin']}>
@@ -117,15 +109,13 @@ describe('ProtectedRoute', () => {
   });
 
   it('allows admin access to adminOnly route', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: { id: 99, email: 'admin@test.com', role: 'ADMIN', createdAt: '2026-08-25T10:00:00Z' },
-      isAuthenticated: true,
-      isAdmin: true,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(
+      mockAuth({
+        user: { id: 99, email: 'admin@test.com', role: 'ADMIN', createdAt: '2026-08-25T10:00:00Z' },
+        isAuthenticated: true,
+        isAdmin: true,
+      })
+    );
 
     render(
       <MemoryRouter initialEntries={['/admin']}>

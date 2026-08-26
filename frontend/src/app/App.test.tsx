@@ -9,17 +9,22 @@ vi.mock('@/features/auth', () => ({
   AuthContextProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+const mockAuth = (overrides = {}) => ({
+  user: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  isLoading: false,
+  loginWithGoogle: vi.fn(),
+  loginWithEmail: vi.fn(),
+  register: vi.fn(),
+  logout: vi.fn(),
+  checkAuth: vi.fn(),
+  ...overrides,
+});
+
 describe('App Component', () => {
   it('renders header with brand link and login button when unauthenticated', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      isAdmin: false,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(mockAuth());
 
     render(
       <MemoryRouter>
@@ -32,15 +37,13 @@ describe('App Component', () => {
   });
 
   it('renders dashboard link and user info when authenticated as student', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: { id: 1, email: 'student@example.com', name: 'Murat', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
-      isAuthenticated: true,
-      isAdmin: false,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(
+      mockAuth({
+        user: { id: 1, email: 'student@example.com', name: 'Murat', role: 'STUDENT', createdAt: '2026-08-25T10:00:00Z' },
+        isAuthenticated: true,
+        isAdmin: false,
+      })
+    );
 
     render(
       <MemoryRouter>
@@ -55,15 +58,13 @@ describe('App Component', () => {
   });
 
   it('renders admin link when authenticated as admin', () => {
-    vi.mocked(authFeature.useAuth).mockReturnValue({
-      user: { id: 99, email: 'admin@example.com', name: 'Admin Murat', role: 'ADMIN', createdAt: '2026-08-25T10:00:00Z' },
-      isAuthenticated: true,
-      isAdmin: true,
-      isLoading: false,
-      loginWithGoogle: vi.fn(),
-      logout: vi.fn(),
-      checkAuth: vi.fn(),
-    });
+    vi.mocked(authFeature.useAuth).mockReturnValue(
+      mockAuth({
+        user: { id: 99, email: 'admin@example.com', name: 'Admin Murat', role: 'ADMIN', createdAt: '2026-08-25T10:00:00Z' },
+        isAuthenticated: true,
+        isAdmin: true,
+      })
+    );
 
     render(
       <MemoryRouter>
@@ -76,3 +77,4 @@ describe('App Component', () => {
     expect(screen.getByText('Admin Murat')).toBeInTheDocument();
   });
 });
+

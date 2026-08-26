@@ -8,6 +8,8 @@ export interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   loginWithGoogle: () => void;
+  loginWithEmail: (email: string, password: string) => Promise<void>;
+  register: (email: string, name: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -48,6 +50,16 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     window.location.href = '/api/oauth2/authorization/google';
   }, []);
 
+  const loginWithEmail = useCallback(async (email: string, password: string) => {
+    const userData = await userApi.loginWithEmail(email, password);
+    setUser(userData);
+  }, []);
+
+  const register = useCallback(async (email: string, name: string, password: string) => {
+    const userData = await userApi.register(email, name, password);
+    setUser(userData);
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       await userApi.logout();
@@ -62,6 +74,8 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     isAdmin: user?.role === 'ADMIN',
     isLoading,
     loginWithGoogle,
+    loginWithEmail,
+    register,
     logout,
     checkAuth,
   };

@@ -11,4 +11,21 @@ export const userApi = {
   logout: async (): Promise<void> => {
     await apiClient.post<ApiResponse<void>>('/v1/auth/logout');
   },
+
+  register: async (email: string, name: string, password: string): Promise<User> => {
+    const response = await apiClient.post<ApiResponse<User>>('/v1/auth/register', {
+      email,
+      name,
+      password,
+    });
+    return response.data.data;
+  },
+
+  loginWithEmail: async (email: string, password: string): Promise<User> => {
+    const response = await apiClient.post<ApiResponse<User>>('/v1/auth/login', {
+      email,
+      password,
+    });
+    return response.data.data;
+  },
 };

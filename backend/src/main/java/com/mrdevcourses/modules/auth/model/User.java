@@ -43,6 +43,9 @@ public class User {
     @Column(name = "google_id", unique = true)
     private String googleId;
 
+    @Column(name = "password_hash")
+    private String passwordHash;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default

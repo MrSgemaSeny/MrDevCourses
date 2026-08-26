@@ -17,6 +17,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,15 +28,14 @@ class OAuth2AuthenticationSuccessHandlerTest {
     @Mock
     private JwtTokenProvider jwtTokenProvider;
 
+    @Mock
+    private JwtCookieHelper jwtCookieHelper;
+
     @InjectMocks
     private OAuth2AuthenticationSuccessHandler successHandler;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(successHandler, "cookieName", "mrdevcourses_token");
-        ReflectionTestUtils.setField(successHandler, "cookieSecure", false);
-        ReflectionTestUtils.setField(successHandler, "cookieSameSite", "Lax");
-        ReflectionTestUtils.setField(successHandler, "expirationMs", 86400000L);
         ReflectionTestUtils.setField(successHandler, "frontendUrl", "http://localhost:5173");
     }
 
@@ -53,18 +55,13 @@ class OAuth2AuthenticationSuccessHandlerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
-        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT)).thenReturn("mocked-jwt-token");
+        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT))
+                .thenReturn("mocked-jwt-token");
 
         successHandler.onAuthenticationSuccess(request, response, auth);
 
-        String setCookieHeader = response.getHeader("Set-Cookie");
-        assertThat(setCookieHeader).isNotNull();
-        assertThat(setCookieHeader).contains("mrdevcourses_token=mocked-jwt-token");
-        assertThat(setCookieHeader).contains("HttpOnly");
-        assertThat(setCookieHeader).contains("Path=/");
-        assertThat(setCookieHeader).contains("Max-Age=86400");
-        assertThat(setCookieHeader).contains("SameSite=Lax");
-
+        // Cookie creation is now delegated to JwtCookieHelper — verify it was called
+        verify(jwtCookieHelper).addJwtCookie(any(), eq("mocked-jwt-token"));
         assertThat(response.getRedirectedUrl()).isEqualTo("http://localhost:5173/auth/callback");
     }
 }

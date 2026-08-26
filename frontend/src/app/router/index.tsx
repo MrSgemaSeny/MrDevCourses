@@ -1,9 +1,10 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { App } from '../App';
+import { StudentLayout } from '../layout/StudentLayout';
+import { AdminLayout } from '../layout/AdminLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
-// Envie Loading Spinner Fallback
 const PageLoader: React.FC = () => (
   <div className="flex items-center justify-center min-h-[60vh]" data-testid="page-loader">
     <div className="flex flex-col items-center gap-3">
@@ -23,93 +24,55 @@ const AdminPage = React.lazy(() => import('@/pages/admin/AdminPage').then((m) =>
 const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 
+const wrap = (element: React.ReactNode) => (
+  <Suspense fallback={<PageLoader />}>{element}</Suspense>
+);
+
 export const router = createBrowserRouter([
+  // ── Public layout (Header + Footer) ──────────────────────────────
   {
     path: '/',
     element: <App />,
     children: [
-      {
-        index: true,
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <LandingPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'auth',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <LoginPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'login',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <LoginPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'auth/callback',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <AuthCallbackPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'courses',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <CoursesPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'courses/:slug',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <CourseDetailPage />
-          </Suspense>
-        ),
-      },
+      { index: true, element: wrap(<LandingPage />) },
+      { path: 'auth', element: wrap(<LoginPage />) },
+      { path: 'login', element: wrap(<LoginPage />) },
+      { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
+      { path: 'courses', element: wrap(<CoursesPage />) },
+      { path: 'courses/:slug', element: wrap(<CourseDetailPage />) },
+    ],
+  },
+
+  // ── Student layout (Sidebar) ──────────────────────────────────────
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <StudentLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: 'dashboard', element: wrap(<DashboardPage />) },
       {
         path: 'courses/:courseId/lessons/:lessonId',
-        element: (
-          <ProtectedRoute>
-            <Suspense fallback={<PageLoader />}>
-              <LessonPage />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'dashboard',
-        element: (
-          <ProtectedRoute>
-            <Suspense fallback={<PageLoader />}>
-              <DashboardPage />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'admin',
-        element: (
-          <ProtectedRoute adminOnly>
-            <Suspense fallback={<PageLoader />}>
-              <AdminPage />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: '*',
-        element: <Navigate to="/" replace />,
+        element: wrap(<LessonPage />),
       },
     ],
   },
+
+  // ── Admin layout (Sidebar) ────────────────────────────────────────
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute adminOnly>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: 'admin', element: wrap(<AdminPage />) },
+    ],
+  },
+
+  // ── Fallback ──────────────────────────────────────────────────────
+  { path: '*', element: <Navigate to="/" replace /> },
 ]);

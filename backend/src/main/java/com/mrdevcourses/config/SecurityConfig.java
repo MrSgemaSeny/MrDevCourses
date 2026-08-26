@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**", "/error", "/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/v1/auth/logout", "/v1/auth/register", "/v1/auth/login").permitAll()
                         .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/v1/auth/me").authenticated()
                         .anyRequest().authenticated()
