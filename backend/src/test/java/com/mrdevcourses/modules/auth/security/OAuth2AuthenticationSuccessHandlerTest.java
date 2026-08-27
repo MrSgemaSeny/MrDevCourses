@@ -1,6 +1,7 @@
 package com.mrdevcourses.modules.auth.security;
 
 import com.mrdevcourses.modules.auth.model.Role;
+import com.mrdevcourses.modules.auth.service.CustomOAuth2UserService;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +32,9 @@ class OAuth2AuthenticationSuccessHandlerTest {
     @Mock
     private JwtCookieHelper jwtCookieHelper;
 
+    @Mock
+    private CustomOAuth2UserService customOAuth2UserService;
+
     @InjectMocks
     private OAuth2AuthenticationSuccessHandler successHandler;
 
@@ -60,7 +64,6 @@ class OAuth2AuthenticationSuccessHandlerTest {
 
         successHandler.onAuthenticationSuccess(request, response, auth);
 
-        // Cookie creation is now delegated to JwtCookieHelper — verify it was called
         verify(jwtCookieHelper).addJwtCookie(any(), eq("mocked-jwt-token"));
         assertThat(response.getRedirectedUrl()).isEqualTo("http://localhost:5173/auth/callback");
     }
