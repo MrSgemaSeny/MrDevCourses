@@ -15,6 +15,9 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+*.local.ps1
+run-local.ps1
+backend/.env
 
 # Gradle
 .gradle/
