@@ -15,7 +15,7 @@ spring:
               - openid
               - profile
               - email
-            redirect-uri: "{baseUrl}/api/login/oauth2/code/{registrationId}"
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 
 logging:
   level:
