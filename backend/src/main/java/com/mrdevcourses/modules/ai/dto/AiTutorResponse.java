@@ -15,5 +15,6 @@ public class AiTutorResponse {
     private String answer;
     private String lessonTitle;
     private List<String> suggestedFollowUps;
+    private List<AiCitationDto> citations;
     private boolean fallbackMode;
 }

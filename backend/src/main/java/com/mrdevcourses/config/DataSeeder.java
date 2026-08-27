@@ -1,5 +1,9 @@
 package com.mrdevcourses.config;
 
+import com.mrdevcourses.modules.ai.rag.model.GlossaryEmbedding;
+import com.mrdevcourses.modules.ai.rag.repository.GlossaryEmbeddingRepository;
+import com.mrdevcourses.modules.ai.rag.service.EmbeddingService;
+import com.mrdevcourses.modules.ai.rag.service.LessonIngestionService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
@@ -25,6 +29,9 @@ public class DataSeeder {
     private final CourseRepository courseRepository;
     private final LessonRepository lessonRepository;
     private final UserRepository userRepository;
+    private final GlossaryEmbeddingRepository glossaryEmbeddingRepository;
+    private final LessonIngestionService lessonIngestionService;
+    private final EmbeddingService embeddingService;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -34,7 +41,7 @@ public class DataSeeder {
             return;
         }
 
-        log.info("Seeding initial MrDevCourses data...");
+        log.info("Seeding initial MrDevCourses data with vectorization & automation...");
 
         // 1. Admin User
         if (!userRepository.existsByEmail("admin@mrdevcourses.com")) {
@@ -59,7 +66,17 @@ public class DataSeeder {
                 .build();
         Course savedCourse = courseRepository.save(vibeCourse);
 
-        // 3. Lessons for Course
+        // 3. Glossary terms for course
+        List<GlossaryEmbedding> terms = List.of(
+                createGlossaryEmbedding(savedCourse.getId(), "RAG", "AI", "Retrieval-Augmented Generation — архитектурный паттерн обогащения промпта LLM актуальными векторными и текстовыми фрагментами из базы данных."),
+                createGlossaryEmbedding(savedCourse.getId(), "pgvector", "Database", "Расширение PostgreSQL для хранения векторных эмбеддингов и быстрого поиска ближайших соседей по HNSW и IVFFlat индексам."),
+                createGlossaryEmbedding(savedCourse.getId(), "FSD", "Frontend", "Feature-Sliced Design — архитектурная методология для фронтенда с разделением на app, pages, widgets, features, entities, shared."),
+                createGlossaryEmbedding(savedCourse.getId(), "IDOR", "Security", "Insecure Direct Object Reference — уязвимость авторизации, когда пользователь может обращаться к чужим объектам через подмену идентификатора."),
+                createGlossaryEmbedding(savedCourse.getId(), "Transactional Outbox", "Architecture", "Паттерн надежной доставки сообщений, сохраняющий события в таблицу БД в рамках той же транзакции, что и бизнес-сущность.")
+        );
+        glossaryEmbeddingRepository.saveAll(terms);
+
+        // 4. Lessons for Course
         List<Lesson> lessons = List.of(
                 Lesson.builder()
                         .course(savedCourse)
@@ -67,7 +84,16 @@ public class DataSeeder {
                         .dayNumber(1)
                         .sortOrder(1)
                         .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-                        .content("### Введение в курс\n\nДобро пожаловать в первый день обучения! Сегодня мы разберем:\n- Как формулировать идеи в инженерные спецификации\n- Настройку редактора кода и терминала\n- Принципы Second Brain и протоколы фиксации контекста")
+                        .content("""
+                                ### Введение в курс
+                                Добро пожаловать в первый день обучения! Сегодня мы разберем:
+                                - Как формулировать идеи в инженерные спецификации.
+                                - Настройку редактора кода, терминала и пакетных менеджеров.
+                                - Принципы Second Brain и протоколы фиксации контекста.
+                                
+                                ### Практическое задание
+                                Настройте проект и создайте первый модуль с соблюдением FSD структуры.
+                                """)
                         .build(),
                 Lesson.builder()
                         .course(savedCourse)
@@ -75,7 +101,16 @@ public class DataSeeder {
                         .dayNumber(2)
                         .sortOrder(2)
                         .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-                        .content("### Промпт-инжиниринг\n\nИзучаем как управлять ИИ-агентами:\n- Разница между базовыми и профессиональными системными инструкциями\n- Паттерн Smart Merge и DTO-структурирование\n- Защита от галлюцинаций в сложных логических задачах")
+                        .content("""
+                                ### Промпт-инжиниринг и RAG
+                                Изучаем как управлять ИИ-агентами:
+                                - Разница между базовыми и профессиональными системными инструкциями.
+                                - Архитектура RAG (Retrieval-Augmented Generation) и векторизация через pgvector.
+                                - Паттерн Smart Merge и DTO-структурирование.
+                                
+                                ### Практическое задание
+                                Напишите DTO-контракт и проверку ответов модели.
+                                """)
                         .build(),
                 Lesson.builder()
                         .course(savedCourse)
@@ -83,7 +118,15 @@ public class DataSeeder {
                         .dayNumber(3)
                         .sortOrder(3)
                         .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-                        .content("### Frontend Foundations\n\n- Структура Feature-Sliced Design (FSD)\n- Настройка Tailwind CSS v4 с темной эстетикой\n- Компонентный подход и типизация на TypeScript")
+                        .content("""
+                                ### Frontend Foundations
+                                - Структура Feature-Sliced Design (FSD).
+                                - Настройка Tailwind CSS v4 с темной эстетикой (#0d1117).
+                                - Компонентный подход, TanStack Query и типизация на TypeScript.
+                                
+                                ### Практическое задание
+                                Создайте интерактивный виджет для отправки домашних заданий.
+                                """)
                         .build(),
                 Lesson.builder()
                         .course(savedCourse)
@@ -91,7 +134,15 @@ public class DataSeeder {
                         .dayNumber(4)
                         .sortOrder(4)
                         .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-                        .content("### Backend & Security\n\n- Архитектура модульного монолита\n- Spring Security 6, Google OAuth2 и JWT в httpOnly cookie\n- Защита от IDOR и безопасность на уровне строк")
+                        .content("""
+                                ### Backend & Security
+                                - Архитектура модульного монолита и Transactional Outbox.
+                                - Spring Security 6, Google OAuth2 и JWT в httpOnly cookie.
+                                - Защита от IDOR и безопасность на уровне строк через SecurityUtils.
+                                
+                                ### Практическое задание
+                                Реализуйте защищенный эндпоинт с проверкой прав доступа.
+                                """)
                         .build(),
                 Lesson.builder()
                         .course(savedCourse)
@@ -99,11 +150,36 @@ public class DataSeeder {
                         .dayNumber(5)
                         .sortOrder(5)
                         .youtubeUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-                        .content("### Production Release\n\n- Настройка GitHub Actions пайплайна\n- Контейнеризация и деплой на Fly.io / Vercel\n- Проверка логов, мониторинг и финальная сдача проекта")
+                        .content("""
+                                ### Production Release
+                                - Настройка GitHub Actions пайплайна с обязательным прогоном тестов.
+                                - Контейнеризация и деплой на Fly.io / Vercel.
+                                - Проверка логов, мониторинг и финальная генерация сертификата.
+                                
+                                ### Практическое задание
+                                Настройте CI/CD сборку и выполните успешный деплой.
+                                """)
                         .build()
         );
 
-        lessonRepository.saveAll(lessons);
-        log.info("Seeded 1 course and {} lessons successfully.", lessons.size());
+        List<Lesson> savedLessons = lessonRepository.saveAll(lessons);
+        log.info("Seeded 1 course and {} lessons successfully.", savedLessons.size());
+
+        // Ingest lessons into vector embeddings
+        for (Lesson l : savedLessons) {
+            lessonIngestionService.ingestLesson(l);
+        }
+        log.info("Vector ingestion completed for all seeded course materials.");
+    }
+
+    private GlossaryEmbedding createGlossaryEmbedding(Long courseId, String term, String category, String definition) {
+        float[] vec = embeddingService.generateEmbedding(term + ": " + definition);
+        return GlossaryEmbedding.builder()
+                .courseId(courseId)
+                .term(term)
+                .category(category)
+                .definition(definition)
+                .embedding(embeddingService.vectorToString(vec))
+                .build();
     }
 }

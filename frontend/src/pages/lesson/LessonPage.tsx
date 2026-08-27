@@ -6,6 +6,7 @@ import { MarkdownViewer } from '@/shared/ui/MarkdownViewer';
 import { QuickNavProvider, QuickNavDrawer, useQuickNav } from '@/widgets/quick-nav';
 import { LessonContextPanel } from '@/widgets/lesson';
 import { LessonAiTutorChat } from '@/widgets/ai-tutor/LessonAiTutorChat';
+import { HomeworkSubmissionWidget } from '@/widgets/homework/HomeworkSubmissionWidget';
 import {
   Play,
   CheckCircle2,
@@ -15,6 +16,7 @@ import {
   ArrowLeft,
   BookOpen,
   Layers,
+  Code2,
 } from 'lucide-react';
 
 const LessonPageContent: React.FC = () => {
@@ -22,7 +24,7 @@ const LessonPageContent: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { openQuickNav } = useQuickNav();
-  const [activeTab, setActiveTab] = useState<'content' | 'tutor'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'homework' | 'tutor'>('content');
 
   const cId = Number(courseId);
   const lId = Number(lessonId);
@@ -50,7 +52,6 @@ const LessonPageContent: React.FC = () => {
     },
   });
 
-  // Extract YouTube embed ID
   const getEmbedUrl = (url?: string) => {
     if (!url) return null;
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
@@ -158,7 +159,7 @@ const LessonPageContent: React.FC = () => {
               </button>
             </div>
 
-            {/* Lesson Content / AI Tutor Tabs */}
+            {/* Lesson Tabs */}
             <div className="pt-4 border-t border-[#27272a]">
               <div className="flex items-center gap-2 mb-4">
                 <button
@@ -174,6 +175,18 @@ const LessonPageContent: React.FC = () => {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setActiveTab('homework')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'homework'
+                      ? 'bg-[#58a6ff]/20 text-[#58a6ff] border border-[#58a6ff]/40'
+                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                  }`}
+                >
+                  <Code2 className="w-3.5 h-3.5 text-[#58a6ff]" />
+                  <span>Задание и AI-ревью</span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => setActiveTab('tutor')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                     activeTab === 'tutor'
@@ -182,14 +195,13 @@ const LessonPageContent: React.FC = () => {
                   }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  AI Наставник
+                  <span>AI Наставник (RAG)</span>
                 </button>
               </div>
 
               {activeTab === 'content' ? (
                 <>
                   <MarkdownViewer content={lesson.content} />
-                  {/* Contextual Terms Panel */}
                   <div className="mt-6 pt-6 border-t border-[#27272a]">
                     <LessonContextPanel
                       dayNumber={lesson.dayNumber}
@@ -198,6 +210,15 @@ const LessonPageContent: React.FC = () => {
                     />
                   </div>
                 </>
+              ) : activeTab === 'homework' ? (
+                <HomeworkSubmissionWidget
+                  courseId={cId}
+                  lessonId={lId}
+                  onLessonCompleted={() => {
+                    queryClient.invalidateQueries({ queryKey: ['lesson', cId, lId] });
+                    queryClient.invalidateQueries({ queryKey: ['lessons', cId] });
+                  }}
+                />
               ) : (
                 <LessonAiTutorChat
                   courseId={cId}
@@ -285,7 +306,6 @@ const LessonPageContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick-Nav Slide-over Drawer (Fixed overlay, does not unmount video or page) */}
       <QuickNavDrawer />
     </div>
   );

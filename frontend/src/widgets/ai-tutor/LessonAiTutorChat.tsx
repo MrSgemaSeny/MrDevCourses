@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { aiTutorApi } from '@/entities/ai/api/aiTutorApi';
-import type { AiTutorResponse } from '@/shared/types';
+import type { AiCitation, AiTutorResponse } from '@/shared/types';
 import { MarkdownViewer } from '@/shared/ui/MarkdownViewer';
 
 interface LessonAiTutorChatProps {
@@ -12,6 +12,7 @@ interface LessonAiTutorChatProps {
 interface Message {
   role: 'user' | 'tutor';
   content: string;
+  citations?: AiCitation[];
   timestamp: string;
 }
 
@@ -59,6 +60,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
       const tutorMsg: Message = {
         role: 'tutor',
         content: response.answer,
+        citations: response.citations,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
@@ -85,7 +87,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-xs font-semibold uppercase tracking-wider text-[#fafafa]">
-            Senior AI Tutor
+            Senior AI Tutor (Hybrid RAG)
           </span>
         </div>
         <span className="text-[11px] text-[#8b949e] font-mono truncate max-w-[200px]">
@@ -110,7 +112,27 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
               {msg.role === 'user' ? (
                 <p className="whitespace-pre-wrap">{msg.content}</p>
               ) : (
-                <MarkdownViewer content={msg.content} />
+                <>
+                  <MarkdownViewer content={msg.content} />
+                  {msg.citations && msg.citations.length > 0 && (
+                    <div className="mt-3 pt-2 border-t border-[#21262d] space-y-1.5">
+                      <span className="text-[10px] uppercase font-semibold text-[#8b949e] tracking-wider block">
+                        Источники RAG:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {msg.citations.map((cit, cIdx) => (
+                          <div
+                            key={cIdx}
+                            title={cit.snippet}
+                            className="text-[10px] px-2 py-0.5 rounded bg-[#161b22] border border-[#30363d] text-[#58a6ff] hover:border-[#58a6ff] transition-colors cursor-help"
+                          >
+                            {cit.header} ({cit.relevanceScore}%)
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
             <span className="text-[10px] text-[#8b949e] mt-1 px-1">{msg.timestamp}</span>
@@ -120,7 +142,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
         {isLoading && (
           <div className="flex items-center gap-2 p-3 rounded-lg bg-[#0d1117] border border-[#30363d] w-fit">
             <div className="w-4 h-4 border-2 border-[#e2b340] border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs text-[#8b949e]">AI анализирует контекст урока...</span>
+            <span className="text-xs text-[#8b949e]">AI анализирует семантический контекст урока...</span>
           </div>
         )}
       </div>

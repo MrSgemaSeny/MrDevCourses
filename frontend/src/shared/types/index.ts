@@ -117,6 +117,7 @@ export interface GlossaryTerm {
   relatedDayNumbers?: number[];
   tags: string[];
 }
+
 export interface Certificate {
   id: number;
   certificateCode: string;
@@ -130,6 +131,13 @@ export interface Certificate {
   verificationUrl: string;
 }
 
+export interface AiCitation {
+  chunkId: number;
+  header: string;
+  snippet: string;
+  relevanceScore: number;
+}
+
 export interface AiTutorRequest {
   courseId: number;
   lessonId: number;
@@ -140,7 +148,60 @@ export interface AiTutorResponse {
   answer: string;
   lessonTitle: string;
   suggestedFollowUps: string[];
+  citations?: AiCitation[];
   fallbackMode: boolean;
+}
+
+export type SubmissionStatus = 'PENDING' | 'EVALUATING' | 'PASSED' | 'NEEDS_IMPROVEMENT' | 'FAILED';
+
+export interface HomeworkSubmission {
+  id: number;
+  lessonId: number;
+  userId: number;
+  courseId: number;
+  codeSnippet: string;
+  repositoryUrl?: string;
+  status: SubmissionStatus;
+  score: number;
+  aiFeedback?: string;
+  passedTestsCount: number;
+  totalTestsCount: number;
+  securityFlags?: string;
+  reviewedAt?: string;
+  createdAt: string;
+}
+
+export interface HomeworkSubmitRequest {
+  codeSnippet: string;
+  repositoryUrl?: string;
+}
+
+export interface OutboxMetrics {
+  pendingCount: number;
+  processingCount: number;
+  completedCount: number;
+  failedCount: number;
+}
+
+export interface StudentRisk {
+  userId: number;
+  userEmail: string;
+  userName: string;
+  courseId: number;
+  courseTitle: string;
+  currentDay: number;
+  daysInactive: number;
+  lastActiveDate: string;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
+  recommendedNudge: string;
+}
+
+export interface SemanticLink {
+  term: string;
+  category?: string;
+  definition: string;
+  similarityScore: number;
+  previewSnippet?: string;
 }
 
 export interface LessonFunnelItem {
