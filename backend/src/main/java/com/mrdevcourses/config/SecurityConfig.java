@@ -6,7 +6,6 @@ import com.mrdevcourses.modules.auth.security.JwtAuthenticationFilter;
 import com.mrdevcourses.modules.auth.security.OAuth2AuthenticationFailureHandler;
 import com.mrdevcourses.modules.auth.security.OAuth2AuthenticationSuccessHandler;
 import com.mrdevcourses.modules.auth.security.RestAuthenticationEntryPoint;
-import com.mrdevcourses.modules.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +34,6 @@ public class SecurityConfig {
     private final SecurityHeadersFilter securityHeadersFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final RateLimitingFilter rateLimitingFilter;
-    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
@@ -70,7 +68,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )

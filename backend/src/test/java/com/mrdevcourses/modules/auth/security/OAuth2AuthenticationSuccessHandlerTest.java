@@ -1,7 +1,8 @@
 package com.mrdevcourses.modules.auth.security;
 
 import com.mrdevcourses.modules.auth.model.Role;
-import com.mrdevcourses.modules.auth.service.CustomOAuth2UserService;
+import com.mrdevcourses.modules.auth.model.User;
+import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,9 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,13 +33,13 @@ import static org.mockito.Mockito.when;
 class OAuth2AuthenticationSuccessHandlerTest {
 
     @Mock
+    private UserRepository userRepository;
+
+    @Mock
     private JwtTokenProvider jwtTokenProvider;
 
     @Mock
     private JwtCookieHelper jwtCookieHelper;
-
-    @Mock
-    private CustomOAuth2UserService customOAuth2UserService;
 
     @InjectMocks
     private OAuth2AuthenticationSuccessHandler successHandler;
@@ -46,21 +52,37 @@ class OAuth2AuthenticationSuccessHandlerTest {
     @Test
     @DisplayName("Should set httpOnly cookie and redirect to frontend callback on success")
     void testOnAuthenticationSuccess() throws IOException {
-        UserPrincipal principal = UserPrincipal.builder()
+        Map<String, Object> attributes = Map.of(
+                "sub", "google-sub-123",
+                "email", "student@example.com",
+                "name", "Student Name",
+                "picture", "https://avatar.url"
+        );
+
+        OAuth2User oAuth2User = new DefaultOAuth2User(
+                Collections.emptyList(),
+                attributes,
+                "email"
+        );
+
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(oAuth2User, null, oAuth2User.getAuthorities());
+
+        User testUser = User.builder()
                 .id(1L)
                 .email("student@example.com")
-                .name("Student")
+                .name("Student Name")
                 .role(Role.STUDENT)
                 .build();
 
-        UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+        when(userRepository.findByGoogleId("google-sub-123")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("student@example.com")).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT))
+                .thenReturn("mocked-jwt-token");
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
-
-        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT))
-                .thenReturn("mocked-jwt-token");
 
         successHandler.onAuthenticationSuccess(request, response, auth);
 

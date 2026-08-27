@@ -1,6 +1,8 @@
 package com.mrdevcourses.modules.auth.security;
 
-import com.mrdevcourses.modules.auth.service.CustomOAuth2UserService;
+import com.mrdevcourses.modules.auth.model.Role;
+import com.mrdevcourses.modules.auth.model.User;
+import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,15 +15,17 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Map;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;
     private final JwtCookieHelper jwtCookieHelper;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
@@ -30,21 +34,41 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        UserPrincipal principal;
-        Object rawPrincipal = authentication.getPrincipal();
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        if (rawPrincipal instanceof UserPrincipal userPrincipal) {
-            principal = userPrincipal;
-        } else if (rawPrincipal instanceof OAuth2User oAuth2User) {
-            principal = customOAuth2UserService.processOAuth2User(null, oAuth2User);
-        } else {
-            log.error("Unsupported authentication principal type: {}", rawPrincipal != null ? rawPrincipal.getClass() : "null");
-            throw new IllegalStateException("Unsupported authentication principal type: " + (rawPrincipal != null ? rawPrincipal.getClass().getName() : "null"));
+        String email = (String) attributes.get("email");
+        String googleId = (String) attributes.get("sub");
+        String name = (String) attributes.get("name");
+        String picture = (String) attributes.get("picture");
+
+        if (email == null || email.isBlank()) {
+            log.error("OAuth2 user has no email in attributes: {}", attributes);
+            getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/login?error=no_email");
+            return;
         }
 
-        String token = tokenProvider.generateToken(principal.getId(), principal.getEmail(), principal.getRole());
+        User user = userRepository.findByGoogleId(googleId)
+                .or(() -> userRepository.findByEmail(email))
+                .map(existing -> {
+                    existing.setGoogleId(googleId);
+                    if (name != null) existing.setName(name);
+                    if (picture != null) existing.setAvatarUrl(picture);
+                    return userRepository.save(existing);
+                })
+                .orElseGet(() -> userRepository.save(User.builder()
+                        .email(email)
+                        .googleId(googleId)
+                        .name(name != null ? name : email.split("@")[0])
+                        .avatarUrl(picture)
+                        .role(Role.STUDENT)
+                        .createdAt(Instant.now())
+                        .build()));
+
+        String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole());
         jwtCookieHelper.addJwtCookie(response, token);
-        String targetUrl = frontendUrl + "/auth/callback";
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+        log.info("OAuth2 login successful for user: id={}, email={}", user.getId(), user.getEmail());
+        getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/auth/callback");
     }
 }
