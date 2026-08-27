@@ -2,6 +2,7 @@ package com.mrdevcourses.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
@@ -16,23 +17,36 @@ import java.util.Map;
 /**
  * Enterprise .env loader for local development.
  * Automatically loads key-value pairs from .env into Spring Environment property sources
- * without requiring hardcoded secrets in YAML or source code.
+ * and System properties without requiring hardcoded secrets in YAML or source code.
  */
-public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor {
+public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE;
+    }
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         File[] candidateFiles = new File[]{
                 new File(".env"),
                 new File("../.env"),
-                new File("backend/.env")
+                new File("backend/.env"),
+                new File(System.getProperty("user.dir"), ".env"),
+                new File(System.getProperty("user.dir"), "backend/.env"),
+                new File(System.getProperty("user.dir"), "../.env")
         };
 
         for (File file : candidateFiles) {
             if (file.exists() && file.isFile()) {
                 Map<String, Object> envMap = parseDotenvFile(file);
                 if (!envMap.isEmpty()) {
-                    environment.getPropertySources().addLast(new MapPropertySource("dotenvProperties", envMap));
+                    for (Map.Entry<String, Object> entry : envMap.entrySet()) {
+                        if (System.getProperty(entry.getKey()) == null && System.getenv(entry.getKey()) == null) {
+                            System.setProperty(entry.getKey(), String.valueOf(entry.getValue()));
+                        }
+                    }
+                    environment.getPropertySources().addFirst(new MapPropertySource("dotenvProperties", envMap));
                 }
                 break;
             }
