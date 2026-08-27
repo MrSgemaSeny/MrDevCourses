@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
-import { BookOpen, LayoutDashboard, Shield, LogOut, LogIn } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Shield, LogOut, LogIn, Flame } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -13,34 +13,49 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#27272a] bg-[#09090b]/80 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-[#21262d] bg-[#0d1117]/85 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link to="/" aria-label="MrDevCourses Главная" className="flex items-center gap-2 text-base font-bold text-white tracking-wide hover:opacity-90 transition-opacity">
-          <div className="w-6 h-6 rounded-md bg-white flex items-center justify-center text-black font-black text-xs">
+        <Link
+          to="/"
+          aria-label="MrDevCourses Главная"
+          className="flex items-center gap-2.5 text-base font-bold text-white tracking-wide hover:opacity-90 transition-opacity"
+        >
+          <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-black font-black text-sm shadow-md">
             M
           </div>
-          <span>MrDev<span className="text-zinc-400 font-normal">Courses</span></span>
+          <span className="text-base font-bold">
+            MrDev<span className="text-[#58a6ff]">Courses</span>
+          </span>
         </Link>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-5 text-sm font-medium">
-          <Link to="/courses" className="text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5 transition-colors">
-            <BookOpen className="w-4 h-4" />
-            <span>Курсы</span>
+        <nav className="flex items-center gap-6 text-xs font-semibold">
+          <Link
+            to="/courses"
+            className="text-[#c9d1d9] hover:text-[#58a6ff] flex items-center gap-1.5 transition-colors"
+          >
+            <BookOpen className="w-4 h-4 text-[#58a6ff]" />
+            <span>Каталог курсов</span>
           </Link>
 
           {isAuthenticated && (
-            <Link to="/dashboard" className="text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5 transition-colors">
-              <LayoutDashboard className="w-4 h-4" />
+            <Link
+              to="/dashboard"
+              className="text-[#c9d1d9] hover:text-[#58a6ff] flex items-center gap-1.5 transition-colors"
+            >
+              <LayoutDashboard className="w-4 h-4 text-purple-400" />
               <span>Моё обучение</span>
             </Link>
           )}
 
           {user?.role === 'ADMIN' && (
-            <Link to="/admin" className="text-zinc-400 hover:text-zinc-100 flex items-center gap-1.5 transition-colors">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-400">Админка</span>
+            <Link
+              to="/admin"
+              className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-800/60"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Админ-панель</span>
             </Link>
           )}
         </nav>
@@ -49,23 +64,46 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-3">
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
+              {/* Streak Badge */}
+              {(user.currentStreak ?? 0) > 0 && (
+                <div
+                  title={`Ваш текущий стрик: ${user.currentStreak} дн.`}
+                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-semibold"
+                >
+                  <Flame className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  <span>{user.currentStreak} дн.</span>
+                </div>
+              )}
+
+              {/* User Avatar + Name */}
+              <div className="flex items-center gap-2.5 pl-2 border-l border-[#30363d]">
                 {user.avatarUrl ? (
-                  <img src={user.avatarUrl} alt={user.name || user.email} className="w-7 h-7 rounded-full border border-zinc-700 object-cover" />
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name || user.email}
+                    className="w-8 h-8 rounded-full border border-[#30363d] object-cover shadow-sm"
+                  />
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs text-zinc-300 font-bold">
+                  <div className="w-8 h-8 rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center text-xs text-[#c9d1d9] font-bold shadow-sm">
                     {(user.name || user.email).charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="text-xs text-zinc-300 hidden sm:inline max-w-[120px] truncate">
-                  {user.name || user.email}
-                </span>
+                <div className="hidden md:flex flex-col text-left">
+                  <span className="text-xs font-semibold text-white max-w-[130px] truncate leading-tight">
+                    {user.name || user.email.split('@')[0]}
+                  </span>
+                  <span className="text-[10px] text-[#8b949e] font-mono leading-tight">
+                    {user.role}
+                  </span>
+                </div>
               </div>
+
+              {/* Logout Button */}
               <button
                 onClick={handleLogout}
                 aria-label="Выйти"
-                title="Выйти"
-                className="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 rounded-md transition-colors cursor-pointer"
+                title="Выйти из аккаунта"
+                className="p-2 text-[#8b949e] hover:text-rose-400 hover:bg-rose-950/30 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-rose-900/40"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -74,7 +112,7 @@ export const Header: React.FC = () => {
             <Link
               to="/login"
               aria-label="Войти в аккаунт"
-              className="px-3.5 py-1.5 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="px-4 py-2 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span>Войти</span>

@@ -36,6 +36,6 @@ describe('CoursesPage Component', () => {
 
     expect(screen.getByText(/Каталог курсов/i)).toBeInTheDocument();
     expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
-    expect(screen.getByText(/Подробнее/i)).toBeInTheDocument();
+    expect(screen.getByText(/Программа курса/i)).toBeInTheDocument();
   });
 });
