@@ -1,18 +1,28 @@
 package com.mrdevcourses.modules.admin.controller;
 
+import com.mrdevcourses.modules.ai.rag.repository.GlossaryEmbeddingRepository;
+import com.mrdevcourses.modules.ai.rag.repository.LessonChunkRepository;
 import com.mrdevcourses.modules.audit.repository.AuditLogRepository;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
+import com.mrdevcourses.modules.automation.repository.OutboxEventRepository;
 import com.mrdevcourses.modules.course.model.Course;
 import com.mrdevcourses.modules.course.model.Enrollment;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
+import com.mrdevcourses.modules.homework.repository.HomeworkSubmissionRepository;
 import com.mrdevcourses.modules.lesson.model.Lesson;
 import com.mrdevcourses.modules.lesson.model.LessonProgress;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionOptionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizSubmissionRepository;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,13 +57,43 @@ class AdminAnalyticsControllerTest {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CourseModuleRepository courseModuleRepository;
+
+    @Autowired
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
 
     @Autowired
+    private LessonMaterialRepository lessonMaterialRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private QuizQuestionRepository quizQuestionRepository;
+
+    @Autowired
+    private QuizQuestionOptionRepository quizQuestionOptionRepository;
+
+    @Autowired
+    private QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
     private LessonProgressRepository lessonProgressRepository;
+
+    @Autowired
+    private LessonChunkRepository lessonChunkRepository;
+
+    @Autowired
+    private GlossaryEmbeddingRepository glossaryEmbeddingRepository;
+
+    @Autowired
+    private HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private OutboxEventRepository outboxEventRepository;
 
     @Autowired
     private AuditLogRepository auditLogRepository;
@@ -71,8 +111,18 @@ class AdminAnalyticsControllerTest {
     @BeforeEach
     void setUp() {
         auditLogRepository.deleteAll();
+        outboxEventRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
+        quizQuestionOptionRepository.deleteAll();
+        quizQuestionRepository.deleteAll();
+        quizRepository.deleteAll();
+        lessonMaterialRepository.deleteAll();
         lessonProgressRepository.deleteAll();
+        lessonChunkRepository.deleteAll();
+        glossaryEmbeddingRepository.deleteAll();
         lessonRepository.deleteAll();
+        courseModuleRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();

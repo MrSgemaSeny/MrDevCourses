@@ -14,8 +14,10 @@ import com.mrdevcourses.modules.lesson.dto.LessonDetailDto;
 import com.mrdevcourses.modules.lesson.dto.LessonSummaryDto;
 import com.mrdevcourses.modules.lesson.model.Lesson;
 import com.mrdevcourses.modules.lesson.model.LessonProgress;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,6 +52,12 @@ class LessonServiceDripTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private LessonMaterialRepository lessonMaterialRepository;
+
+    @Mock
+    private QuizRepository quizRepository;
 
     @Mock
     private AuditService auditService;

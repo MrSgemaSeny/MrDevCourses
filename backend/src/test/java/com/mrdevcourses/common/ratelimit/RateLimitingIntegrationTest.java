@@ -1,15 +1,25 @@
 package com.mrdevcourses.common.ratelimit;
 
+import com.mrdevcourses.modules.ai.rag.repository.GlossaryEmbeddingRepository;
+import com.mrdevcourses.modules.ai.rag.repository.LessonChunkRepository;
 import com.mrdevcourses.modules.audit.repository.AuditLogRepository;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
+import com.mrdevcourses.modules.automation.repository.OutboxEventRepository;
 import com.mrdevcourses.modules.course.model.Course;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
+import com.mrdevcourses.modules.homework.repository.HomeworkSubmissionRepository;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionOptionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizSubmissionRepository;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,13 +55,43 @@ class RateLimitingIntegrationTest {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CourseModuleRepository courseModuleRepository;
+
+    @Autowired
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
 
     @Autowired
+    private LessonMaterialRepository lessonMaterialRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private QuizQuestionRepository quizQuestionRepository;
+
+    @Autowired
+    private QuizQuestionOptionRepository quizQuestionOptionRepository;
+
+    @Autowired
+    private QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
     private LessonProgressRepository lessonProgressRepository;
+
+    @Autowired
+    private LessonChunkRepository lessonChunkRepository;
+
+    @Autowired
+    private GlossaryEmbeddingRepository glossaryEmbeddingRepository;
+
+    @Autowired
+    private HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private OutboxEventRepository outboxEventRepository;
 
     @Autowired
     private AuditLogRepository auditLogRepository;
@@ -66,8 +106,18 @@ class RateLimitingIntegrationTest {
     void setUp() {
         rateLimiterService.reset();
         auditLogRepository.deleteAll();
+        outboxEventRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
+        quizQuestionOptionRepository.deleteAll();
+        quizQuestionRepository.deleteAll();
+        quizRepository.deleteAll();
+        lessonMaterialRepository.deleteAll();
         lessonProgressRepository.deleteAll();
+        lessonChunkRepository.deleteAll();
+        glossaryEmbeddingRepository.deleteAll();
         lessonRepository.deleteAll();
+        courseModuleRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();
@@ -102,7 +152,6 @@ class RateLimitingIntegrationTest {
                     .andExpect(header().string("X-RateLimit-Remaining", String.valueOf(59 - i)));
         }
 
-        // 61st request must trigger HTTP 429
         mockMvc.perform(get("/v1/courses")
                         .header("X-Forwarded-For", testIp))
                 .andExpect(status().isTooManyRequests())
@@ -125,7 +174,6 @@ class RateLimitingIntegrationTest {
                     .andExpect(header().string("X-RateLimit-Remaining", String.valueOf(9 - i)));
         }
 
-        // 11th request must trigger HTTP 429
         mockMvc.perform(post("/v1/auth/logout")
                         .header("X-Forwarded-For", testIp))
                 .andExpect(status().isTooManyRequests())
@@ -141,7 +189,6 @@ class RateLimitingIntegrationTest {
         String ipA = "198.51.100.101";
         String ipB = "198.51.100.102";
 
-        // Exhaust ipA auth quota
         for (int i = 0; i < 10; i++) {
             mockMvc.perform(post("/v1/auth/logout")
                             .header("X-Forwarded-For", ipA))
@@ -152,7 +199,6 @@ class RateLimitingIntegrationTest {
                         .header("X-Forwarded-For", ipA))
                 .andExpect(status().isTooManyRequests());
 
-        // ipB must still have full quota
         mockMvc.perform(post("/v1/auth/logout")
                         .header("X-Forwarded-For", ipB))
                 .andExpect(status().isOk())

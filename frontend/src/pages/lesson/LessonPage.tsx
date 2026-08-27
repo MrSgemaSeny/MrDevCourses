@@ -7,6 +7,8 @@ import { QuickNavProvider, QuickNavDrawer, useQuickNav } from '@/widgets/quick-n
 import { LessonContextPanel } from '@/widgets/lesson';
 import { LessonAiTutorChat } from '@/widgets/ai-tutor/LessonAiTutorChat';
 import { HomeworkSubmissionWidget } from '@/widgets/homework/HomeworkSubmissionWidget';
+import { LessonQuizWidget } from '@/widgets/quiz/LessonQuizWidget';
+import { LessonMaterialsList } from '@/widgets/materials/LessonMaterialsList';
 import {
   Play,
   CheckCircle2,
@@ -17,6 +19,7 @@ import {
   BookOpen,
   Layers,
   Code2,
+  HelpCircle,
 } from 'lucide-react';
 
 const LessonPageContent: React.FC = () => {
@@ -24,7 +27,7 @@ const LessonPageContent: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { openQuickNav } = useQuickNav();
-  const [activeTab, setActiveTab] = useState<'content' | 'homework' | 'tutor'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'quiz' | 'homework' | 'tutor'>('content');
 
   const cId = Number(courseId);
   const lId = Number(lessonId);
@@ -97,7 +100,6 @@ const LessonPageContent: React.FC = () => {
         </Link>
 
         <div className="flex items-center gap-2">
-          {/* Quick-Nav trigger button */}
           <button
             onClick={() => openQuickNav('glossary')}
             className="px-2.5 py-1 rounded text-xs bg-[#161b22] hover:bg-zinc-800 border border-[#30363d] hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
@@ -143,7 +145,14 @@ const LessonPageContent: React.FC = () => {
           {/* Lesson Title & Actions */}
           <div className="p-6 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-              <h1 className="text-2xl font-bold text-white tracking-tight">{lesson.title}</h1>
+              <div>
+                {lesson.moduleTitle && (
+                  <div className="text-[11px] font-semibold text-[#58a6ff] uppercase tracking-wider mb-1">
+                    {lesson.moduleTitle}
+                  </div>
+                )}
+                <h1 className="text-2xl font-bold text-white tracking-tight">{lesson.title}</h1>
+              </div>
 
               <button
                 onClick={() => completeMutation.mutate()}
@@ -161,11 +170,11 @@ const LessonPageContent: React.FC = () => {
 
             {/* Lesson Tabs */}
             <div className="pt-4 border-t border-[#27272a]">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
                 <button
                   type="button"
                   onClick={() => setActiveTab('content')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                     activeTab === 'content'
                       ? 'bg-[#21262d] text-[#fafafa] border border-[#30363d]'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -173,10 +182,24 @@ const LessonPageContent: React.FC = () => {
                 >
                   Материалы урока
                 </button>
+                {lesson.hasQuiz && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('quiz')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                      activeTab === 'quiz'
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        : 'text-[#8b949e] hover:text-[#fafafa]'
+                    }`}
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Квиз & Аттестация</span>
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setActiveTab('homework')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'homework'
                       ? 'bg-[#58a6ff]/20 text-[#58a6ff] border border-[#58a6ff]/40'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -188,7 +211,7 @@ const LessonPageContent: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('tutor')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'tutor'
                       ? 'bg-[#238636]/20 text-emerald-400 border border-emerald-500/40'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -200,16 +223,26 @@ const LessonPageContent: React.FC = () => {
               </div>
 
               {activeTab === 'content' ? (
-                <>
+                <div className="space-y-6">
                   <MarkdownViewer content={lesson.content} />
-                  <div className="mt-6 pt-6 border-t border-[#27272a]">
+                  <LessonMaterialsList materials={lesson.materials} />
+                  <div className="pt-6 border-t border-[#27272a]">
                     <LessonContextPanel
                       dayNumber={lesson.dayNumber}
                       courseId={cId}
                       lessonId={lId}
                     />
                   </div>
-                </>
+                </div>
+              ) : activeTab === 'quiz' ? (
+                <LessonQuizWidget
+                  courseId={cId}
+                  lessonId={lId}
+                  onPassed={() => {
+                    queryClient.invalidateQueries({ queryKey: ['lesson', cId, lId] });
+                    queryClient.invalidateQueries({ queryKey: ['lessons', cId] });
+                  }}
+                />
               ) : activeTab === 'homework' ? (
                 <HomeworkSubmissionWidget
                   courseId={cId}

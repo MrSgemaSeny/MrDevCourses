@@ -12,6 +12,47 @@ export interface User {
   createdAt: string;
 }
 
+export type LessonType = 'VIDEO' | 'ARTICLE' | 'PRACTICE' | 'QUIZ';
+
+export type MaterialType = 'CHEAT_SHEET' | 'SOURCE_CODE' | 'REPO_LINK' | 'DOCUMENTATION' | 'PDF';
+
+export interface LessonMaterial {
+  id: number;
+  title: string;
+  materialType: MaterialType;
+  url: string;
+  fileSizeBytes?: number;
+  sortOrder: number;
+}
+
+export interface LessonSummary {
+  id: number;
+  courseId: number;
+  moduleId?: number;
+  title: string;
+  lessonType?: LessonType;
+  durationMinutes?: number;
+  isFreePreview?: boolean;
+  dayNumber: number;
+  sortOrder: number;
+  accessible: boolean;
+  opensAt: string;
+  completed: boolean;
+  completedAt?: string;
+}
+
+export interface CourseModule {
+  id: number;
+  courseId: number;
+  title: string;
+  description?: string;
+  sortOrder: number;
+  isFreePreview: boolean;
+  lessonsCount: number;
+  completedLessonsCount: number;
+  lessons: LessonSummary[];
+}
+
 export interface Course {
   id: number;
   title: string;
@@ -22,18 +63,7 @@ export interface Course {
   enrolled?: boolean;
   enrolledAt?: string;
   totalLessons?: number;
-}
-
-export interface LessonSummary {
-  id: number;
-  courseId: number;
-  title: string;
-  dayNumber: number;
-  sortOrder: number;
-  accessible: boolean;
-  opensAt: string;
-  completed: boolean;
-  completedAt?: string;
+  modules?: CourseModule[];
 }
 
 export interface LessonDetail {
@@ -41,7 +71,12 @@ export interface LessonDetail {
   courseId: number;
   courseTitle: string;
   courseSlug: string;
+  moduleId?: number;
+  moduleTitle?: string;
   title: string;
+  lessonType?: LessonType;
+  durationMinutes?: number;
+  isFreePreview?: boolean;
   content?: string;
   youtubeUrl?: string;
   dayNumber: number;
@@ -50,6 +85,8 @@ export interface LessonDetail {
   opensAt: string;
   completed: boolean;
   completedAt?: string;
+  hasQuiz?: boolean;
+  materials?: LessonMaterial[];
   prevLessonId?: number;
   nextLessonId?: number;
 }
@@ -174,6 +211,63 @@ export interface HomeworkSubmission {
 export interface HomeworkSubmitRequest {
   codeSnippet: string;
   repositoryUrl?: string;
+}
+
+export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'TEXT_INPUT';
+
+export interface QuizOption {
+  id: number;
+  optionText: string;
+  sortOrder: number;
+}
+
+export interface QuizQuestion {
+  id: number;
+  questionText: string;
+  questionType: QuestionType;
+  points: number;
+  sortOrder: number;
+  options: QuizOption[];
+}
+
+export interface Quiz {
+  id: number;
+  lessonId: number;
+  title: string;
+  description?: string;
+  passingScorePercentage: number;
+  maxAttempts: number;
+  timeLimitSeconds: number;
+  questionsCount: number;
+  questions: QuizQuestion[];
+}
+
+export interface QuizSubmitRequest {
+  quizId: number;
+  selectedOptionIds: Record<number, number[]>;
+}
+
+export interface QuizResult {
+  submissionId: number;
+  quizId: number;
+  scorePercentage: number;
+  passed: boolean;
+  correctCount: number;
+  totalCount: number;
+  passingScorePercentage: number;
+  questionResults: Record<number, boolean>;
+  questionExplanations?: Record<number, string>;
+}
+
+export interface Cohort {
+  id: number;
+  courseId: number;
+  name: string;
+  startDate: string;
+  endDate?: string;
+  maxStudents?: number;
+  isActive: boolean;
+  createdAt: string;
 }
 
 export interface OutboxMetrics {

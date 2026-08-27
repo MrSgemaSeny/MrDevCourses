@@ -1,12 +1,18 @@
 package com.mrdevcourses.modules.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mrdevcourses.modules.ai.rag.repository.GlossaryEmbeddingRepository;
+import com.mrdevcourses.modules.ai.rag.repository.LessonChunkRepository;
+import com.mrdevcourses.modules.audit.repository.AuditLogRepository;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
+import com.mrdevcourses.modules.automation.repository.OutboxEventRepository;
 import com.mrdevcourses.modules.course.model.Course;
+import com.mrdevcourses.modules.course.model.CourseModule;
 import com.mrdevcourses.modules.course.model.Enrollment;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
 import com.mrdevcourses.modules.homework.dto.HomeworkSubmitRequest;
@@ -14,7 +20,13 @@ import com.mrdevcourses.modules.homework.model.HomeworkSubmission;
 import com.mrdevcourses.modules.homework.model.SubmissionStatus;
 import com.mrdevcourses.modules.homework.repository.HomeworkSubmissionRepository;
 import com.mrdevcourses.modules.lesson.model.Lesson;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
+import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionOptionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizQuestionRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizSubmissionRepository;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,13 +64,46 @@ class HomeworkControllerTest {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CourseModuleRepository courseModuleRepository;
+
+    @Autowired
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
 
     @Autowired
+    private LessonMaterialRepository lessonMaterialRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private QuizQuestionRepository quizQuestionRepository;
+
+    @Autowired
+    private QuizQuestionOptionRepository quizQuestionOptionRepository;
+
+    @Autowired
+    private QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
+    private LessonProgressRepository lessonProgressRepository;
+
+    @Autowired
+    private LessonChunkRepository lessonChunkRepository;
+
+    @Autowired
+    private GlossaryEmbeddingRepository glossaryEmbeddingRepository;
+
+    @Autowired
     private HomeworkSubmissionRepository submissionRepository;
+
+    @Autowired
+    private OutboxEventRepository outboxEventRepository;
+
+    @Autowired
+    private AuditLogRepository auditLogRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -70,8 +115,19 @@ class HomeworkControllerTest {
 
     @BeforeEach
     void setUp() {
+        auditLogRepository.deleteAll();
+        outboxEventRepository.deleteAll();
         submissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
+        quizQuestionOptionRepository.deleteAll();
+        quizQuestionRepository.deleteAll();
+        quizRepository.deleteAll();
+        lessonMaterialRepository.deleteAll();
+        lessonProgressRepository.deleteAll();
+        lessonChunkRepository.deleteAll();
+        glossaryEmbeddingRepository.deleteAll();
         lessonRepository.deleteAll();
+        courseModuleRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();
@@ -93,8 +149,17 @@ class HomeworkControllerTest {
                 .build();
         testCourse = courseRepository.save(testCourse);
 
+        CourseModule module = CourseModule.builder()
+                .course(testCourse)
+                .title("HW Module")
+                .sortOrder(1)
+                .isFreePreview(true)
+                .build();
+        module = courseModuleRepository.save(module);
+
         testLesson = Lesson.builder()
                 .course(testCourse)
+                .module(module)
                 .title("Day 1: Intro")
                 .dayNumber(1)
                 .sortOrder(1)

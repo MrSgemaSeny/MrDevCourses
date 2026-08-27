@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,6 +25,7 @@ public class CourseDetailDto {
     private Instant enrolledAt;
     private long lessonCount;
     private long totalLessons;
+    private List<CourseModuleDto> modules;
 
     public boolean isActive() {
         return isActive || active;

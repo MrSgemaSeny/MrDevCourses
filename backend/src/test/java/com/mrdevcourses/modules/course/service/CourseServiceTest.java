@@ -6,12 +6,15 @@ import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.Role;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
+import com.mrdevcourses.modules.course.dto.CourseDetailDto;
 import com.mrdevcourses.modules.course.dto.CourseDto;
 import com.mrdevcourses.modules.course.dto.EnrollmentDto;
 import com.mrdevcourses.modules.course.model.Course;
 import com.mrdevcourses.modules.course.model.Enrollment;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
+import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +41,16 @@ class CourseServiceTest {
     private CourseRepository courseRepository;
 
     @Mock
+    private CourseModuleRepository courseModuleRepository;
+
+    @Mock
     private EnrollmentRepository enrollmentRepository;
 
     @Mock
     private LessonRepository lessonRepository;
+
+    @Mock
+    private LessonProgressRepository lessonProgressRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -104,8 +113,9 @@ class CourseServiceTest {
     void getCourseBySlug_WhenExists_ShouldReturnCourse() {
         when(courseRepository.findBySlugAndActiveTrue("test-course")).thenReturn(Optional.of(testCourse));
         when(lessonRepository.countByCourseId(1L)).thenReturn(3L);
+        when(courseModuleRepository.findAllByCourseIdWithLessons(1L)).thenReturn(List.of());
 
-        CourseDto result = courseService.getCourseBySlug("test-course", Optional.empty());
+        CourseDetailDto result = courseService.getCourseBySlug("test-course", Optional.empty());
 
         assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getSlug()).isEqualTo("test-course");

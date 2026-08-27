@@ -5,12 +5,20 @@ import com.mrdevcourses.common.exception.ResourceNotFoundException;
 import com.mrdevcourses.modules.audit.service.AuditService;
 import com.mrdevcourses.modules.auth.model.User;
 import com.mrdevcourses.modules.auth.repository.UserRepository;
+import com.mrdevcourses.modules.course.dto.CourseDetailDto;
 import com.mrdevcourses.modules.course.dto.CourseDto;
+import com.mrdevcourses.modules.course.dto.CourseModuleDto;
 import com.mrdevcourses.modules.course.dto.EnrollmentDto;
 import com.mrdevcourses.modules.course.model.Course;
+import com.mrdevcourses.modules.course.model.CourseModule;
 import com.mrdevcourses.modules.course.model.Enrollment;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
+import com.mrdevcourses.modules.lesson.dto.LessonSummaryDto;
+import com.mrdevcourses.modules.lesson.model.Lesson;
+import com.mrdevcourses.modules.lesson.model.LessonProgress;
+import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +26,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,8 +37,10 @@ import java.util.stream.Collectors;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseModuleRepository courseModuleRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final LessonRepository lessonRepository;
+    private final LessonProgressRepository lessonProgressRepository;
     private final UserRepository userRepository;
     private final AuditService auditService;
 
@@ -44,14 +53,12 @@ public class CourseService {
 
         List<Long> courseIds = courses.stream().map(Course::getId).toList();
 
-        // Batch fetch lesson counts for all active courses
         Map<Long, Long> lessonCountMap = lessonRepository.countLessonsByCourseIds(courseIds).stream()
                 .collect(Collectors.toMap(
                         row -> (Long) row[0],
                         row -> (Long) row[1]
                 ));
 
-        // Batch fetch user enrollments if authenticated
         Map<Long, Instant> userEnrollmentMap;
         if (currentUserId.isPresent()) {
             userEnrollmentMap = enrollmentRepository.findAllByUserIdAndCourseIdIn(currentUserId.get(), courseIds).stream()
@@ -85,10 +92,10 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
-    public CourseDto getCourseBySlug(String slug, Optional<Long> currentUserId) {
+    public CourseDetailDto getCourseBySlug(String slug, Optional<Long> currentUserId) {
         Course course = courseRepository.findBySlugAndActiveTrue(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "slug", slug));
-        return toDto(course, currentUserId);
+        return toDetailDto(course, currentUserId);
     }
 
     @Transactional
@@ -122,21 +129,69 @@ public class CourseService {
         return toEnrollmentDto(saved);
     }
 
-    private CourseDto toDto(Course course, Optional<Long> currentUserId) {
+    private CourseDetailDto toDetailDto(Course course, Optional<Long> currentUserId) {
         boolean enrolled = false;
         Instant enrolledAt = null;
+        Map<Long, LessonProgress> progressMap = Map.of();
 
         if (currentUserId.isPresent()) {
             Optional<Enrollment> enrollment = enrollmentRepository.findByUserIdAndCourseId(currentUserId.get(), course.getId());
             if (enrollment.isPresent()) {
                 enrolled = true;
                 enrolledAt = enrollment.get().getEnrolledAt();
+                progressMap = lessonProgressRepository.findAllByUserIdAndCourseId(currentUserId.get(), course.getId()).stream()
+                        .collect(Collectors.toMap(lp -> lp.getLesson().getId(), lp -> lp));
             }
         }
 
+        List<CourseModule> modules = courseModuleRepository.findAllByCourseIdWithLessons(course.getId());
+        Instant now = Instant.now();
+        Instant finalEnrolledAt = enrolledAt;
+        Map<Long, LessonProgress> finalProgressMap = progressMap;
+
+        List<CourseModuleDto> moduleDtos = modules.stream().map(module -> {
+            List<LessonSummaryDto> lessonDtos = module.getLessons().stream().map(lesson -> {
+                Instant opensAt = finalEnrolledAt != null ? calculateUnlockTime(finalEnrolledAt, lesson.getDayNumber()) : Instant.now();
+                boolean isAccessible = lesson.getIsFreePreview() || (finalEnrolledAt != null && !now.isBefore(opensAt));
+                LessonProgress progress = finalProgressMap.get(lesson.getId());
+                boolean isCompleted = progress != null;
+                Instant completedAt = isCompleted ? progress.getCompletedAt() : null;
+
+                return LessonSummaryDto.builder()
+                        .id(lesson.getId())
+                        .courseId(course.getId())
+                        .moduleId(module.getId())
+                        .title(lesson.getTitle())
+                        .lessonType(lesson.getLessonType())
+                        .durationMinutes(lesson.getDurationMinutes())
+                        .isFreePreview(lesson.getIsFreePreview())
+                        .dayNumber(lesson.getDayNumber())
+                        .sortOrder(lesson.getSortOrder())
+                        .accessible(isAccessible)
+                        .opensAt(opensAt)
+                        .completed(isCompleted)
+                        .completedAt(completedAt)
+                        .build();
+            }).collect(Collectors.toList());
+
+            int completedCount = (int) lessonDtos.stream().filter(LessonSummaryDto::isCompleted).count();
+
+            return CourseModuleDto.builder()
+                    .id(module.getId())
+                    .courseId(course.getId())
+                    .title(module.getTitle())
+                    .description(module.getDescription())
+                    .sortOrder(module.getSortOrder())
+                    .isFreePreview(module.getIsFreePreview())
+                    .lessonsCount(lessonDtos.size())
+                    .completedLessonsCount(completedCount)
+                    .lessons(lessonDtos)
+                    .build();
+        }).collect(Collectors.toList());
+
         long totalLessons = lessonRepository.countByCourseId(course.getId());
 
-        return CourseDto.builder()
+        return CourseDetailDto.builder()
                 .id(course.getId())
                 .title(course.getTitle())
                 .description(course.getDescription())
@@ -146,7 +201,15 @@ public class CourseService {
                 .enrolled(enrolled)
                 .enrolledAt(enrolledAt)
                 .totalLessons(totalLessons)
+                .modules(moduleDtos)
                 .build();
+    }
+
+    private Instant calculateUnlockTime(Instant enrolledAt, int dayNumber) {
+        if (dayNumber <= 1) {
+            return enrolledAt;
+        }
+        return enrolledAt.plus(Duration.ofDays(dayNumber - 1L));
     }
 
     private EnrollmentDto toEnrollmentDto(Enrollment enrollment) {

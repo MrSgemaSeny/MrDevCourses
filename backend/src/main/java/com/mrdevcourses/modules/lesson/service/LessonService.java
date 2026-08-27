@@ -1,6 +1,5 @@
 package com.mrdevcourses.modules.lesson.service;
 
-import com.mrdevcourses.common.exception.AccessDeniedException;
 import com.mrdevcourses.common.exception.ApiException;
 import com.mrdevcourses.common.exception.LessonLockedException;
 import com.mrdevcourses.common.exception.ResourceNotFoundException;
@@ -13,11 +12,14 @@ import com.mrdevcourses.modules.course.model.Enrollment;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
 import com.mrdevcourses.modules.lesson.dto.LessonDetailDto;
+import com.mrdevcourses.modules.lesson.dto.LessonMaterialDto;
 import com.mrdevcourses.modules.lesson.dto.LessonSummaryDto;
 import com.mrdevcourses.modules.lesson.model.Lesson;
 import com.mrdevcourses.modules.lesson.model.LessonProgress;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,8 @@ public class LessonService {
     private final CourseRepository courseRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final UserRepository userRepository;
+    private final LessonMaterialRepository lessonMaterialRepository;
+    private final QuizRepository quizRepository;
     private final AuditService auditService;
 
     @Transactional(readOnly = true)
@@ -57,7 +61,11 @@ public class LessonService {
                     .map(lesson -> LessonSummaryDto.builder()
                             .id(lesson.getId())
                             .courseId(course.getId())
+                            .moduleId(lesson.getModule() != null ? lesson.getModule().getId() : null)
                             .title(lesson.getTitle())
+                            .lessonType(lesson.getLessonType())
+                            .durationMinutes(lesson.getDurationMinutes())
+                            .isFreePreview(lesson.getIsFreePreview())
                             .dayNumber(lesson.getDayNumber())
                             .sortOrder(lesson.getSortOrder())
                             .accessible(true)
@@ -89,7 +97,11 @@ public class LessonService {
                     return LessonSummaryDto.builder()
                             .id(lesson.getId())
                             .courseId(course.getId())
+                            .moduleId(lesson.getModule() != null ? lesson.getModule().getId() : null)
                             .title(lesson.getTitle())
+                            .lessonType(lesson.getLessonType())
+                            .durationMinutes(lesson.getDurationMinutes())
+                            .isFreePreview(lesson.getIsFreePreview())
                             .dayNumber(lesson.getDayNumber())
                             .sortOrder(lesson.getSortOrder())
                             .accessible(isAccessible)
@@ -124,13 +136,33 @@ public class LessonService {
             }
         }
 
+        List<LessonMaterialDto> materials = lessonMaterialRepository.findByLessonIdOrderBySortOrderAsc(lessonId).stream()
+                .map(m -> LessonMaterialDto.builder()
+                        .id(m.getId())
+                        .title(m.getTitle())
+                        .materialType(m.getMaterialType())
+                        .url(m.getUrl())
+                        .fileSizeBytes(m.getFileSizeBytes())
+                        .sortOrder(m.getSortOrder())
+                        .build())
+                .toList();
+
+        boolean hasQuiz = quizRepository.findByLessonId(lessonId).isPresent();
+        Long moduleId = lesson.getModule() != null ? lesson.getModule().getId() : null;
+        String moduleTitle = lesson.getModule() != null ? lesson.getModule().getTitle() : null;
+
         if (userRole == Role.ADMIN) {
             return LessonDetailDto.builder()
                     .id(lesson.getId())
                     .courseId(course.getId())
                     .courseTitle(course.getTitle())
                     .courseSlug(course.getSlug())
+                    .moduleId(moduleId)
+                    .moduleTitle(moduleTitle)
                     .title(lesson.getTitle())
+                    .lessonType(lesson.getLessonType())
+                    .durationMinutes(lesson.getDurationMinutes())
+                    .isFreePreview(lesson.getIsFreePreview())
                     .content(lesson.getContent())
                     .youtubeUrl(lesson.getYoutubeUrl())
                     .dayNumber(lesson.getDayNumber())
@@ -139,6 +171,8 @@ public class LessonService {
                     .opensAt(Instant.now())
                     .completed(false)
                     .completedAt(null)
+                    .hasQuiz(hasQuiz)
+                    .materials(materials)
                     .prevLessonId(prevLessonId)
                     .nextLessonId(nextLessonId)
                     .build();
@@ -151,7 +185,7 @@ public class LessonService {
         Instant opensAt = calculateUnlockTime(enrolledAt, lesson.getDayNumber());
         Instant now = Instant.now();
 
-        if (now.isBefore(opensAt)) {
+        if (now.isBefore(opensAt) && !lesson.getIsFreePreview()) {
             throw new LessonLockedException("Урок заблокирован. Он станет доступен: " + opensAt.toString(), opensAt);
         }
 
@@ -164,7 +198,12 @@ public class LessonService {
                 .courseId(course.getId())
                 .courseTitle(course.getTitle())
                 .courseSlug(course.getSlug())
+                .moduleId(moduleId)
+                .moduleTitle(moduleTitle)
                 .title(lesson.getTitle())
+                .lessonType(lesson.getLessonType())
+                .durationMinutes(lesson.getDurationMinutes())
+                .isFreePreview(lesson.getIsFreePreview())
                 .content(lesson.getContent())
                 .youtubeUrl(lesson.getYoutubeUrl())
                 .dayNumber(lesson.getDayNumber())
@@ -173,6 +212,8 @@ public class LessonService {
                 .opensAt(opensAt)
                 .completed(isCompleted)
                 .completedAt(completedAt)
+                .hasQuiz(hasQuiz)
+                .materials(materials)
                 .prevLessonId(prevLessonId)
                 .nextLessonId(nextLessonId)
                 .build();
@@ -220,7 +261,11 @@ public class LessonService {
         return LessonSummaryDto.builder()
                 .id(lesson.getId())
                 .courseId(course.getId())
+                .moduleId(lesson.getModule() != null ? lesson.getModule().getId() : null)
                 .title(lesson.getTitle())
+                .lessonType(lesson.getLessonType())
+                .durationMinutes(lesson.getDurationMinutes())
+                .isFreePreview(lesson.getIsFreePreview())
                 .dayNumber(lesson.getDayNumber())
                 .sortOrder(lesson.getSortOrder())
                 .accessible(true)
@@ -230,6 +275,11 @@ public class LessonService {
                 .build();
     }
 
+    @Transactional
+    public void completeLesson(Long courseId, Long lessonId) {
+        completeLesson(courseId, lessonId, com.mrdevcourses.common.util.SecurityUtils.getCurrentUserId(), Role.STUDENT);
+    }
+
     public Instant calculateUnlockTime(Instant enrolledAt, int dayNumber) {
         if (dayNumber <= 1) {
             return enrolledAt;
@@ -237,16 +287,6 @@ public class LessonService {
         return enrolledAt.plus(Duration.ofDays(dayNumber - 1L));
     }
 
-    /**
-     * Updates the student's study streak.
-     *
-     * Contract: streak is incremented only when a lesson is explicitly marked as completed —
-     * NOT on lesson open or video view. This is intentional: streak measures completed work,
-     * not passive browsing. If a student watches a video without clicking "complete", the streak
-     * is not updated. This is by design and documented here to distinguish from a "daily login" streak.
-     *
-     * Timezone: all calculations are in UTC. Streak resets if no lesson is completed for >1 UTC day.
-     */
     private void updateUserStreak(User user) {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
         LocalDate lastActive = user.getLastActiveDate();

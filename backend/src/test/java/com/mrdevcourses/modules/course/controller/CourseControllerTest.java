@@ -7,10 +7,13 @@ import com.mrdevcourses.modules.auth.repository.UserRepository;
 import com.mrdevcourses.modules.auth.service.JwtTokenProvider;
 import com.mrdevcourses.modules.course.model.Course;
 import com.mrdevcourses.modules.course.model.Enrollment;
+import com.mrdevcourses.modules.course.repository.CourseModuleRepository;
 import com.mrdevcourses.modules.course.repository.CourseRepository;
 import com.mrdevcourses.modules.course.repository.EnrollmentRepository;
+import com.mrdevcourses.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonProgressRepository;
 import com.mrdevcourses.modules.lesson.repository.LessonRepository;
+import com.mrdevcourses.modules.quiz.repository.QuizRepository;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,10 +48,19 @@ class CourseControllerTest {
     private CourseRepository courseRepository;
 
     @Autowired
+    private CourseModuleRepository courseModuleRepository;
+
+    @Autowired
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
+
+    @Autowired
+    private LessonMaterialRepository lessonMaterialRepository;
+
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Autowired
     private LessonProgressRepository lessonProgressRepository;
@@ -67,8 +79,11 @@ class CourseControllerTest {
     @BeforeEach
     void setUp() {
         auditLogRepository.deleteAll();
+        quizRepository.deleteAll();
+        lessonMaterialRepository.deleteAll();
         lessonProgressRepository.deleteAll();
         lessonRepository.deleteAll();
+        courseModuleRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();

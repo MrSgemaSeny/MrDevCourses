@@ -2,6 +2,7 @@ package com.mrdevcourses.modules.course.controller;
 
 import com.mrdevcourses.common.dto.ApiResponse;
 import com.mrdevcourses.common.util.SecurityUtils;
+import com.mrdevcourses.modules.course.dto.CourseDetailDto;
 import com.mrdevcourses.modules.course.dto.CourseDto;
 import com.mrdevcourses.modules.course.dto.EnrollmentDto;
 import com.mrdevcourses.modules.course.service.CourseService;
@@ -31,9 +32,9 @@ public class CourseController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<ApiResponse<CourseDto>> getCourseBySlug(@PathVariable String slug) {
+    public ResponseEntity<ApiResponse<CourseDetailDto>> getCourseBySlug(@PathVariable String slug) {
         Optional<Long> currentUserId = SecurityUtils.getCurrentUserIdOptional();
-        CourseDto course = courseService.getCourseBySlug(slug, currentUserId);
+        CourseDetailDto course = courseService.getCourseBySlug(slug, currentUserId);
         return ResponseEntity.ok(ApiResponse.success(course));
     }
 

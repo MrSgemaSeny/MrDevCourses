@@ -1,24 +1,13 @@
 package com.mrdevcourses.modules.lesson.model;
 
 import com.mrdevcourses.modules.course.model.Course;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.mrdevcourses.modules.course.model.CourseModule;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -40,8 +29,25 @@ public class Lesson {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "module_id")
+    private CourseModule module;
+
     @Column(nullable = false)
     private String title;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lesson_type", nullable = false, length = 50)
+    @Builder.Default
+    private LessonType lessonType = LessonType.VIDEO;
+
+    @Column(name = "duration_minutes", nullable = false)
+    @Builder.Default
+    private Integer durationMinutes = 0;
+
+    @Column(name = "is_free_preview", nullable = false)
+    @Builder.Default
+    private Boolean isFreePreview = false;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -55,6 +61,11 @@ public class Lesson {
     @Column(name = "sort_order", nullable = false)
     @Builder.Default
     private int sortOrder = 0;
+
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
+    @Builder.Default
+    private List<LessonMaterial> materials = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Builder.Default
