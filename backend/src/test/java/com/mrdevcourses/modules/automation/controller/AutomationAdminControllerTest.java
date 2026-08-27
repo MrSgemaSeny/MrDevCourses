@@ -112,7 +112,7 @@ class AutomationAdminControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/v1/admin/automation/outbox-metrics as ADMIN returns outbox counts")
+    @DisplayName("GET /v1/admin/automation/outbox-metrics as ADMIN returns outbox counts")
     void getOutboxMetrics_AsAdmin_ReturnsCounts() throws Exception {
         OutboxEvent event = OutboxEvent.builder()
                 .aggregateType("COURSE")
@@ -123,7 +123,7 @@ class AutomationAdminControllerTest {
                 .build();
         outboxEventRepository.save(event);
 
-        mockMvc.perform(get("/api/v1/admin/automation/outbox-metrics")
+        mockMvc.perform(get("/v1/admin/automation/outbox-metrics")
                         .cookie(new Cookie("mrdevcourses_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
@@ -131,9 +131,9 @@ class AutomationAdminControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/v1/courses/{courseId}/semantic-links extracts links from text")
+    @DisplayName("POST /v1/courses/{courseId}/semantic-links extracts links from text")
     void extractSemanticLinks_ReturnsLinks() throws Exception {
-        mockMvc.perform(post("/api/v1/courses/" + testCourse.getId() + "/semantic-links")
+        mockMvc.perform(post("/v1/courses/" + testCourse.getId() + "/semantic-links")
                         .cookie(new Cookie("mrdevcourses_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"text\": \"Применение RAG и FSD в проекте\"}"))

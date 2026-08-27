@@ -1,7 +1,20 @@
 -- MrDevCourses: Enterprise Vectorization and Automation Schema
--- Extensions for vector similarity search and trigram matching
-CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
+-- Extensions for vector similarity search and trigram matching (safe fallback)
+DO $$
+BEGIN
+    CREATE EXTENSION IF NOT EXISTS vector;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'pgvector extension not installed in environment, using TEXT storage fallback';
+END
+$$;
+
+DO $$
+BEGIN
+    CREATE EXTENSION IF NOT EXISTS pg_trgm;
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'pg_trgm extension not installed';
+END
+$$;
 
 -- 1. Lesson Semantic Chunks for Dense + Sparse Hybrid Search
 CREATE TABLE IF NOT EXISTS lesson_chunks (
@@ -14,8 +27,8 @@ CREATE TABLE IF NOT EXISTS lesson_chunks (
     content       TEXT NOT NULL,
     token_count   INT NOT NULL DEFAULT 0,
     content_hash  VARCHAR(64) NOT NULL,
-    embedding     vector(1536),
-    metadata      JSONB,
+    embedding     TEXT,
+    metadata      TEXT,
     created_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     updated_at    TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     CONSTRAINT uk_lesson_chunks_lesson_index UNIQUE (lesson_id, chunk_index)
@@ -25,7 +38,6 @@ CREATE INDEX IF NOT EXISTS idx_lesson_chunks_lesson ON lesson_chunks(lesson_id);
 CREATE INDEX IF NOT EXISTS idx_lesson_chunks_course ON lesson_chunks(course_id);
 CREATE INDEX IF NOT EXISTS idx_lesson_chunks_hash ON lesson_chunks(content_hash);
 CREATE INDEX IF NOT EXISTS idx_lesson_chunks_fts ON lesson_chunks USING gin (to_tsvector('russian', content));
-CREATE INDEX IF NOT EXISTS idx_lesson_chunks_hnsw ON lesson_chunks USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
 
 -- 2. Semantic Glossary Term Embeddings for Auto-Linking
 CREATE TABLE IF NOT EXISTS glossary_embeddings (
@@ -34,13 +46,12 @@ CREATE TABLE IF NOT EXISTS glossary_embeddings (
     term        VARCHAR(150) NOT NULL,
     category    VARCHAR(100),
     definition  TEXT NOT NULL,
-    embedding   vector(1536),
+    embedding   TEXT,
     created_at  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     CONSTRAINT uk_glossary_embeddings_course_term UNIQUE (course_id, term)
 );
 
 CREATE INDEX IF NOT EXISTS idx_glossary_embeddings_course ON glossary_embeddings(course_id);
-CREATE INDEX IF NOT EXISTS idx_glossary_embeddings_hnsw ON glossary_embeddings USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
 
 -- 3. Automated Homework Submissions & AI Code Grader
 CREATE TABLE IF NOT EXISTS homework_submissions (
