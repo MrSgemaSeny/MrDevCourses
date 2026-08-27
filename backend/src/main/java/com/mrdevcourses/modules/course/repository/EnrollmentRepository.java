@@ -31,5 +31,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     @Query("SELECT e FROM Enrollment e JOIN FETCH e.user WHERE e.course.id = :courseId ORDER BY e.enrolledAt DESC")
     List<Enrollment> findAllByCourseIdWithUser(@Param("courseId") Long courseId);
 
+    @Query("SELECT COUNT(DISTINCT e.user.id) FROM Enrollment e")
+    long countDistinctUsers();
+
     List<Enrollment> findAllByUserId(Long userId);
 }

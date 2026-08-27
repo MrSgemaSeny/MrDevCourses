@@ -99,15 +99,35 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-3">
-          <button
-            onClick={() => window.print()}
-            aria-label="Распечатать сертификат или сохранить в PDF"
-            className="px-4 py-2 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer"
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <a
+            href={`/certificates/verify/${certificateCode}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-[#e2b340] hover:underline font-mono"
           >
-            <Download className="w-4 h-4" />
-            <span>Распечатать / PDF</span>
-          </button>
+            Проверить подлинность сертификата →
+          </a>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={`/api/v1/certificates/${certificateCode}/pdf`}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Скачать официальный PDF сертификат"
+              className="px-4 py-2 bg-[#238636] hover:bg-[#2ea043] text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all cursor-pointer shadow-lg"
+            >
+              <Download className="w-4 h-4" />
+              <span>Официальный PDF</span>
+            </a>
+            <button
+              onClick={() => window.print()}
+              aria-label="Распечатать сертификат"
+              className="px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-[#fafafa] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all border border-[#30363d] cursor-pointer"
+            >
+              <span>Печать</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

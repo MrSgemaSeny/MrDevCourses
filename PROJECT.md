@@ -1,130 +1,81 @@
-# Project: MrDevCourses LMS Platform
+# Project: MrDevCourses Enterprise Scaling & Security Hardening
 
 ## Architecture
-
-MrDevCourses is a production-ready Learning Management System designed around a deterministic server-side drip-content engine, Google OAuth2 authentication with stateless JWT in `httpOnly` cookies, student progress tracking, an administrative control panel, and a modern minimalist dark UI styled in the Envie design aesthetic.
-
-### System Overview & Data Flow
-```
-[Browser / React 19 + Vite + FSD]
-   │ (httpOnly Cookie: mrdevcourses_token, SameSite=Lax, Secure)
-   ▼
-[Reverse Proxy / Spring Boot 3.3.0 Backend: Context Path /api]
-   ├── JwtAuthenticationFilter (Cookie & Bearer extractor)
-   ├── SecurityUtils (Thread-local IDOR-safe current user ID)
-   ├── REST Controllers (/api/v1/**)
-   │     ├── AuthController (/api/v1/auth/**)
-   │     ├── CourseController (/api/v1/courses/**)
-   │     ├── LessonController (/api/v1/courses/{courseId}/lessons/**)
-   │     ├── ProgressController (/api/v1/progress/**)
-   │     └── AdminController (/api/v1/admin/**)
-   ├── Domain Services (Drip Calculation Engine, Enrollment, Progress Aggregation)
-   └── PostgreSQL / H2 (Flyway Migrations V1..V5, strict UTC timestamps)
-```
-
-### Module Boundaries
-1. **`auth`**: Google OAuth2 User Service, JWT Provider, Security Filter, Session Cookie Management, SecurityUtils, `/api/v1/auth/me`, `/api/v1/auth/logout` [DONE].
-2. **`course`**: Course catalog, Course details by slug, Student enrollment (`POST /api/v1/courses/{courseId}/enroll` with `NOW()` timestamp and unique constraint) [IN_PROGRESS].
-3. **`lesson`**: Lesson player APIs, strict deterministic SQL/Service Drip Engine (`(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL '1 day')`), 403 Forbidden with exact `opensAt` timestamp, Lesson completion tracking (`POST /api/v1/courses/{courseId}/lessons/{lessonId}/complete`).
-4. **`progress`**: Aggregated student progress metrics (`currentDay`, `completedCount`, `totalUnlocked`, `totalLessons`, `nextUnlockAt`), overview across courses and per-course details.
-5. **`admin`**: Role-based access control (`ROLE_ADMIN`), CRUD for courses and lessons, student roster & progress inspection, manual enrollment.
-6. **`frontend`**: Strict Feature-Sliced Design (FSD: `app`, `pages`, `widgets`, `features`, `entities`, `shared`), Envie Dark Theme (`#09090b` bg, `rgba(24, 24, 27, 0.8)` cards, `#27272a` borders, `#fafafa` text/actions).
-
----
+- **Backend Architecture**: Spring Boot 3.3.0, Java 17, PostgreSQL 16, Spring Security 6 (Stateless JWT in httpOnly cookie + Google OAuth2), Flyway (V1..V10), Bucket4j (Rate Limiting), OpenHTMLtoPDF + Thymeleaf (PDF Certificates), Groq API / Llama 3.3 70B (AI Tutor).
+- **Frontend Architecture**: React 19, TypeScript, Vite, FSD (Feature-Sliced Design), Tailwind CSS v4 (Envie Dark Theme), TanStack React Query v5, Lucide Icons, Pure SVG Visualizations.
+- **Design System**: Strict modern dark aesthetic (`#0d1117` background, `#161b22` cards, `#30363d` borders, `#d97706`/`#f59e0b` gold accents). No emojis.
 
 ## Feature Inventory
-
 | # | Feature | Description | Milestone | Source |
 |---|---------|-------------|-----------|--------|
-| 1 | F-01: Google OAuth2 Login & User Provisioning | OAuth2UserService for auto-provisioning/updating user record on Google login | M1 | ORIGINAL_REQUEST §R1 |
-| 2 | F-02: Stateless JWT in httpOnly Cookie | Issue `mrdevcourses_token` httpOnly cookie with expiration and SameSite config | M1 | ORIGINAL_REQUEST §R1 |
-| 3 | F-03: SecurityUtils & Auth Filter | JWT extraction filter and `SecurityUtils.getCurrentUserId()` IDOR protection | M1 | ORIGINAL_REQUEST §R1 |
-| 4 | F-04: User Profile & Logout Endpoints | `GET /api/v1/auth/me` and `POST /api/v1/auth/logout` | M1 | ORIGINAL_REQUEST §R1 |
-| 5 | F-05: Frontend Auth Provider & Guards | React Auth Context, Google login modal, protected route wrapper | M1 | ORIGINAL_REQUEST §R1 |
-| 6 | F-06: Course Catalog API | `GET /api/v1/courses` with public active courses | M2 | ORIGINAL_REQUEST §R2 |
-| 7 | F-07: Course Slug Detail API | `GET /api/v1/courses/{slug}` with course overview and lesson count | M2 | ORIGINAL_REQUEST §R2 |
-| 8 | F-08: Student Enrollment Engine | `POST /api/v1/courses/{courseId}/enroll` recording `enrolled_at = NOW()` | M2 | ORIGINAL_REQUEST §R2 |
-| 9 | F-09: Course Catalog & Details UI | Courses list page, course landing page with slug routing & enroll action | M2 | ORIGINAL_REQUEST §R2 |
-| 10| F-10: Server-Side Drip Engine & Lesson Listing | `GET /api/v1/courses/{courseId}/lessons` with `isAccessible`, `opensAt`, `isCompleted` | M3 | ORIGINAL_REQUEST §R3 |
-| 11| F-11: Guarded Lesson Content API | `GET /api/v1/courses/{courseId}/lessons/{lessonId}` returning 403 with `opensAt` if premature | M3 | ORIGINAL_REQUEST §R3 |
-| 12| F-12: Lesson Completion API | `POST /api/v1/courses/{courseId}/lessons/{lessonId}/complete` idempotent progress tracking | M3 | ORIGINAL_REQUEST §R3 |
-| 13| F-13: Lesson Player UI | YouTube player embed converter, markdown viewer, lesson navigation sidebar | M3 | ORIGINAL_REQUEST §R3 |
-| 14| F-14: Student Progress Metrics Engine | `GET /api/v1/progress` and `GET /api/v1/progress/{courseId}` metrics calculation | M4 | ORIGINAL_REQUEST §R4 |
-| 15| F-15: Student Dashboard UI | Dashboard view with overall stats, course progress bar, timeline & unlock countdown | M4 | ORIGINAL_REQUEST §R4 |
-| 16| F-16: Admin RBAC & Course/Lesson CRUD | `/api/v1/admin/**` protected endpoints for course and lesson management | M5 | ORIGINAL_REQUEST §R5 |
-| 17| F-17: Admin Student Management | Student roster, enrollment records, completion status inspection, manual enrollment | M5 | ORIGINAL_REQUEST §R5 |
-| 18| F-18: Admin Management UI | Admin dashboard with data tables, course/lesson edit modals, student roster | M5 | ORIGINAL_REQUEST §R5 |
-| 19| F-19: Envie Dark Theme & FSD Compliance | Modern dark palette (#09090b, rgba(24,24,27,0.8), #27272a, #fafafa), clean FSD layers | M6 | ORIGINAL_REQUEST §R6 |
-| 20| F-20: E2E Verification & Second Brain Sync | 100% backend & frontend test pass, Tiers 1-5 pass, Second Brain journal & git sync | M6 | ORIGINAL_REQUEST §Quality |
-
----
+| 1 | Bucket4j Rate Limiting | Tiered Token Bucket policies (Auth: 10/15m per IP, AI: 5/1m per User, General: 60/1m per IP/User) | M1 | ORIGINAL_REQUEST §R1 |
+| 2 | RLS & IDOR Defense | Strict Row-Level Security & IDOR checks via SecurityUtils.getCurrentUserId() | M1 | ORIGINAL_REQUEST §R1 |
+| 3 | Quick-Nav Slide-over Drawer | 3-tab drawer (GlossaryView, ProgressView, RoadmapView) without resetting video | M2 | ORIGINAL_REQUEST §R2 |
+| 4 | In-Lesson Contextual Term Cards | Clickable term chips with 1-click focus into Quick-Nav Drawer | M2 | ORIGINAL_REQUEST §R2 |
+| 5 | AI Lesson Tutor Backend Module | Groq API (Llama 3.3 70B), prompt grounding in lesson markdown, XML prompt injection defense | M3 | ORIGINAL_REQUEST §R3 |
+| 6 | AI Lesson Tutor Frontend Chat | Slide-in chat widget with streaming/markdown rendering, quick prompts, 429 cooldown | M3 | ORIGINAL_REQUEST §R3 |
+| 7 | Automated PDF Certificate Generator | OpenHTMLtoPDF + Thymeleaf dark/gold vector PDF certificate upon 100% course completion | M4 | ORIGINAL_REQUEST §R4 |
+| 8 | Certificate Verification Endpoint & UI | Public verify endpoint GET /api/v1/certificates/verify/{uuid} & /certificates/verify/:uuid page | M4 | ORIGINAL_REQUEST §R4 |
+| 9 | Admin Analytics Backend Engine | Day completion funnel, drop-off rates, average time per lesson, streak distributions | M5 | ORIGINAL_REQUEST §R5 |
+| 10 | Admin Analytics Dashboard UI | KPI cards, pure SVG Funnel Chart, Streak Distribution bars, Lesson Retention table | M5 | ORIGINAL_REQUEST §R5 |
+| 11 | Full Verification & Second Brain | 100% green tests, production build, Flyway validation, Second Brain journal & status update | M6 | ORIGINAL_REQUEST §AC |
 
 ## Milestones
-
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Auth & Session Management | F-01..F-05 | None | DONE |
-| M2 | Courses & Enrollment Engine | F-06..F-09 | M1 | IN_PROGRESS |
-| M3 | Lesson Player & Drip Engine | F-10..F-13 | M1, M2 | PLANNED |
-| M4 | Student Dashboard & Progress | F-14, F-15 | M1, M2, M3 | PLANNED |
-| M5 | Admin Management Panel | F-16..F-18 | M1, M2, M3 | PLANNED |
-| M6 | UI/UX Hardening, E2E Verification & Second Brain | F-19, F-20 | M1..M5 | PLANNED |
-
----
+| M1 | Enterprise Security & Rate Limiting | Bucket4j service & filter (Auth, AI, General tiers), RLS/IDOR verification, unit/integration tests | none | IN_PROGRESS |
+| M2 | Quick-Nav Drawer & Navigation Engine | QuickNavDrawer (GlossaryView, ProgressView, RoadmapView), LessonContextPanel, video preservation | none | IN_PROGRESS |
+| M3 | AI Lesson Tutor Engine & Chat | Groq client, prompt grounding, XML sanitizer, V10 Flyway migration, frontend AI Chat widget | M1 | PLANNED |
+| M4 | Automated PDF Certificate & Verification | Certificate entity, OpenHTMLtoPDF+Thymeleaf template, verify endpoint & page, PDF download | none | PLANNED |
+| M5 | Admin Analytics & Retention Dashboard | AdminAnalyticsService, repository aggregations, SVG Funnel, Streak & Retention table | none | PLANNED |
+| M6 | Full E2E Verification & Second Brain Sync | ./gradlew test jacocoTestReport, npm test, npm run build, Second Brain journal & projects update | M1, M2, M3, M4, M5 | PLANNED |
 
 ## Interface Contracts
 
-### 1. HTTP Response Envelopes
-- **Success (`ApiResponse<T>`)**:
-  ```json
-  {
-    "success": true,
-    "message": "Operation successful",
-    "data": { ... },
-    "timestamp": "2026-08-25T14:45:00Z"
-  }
-  ```
-- **Error (`ErrorResponse`)**:
-  ```json
-  {
-    "status": 403,
-    "error": "Forbidden",
-    "message": "Lesson is locked. Opens at 2026-08-26T14:45:00Z",
-    "path": "/api/v1/courses/1/lessons/2",
-    "timestamp": "2026-08-25T14:45:00Z",
-    "opensAt": "2026-08-26T14:45:00Z",
-    "validationErrors": null
-  }
-  ```
+### M1: Rate Limiting & RLS
+- **Service**: `RateLimiterService.resolveBucket(String key, RateLimitTier tier) -> Bucket`
+- **Filter**: `RateLimitingFilter extends OncePerRequestFilter` returning HTTP 429 Too Many Requests with JSON `ErrorResponse` and `Retry-After` header.
+- **Tiers**: `AUTH` (10 req/15 min/IP), `AI` (5 req/1 min/User), `GENERAL` (60 req/1 min/IP/User).
 
-### 2. Auth Endpoints [DONE]
-- `GET /api/v1/auth/me` -> returns current authenticated `UserDto { id, email, name, avatarUrl, role }`. Returns 401 if unauthenticated.
-- `POST /api/v1/auth/logout` -> clears `mrdevcourses_token` cookie (Max-Age=0, Path=/).
-- Cookie format: `mrdevcourses_token=<jwt>; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400`.
+### M2: Quick-Nav Drawer
+- **Context**: `QuickNavContext` (`isOpen`, `activeTab: 'glossary'|'progress'|'roadmap'`, `selectedTerm?: string`, `openQuickNav(tab, term)`, `closeQuickNav()`).
+- **DOM**: Overlay fixed slide-over without unmounting parent components or resetting video playback.
 
-### 3. Courses & Enrollment Endpoints [IN_PROGRESS]
-- `GET /api/v1/courses` -> returns `List<CourseDto> { id, title, description, slug, isActive, lessonCount, createdAt }`.
-- `GET /api/v1/courses/{slug}` -> returns `CourseDetailDto { id, title, description, slug, isActive, totalLessons, isEnrolled, enrolledAt }`.
-- `POST /api/v1/courses/{courseId}/enroll` -> returns `EnrollmentDto { id, userId, courseId, enrolledAt }`.
+### M3: AI Lesson Tutor
+- **API**: `POST /api/v1/ai/tutor/chat` (Payload: `{ courseId, lessonId, prompt, history }` -> Response: `{ message, groundedLessonId, tokensUsed }` or SSE stream).
+- **Security**: System prompt XML-isolation `<lesson_content>`, `<student_question>`, PII masking.
+- **Flyway**: `V10__create_ai_usage.sql` table `ai_usage`.
 
-### 4. Lessons & Strict Drip Endpoints
-- `GET /api/v1/courses/{courseId}/lessons` -> returns `List<LessonSummaryDto> { id, dayNumber, title, sortOrder, isAccessible, opensAt, isCompleted }`.
-- `GET /api/v1/courses/{courseId}/lessons/{lessonId}` -> returns `LessonDetailDto { id, courseId, dayNumber, title, content, youtubeUrl, sortOrder, isAccessible, isCompleted }`.
-  - If locked (`now < opensAt`), returns HTTP `403 Forbidden` with body `{ ..., "opensAt": "..." }`.
-- `POST /api/v1/courses/{courseId}/lessons/{lessonId}/complete` -> returns `LessonProgressDto { id, userId, lessonId, completedAt }`.
+### M4: Certificate Generation & Verification
+- **API**:
+  - `GET /api/v1/certificates/courses/{courseId}/download` (returns `application/pdf`).
+  - `GET /api/v1/certificates/verify/{certificateCode}` (Public permitAll -> returns `{ uuid, studentName, courseTitle, issuedAt, valid: true }`).
+- **Engine**: OpenHTMLtoPDF `PdfRendererBuilder` with Thymeleaf template `templates/certificate.html`.
 
-### 5. Progress Endpoints
-- `GET /api/v1/progress` -> returns `List<CourseProgressSummaryDto> { courseId, courseTitle, slug, currentDay, completedCount, totalUnlocked, totalLessons, nextUnlockAt, percentComplete }`.
-- `GET /api/v1/progress/{courseId}` -> returns `DetailedProgressDto { courseId, currentDay, completedCount, totalUnlocked, totalLessons, nextUnlockAt, lessons: List<LessonProgressStatusDto> }`.
+### M5: Admin Analytics
+- **API**:
+  - `GET /api/v1/admin/analytics/overview` -> `AdminOverviewMetricsDto`
+  - `GET /api/v1/admin/analytics/courses/{courseId}/funnel` -> `List<FunnelStageDto>`
+  - `GET /api/v1/admin/analytics/streaks` -> `List<StreakDistributionDto>`
+- **Security**: `@PreAuthorize("hasRole('ADMIN')")`.
 
-### 6. Admin Endpoints (`hasRole('ADMIN')`)
-- `GET /api/v1/admin/courses`
-- `POST /api/v1/admin/courses` (Create Course)
-- `PUT /api/v1/admin/courses/{id}` (Update Course)
-- `DELETE /api/v1/admin/courses/{id}` (Deactivate Course)
-- `GET /api/v1/admin/courses/{courseId}/lessons`
-- `POST /api/v1/admin/courses/{courseId}/lessons` (Create Lesson)
-- `PUT /api/v1/admin/lessons/{id}` (Update Lesson)
-- `DELETE /api/v1/admin/lessons/{id}` (Delete Lesson)
-- `GET /api/v1/admin/courses/{courseId}/students` (Roster with enrollment date & completed lessons)
-- `POST /api/v1/admin/courses/{courseId}/enroll` (Manual student enrollment by user email/id)
+## Code Layout
+### Backend (`backend/src/main/java/com/mrdevcourses/`)
+- `common/ratelimit/`: `RateLimiterService`, `RateLimitingFilter`, `RateLimitTier`, `IpResolver`
+- `modules/ai/`: `controller/AiTutorController`, `service/AiTutorService`, `service/GroqClient`, `service/ContextSanitizer`, `service/TokenAccountingService`, `entity/AiUsage`, `repository/AiUsageRepository`
+- `modules/certificate/`: `controller/CertificateController`, `service/CertificateService`, `service/PdfCertificateGenerator`, `entity/Certificate`, `repository/CertificateRepository`
+- `modules/admin/`: `controller/AdminAnalyticsController`, `service/AdminAnalyticsService`
+- `resources/db/migration/`: `V10__create_ai_usage.sql`
+- `resources/templates/`: `certificate.html`
+- `resources/fonts/`: embedded font files for PDF rendering
+
+### Frontend (`frontend/src/`)
+- `entities/ai/api/aiTutorApi.ts`
+- `entities/certificate/api/certificateApi.ts`
+- `entities/admin/api/adminAnalyticsApi.ts`
+- `entities/glossary/`: `model/types.ts`, `data/glossaryData.ts`
+- `features/ai-tutor/`: `ui/AiLessonTutor.tsx`, `model/useAiTutor.ts`
+- `features/admin-analytics/`: `ui/AdminAnalyticsDashboard.tsx`, `ui/CourseFunnelChart.tsx`, `ui/StreakDistributionChart.tsx`, `ui/LessonRetentionTable.tsx`
+- `widgets/quick-nav/`: `ui/QuickNavDrawer.tsx`, `ui/GlossaryView.tsx`, `ui/ProgressView.tsx`, `ui/RoadmapView.tsx`, `model/QuickNavContext.tsx`
+- `widgets/lesson/ui/LessonContextPanel.tsx`
+- `pages/certificate/CertificateVerifyPage.tsx`

@@ -104,3 +104,60 @@ export interface ApiError {
   timestamp: string;
   validationErrors?: Record<string, string>;
 }
+
+export type GlossaryCategory = 'core' | 'backend' | 'frontend' | 'security' | 'ai' | 'devops';
+
+export interface GlossaryTerm {
+  id: string;
+  term: string;
+  category: GlossaryCategory;
+  shortDefinition: string;
+  fullExplanation: string;
+  codeSnippet?: string;
+  relatedDayNumbers?: number[];
+  tags: string[];
+}
+export interface Certificate {
+  id: number;
+  certificateCode: string;
+  userId: number;
+  userName: string;
+  userEmail: string;
+  courseId: number;
+  courseTitle: string;
+  courseSlug: string;
+  issuedAt: string;
+  verificationUrl: string;
+}
+
+export interface AiTutorRequest {
+  courseId: number;
+  lessonId: number;
+  question: string;
+}
+
+export interface AiTutorResponse {
+  answer: string;
+  lessonTitle: string;
+  suggestedFollowUps: string[];
+  fallbackMode: boolean;
+}
+
+export interface LessonFunnelItem {
+  lessonId: number;
+  dayNumber: number;
+  title: string;
+  completedCount: number;
+  conversionRate: number;
+  dropOffRate: number;
+}
+
+export interface AdminAnalytics {
+  totalStudents: number;
+  totalEnrollments: number;
+  totalCompletions: number;
+  totalCertificates: number;
+  averageStreak: number;
+  overallCompletionRate: number;
+  funnel: LessonFunnelItem[];
+}

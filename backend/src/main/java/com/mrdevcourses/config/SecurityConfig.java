@@ -1,5 +1,6 @@
 package com.mrdevcourses.config;
 
+import com.mrdevcourses.common.ratelimit.RateLimitingFilter;
 import com.mrdevcourses.common.security.SecurityHeadersFilter;
 import com.mrdevcourses.modules.auth.security.JwtAuthenticationFilter;
 import com.mrdevcourses.modules.auth.security.OAuth2AuthenticationFailureHandler;
@@ -33,6 +34,7 @@ public class SecurityConfig {
 
     private final SecurityHeadersFilter securityHeadersFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final RateLimitingFilter rateLimitingFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
@@ -61,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**", "/error", "/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/certificates/verify/**", "/v1/certificates/*/pdf").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/auth/logout", "/v1/auth/register", "/v1/auth/login").permitAll()
                         .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/v1/auth/me").authenticated()
@@ -72,7 +75,8 @@ public class SecurityConfig {
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
                 .addFilterBefore(securityHeadersFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(rateLimitingFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }

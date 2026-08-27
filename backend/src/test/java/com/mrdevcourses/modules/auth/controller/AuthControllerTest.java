@@ -46,11 +46,15 @@ class AuthControllerTest {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private com.mrdevcourses.common.ratelimit.RateLimiterService rateLimiterService;
+
     private User testUser;
     private String validToken;
 
     @BeforeEach
     void setUp() {
+        rateLimiterService.reset();
         auditLogRepository.deleteAll();
         lessonProgressRepository.deleteAll();
         enrollmentRepository.deleteAll();

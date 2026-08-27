@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { MarkdownViewer } from '@/shared/ui/MarkdownViewer';
+import { QuickNavProvider, QuickNavDrawer, useQuickNav } from '@/widgets/quick-nav';
+import { LessonContextPanel } from '@/widgets/lesson';
+import { LessonAiTutorChat } from '@/widgets/ai-tutor/LessonAiTutorChat';
 import {
   Play,
   CheckCircle2,
@@ -11,12 +14,15 @@ import {
   Lock,
   ArrowLeft,
   BookOpen,
+  Layers,
 } from 'lucide-react';
 
-export const LessonPage: React.FC = () => {
+const LessonPageContent: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { openQuickNav } = useQuickNav();
+  const [activeTab, setActiveTab] = useState<'content' | 'tutor'>('content');
 
   const cId = Number(courseId);
   const lId = Number(lessonId);
@@ -26,6 +32,7 @@ export const LessonPage: React.FC = () => {
     queryFn: () => lessonApi.getLessonDetail(cId, lId),
     enabled: !isNaN(cId) && !isNaN(lId),
     retry: false,
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data: lessons = [], isLoading: lessonsLoading } = useQuery({
@@ -89,6 +96,16 @@ export const LessonPage: React.FC = () => {
         </Link>
 
         <div className="flex items-center gap-2">
+          {/* Quick-Nav trigger button */}
+          <button
+            onClick={() => openQuickNav('glossary')}
+            className="px-2.5 py-1 rounded text-xs bg-[#161b22] hover:bg-zinc-800 border border-[#30363d] hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            aria-label="Открыть быструю навигацию"
+          >
+            <Layers className="w-3.5 h-3.5 text-amber-400" />
+            <span>Быстрая навигация</span>
+          </button>
+
           <span className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-700 text-zinc-300">
             День {lesson.dayNumber}
           </span>
@@ -141,9 +158,53 @@ export const LessonPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Structured Markdown Content */}
+            {/* Lesson Content / AI Tutor Tabs */}
             <div className="pt-4 border-t border-[#27272a]">
-              <MarkdownViewer content={lesson.content} />
+              <div className="flex items-center gap-2 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('content')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                    activeTab === 'content'
+                      ? 'bg-[#21262d] text-[#fafafa] border border-[#30363d]'
+                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                  }`}
+                >
+                  Материалы урока
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('tutor')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'tutor'
+                      ? 'bg-[#238636]/20 text-emerald-400 border border-emerald-500/40'
+                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  AI Наставник
+                </button>
+              </div>
+
+              {activeTab === 'content' ? (
+                <>
+                  <MarkdownViewer content={lesson.content} />
+                  {/* Contextual Terms Panel */}
+                  <div className="mt-6 pt-6 border-t border-[#27272a]">
+                    <LessonContextPanel
+                      dayNumber={lesson.dayNumber}
+                      courseId={cId}
+                      lessonId={lId}
+                    />
+                  </div>
+                </>
+              ) : (
+                <LessonAiTutorChat
+                  courseId={cId}
+                  lessonId={lId}
+                  lessonTitle={lesson.title}
+                />
+              )}
             </div>
 
             {/* Prev / Next navigation */}
@@ -223,6 +284,21 @@ export const LessonPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Quick-Nav Slide-over Drawer (Fixed overlay, does not unmount video or page) */}
+      <QuickNavDrawer />
     </div>
+  );
+};
+
+export const LessonPage: React.FC = () => {
+  const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
+  const cId = Number(courseId);
+  const lId = Number(lessonId);
+
+  return (
+    <QuickNavProvider initialCourseId={!isNaN(cId) ? cId : undefined} initialLessonId={!isNaN(lId) ? lId : undefined}>
+      <LessonPageContent />
+    </QuickNavProvider>
   );
 };

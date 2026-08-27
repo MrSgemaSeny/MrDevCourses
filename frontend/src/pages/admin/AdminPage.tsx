@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi, CreateCoursePayload, CreateLessonPayload } from '@/entities/admin/api/adminApi';
+import { AdminAnalyticsDashboard } from '@/features/admin-analytics';
 import { Plus, Trash2, Shield, X, AlertTriangle, UserPlus } from 'lucide-react';
 
 export const AdminPage: React.FC = () => {
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<'courses' | 'lessons' | 'students'>('courses');
+  const [activeTab, setActiveTab] = useState<'courses' | 'lessons' | 'students' | 'analytics'>('courses');
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
   // Forms State
@@ -157,6 +158,14 @@ export const AdminPage: React.FC = () => {
             }`}
           >
             Студенты
+          </button>
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+              activeTab === 'analytics' ? 'bg-[#fafafa] text-[#09090b] shadow-sm' : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            Аналитика
           </button>
         </div>
       </div>
@@ -610,6 +619,11 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
         </div>
+      )}
+
+      {/* TAB 4: ANALYTICS */}
+      {activeTab === 'analytics' && (
+        <AdminAnalyticsDashboard />
       )}
 
       {/* Confirmation Modal for Deletions */}

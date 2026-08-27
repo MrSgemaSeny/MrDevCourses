@@ -23,6 +23,7 @@ const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage')
 const AdminPage = React.lazy(() => import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })));
 const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
+const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/CertificateVerifyPage').then((m) => ({ default: m.CertificateVerifyPage })));
 
 const wrap = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
       { path: 'courses', element: wrap(<CoursesPage />) },
       { path: 'courses/:slug', element: wrap(<CourseDetailPage />) },
+      { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
     ],
   },
 

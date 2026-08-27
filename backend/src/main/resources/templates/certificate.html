@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Сертификат об окончании курса</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #0d1117;
+            color: #fafafa;
+            margin: 0;
+            padding: 40px;
+            box-sizing: border-box;
+            width: 297mm;
+            height: 210mm;
+        }
+        .outer-border {
+            border: 2px solid #e2b340;
+            padding: 24px;
+            height: 100%;
+            box-sizing: border-box;
+            position: relative;
+            background-color: #161b22;
+        }
+        .inner-border {
+            border: 1px solid #30363d;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .brand-header {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #fafafa;
+            text-transform: uppercase;
+        }
+        .brand-header span {
+            color: #e2b340;
+        }
+        .title {
+            font-size: 34px;
+            font-weight: 800;
+            color: #e2b340;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #8b949e;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+        .student-name {
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffffff;
+            border-bottom: 2px solid #e2b340;
+            display: inline-block;
+            padding-bottom: 6px;
+            margin-bottom: 20px;
+            min-width: 350px;
+        }
+        .course-description {
+            font-size: 15px;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+        }
+        .course-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e2b340;
+            margin-bottom: 30px;
+        }
+        .footer-row {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 12px;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            padding-top: 15px;
+        }
+        .footer-col {
+            text-align: left;
+        }
+        .footer-col.right {
+            text-align: right;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid #e2b340;
+            border-radius: 4px;
+            color: #e2b340;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+<div class="outer-border">
+    <div class="inner-border">
+        <div>
+            <div class="brand-header">MRDEV<span>COURSES</span></div>
+            <div class="title">СЕРТИФИКАТ</div>
+            <div class="subtitle">НАСТОЯЩИЙ ДОКУМЕНТ ПОДТВЕРЖДАЕТ УСПЕШНОЕ ОКОНЧАНИЕ ОБУЧЕНИЯ</div>
+        </div>
+
+        <div>
+            <div class="student-name" th:text="${userName}">Имя Студента</div>
+            <div class="course-description">успешно освоил(а) программу и выполнил(а) все практические задания курса</div>
+            <div class="course-title" th:text="${courseTitle}">Название курса</div>
+            <div class="badge">100% ВЫПОЛНЕНИЕ ПРОГРАММЫ</div>
+        </div>
+
+        <div class="footer-row">
+            <div class="footer-col">
+                <div>Дата выдачи: <strong th:text="${issuedDate}">2026-08-27</strong></div>
+                <div>ID Сертификата: <span style="font-family: monospace;" th:text="${certificateCode}">MRDEV-CERT-123456</span></div>
+            </div>
+            <div class="footer-col right">
+                <div>Проверка подлинности:</div>
+                <div style="color: #e2b340; font-family: monospace;" th:text="${verifyUrl}">https://mrdevcourses.com/verify/...</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
