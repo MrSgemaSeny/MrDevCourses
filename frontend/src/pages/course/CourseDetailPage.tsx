@@ -90,7 +90,7 @@ export const CourseDetailPage: React.FC = () => {
       <div className="p-8 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] mb-8 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-emerald-950/60 border border-emerald-800/60 text-emerald-400">
-            Обучение 1 день — 1 урок
+            Практическая программа
           </span>
           <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-zinc-700 font-mono">
             {course.totalLessons || 5} уроков &bull; {modules.length || 2} модуля

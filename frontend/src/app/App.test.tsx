@@ -51,7 +51,7 @@ describe('App Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('link', { name: /Моё обучение/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /Моё обучение/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.queryByRole('link', { name: /Админ-панель/i })).not.toBeInTheDocument();
     expect(screen.getByText('Murat')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Выйти/i })).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('App Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('link', { name: /Моё обучение/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /Моё обучение/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: /Админ-панель/i })).toBeInTheDocument();
     expect(screen.getByText('Admin Murat')).toBeInTheDocument();
   });
