@@ -89,7 +89,7 @@ export const EmailAuthForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
           autoComplete="email"
-          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-sm text-[#fafafa] placeholder-[#52525b]
+          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-[#fafafa] placeholder-[#52525b]
             outline-none transition-colors
             ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
         />
@@ -105,7 +105,7 @@ export const EmailAuthForm: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
             placeholder="Иван Петров"
             autoComplete="name"
-            className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-sm text-[#fafafa] placeholder-[#52525b]
+            className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-[#fafafa] placeholder-[#52525b]
               outline-none transition-colors
               ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
           />
@@ -121,7 +121,7 @@ export const EmailAuthForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder={mode === 'register' ? 'Минимум 8 символов' : '••••••••'}
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-sm text-[#fafafa] placeholder-[#52525b]
+          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-[#fafafa] placeholder-[#52525b]
             outline-none transition-colors
             ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
         />
@@ -132,7 +132,7 @@ export const EmailAuthForm: React.FC = () => {
         type="submit"
         disabled={isSubmitting}
         className="w-full py-2.5 rounded-sm bg-[#27272a] hover:bg-[#3f3f46] border border-[#3f3f46]
-          text-sm text-[#fafafa] font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          text-xs text-[#fafafa] font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting
           ? mode === 'login'

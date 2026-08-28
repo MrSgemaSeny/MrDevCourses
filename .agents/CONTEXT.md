@@ -16,7 +16,8 @@
   - `navigation`: Quick-Nav Drawer (Glossary, Progress, Roadmap) with in-lesson term cards and deep-linking without resetting video player iframe state.
   - `certificate`: Automated PDF Certificate generator (Thymeleaf + OpenHTMLtoPDF) upon 100% completion with public verification by code (`/v1/certificates/verify/{code}`).
   - `analytics`: Enterprise Admin Cohort Analytics dashboard (Funnel by day, drop-off rates, streak distribution, time-to-complete retention).
-  - `lifecycle-hooks`: Antigravity workflow automation (`hooks.json`, `pre-invocation`, `safety-gate`, `enforce-workflow`, `stop-commit-check`).
+  - `design-system`: Strict 4 font sizes typography scale (`text-2xl` for H1, `text-sm` for descriptions/modules/headers, `text-xs` for lessons/body/inputs/buttons, `text-[10px]` for badges/tags/statuses). All non-standard sizes removed.
+  - `course-data`: 5 modules and 30 lessons (6 lessons per module) seeded with complete metadata, permanent non-collapsible module blocks.
 - **Test Verification**:
   - Backend: 118/118 unit & integration tests PASSED (100% Green, `:jacocoTestReport` verified).
   - Frontend: 37/37 Vitest tests PASSED across 14 test suites (100% Green).

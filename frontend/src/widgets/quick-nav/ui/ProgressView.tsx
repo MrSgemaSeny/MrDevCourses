@@ -76,13 +76,14 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
           </div>
 
           {/* Progress Bar */}
-          <space-y-1.5>
+          <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-zinc-400">Прогресс завершения</span>
               <span className="font-mono font-bold text-white">
                 {courseProgress.progressPercentage}%
               </span>
             </div>
+
             <div className="w-full h-2.5 bg-zinc-900 rounded-full overflow-hidden border border-[#21262d]">
               <div
                 className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 rounded-full"

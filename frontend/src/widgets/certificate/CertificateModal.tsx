@@ -77,7 +77,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           </span>
 
           <h2 className="text-2xl font-extrabold text-white tracking-tight mt-2 mb-4">
-            MrDevCourses
+            MrDev
           </h2>
 
           <p className="text-xs text-zinc-400 mb-1">Настоящим подтверждается, что</p>

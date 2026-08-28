@@ -11,7 +11,7 @@ export const Logo: React.FC<{ className?: string }> = ({ className = '' }) => {
         />
       </div>
       <span className="text-sm font-bold tracking-tight text-white uppercase">
-        MrDevCourses
+        MrDev
       </span>
     </div>
   );
