@@ -77,7 +77,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
               <h2 className="text-xs font-bold text-white tracking-tight uppercase">
                 Контекстная навигация
               </h2>
-              <p className="text-[11px] text-zinc-400">Быстрый доступ без перезагрузки видео</p>
+              <p className="text-xs text-zinc-400">Быстрый доступ без перезагрузки видео</p>
             </div>
           </div>
 

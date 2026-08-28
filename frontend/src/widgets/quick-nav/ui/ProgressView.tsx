@@ -64,19 +64,19 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
               </h3>
             </div>
             {isCompleted ? (
-              <span className="px-2.5 py-1 rounded-full text-[11px] bg-emerald-950/80 border border-emerald-700 text-emerald-400 font-medium flex items-center gap-1 shrink-0">
+              <span className="px-2.5 py-1 rounded-full text-[10px] bg-emerald-950/80 border border-emerald-700 text-emerald-400 font-medium flex items-center gap-1 shrink-0">
                 <Award className="w-3.5 h-3.5" />
                 Пройден
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full text-[11px] bg-zinc-800 border border-white/5 text-zinc-300 font-mono shrink-0">
+              <span className="px-2.5 py-1 rounded-full text-[10px] bg-zinc-800 border border-white/5 text-zinc-300 font-mono shrink-0">
                 День {courseProgress.currentDay}
               </span>
             )}
           </div>
 
           {/* Progress Bar */}
-          <div className="space-y-1.5">
+          <space-y-1.5>
             <div className="flex items-center justify-between text-xs">
               <span className="text-zinc-400">Прогресс завершения</span>
               <span className="font-mono font-bold text-white">
@@ -89,7 +89,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
                 style={{ width: `${courseProgress.progressPercentage}%` }}
               />
             </div>
-            <div className="flex items-center justify-between text-[11px] text-zinc-500 pt-0.5">
+            <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-0.5">
               <span>Пройдено {courseProgress.completedCount} из {courseProgress.totalLessons} уроков</span>
               <span>Доступно: {courseProgress.totalUnlocked}</span>
             </div>
@@ -103,7 +103,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
               <Flame className="w-4 h-4" />
               <span className="font-semibold">Текущий стрик</span>
             </div>
-            <div className="text-xl font-bold font-mono text-white">
+            <div className="text-sm font-bold font-mono text-white">
               {currentStreak} {currentStreak === 1 ? 'день' : currentStreak > 1 && currentStreak < 5 ? 'дня' : 'дней'}
             </div>
             <p className="text-[10px] text-zinc-500">Рекорд: {longestStreak} дн.</p>
@@ -114,7 +114,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
               <TrendingUp className="w-4 h-4" />
               <span className="font-semibold">Темп обучения</span>
             </div>
-            <div className="text-xl font-bold font-mono text-white">
+            <div className="text-sm font-bold font-mono text-white">
               {courseProgress.completedCount > 0 ? '1 у/день' : 'Старт'}
             </div>
             <p className="text-[10px] text-zinc-500">Капельный контент</p>
@@ -131,7 +131,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
             <div className="py-1">
               <CountdownTimer targetDate={courseProgress.nextUnlockAt} />
             </div>
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-xs text-zinc-400">
               Новые материалы открываются последовательно раз в сутки.
             </p>
           </div>
@@ -144,7 +144,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
               <Award className="w-5 h-5" />
             </div>
             <h4 className="text-xs font-bold text-white">Курс успешно завершен!</h4>
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-xs text-zinc-400">
               Вы освоили все модули и можете получить верифицированный сертификат.
             </p>
           </div>
@@ -163,10 +163,10 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
             <Flame className="w-4 h-4" />
             <span>Учебный стрик</span>
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-sm font-bold font-mono text-white">
             {currentStreak} {currentStreak === 1 ? 'день' : currentStreak > 1 && currentStreak < 5 ? 'дня' : 'дней'}
           </div>
-          <p className="text-[11px] text-zinc-400">Рекордный стрик: {longestStreak} дн.</p>
+          <p className="text-xs text-zinc-400">Рекордный стрик: {longestStreak} дн.</p>
         </div>
         <div className="w-12 h-12 rounded-full bg-[#0d1117] border border-white/5 flex items-center justify-center text-orange-400">
           <Zap className="w-6 h-6" />
@@ -205,7 +205,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] text-zinc-500">
+              <div className="flex items-center justify-between text-[10px] text-zinc-500">
                 <span>{item.completedCount} / {item.totalLessons} уроков</span>
                 {item.progressPercentage === 100 ? (
                   <span className="text-emerald-400 flex items-center gap-1">
