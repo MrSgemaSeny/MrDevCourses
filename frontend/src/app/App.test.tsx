@@ -31,10 +31,11 @@ describe('App Component', () => {
         <App />
       </MemoryRouter>
     );
-    expect(screen.getAllByRole('link', { name: /MrDeveloper\s*Courses/i }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole('link', { name: /MrDevCourses/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByRole('link', { name: /Каталог курсов/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: /Войти/i })).toBeInTheDocument();
   });
+
 
   it('renders dashboard link and user info when authenticated as student', () => {
     vi.mocked(authFeature.useAuth).mockReturnValue(
