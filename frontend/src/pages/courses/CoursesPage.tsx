@@ -41,7 +41,7 @@ export const CoursesPage: React.FC = () => {
   }, [courses, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-[#fafafa]">
+    <div className="min-h-screen bg-[#0a0a0c] text-white">
       {/* Header Section */}
       <div className="border-b border-white/5 bg-[#0a0a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12">

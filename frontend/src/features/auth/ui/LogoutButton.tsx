@@ -24,7 +24,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       type="button"
       onClick={handleLogout}
       disabled={isLoading}
-      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer border border-white/5 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] ${className}`}
+      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer border border-white/5 text-[#a1a1aa] hover:text-white hover:bg-[#18181b] ${className}`}
     >
       Выйти
     </button>

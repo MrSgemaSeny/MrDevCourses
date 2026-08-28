@@ -127,11 +127,11 @@ ON lesson_progress (user_id, lesson_id);`,
     term: 'Tailwind CSS v4 & Dark Aesthetic',
     category: 'frontend',
     shortDefinition: 'Утилитарный CSS-фреймворк нового поколения на базе LightningCSS с единой дизайн-системой.',
-    fullExplanation: 'В MrDev используется строгая темная палитра: `#0d1117` (основной фон/сайдбар), `#161b22` (карточки и контейнеры), `#21262d`/`#30363d` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
+    fullExplanation: 'В MrDev используется строгая темная палитра: `#0a0a0c` (основной фон/сайдбар), `#18181b` (карточки и контейнеры), `#18181b`/`#27272a` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
     codeSnippet: `/* Modern Dark Palette in Tailwind v4 */
 .custom-card {
-  background-color: #161b22;
-  border: 1px solid #30363d;
+  background-color: #18181b;
+  border: 1px solid #27272a;
   color: #fafafa;
 }`,
     relatedDayNumbers: [1, 2],

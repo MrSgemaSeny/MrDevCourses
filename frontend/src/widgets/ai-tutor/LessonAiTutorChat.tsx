@@ -83,14 +83,14 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
   return (
     <div className="flex flex-col h-[520px] bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
-      <div className="px-4 py-3 bg-[#0d1117] border-b border-white/5 flex items-center justify-between">
+      <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-[#fafafa]">
+          <span className="text-xs font-semibold uppercase tracking-wider text-white">
             Senior AI Tutor (Hybrid RAG)
           </span>
         </div>
-        <span className="text-[10px] text-[#8b949e] font-mono truncate max-w-[200px]">
+        <span className="text-[10px] text-zinc-500 font-mono truncate max-w-[200px]">
           {lessonTitle}
         </span>
       </div>
@@ -106,7 +106,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
               className={`max-w-[85%] rounded-sm p-3 text-xs leading-relaxed ${
                 msg.role === 'user'
                   ? 'bg-[#238636] text-white'
-                  : 'bg-[#0d1117] border border-white/5 text-[#c9d1d9]'
+                  : 'bg-[#0a0a0c] border border-white/5 text-[#c9d1d9]'
               }`}
             >
               {msg.role === 'user' ? (
@@ -115,8 +115,8 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
                 <>
                   <MarkdownViewer content={msg.content} />
                   {msg.citations && msg.citations.length > 0 && (
-                    <div className="mt-3 pt-2 border-t border-[#21262d] space-y-1.5">
-                      <span className="text-[10px] uppercase font-semibold text-[#8b949e] tracking-wider block">
+                    <div className="mt-3 pt-2 border-t border-white/5 space-y-1.5">
+                      <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider block">
                         Источники RAG:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
@@ -135,27 +135,27 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
                 </>
               )}
             </div>
-            <span className="text-[10px] text-[#8b949e] mt-1 px-1">{msg.timestamp}</span>
+            <span className="text-[10px] text-zinc-500 mt-1 px-1">{msg.timestamp}</span>
           </div>
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 p-3 rounded-sm bg-[#0d1117] border border-white/5 w-fit">
+          <div className="flex items-center gap-2 p-3 rounded-sm bg-[#0a0a0c] border border-white/5 w-fit">
             <div className="w-4 h-4 border-2 border-[#e2b340] border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs text-[#8b949e]">AI анализирует семантический контекст урока...</span>
+            <span className="text-xs text-zinc-500">AI анализирует семантический контекст урока...</span>
           </div>
         )}
       </div>
 
       {/* Suggested Follow-ups */}
       {suggestedFollowUps.length > 0 && !isLoading && (
-        <div className="px-4 py-2 bg-[#0d1117]/60 border-t border-[#21262d] flex items-center gap-1.5 overflow-x-auto">
+        <div className="px-4 py-2 bg-[#0a0a0c]/60 border-t border-white/5 flex items-center gap-1.5 overflow-x-auto">
           {suggestedFollowUps.map((prompt, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleSend(prompt)}
-              className="text-xs whitespace-nowrap px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] transition-colors cursor-pointer border border-white/5"
+              className="text-xs whitespace-nowrap px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-[#c9d1d9] transition-colors cursor-pointer border border-white/5"
             >
               {prompt}
             </button>
@@ -169,7 +169,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
           e.preventDefault();
           handleSend();
         }}
-        className="p-3 bg-[#0d1117] border-t border-white/5 flex gap-2"
+        className="p-3 bg-[#0a0a0c] border-t border-white/5 flex gap-2"
       >
         <input
           type="text"
@@ -177,7 +177,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Задать вопрос по уроку..."
           disabled={isLoading}
-          className="flex-1 bg-[#18181b] border border-white/5 rounded-sm px-3 py-2 text-xs text-[#fafafa] placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
+          className="flex-1 bg-[#18181b] border border-white/5 rounded-sm px-3 py-2 text-xs text-white placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
         />
         <button
           type="submit"

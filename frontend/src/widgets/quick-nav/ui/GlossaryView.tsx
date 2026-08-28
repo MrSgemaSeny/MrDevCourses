@@ -121,7 +121,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
               className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 isActive
                   ? 'bg-zinc-200 text-zinc-900 shadow-sm'
-                  : 'bg-[#18181b] border border-[#21262d] text-zinc-400 hover:text-white hover:border-white/5'
+                  : 'bg-[#18181b] border border-white/5 text-zinc-400 hover:text-white hover:border-white/5'
               }`}
             >
               {cat.label}
@@ -174,7 +174,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                 className={`p-3.5 rounded-sm border transition-all ${
                   isExpanded
                     ? 'bg-[#18181b] border-zinc-500/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                    : 'bg-[#18181b]/70 border-[#21262d] hover:border-white/5'
+                    : 'bg-[#18181b]/70 border-white/5 hover:border-white/5'
                 }`}
               >
                 {/* Header */}
@@ -202,7 +202,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
 
                 {/* Expanded Details */}
                 {isExpanded && (
-                  <div className="mt-3 pt-3 border-t border-[#21262d] space-y-3 animate-fadeIn">
+                  <div className="mt-3 pt-3 border-t border-white/5 space-y-3 animate-fadeIn">
                     {/* Full Explanation */}
                     <div className="text-xs text-zinc-400 leading-relaxed whitespace-pre-line">
                       {term.fullExplanation}
@@ -210,8 +210,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
 
                     {/* Code Snippet */}
                     {term.codeSnippet && (
-                      <div className="rounded-sm bg-[#0d1117] border border-[#21262d] overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-[#21262d] text-[10px] text-zinc-400">
+                      <div className="rounded-sm bg-[#0a0a0c] border border-white/5 overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-white/5 text-[10px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Code className="w-3.5 h-3.5 text-zinc-500" />
                             <span>Пример реализации</span>

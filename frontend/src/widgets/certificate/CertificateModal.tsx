@@ -123,7 +123,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <button
               onClick={() => window.print()}
               aria-label="Распечатать сертификат"
-              className="px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-[#fafafa] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all border border-white/5 cursor-pointer"
+              className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all border border-white/5 cursor-pointer"
             >
               <span>Печать</span>
             </button>

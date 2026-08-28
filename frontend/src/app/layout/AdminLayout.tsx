@@ -50,38 +50,38 @@ export const AdminLayout: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0c] text-[#fafafa]">
+    <div className="flex min-h-screen bg-[#0a0a0c] text-white">
       <ScrollToTop />
       {/* Sidebar */}
-      <aside className="fixed top-0 left-0 h-full w-60 bg-[#0d1117] border-r border-[#21262d] flex flex-col z-40">
+      <aside className="fixed top-0 left-0 h-full w-60 bg-[#0a0a0c] border-r border-white/5 flex flex-col z-40">
         {/* Logo + Admin badge */}
-        <div className="px-5 py-5 border-b border-[#21262d]">
+        <div className="px-5 py-5 border-b border-white/5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-[#fafafa] tracking-tight">
+            <span className="text-sm font-semibold text-white tracking-tight">
               MrDev
             </span>
-            <span className="text-xs px-1.5 py-0.5 rounded bg-[#30363d] text-[#8b949e] font-mono">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500 font-mono">
               admin
             </span>
           </div>
         </div>
 
         {/* Admin user */}
-        <div className="px-5 py-4 border-b border-[#21262d]">
+        <div className="px-5 py-4 border-b border-white/5">
           <div className="flex items-center gap-3">
             {user?.avatarUrl ? (
               <img
                 src={user.avatarUrl}
                 alt={user.name ?? 'Admin'}
-                className="w-8 h-8 rounded-full object-cover border border-[#21262d]"
+                className="w-8 h-8 rounded-full object-cover border border-white/5"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[#21262d] border border-white/5 flex items-center justify-center text-xs text-[#8b949e]">
+              <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center text-xs text-zinc-500">
                 {user?.name?.[0]?.toUpperCase() ?? 'A'}
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-xs font-medium text-[#fafafa] truncate">{user?.name ?? 'Admin'}</p>
+              <p className="text-xs font-medium text-white truncate">{user?.name ?? 'Admin'}</p>
               <p className="text-xs text-[#71717a] truncate">{user?.email}</p>
             </div>
           </div>
@@ -97,8 +97,8 @@ export const AdminLayout: React.FC = () => {
               className={({ isActive }) =>
                 `flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
                   isActive
-                    ? 'bg-[#21262d] text-[#fafafa]'
-                    : 'text-[#8b949e] hover:text-[#fafafa] hover:bg-[#18181b]'
+                    ? 'bg-zinc-900 text-white'
+                    : 'text-zinc-500 hover:text-white hover:bg-[#18181b]'
                 }`
               }
             >
@@ -109,10 +109,10 @@ export const AdminLayout: React.FC = () => {
         </nav>
 
         {/* Back to site + Logout */}
-        <div className="px-3 py-4 border-t border-[#21262d] space-y-1">
+        <div className="px-3 py-4 border-t border-white/5 space-y-1">
           <NavLink
             to="/courses"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs text-[#8b949e] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs text-zinc-500 hover:text-white hover:bg-[#18181b] transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 5l-7 7 7 7" />

@@ -46,7 +46,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#18181b] border border-white/5 rounded-sm">
+      <div className="p-8 text-center text-xs text-zinc-500 bg-[#18181b] border border-white/5 rounded-sm">
         Загрузка квиза...
       </div>
     );
@@ -54,7 +54,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (error || !quiz) {
     return (
-      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#18181b] border border-white/5 rounded-sm">
+      <div className="p-8 text-center text-xs text-zinc-500 bg-[#18181b] border border-white/5 rounded-sm">
         Квиз для данного урока не настроен или доступ ограничен.
       </div>
     );
@@ -94,21 +94,21 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
   return (
     <div className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
-      <div className="px-5 py-4 bg-[#0d1117] border-b border-white/5 flex items-center justify-between">
+      <div className="px-5 py-4 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="p-1.5 rounded-sm bg-amber-500/10 text-amber-400">
             <HelpCircle className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-[#fafafa]">{quiz.title}</h3>
-            <p className="text-xs text-[#8b949e]">
+            <h3 className="text-sm font-semibold text-white">{quiz.title}</h3>
+            <p className="text-xs text-zinc-500">
               Проходной балл: {quiz.passingScorePercentage}% &bull; Попыток: {quiz.maxAttempts}
             </p>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-xs font-mono text-[#8b949e]">
+          <span className="text-xs font-mono text-zinc-500">
             Отвечено: <strong className="text-white">{answeredCount}</strong> / {totalQuestions}
           </span>
         </div>
@@ -129,15 +129,15 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                   ? isCorrect
                     ? 'bg-emerald-950/15 border-emerald-800/40'
                     : 'bg-rose-950/15 border-rose-800/40'
-                  : 'bg-[#0d1117] border-white/5'
+                  : 'bg-[#0a0a0c] border-white/5'
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-start gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-[#c9d1d9]">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-[#c9d1d9]">
                     #{idx + 1}
                   </span>
-                  <p className="text-xs font-medium text-[#fafafa] leading-relaxed">
+                  <p className="text-xs font-medium text-white leading-relaxed">
                     {q.questionText}
                   </p>
                 </div>
@@ -180,7 +180,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                         } border flex items-center justify-center shrink-0 ${
                           isSelected
                             ? 'bg-[#58a6ff] border-[#58a6ff] text-black font-bold'
-                            : 'border-[#484f58] bg-[#0d1117]'
+                            : 'border-[#484f58] bg-[#0a0a0c]'
                         }`}
                       >
                         {isSelected && <span className="text-[10px]">&bull;</span>}
@@ -193,7 +193,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
               {/* Explanation note after submission */}
               {result && explanation && (
-                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-xs text-[#8b949e]">
+                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-xs text-zinc-500">
                   <strong className="text-zinc-300">Пояснение:</strong> {explanation}
                 </div>
               )}
@@ -227,7 +227,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                   </>
                 )}
               </div>
-              <p className="text-xs mt-1 text-[#8b949e]">
+              <p className="text-xs mt-1 text-zinc-500">
                 Правильных ответов: {result.correctCount} из {result.totalCount}
               </p>
             </div>
@@ -236,7 +236,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
               <button
                 type="button"
                 onClick={handleRetry}
-                className="px-4 py-2 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white border border-white/5 flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-sm bg-zinc-900 hover:bg-zinc-800 text-xs font-semibold text-white border border-white/5 flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Попробовать снова</span>
@@ -245,7 +245,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
           </div>
         ) : (
           <div className="pt-2 flex items-center justify-between border-t border-white/5">
-            <span className="text-xs text-[#8b949e]">
+            <span className="text-xs text-zinc-500">
               Урок будет автоматически зачтен при результате &ge; {quiz.passingScorePercentage}%
             </span>
 

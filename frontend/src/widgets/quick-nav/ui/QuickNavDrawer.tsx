@@ -63,12 +63,12 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
         role="dialog"
         aria-modal="true"
         aria-label="Быстрая навигация"
-        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-[#0d1117] border-l border-[#21262d] z-50 flex flex-col shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-[#0a0a0c] border-l border-white/5 z-50 flex flex-col shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer Header */}
-        <div className="px-5 py-4 border-b border-[#21262d] flex items-center justify-between bg-[#18181b]/80">
+        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-[#18181b]/80">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-sm bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-300">
               <Layers className="w-4 h-4" />
@@ -92,8 +92,8 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-5 pt-3 pb-2 border-b border-[#21262d] bg-[#0d1117]">
-          <div className="grid grid-cols-3 gap-1 bg-[#18181b] p-1 rounded-sm border border-[#21262d]">
+        <div className="px-5 pt-3 pb-2 border-b border-white/5 bg-[#0a0a0c]">
+          <div className="grid grid-cols-3 gap-1 bg-[#18181b] p-1 rounded-sm border border-white/5">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.key;
               return (
@@ -116,7 +116,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
         </div>
 
         {/* Drawer Body */}
-        <div className="flex-1 overflow-y-auto p-5 bg-[#0d1117]">
+        <div className="flex-1 overflow-y-auto p-5 bg-[#0a0a0c]">
           {activeTab === 'glossary' && (
             <GlossaryView initialSearch={selectedTerm} />
           )}

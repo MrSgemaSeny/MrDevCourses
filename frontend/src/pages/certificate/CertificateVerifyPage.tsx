@@ -50,10 +50,10 @@ export const CertificateVerifyPage: React.FC = () => {
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-red-400 mb-2">Ошибка верификации</h1>
-            <p className="text-xs text-[#8b949e] mb-6">{error}</p>
+            <p className="text-xs text-zinc-500 mb-6">{error}</p>
             <Link
               to="/courses"
-              className="inline-block px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs text-[#fafafa] transition-colors border border-white/5"
+              className="inline-block px-5 py-2.5 rounded-sm bg-zinc-900 hover:bg-zinc-800 text-xs text-white transition-colors border border-white/5"
             >
               К каталогу курсов
             </Link>
@@ -71,25 +71,25 @@ export const CertificateVerifyPage: React.FC = () => {
               ОФИЦИАЛЬНО ПОДТВЕРЖДЕНО
             </span>
 
-            <h1 className="text-2xl font-bold text-[#fafafa] mt-4 mb-1">
+            <h1 className="text-2xl font-bold text-white mt-4 mb-1">
               Сертификат подлинный
             </h1>
-            <p className="text-xs text-[#8b949e] font-mono mb-6">
+            <p className="text-xs text-zinc-500 font-mono mb-6">
               ID: {certificate.certificateCode}
             </p>
 
-            <div className="space-y-3 bg-[#0d1117] p-5 rounded-sm border border-[#21262d] text-left text-xs mb-6">
-              <div className="flex justify-between border-b border-[#21262d] pb-2">
-                <span className="text-[#8b949e]">Студент:</span>
-                <span className="font-semibold text-[#fafafa]">{certificate.userName}</span>
+            <div className="space-y-3 bg-[#0a0a0c] p-5 rounded-sm border border-white/5 text-left text-xs mb-6">
+              <div className="flex justify-between border-b border-white/5 pb-2">
+                <span className="text-zinc-500">Студент:</span>
+                <span className="font-semibold text-white">{certificate.userName}</span>
               </div>
-              <div className="flex justify-between border-b border-[#21262d] pb-2">
-                <span className="text-[#8b949e]">Курс:</span>
+              <div className="flex justify-between border-b border-white/5 pb-2">
+                <span className="text-zinc-500">Курс:</span>
                 <span className="font-semibold text-[#e2b340]">{certificate.courseTitle}</span>
               </div>
-              <div className="flex justify-between border-b border-[#21262d] pb-2">
-                <span className="text-[#8b949e]">Дата выдачи:</span>
-                <span className="text-[#fafafa]">
+              <div className="flex justify-between border-b border-white/5 pb-2">
+                <span className="text-zinc-500">Дата выдачи:</span>
+                <span className="text-white">
                   {new Date(certificate.issuedAt).toLocaleDateString('ru-RU', {
                     day: 'numeric',
                     month: 'long',
@@ -98,7 +98,7 @@ export const CertificateVerifyPage: React.FC = () => {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#8b949e]">Статус:</span>
+                <span className="text-zinc-500">Статус:</span>
                 <span className="text-emerald-400 font-semibold">100% Завершено</span>
               </div>
             </div>
@@ -114,7 +114,7 @@ export const CertificateVerifyPage: React.FC = () => {
               </a>
               <Link
                 to="/courses"
-                className="px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs text-[#fafafa] transition-colors border border-white/5"
+                className="px-5 py-2.5 rounded-sm bg-zinc-900 hover:bg-zinc-800 text-xs text-white transition-colors border border-white/5"
               >
                 Все курсы MrDev
               </Link>

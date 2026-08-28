@@ -65,7 +65,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Header Summary */}
-      <div className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] flex items-center justify-between">
+      <div className="p-3.5 rounded-sm bg-[#18181b] border border-white/5 flex items-center justify-between">
         <div>
           <h4 className="text-xs font-bold text-white tracking-tight">Траектория обучения</h4>
           <p className="text-xs text-zinc-400">1 день = 1 урок (капельный доступ)</p>
@@ -128,8 +128,8 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                     isCurrent
                       ? 'bg-zinc-800/90 border-zinc-500 text-white'
                       : lesson.accessible
-                      ? 'bg-[#18181b] border-[#21262d] text-zinc-200'
-                      : 'bg-[#18181b]/40 border-[#21262d]/50 text-zinc-500'
+                      ? 'bg-[#18181b] border-white/5 text-zinc-200'
+                      : 'bg-[#18181b]/40 border-white/5/50 text-zinc-500'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1 mb-0.5">
@@ -150,7 +150,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   </h5>
 
                   {!lesson.accessible && lesson.opensAt && (
-                    <div className="mt-1.5 pt-1.5 border-t border-[#21262d] text-[10px]">
+                    <div className="mt-1.5 pt-1.5 border-t border-white/5 text-[10px]">
                       <CountdownTimer targetDate={lesson.opensAt} />
                     </div>
                   )}

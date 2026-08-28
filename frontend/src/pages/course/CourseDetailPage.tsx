@@ -155,7 +155,7 @@ export const CourseDetailPage: React.FC = () => {
                 key={mod.id}
                 className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
               >
-                <div className="w-full px-5 py-4 bg-[#0d1117] flex items-center justify-between text-left">
+                <div className="w-full px-5 py-4 bg-[#0a0a0c] flex items-center justify-between text-left">
                   <div>
                     <div className="flex items-center gap-2.5">
                       <span className="text-sm font-semibold text-white">{mod.title}</span>
@@ -166,12 +166,12 @@ export const CourseDetailPage: React.FC = () => {
                       )}
                     </div>
                     {mod.description && (
-                      <p className="text-xs text-[#8b949e] mt-1">{mod.description}</p>
+                      <p className="text-xs text-zinc-400 mt-1">{mod.description}</p>
                     )}
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-[#8b949e]">
+                    <span className="text-xs font-mono text-zinc-500">
                       {mod.completedLessonsCount || 0} / {mod.lessonsCount}
                     </span>
                   </div>
@@ -188,12 +188,12 @@ export const CourseDetailPage: React.FC = () => {
                       }}
                       className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
                         lessonItem.accessible && course.enrolled
-                          ? 'bg-[#0d1117] border-white/5 hover:border-zinc-500 text-zinc-200 cursor-pointer'
-                          : 'bg-[#090d13]/60 border-[#21262d] text-[#8b949e] cursor-default'
+                          ? 'bg-[#18181b] border-white/5 hover:border-zinc-500 text-zinc-200 cursor-pointer'
+                          : 'bg-[#0a0a0c] border-white/5 text-zinc-500 cursor-default'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="p-1 rounded bg-[#21262d] shrink-0">
+                        <div className="p-1 rounded bg-zinc-900 border border-white/5 shrink-0">
                           {getLessonTypeIcon(lessonItem.lessonType)}
                         </div>
                         <div className="min-w-0">
@@ -202,7 +202,7 @@ export const CourseDetailPage: React.FC = () => {
                               ? lessonItem.title
                               : `День ${lessonItem.dayNumber}: ${lessonItem.title}`}
                           </div>
-                          <div className="text-[10px] text-[#8b949e] flex items-center gap-2 mt-0.5">
+                          <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
                             <span>{lessonItem.lessonType || 'VIDEO'}</span>
                             {lessonItem.durationMinutes ? (
                               <span>&bull; {lessonItem.durationMinutes} мин</span>
@@ -217,11 +217,11 @@ export const CourseDetailPage: React.FC = () => {
                             <CheckCircle2 className="w-3 h-3" /> Пройден
                           </span>
                         ) : lessonItem.accessible && course.enrolled ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-[#21262d] text-white">
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-800 border border-white/5 text-white">
                             Доступен
                           </span>
                         ) : (
-                          <Lock className="w-3.5 h-3.5 text-[#8b949e]" />
+                          <Lock className="w-3.5 h-3.5 text-zinc-600" />
                         )}
                       </div>
                     </div>

@@ -40,7 +40,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
       className="p-5 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-4"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#21262d]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/5">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-sm bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-300">
             <HelpCircle className="w-4 h-4" />
@@ -77,7 +77,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
               key={termName}
               data-testid={`term-chip-${termName}`}
               onClick={() => openQuickNav('glossary', termName)}
-              className="px-3 py-1.5 rounded-sm bg-[#0d1117] border border-white/5 hover:border-amber-400/60 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
+              className="px-3 py-1.5 rounded-sm bg-[#0a0a0c] border border-white/5 hover:border-amber-400/60 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
             >
               <span className="text-amber-400 font-mono">#</span>
               <span>{termName}</span>
@@ -87,7 +87,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
       </div>
 
       {/* Fast Navigation Shortcuts */}
-      <div className="pt-3 border-t border-[#21262d] flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-3 text-xs">
         <span className="text-zinc-500 text-xs">
           Быстрый просмотр без перезагрузки видео:
         </span>

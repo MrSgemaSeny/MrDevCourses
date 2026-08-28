@@ -176,8 +176,8 @@ const LessonPageContent: React.FC = () => {
                   onClick={() => setActiveTab('content')}
                   className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                     activeTab === 'content'
-                      ? 'bg-[#21262d] text-[#fafafa] border border-white/5'
-                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                      ? 'bg-zinc-900 text-white border border-white/5'
+                      : 'text-zinc-500 hover:text-white'
                   }`}
                 >
                   Материалы урока
@@ -189,7 +189,7 @@ const LessonPageContent: React.FC = () => {
                     className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                       activeTab === 'quiz'
                         ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'text-[#8b949e] hover:text-[#fafafa]'
+                        : 'text-zinc-500 hover:text-white'
                     }`}
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
@@ -202,7 +202,7 @@ const LessonPageContent: React.FC = () => {
                   className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'homework'
                       ? 'bg-[#58a6ff]/20 text-[#58a6ff] border border-[#58a6ff]/40'
-                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                      : 'text-zinc-500 hover:text-white'
                   }`}
                 >
                   <Code2 className="w-3.5 h-3.5 text-[#58a6ff]" />
@@ -214,7 +214,7 @@ const LessonPageContent: React.FC = () => {
                   className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'tutor'
                       ? 'bg-[#238636]/20 text-emerald-400 border border-emerald-500/40'
-                      : 'text-[#8b949e] hover:text-[#fafafa]'
+                      : 'text-zinc-500 hover:text-white'
                   }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />

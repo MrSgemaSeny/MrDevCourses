@@ -46,10 +46,10 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
   return (
     <div className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
-      <div className="px-4 py-3 bg-[#0d1117] border-b border-white/5 flex items-center justify-between">
+      <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-[#58a6ff]" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-[#fafafa]">
+          <span className="text-xs font-semibold uppercase tracking-wider text-white">
             AI Code Review & Auto-Grader
           </span>
         </div>
@@ -59,8 +59,8 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
             onClick={() => setActiveTab('editor')}
             className={`px-2.5 py-1 text-xs rounded transition-colors cursor-pointer ${
               activeTab === 'editor'
-                ? 'bg-[#21262d] text-white border border-white/5'
-                : 'text-[#8b949e] hover:text-white'
+                ? 'bg-zinc-900 text-white border border-white/5'
+                : 'text-zinc-500 hover:text-white'
             }`}
           >
             Редактор
@@ -70,8 +70,8 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
             onClick={() => setActiveTab('history')}
             className={`px-2.5 py-1 text-xs rounded transition-colors cursor-pointer ${
               activeTab === 'history'
-                ? 'bg-[#21262d] text-white border border-white/5'
-                : 'text-[#8b949e] hover:text-white'
+                ? 'bg-zinc-900 text-white border border-white/5'
+                : 'text-zinc-500 hover:text-white'
             }`}
           >
             История ({submissions.length})
@@ -92,7 +92,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                 onChange={(e) => setCodeSnippet(e.target.value)}
                 placeholder="// Вставьте код решения для проверки ИИ-грейдером..."
                 rows={8}
-                className="w-full bg-[#0d1117] border border-white/5 rounded-sm p-3 text-xs font-mono text-[#fafafa] placeholder-[#8b949e] focus:outline-none focus:border-[#58a6ff] transition-colors resize-y"
+                className="w-full bg-[#0a0a0c] border border-white/5 rounded-sm p-3 text-xs font-mono text-white placeholder-[#8b949e] focus:outline-none focus:border-[#58a6ff] transition-colors resize-y"
               />
             </div>
 
@@ -105,12 +105,12 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                 value={repositoryUrl}
                 onChange={(e) => setRepositoryUrl(e.target.value)}
                 placeholder="https://github.com/username/project"
-                className="w-full bg-[#0d1117] border border-white/5 rounded-sm px-3 py-2 text-xs text-[#fafafa] placeholder-[#8b949e] focus:outline-none focus:border-[#58a6ff] transition-colors"
+                className="w-full bg-[#0a0a0c] border border-white/5 rounded-sm px-3 py-2 text-xs text-white placeholder-[#8b949e] focus:outline-none focus:border-[#58a6ff] transition-colors"
               />
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <span className="text-xs text-[#8b949e]">
+              <span className="text-xs text-zinc-500">
                 Проверка безопасности, FSD-архитектуры и авто-зачет урока (при балле &ge; 80)
               </span>
               <button
@@ -136,7 +136,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                 className={`mt-4 p-4 rounded-sm border ${
                   latestSubmission.status === 'PASSED'
                     ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-300'
-                    : 'bg-[#0d1117] border-white/5 text-[#c9d1d9]'
+                    : 'bg-[#0a0a0c] border-white/5 text-[#c9d1d9]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -156,7 +156,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                       Балл: {latestSubmission.score} / 100
                     </span>
                   </div>
-                  <span className="text-[10px] text-[#8b949e]">
+                  <span className="text-[10px] text-zinc-500">
                     {new Date(latestSubmission.createdAt).toLocaleString()}
                   </span>
                 </div>
@@ -179,16 +179,16 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
           /* History View */
           <div className="space-y-3">
             {isLoadingHistory ? (
-              <div className="text-center py-6 text-xs text-[#8b949e]">Загрузка истории...</div>
+              <div className="text-center py-6 text-xs text-zinc-500">Загрузка истории...</div>
             ) : submissions.length === 0 ? (
-              <div className="text-center py-6 text-xs text-[#8b949e]">
+              <div className="text-center py-6 text-xs text-zinc-500">
                 Вы еще не отправляли решений по этому уроку
               </div>
             ) : (
               submissions.map((sub) => (
                 <div
                   key={sub.id}
-                  className="p-3 rounded-sm bg-[#0d1117] border border-white/5 text-xs space-y-2"
+                  className="p-3 rounded-sm bg-[#0a0a0c] border border-white/5 text-xs space-y-2"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -201,14 +201,14 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                       >
                         {sub.status}
                       </span>
-                      <span className="font-semibold text-[#fafafa]">Балл: {sub.score}</span>
+                      <span className="font-semibold text-white">Балл: {sub.score}</span>
                     </div>
-                    <span className="text-[10px] text-[#8b949e]">
+                    <span className="text-[10px] text-zinc-500">
                       {new Date(sub.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                   {sub.aiFeedback && (
-                    <div className="text-xs text-[#8b949e] line-clamp-3">
+                    <div className="text-xs text-zinc-500 line-clamp-3">
                       {sub.aiFeedback}
                     </div>
                   )}
