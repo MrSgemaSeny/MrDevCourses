@@ -19,10 +19,15 @@ Explain WHY, not just WHAT (Senior Tech Lead mentoring approach: architect think
 - **Timezone**: All timestamps strictly in UTC (`spring.jpa.properties.hibernate.jdbc.time_zone=UTC`, `TIMESTAMP WITH TIME ZONE`).
 - **Модульный монолит**: Бэкенд разбит на модули (`auth`, `course`, `lesson`, `progress`, `admin`).
 
+## Project Scope & Maturity Limit
+- **Максимальный уровень проекта — 3 (Educational MVP)**.
+- **СТРОГИЙ ЗАПРЕТ**: Проект **НИКОГДА не выйдет в релиз и НЕ является Enterprise**. Запрещено использовать формулировки "Enterprise", "Enterprise Scaled", "Level 4", "Level 5". Проект создаётся исключительно как качественный локальный MVP/учебная база (Level 3).
+
 ## 🛑 CRITICAL INITIALIZATION SEQUENCE (MUST DO FIRST)
 1. **Brain's Protocol (Second Brain)**: Ты ОБЯЗАН неукоснительно следовать протоколам из `C:\Users\murat\IdeaProjects\new_world\Brain's protocol - second brain`. **В самом начале каждой новой сессии ты ДОЛЖЕН прочитать файлы в папке `context/` (например, `me.md`, `projects.md`, `rules.md`). Это твой Second Brain.**
 2. **CONTEXT.md**: ALWAYS read `.agents/CONTEXT.md` at the start of a session to understand the current project state.
 *Do NOT execute any code or write any plans until you have completed these two reads.*
+
 
 ## Critical Rules
 1. **Workflow (Журнал)**: ТЕСТЫ ПРОШЛИ → ЗАПИСЬ В ЖУРНАЛ (`journal/YYYY-MM-DD/mrdevcourses.md`) → GIT PUSH. Никогда наоборот.

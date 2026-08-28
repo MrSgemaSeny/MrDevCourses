@@ -1,10 +1,11 @@
 # Current Project Context — MrDevCourses
 
 ## Status
-- **Project Stage**: Level 5 — Full Enterprise LMS Platform (Domain Hierarchy + Modules + Quizzes + Hybrid RAG + AI Grader + Outbox Engine + Cohort Analytics)
+- **Project Stage**: Level 3 — Educational MVP (Учебная LMS платформа. Максимальный уровень проекта — 3. Проект НЕ предназначен для коммерческого релиза и НЕ является Enterprise).
 - **Developer Level**: Senior Full-Stack / Tech Lead
-- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V11), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j, OpenHTMLtoPDF, Thymeleaf.
-- **Enterprise Features**:
+- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V12), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j, OpenHTMLtoPDF, Thymeleaf.
+- **Core Modules & Capabilities**:
+
   - `domain-hierarchy`: Deep course structure (`Course -> CourseModule -> Lesson -> Materials/Quizzes`), Lesson Types (`VIDEO`, `ARTICLE`, `PRACTICE`, `QUIZ`), cohorts, free preview gates.
   - `quiz-engine`: Interactive assessment subsystem (`Quiz`, `QuizQuestion`, `QuizQuestionOption`, `QuizSubmission`, anti-cheat option masking, auto-scoring, explanation feedback, `LessonQuizWidget`).
   - `materials`: Per-lesson downloadable resources (`CHEAT_SHEET`, `SOURCE_CODE`, `REPO_LINK`, `PDF`, `LessonMaterialsList`).
