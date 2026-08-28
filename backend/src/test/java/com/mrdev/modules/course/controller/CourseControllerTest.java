@@ -137,7 +137,7 @@ class CourseControllerTest {
         enrollmentRepository.save(enrollment);
 
         mockMvc.perform(get("/v1/courses")
-                        .cookie(new Cookie("MrDev_token", userToken)))
+                        .cookie(new Cookie("MrDevelopertoken", userToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data[0].enrolled", is(true)));
@@ -172,7 +172,7 @@ class CourseControllerTest {
     @DisplayName("POST /v1/courses/{courseId}/enroll with valid token should enroll student")
     void enroll_authenticated_success() throws Exception {
         mockMvc.perform(post("/v1/courses/" + activeCourse.getId() + "/enroll")
-                        .cookie(new Cookie("MrDev_token", userToken)))
+                        .cookie(new Cookie("MrDevelopertoken", userToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.courseId", is(activeCourse.getId().intValue())))
@@ -190,7 +190,7 @@ class CourseControllerTest {
         enrollmentRepository.save(enrollment);
 
         mockMvc.perform(post("/v1/courses/" + activeCourse.getId() + "/enroll")
-                        .cookie(new Cookie("MrDev_token", userToken)))
+                        .cookie(new Cookie("MrDevelopertoken", userToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.courseId", is(activeCourse.getId().intValue())));

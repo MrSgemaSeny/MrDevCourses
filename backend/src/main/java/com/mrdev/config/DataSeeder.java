@@ -60,7 +60,7 @@ public class DataSeeder {
             return;
         }
 
-        log.info("Seeding initial MrDev data with domain hierarchy, modules & quizzes...");
+        log.info("Seeding initial MrDeveloperdata with domain hierarchy, modules & quizzes...");
 
         // 1. Admin User
         if (!userRepository.existsByEmail("admin@mrdev.com")) {
@@ -224,9 +224,9 @@ public class DataSeeder {
                 .build();
         LessonMaterial mat2 = LessonMaterial.builder()
                 .lesson(savedLessons.get(0))
-                .title("Исходный код: Шаблон репозитория MrDev")
+                .title("Исходный код: Шаблон репозитория MrDeveloper")
                 .materialType(MaterialType.REPO_LINK)
-                .url("https://github.com/MrSgemaSeny/MrDev")
+                .url("https://github.com/MrSgemaSeny/MrDeveloper")
                 .sortOrder(2)
                 .build();
         lessonMaterialRepository.saveAll(List.of(mat1, mat2));

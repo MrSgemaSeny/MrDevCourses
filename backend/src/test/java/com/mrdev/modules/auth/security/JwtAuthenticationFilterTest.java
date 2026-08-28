@@ -38,7 +38,7 @@ class JwtAuthenticationFilterTest {
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(jwtAuthenticationFilter, "cookieName", "MrDev_token");
+        ReflectionTestUtils.setField(jwtAuthenticationFilter, "cookieName", "MrDevelopertoken");
         SecurityContextHolder.clearContext();
     }
 
@@ -52,7 +52,7 @@ class JwtAuthenticationFilterTest {
     void testFilterWithValidCookie() throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
-        request.setCookies(new Cookie("MrDev_token", "valid-jwt-token"));
+        request.setCookies(new Cookie("MrDevelopertoken", "valid-jwt-token"));
 
         when(jwtTokenProvider.validateToken("valid-jwt-token")).thenReturn(true);
         when(jwtTokenProvider.getUserIdFromToken("valid-jwt-token")).thenReturn(10L);
@@ -101,7 +101,7 @@ class JwtAuthenticationFilterTest {
     void testFilterWithInvalidToken() throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
-        request.setCookies(new Cookie("MrDev_token", "invalid-token"));
+        request.setCookies(new Cookie("MrDevelopertoken", "invalid-token"));
 
         when(jwtTokenProvider.validateToken("invalid-token")).thenReturn(false);
 

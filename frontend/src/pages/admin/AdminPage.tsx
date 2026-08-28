@@ -130,7 +130,7 @@ export const AdminPage: React.FC = () => {
             <Shield className="w-3.5 h-3.5" />
             <span>Панель администратора</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Управление MrDev</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Управление MrDeveloper/h1>
         </div>
 
         {/* Tab Buttons */}

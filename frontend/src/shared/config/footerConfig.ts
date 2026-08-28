@@ -28,7 +28,7 @@ export interface FooterConfig {
 
 export const FOOTER_CONFIG: FooterConfig = {
   brand: {
-    title: 'MrDev',
+    title: 'MrDeveloper,
     description:
       'Образовательная платформа для разработчиков от Mr Developer. Практические курсы по промышленному стеку, архитектуре и AI-инструментам.',
   },
@@ -46,7 +46,7 @@ export const FOOTER_CONFIG: FooterConfig = {
       links: [
         {
           label: 'GitHub',
-          to: 'https://github.com/MrSgemaSeny/MrDev',
+          to: 'https://github.com/MrSgemaSeny/MrDeveloper,
           isExternal: true,
           icon: Github,
         },
@@ -61,7 +61,7 @@ export const FOOTER_CONFIG: FooterConfig = {
   ],
   legal: {
     copyrightYear: new Date().getFullYear(),
-    copyrightHolder: 'MrDev',
+    copyrightHolder: 'MrDeveloper,
     links: [
       { label: 'Конфиденциальность', to: '#' },
       { label: 'Условия', to: '#' },

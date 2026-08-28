@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtCookieHelper {
 
-    @Value("${app.jwt.cookie-name:MrDev_token}")
+    @Value("${app.jwt.cookie-name:MrDevelopertoken}")
     private String cookieName;
 
     @Value("${app.jwt.cookie-secure:false}")

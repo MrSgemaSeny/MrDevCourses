@@ -209,7 +209,7 @@ class RateLimitingIntegrationTest {
     @DisplayName("Authenticated user gets authenticated quota isolated from anonymous traffic")
     void testAuthenticatedUserQuota() throws Exception {
         mockMvc.perform(get("/v1/auth/me")
-                        .cookie(new Cookie("MrDev_token", userToken)))
+                        .cookie(new Cookie("MrDevelopertoken", userToken)))
                 .andExpect(status().isOk())
                 .andExpect(header().string("X-RateLimit-Remaining", "9"));
     }

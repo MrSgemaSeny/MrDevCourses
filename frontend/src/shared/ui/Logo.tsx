@@ -6,12 +6,12 @@ export const Logo: React.FC<{ className?: string }> = ({ className = '' }) => {
       <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden flex-shrink-0 bg-[#0a0a0c]">
         <img 
           src="/author-avatar.png" 
-          alt="MrDev Logo" 
+          alt="MrDeveloperLogo" 
           className="w-full h-full object-cover scale-[1.35] translate-y-[5%] origin-center"
         />
       </div>
-      <span className="text-sm font-bold tracking-tight text-white uppercase">
-        MrDev
+      <span className="text-xl font-black font-mono tracking-widest text-white uppercase drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+        MrDeveloper
       </span>
     </div>
   );

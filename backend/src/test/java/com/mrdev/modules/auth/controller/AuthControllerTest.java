@@ -75,7 +75,7 @@ class AuthControllerTest {
     @DisplayName("GET /v1/auth/me should return 200 and UserDto when authenticated via cookie")
     void testGetMeAuthenticatedCookie() throws Exception {
         mockMvc.perform(get("/v1/auth/me")
-                        .cookie(new Cookie("MrDev_token", validToken)))
+                        .cookie(new Cookie("MrDevelopertoken", validToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.email", is("student@mrdev.com")))
@@ -108,7 +108,7 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(header().exists("Set-Cookie"))
-                .andExpect(header().string("Set-Cookie", containsString("MrDev_token=")))
+                .andExpect(header().string("Set-Cookie", containsString("MrDevelopertoken=")))
                 .andExpect(header().string("Set-Cookie", containsString("Max-Age=0")));
     }
 }
