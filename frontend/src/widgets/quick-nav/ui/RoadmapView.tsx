@@ -68,9 +68,9 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
       <div className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] flex items-center justify-between">
         <div>
           <h4 className="text-xs font-bold text-white tracking-tight">Траектория обучения</h4>
-          <p className="text-[11px] text-zinc-400">1 день = 1 урок (капельный доступ)</p>
+          <p className="text-xs text-zinc-400">1 день = 1 урок (капельный доступ)</p>
         </div>
-        <span className="text-[11px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-zinc-900 border border-white/5">
+        <span className="text-[10px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-zinc-900 border border-white/5">
           {completedCount} / {lessons.length}
         </span>
       </div>
