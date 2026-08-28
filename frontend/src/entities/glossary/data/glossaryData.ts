@@ -6,7 +6,7 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
     term: 'JWT (JSON Web Token)',
     category: 'security',
     shortDefinition: 'Компактный и самодостаточный формат безопасной передачи информации между сторонами в виде JSON-объекта.',
-    fullExplanation: 'В архитектуре MrDev JWT генерируется после успешной Google OAuth2 авторизации и сохраняется в защищенную httpOnly cookie (`mrdev_token`). Содержит зашифрованный userId, email, роль и срок жизни (exp). Сервер проверяет подпись с помощью HMAC-SHA256 без обращения к базе данных на каждый запрос.',
+    fullExplanation: 'В архитектуре MrDeveloper JWT генерируется после успешной Google OAuth2 авторизации и сохраняется в защищенную httpOnly cookie (`mrdev_token`). Содержит зашифрованный userId, email, роль и срок жизни (exp). Сервер проверяет подпись с помощью HMAC-SHA256 без обращения к базе данных на каждый запрос.',
     codeSnippet: `// Spring Security JWT Filter validation
 String token = extractTokenFromCookie(request, "mrdev_token");
 if (token != null && jwtProvider.validateToken(token)) {
@@ -65,7 +65,7 @@ public CourseProgressDto getProgress(Long courseId) {
     term: 'Drip-Content (Капельный контент)',
     category: 'backend',
     shortDefinition: 'Механика постепенного открытия уроков по расписанию относительно даты записи студента.',
-    fullExplanation: 'В MrDev уроки открываются по строгой формуле: `(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL \'1 day\')`. Расчет выполняется динамически на уровне базы данных и бизнес-логики без фоновых cron-задач. Если урок еще заблокирован, выбрасывается LessonLockedException с датой opensAt.',
+    fullExplanation: 'В MrDeveloper уроки открываются по строгой формуле: `(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL \'1 day\')`. Расчет выполняется динамически на уровне базы данных и бизнес-логики без фоновых cron-задач. Если урок еще заблокирован, выбрасывается LessonLockedException с датой opensAt.',
     codeSnippet: `-- Drip calculation in SQL query
 SELECT l.*,
        (NOW() >= (e.enrolled_at + ((l.day_number - 1) * INTERVAL '1 day'))) AS is_accessible,
@@ -127,7 +127,7 @@ ON lesson_progress (user_id, lesson_id);`,
     term: 'Tailwind CSS v4 & Dark Aesthetic',
     category: 'frontend',
     shortDefinition: 'Утилитарный CSS-фреймворк нового поколения на базе LightningCSS с единой дизайн-системой.',
-    fullExplanation: 'В MrDev используется строгая темная палитра: `#0a0a0c` (основной фон/сайдбар), `#18181b` (карточки и контейнеры), `#18181b`/`#27272a` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
+    fullExplanation: 'В MrDeveloper используется строгая темная палитра: `#0a0a0c` (основной фон/сайдбар), `#18181b` (карточки и контейнеры), `#18181b`/`#27272a` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
     codeSnippet: `/* Modern Dark Palette in Tailwind v4 */
 .custom-card {
   background-color: #18181b;
@@ -145,7 +145,7 @@ ON lesson_progress (user_id, lesson_id);`,
     fullExplanation: 'AI-ассистент в уроках использует модель Llama 3.3 70B через Groq API. Системный промпт жестко заземляет ответы на текущий markdown-контент урока и фильтрует попытки prompt injection. Ответы стримятся по Server-Sent Events (SSE) в реальном времени.',
     codeSnippet: `// AI Tutor Prompt Grounding
 String systemPrompt = """
-Ты — AI-наставник курса MrDev.
+Ты — AI-наставник курса MrDeveloper.
 Отвечай ТОЛЬКО на основе предоставленного контекста урока.
 Контекст урока:
 """ + sanitizedLessonMarkdown;`,

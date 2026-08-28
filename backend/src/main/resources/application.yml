@@ -1,6 +1,6 @@
 spring:
   application:
-    name: MrDev
+    name: MrDeveloper
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   jpa:
