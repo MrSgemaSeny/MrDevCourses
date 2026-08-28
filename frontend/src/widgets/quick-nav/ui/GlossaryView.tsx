@@ -118,7 +118,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
             <button
               key={cat.key}
               onClick={() => setSelectedCategory(cat.key)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 isActive
                   ? 'bg-zinc-200 text-zinc-900 shadow-sm'
                   : 'bg-[#18181b] border border-[#21262d] text-zinc-400 hover:text-white hover:border-white/5'
@@ -131,7 +131,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
       </div>
 
       {/* Term Counter */}
-      <div className="flex items-center justify-between text-[11px] text-zinc-400 px-0.5">
+      <div className="flex items-center justify-between text-xs text-zinc-400 px-0.5">
         <span>Найдено терминов: {filteredTerms.length}</span>
         {(search || selectedCategory !== 'all') && (
           <button
@@ -211,14 +211,14 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                     {/* Code Snippet */}
                     {term.codeSnippet && (
                       <div className="rounded-sm bg-[#0d1117] border border-[#21262d] overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-[#21262d] text-[11px] text-zinc-400">
+                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-[#21262d] text-[10px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Code className="w-3.5 h-3.5 text-zinc-500" />
                             <span>Пример реализации</span>
                           </div>
                           <button
                             onClick={() => handleCopyCode(term.id, term.codeSnippet!)}
-                            className="flex items-center gap-1 text-[11px] text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            className="flex items-center gap-1 text-xs text-zinc-400 hover:text-white transition-colors cursor-pointer"
                             aria-label="Копировать код"
                           >
                             {isCopied ? (
@@ -234,14 +234,14 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                             )}
                           </button>
                         </div>
-                        <pre className="p-3 text-[11px] font-mono text-zinc-300 overflow-x-auto leading-normal">
+                        <pre className="p-3 text-xs font-mono text-zinc-300 overflow-x-auto leading-normal">
                           <code>{term.codeSnippet}</code>
                         </pre>
                       </div>
                     )}
 
                     {/* Metadata Footer: Days and Tags */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] text-zinc-500">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[10px] text-zinc-500">
                       {term.relatedDayNumbers && term.relatedDayNumbers.length > 0 && (
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-3 h-3 text-zinc-400" />
