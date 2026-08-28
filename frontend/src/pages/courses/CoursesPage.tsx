@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
 import {
@@ -7,7 +7,6 @@ import {
   Calendar,
   CheckCircle2,
   ArrowRight,
-  Search,
   Layers,
   Code2,
   Cpu,
@@ -23,7 +22,8 @@ const CATEGORIES = [
 ];
 
 export const CoursesPage: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') || '';
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const { data: courses = [], isLoading } = useQuery({
@@ -39,6 +39,7 @@ export const CoursesPage: React.FC = () => {
       return matchesSearch;
     });
   }, [courses, searchQuery]);
+
 
   return (
     <div className="min-h-screen bg-[#0a0a0c] text-white">
@@ -94,7 +95,7 @@ export const CoursesPage: React.FC = () => {
 
       {/* Main Catalog Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Toolbar: Search and Filter Chips */}
+        {/* Toolbar: Filter Chips and Search Indicator */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8">
           {/* Category Chips */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
@@ -113,18 +114,13 @@ export const CoursesPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Search bar */}
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Поиск по курсам..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#121214] border border-white/5 rounded pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
-            />
-          </div>
+          {searchQuery && (
+            <div className="text-xs text-zinc-400 font-mono">
+              Поиск: &laquo;<span className="text-white">{searchQuery}</span>&raquo; ({filteredCourses.length})
+            </div>
+          )}
         </div>
+
 
         {/* Content list */}
         {isLoading ? (

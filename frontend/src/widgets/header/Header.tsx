@@ -1,30 +1,76 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { ROUTES } from '@/shared/config/routes';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { Logo } from '@/shared/ui/Logo';
-import { BookOpen, LayoutDashboard, Shield, LogIn, Flame } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Shield, LogIn, Flame, Search } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const isCoursesPage = location.pathname === ROUTES.COURSES;
+  const currentQuery = searchParams.get('q') || '';
+  const [searchTerm, setSearchTerm] = useState(currentQuery);
+
+  useEffect(() => {
+    if (isCoursesPage) {
+      setSearchTerm(searchParams.get('q') || '');
+    }
+  }, [isCoursesPage, searchParams]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchTerm(val);
+    if (isCoursesPage) {
+      const newParams = new URLSearchParams(searchParams);
+      if (val.trim()) {
+        newParams.set('q', val);
+      } else {
+        newParams.delete('q');
+      }
+      navigate(`${ROUTES.COURSES}?${newParams.toString()}`, { replace: true });
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isCoursesPage) {
+      navigate(`${ROUTES.COURSES}?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0c]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
         {/* Brand */}
         <Link
           to={ROUTES.HOME}
           aria-label="MrDevCourses Главная"
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0"
         >
           <Logo />
         </Link>
 
+        {/* Global Search in Header */}
+        <div className="flex-1 max-w-md relative hidden sm:block">
+          <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Поиск по курсам..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            className="w-full bg-[#121214] border border-white/10 rounded-sm pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
+          />
+        </div>
 
+        {/* Navigation & Actions */}
+        <div className="flex items-center gap-6 shrink-0">
+          <nav className="flex items-center gap-6 text-xs font-medium">
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-6 text-xs font-medium">
           <Link
             to={ROUTES.COURSES}
             className="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
@@ -84,6 +130,8 @@ export const Header: React.FC = () => {
           )}
         </div>
       </div>
+      </div>
     </header>
+
   );
 };
