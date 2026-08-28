@@ -9,6 +9,11 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
+springBoot {
+    mainClass = 'com.mrdev.MrDevApplication'
+}
+
+
 repositories {
     mavenCentral()
 }
