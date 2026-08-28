@@ -5,7 +5,7 @@ import { Footer } from '@/widgets/footer/Footer';
 
 export const App: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-[#090d13] text-[#fafafa]">
+    <div className="flex flex-col min-h-screen bg-[#09090b] text-[#fafafa]">
       <Header />
 
       <main className="flex-1">
