@@ -185,7 +185,7 @@ class HomeworkControllerTest {
                 .build();
 
         mockMvc.perform(post("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/homework/submit")
-                        .cookie(new Cookie("MrDevelopertoken", studentToken))
+                        .cookie(new Cookie("MrDev_token", studentToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
@@ -207,7 +207,7 @@ class HomeworkControllerTest {
         submissionRepository.save(sub);
 
         mockMvc.perform(get("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/homework/submissions")
-                        .cookie(new Cookie("MrDevelopertoken", studentToken)))
+                        .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data[0].score", is(90)));

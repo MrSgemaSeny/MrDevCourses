@@ -155,7 +155,7 @@ class AutomationAdminControllerTest {
         outboxEventRepository.save(event);
 
         mockMvc.perform(get("/v1/admin/automation/outbox-metrics")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.pendingCount", is(1)));
@@ -165,7 +165,7 @@ class AutomationAdminControllerTest {
     @DisplayName("POST /v1/courses/{courseId}/semantic-links extracts links from text")
     void extractSemanticLinks_ReturnsLinks() throws Exception {
         mockMvc.perform(post("/v1/courses/" + testCourse.getId() + "/semantic-links")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"text\": \"Применение RAG и FSD в проекте\"}"))
                 .andExpect(status().isOk())

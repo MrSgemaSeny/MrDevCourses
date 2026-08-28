@@ -116,7 +116,8 @@ export const CertificateVerifyPage: React.FC = () => {
                 to="/courses"
                 className="px-5 py-2.5 rounded-sm bg-zinc-900 hover:bg-zinc-800 text-xs text-white transition-colors border border-white/5"
               >
-                Все курсы MrDeveloper              </Link>
+                Все курсы MrDev
+              </Link>
             </div>
           </div>
         ) : null}

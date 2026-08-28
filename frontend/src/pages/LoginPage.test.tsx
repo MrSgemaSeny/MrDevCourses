@@ -33,7 +33,7 @@ describe('LoginPage', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Вход в MrDeveloperi)).toBeInTheDocument();
+    expect(screen.getByText(/Вход в MrDev/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Войти через Google/i })).toBeInTheDocument();
     expect(screen.getByTestId('email-auth-form')).toBeInTheDocument();
   });

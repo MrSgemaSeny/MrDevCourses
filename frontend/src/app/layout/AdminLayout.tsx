@@ -58,7 +58,8 @@ export const AdminLayout: React.FC = () => {
         <div className="px-5 py-5 border-b border-white/5">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-white tracking-tight">
-              MrDeveloper            </span>
+              MrDev
+            </span>
             <span className="text-xs px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500 font-mono">
               admin
             </span>

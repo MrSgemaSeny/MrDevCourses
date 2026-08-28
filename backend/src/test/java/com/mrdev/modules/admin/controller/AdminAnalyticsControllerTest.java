@@ -191,7 +191,7 @@ class AdminAnalyticsControllerTest {
     @DisplayName("GET /v1/admin/analytics/overview as STUDENT returns 403")
     void getOverview_AsStudent_Returns403() throws Exception {
         mockMvc.perform(get("/v1/admin/analytics/overview")
-                        .cookie(new Cookie("MrDevelopertoken", studentToken)))
+                        .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isForbidden());
     }
 
@@ -199,7 +199,7 @@ class AdminAnalyticsControllerTest {
     @DisplayName("GET /v1/admin/analytics/overview as ADMIN returns 200 and metrics")
     void getOverview_AsAdmin_Returns200() throws Exception {
         mockMvc.perform(get("/v1/admin/analytics/overview")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.totalStudents", is(1)))
@@ -215,7 +215,7 @@ class AdminAnalyticsControllerTest {
     @DisplayName("GET /v1/admin/analytics/courses/{courseId}/funnel as ADMIN returns funnel stages")
     void getCourseFunnel_AsAdmin_ReturnsFunnel() throws Exception {
         mockMvc.perform(get("/v1/admin/analytics/courses/" + testCourse.getId() + "/funnel")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data", hasSize(3))) // Enrolled -> Day 1 -> Completed
@@ -231,7 +231,7 @@ class AdminAnalyticsControllerTest {
     @DisplayName("GET /v1/admin/analytics/streaks as ADMIN returns 5 streak buckets")
     void getStreaks_AsAdmin_ReturnsBuckets() throws Exception {
         mockMvc.perform(get("/v1/admin/analytics/streaks")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data", hasSize(5)))
@@ -244,7 +244,7 @@ class AdminAnalyticsControllerTest {
     @DisplayName("GET /v1/admin/analytics/courses/{courseId}/retention as ADMIN returns retention data")
     void getCourseRetention_AsAdmin_ReturnsRetention() throws Exception {
         mockMvc.perform(get("/v1/admin/analytics/courses/" + testCourse.getId() + "/retention")
-                        .cookie(new Cookie("MrDevelopertoken", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.courseId", is(testCourse.getId().intValue())))

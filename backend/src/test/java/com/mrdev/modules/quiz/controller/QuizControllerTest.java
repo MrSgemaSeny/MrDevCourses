@@ -218,7 +218,7 @@ class QuizControllerTest {
     @DisplayName("GET /v1/lessons/{lessonId}/quiz returns quiz questions")
     void getQuiz_ReturnsQuizDetails() throws Exception {
         mockMvc.perform(get("/v1/lessons/" + testLesson.getId() + "/quiz")
-                        .cookie(new Cookie("MrDevelopertoken", studentToken)))
+                        .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.title", is("Intro Quiz Title")))
@@ -234,7 +234,7 @@ class QuizControllerTest {
                 .build();
 
         mockMvc.perform(post("/v1/lessons/" + testLesson.getId() + "/quiz/submit")
-                        .cookie(new Cookie("MrDevelopertoken", studentToken))
+                        .cookie(new Cookie("MrDev_token", studentToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
