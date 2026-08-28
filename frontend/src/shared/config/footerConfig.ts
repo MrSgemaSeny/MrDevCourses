@@ -1,5 +1,5 @@
 import { ROUTES } from './routes';
-import { LucideIcon, Github, Send } from 'lucide-react';
+import { LucideIcon, Github, Send, Phone } from 'lucide-react';
 
 export interface FooterLink {
   label: string;
@@ -46,15 +46,21 @@ export const FOOTER_CONFIG: FooterConfig = {
       links: [
         {
           label: 'GitHub',
-          to: 'https://github.com/MrSgemaSeny/MrDeveloper',
+          to: 'https://github.com/MrSgemaSeny',
           isExternal: true,
           icon: Github,
         },
         {
           label: 'Telegram',
-          to: 'https://t.me/mrdeveloper',
+          to: 'https://t.me/mrsgemaseny',
           isExternal: true,
           icon: Send,
+        },
+        {
+          label: '+7 775 058 40 21',
+          to: 'tel:+77750584021',
+          isExternal: true,
+          icon: Phone,
         },
       ],
     },

@@ -30,51 +30,64 @@ const wrap = (element: React.ReactNode) => (
 );
 
 export const router = createBrowserRouter([
-  // ── Public layout (Header + Footer) ──────────────────────────────
   {
     path: '/',
     element: <App />,
     children: [
+      // ── Public Pages ───────────────────────────────────────────────
       { index: true, element: wrap(<LandingPage />) },
       { path: 'auth', element: wrap(<LoginPage />) },
       { path: 'login', element: wrap(<LoginPage />) },
       { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
-      { path: 'courses', element: wrap(<CoursesPage />) },
-      { path: 'courses/:slug', element: wrap(<CourseDetailPage />) },
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
-    ],
-  },
 
-  // ── Student layout (Sidebar) ──────────────────────────────────────
-  {
-    path: '/',
-    element: (
-      <ProtectedRoute>
-        <StudentLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: 'dashboard', element: wrap(<DashboardPage />) },
+      // ── Protected Student/Core App Pages (Auth Required) ───────────
+      {
+        path: 'courses',
+        element: (
+          <ProtectedRoute>
+            <CoursesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'courses/:slug',
+        element: (
+          <ProtectedRoute>
+            <CourseDetailPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: 'courses/:courseId/lessons/:lessonId',
-        element: wrap(<LessonPage />),
+        element: (
+          <ProtectedRoute>
+            <LessonPage />
+          </ProtectedRoute>
+        ),
       },
-    ],
-  },
+      {
+        path: 'dashboard',
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
 
-  // ── Admin layout (Sidebar) ────────────────────────────────────────
-  {
-    path: '/',
-    element: (
-      <ProtectedRoute adminOnly>
-        <AdminLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: 'admin', element: wrap(<AdminPage />) },
+      // ── Protected Admin Pages ──────────────────────────────────────
+      {
+        path: 'admin',
+        element: (
+          <ProtectedRoute adminOnly>
+            <AdminPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 
   // ── Fallback ──────────────────────────────────────────────────────
   { path: '*', element: <Navigate to="/" replace /> },
 ]);
+
