@@ -10,8 +10,8 @@ export const Logo: React.FC<{ className?: string }> = ({ className = '' }) => {
           className="w-full h-full object-cover scale-[1.35] translate-y-[5%] origin-center"
         />
       </div>
-      <span className="text-lg font-bold tracking-tight text-white uppercase">
-        MrDev
+      <span className="text-sm font-bold tracking-tight text-white uppercase">
+        MrDevCourses
       </span>
     </div>
   );

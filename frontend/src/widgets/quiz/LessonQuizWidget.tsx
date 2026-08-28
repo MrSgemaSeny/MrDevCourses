@@ -101,7 +101,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-semibold text-[#fafafa]">{quiz.title}</h3>
-            <p className="text-[11px] text-[#8b949e]">
+            <p className="text-xs text-[#8b949e]">
               Проходной балл: {quiz.passingScorePercentage}% &bull; Попыток: {quiz.maxAttempts}
             </p>
           </div>
@@ -134,7 +134,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-start gap-2">
-                  <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#21262d] text-[#c9d1d9]">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#21262d] text-[#c9d1d9]">
                     #{idx + 1}
                   </span>
                   <p className="text-xs font-medium text-[#fafafa] leading-relaxed">
@@ -193,7 +193,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
               {/* Explanation note after submission */}
               {result && explanation && (
-                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-[11px] text-[#8b949e]">
+                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-xs text-[#8b949e]">
                   <strong className="text-zinc-300">Пояснение:</strong> {explanation}
                 </div>
               )}
@@ -227,7 +227,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                   </>
                 )}
               </div>
-              <p className="text-[11px] mt-1 text-[#8b949e]">
+              <p className="text-xs mt-1 text-[#8b949e]">
                 Правильных ответов: {result.correctCount} из {result.totalCount}
               </p>
             </div>
@@ -245,7 +245,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
           </div>
         ) : (
           <div className="pt-2 flex items-center justify-between border-t border-white/5">
-            <span className="text-[11px] text-[#8b949e]">
+            <span className="text-xs text-[#8b949e]">
               Урок будет автоматически зачтен при результате &ge; {quiz.passingScorePercentage}%
             </span>
 

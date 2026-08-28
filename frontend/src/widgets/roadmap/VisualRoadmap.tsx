@@ -114,16 +114,16 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-zinc-400">День {lesson.dayNumber}</span>
-                      <h4 className={`text-xs sm:text-sm font-semibold ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
+                      <span className="text-[10px] font-mono text-zinc-400">День {lesson.dayNumber}</span>
+                      <h4 className={`text-xs font-semibold ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
                         {lesson.title}
                       </h4>
                     </div>
 
                     {lesson.completed ? (
-                      <span className="text-[11px] text-emerald-400 font-medium self-start sm:self-auto">Завершен</span>
+                      <span className="text-[10px] text-emerald-400 font-medium self-start sm:self-auto">Завершен</span>
                     ) : lesson.accessible ? (
-                      <span className="text-[11px] text-zinc-300 font-medium self-start sm:self-auto">Открыть урок</span>
+                      <span className="text-[10px] text-zinc-300 font-medium self-start sm:self-auto">Открыть урок</span>
                     ) : (
                       <div className="self-start sm:self-auto">
                         <CountdownTimer targetDate={lesson.opensAt} />
