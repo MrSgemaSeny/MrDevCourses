@@ -49,7 +49,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
             <h3 className="text-xs font-bold text-white tracking-tight uppercase">
               Не понятен термин или концепция?
             </h3>
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-xs text-zinc-400">
               Нажмите на термин для мгновенного разбора в контекстной панели
             </p>
           </div>
@@ -66,7 +66,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 
       {/* Clickable Term Chips */}
       <div className="space-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] text-zinc-400">
+        <div className="flex items-center gap-1.5 text-xs text-zinc-400">
           <Tag className="w-3.5 h-3.5 text-zinc-500" />
           <span>Ключевые термины этого урока:</span>
         </div>
@@ -88,14 +88,14 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 
       {/* Fast Navigation Shortcuts */}
       <div className="pt-3 border-t border-[#21262d] flex flex-wrap items-center justify-between gap-3 text-xs">
-        <span className="text-zinc-500 text-[11px]">
+        <span className="text-zinc-500 text-xs">
           Быстрый просмотр без перезагрузки видео:
         </span>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => openQuickNav('progress')}
-            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Flame className="w-3.5 h-3.5 text-orange-400" />
             <span>Мой прогресс</span>
@@ -103,7 +103,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 
           <button
             onClick={() => openQuickNav('roadmap')}
-            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Map className="w-3.5 h-3.5 text-zinc-100" />
             <span>Roadmap курса</span>
