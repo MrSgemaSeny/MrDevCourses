@@ -114,11 +114,11 @@ export const UserProfileDropdown: React.FC = () => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-1">
                   <p className="text-xs font-semibold text-white truncate">{displayName}</p>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-zinc-800 border border-white/5 text-zinc-300">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 border border-white/5 text-zinc-300">
                     {user.role}
                   </span>
                 </div>
-                <p className="text-[11px] text-zinc-400 truncate mt-0.5">{user.email}</p>
+                <p className="text-xs text-zinc-400 truncate mt-0.5">{user.email}</p>
               </div>
             </div>
 
@@ -127,7 +127,7 @@ export const UserProfileDropdown: React.FC = () => {
               <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
                 <Flame className="w-3.5 h-3.5 text-white shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[9px] text-zinc-500 uppercase font-mono">Стрик</div>
+                  <div className="text-[10px] text-zinc-500 uppercase font-mono">Стрик</div>
                   <div className="text-xs font-bold text-white font-mono">{user.currentStreak || 0} дн.</div>
                 </div>
               </div>
@@ -135,7 +135,7 @@ export const UserProfileDropdown: React.FC = () => {
               <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
                 <Trophy className="w-3.5 h-3.5 text-white shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[9px] text-zinc-500 uppercase font-mono">Рекорд</div>
+                  <div className="text-[10px] text-zinc-500 uppercase font-mono">Рекорд</div>
                   <div className="text-xs font-bold text-white font-mono">{user.longestStreak || 0} дн.</div>
                 </div>
               </div>

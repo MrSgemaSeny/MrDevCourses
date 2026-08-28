@@ -71,7 +71,7 @@ const LessonPageContent: React.FC = () => {
         <div className="w-12 h-12 rounded-full bg-red-950/60 border border-red-800 text-red-400 flex items-center justify-center mx-auto mb-4">
           <Lock className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-bold text-white mb-2">Доступ ограничен</h2>
+        <h2 className="text-sm font-bold text-white mb-2">Доступ ограничен</h2>
         <p className="text-xs text-zinc-400 max-w-md mx-auto mb-6">
           {(lessonError as any)?.response?.data?.message || 'Этот урок заблокирован согласно вашему графику обучения.'}
         </p>
@@ -109,11 +109,11 @@ const LessonPageContent: React.FC = () => {
             <span>Быстрая навигация</span>
           </button>
 
-          <span className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-white/5 text-zinc-300">
+          <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 border border-white/5 text-zinc-300">
             День {lesson.dayNumber}
           </span>
           {lesson.completed && (
-            <span className="px-2.5 py-0.5 rounded text-[11px] bg-emerald-950/80 border border-emerald-800 text-emerald-400 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded text-[10px] bg-emerald-950/80 border border-emerald-800 text-emerald-400 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" />
               Пройден
             </span>
@@ -147,7 +147,7 @@ const LessonPageContent: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
                 {lesson.moduleTitle && (
-                  <div className="text-[11px] font-semibold text-[#58a6ff] uppercase tracking-wider mb-1">
+                  <div className="text-[10px] font-semibold text-[#58a6ff] uppercase tracking-wider mb-1">
                     {lesson.moduleTitle}
                   </div>
                 )}

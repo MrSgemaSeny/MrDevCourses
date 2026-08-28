@@ -58,14 +58,14 @@ export const CourseDetailPage: React.FC = () => {
   };
 
   if (courseLoading) {
-    return <div className="text-center py-20 text-zinc-500 text-sm">Загрузка информации о курсе...</div>;
+    return <div className="text-center py-20 text-zinc-500 text-xs">Загрузка информации о курсе...</div>;
   }
 
   if (!course) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-xl font-bold text-white mb-2">Курс не найден</h2>
-        <Link to="/courses" className="text-sm text-zinc-400 hover:text-white underline">
+        <h2 className="text-sm font-bold text-white mb-2">Курс не найден</h2>
+        <Link to="/courses" className="text-xs text-zinc-400 hover:text-white underline">
           Вернуться в каталог
         </Link>
       </div>
@@ -81,12 +81,12 @@ export const CourseDetailPage: React.FC = () => {
       {/* Course Hero */}
       <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-white/5 font-mono">
+          <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-zinc-800 text-zinc-300 border border-white/5 font-mono">
             5 модулей &bull; 30 уроков
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">{course.title}</h1>
+        <h1 className="text-2xl font-bold text-white tracking-tight mb-4">{course.title}</h1>
 
         <p className="text-sm text-zinc-300 max-w-3xl leading-relaxed mb-6 font-normal">
           {course.description || 'Пошаговый курс с практическими уроками, ориентированный на реальный результат.'}
@@ -143,7 +143,7 @@ export const CourseDetailPage: React.FC = () => {
       {modules.length > 0 ? (
         <div className="space-y-4 mb-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white tracking-tight">Структура и модули программы</h2>
+            <h2 className="text-sm font-bold text-white tracking-tight">Структура и модули программы</h2>
             <span className="text-xs text-zinc-400">
               {modules.reduce((acc, m) => acc + (m.lessonsCount || 0), 0)} уроков всего
             </span>
@@ -158,7 +158,7 @@ export const CourseDetailPage: React.FC = () => {
                 <div className="w-full px-5 py-4 bg-[#0d1117] flex items-center justify-between text-left">
                   <div>
                     <div className="flex items-center gap-2.5">
-                      <span className="text-xs font-semibold text-white">{mod.title}</span>
+                      <span className="text-sm font-semibold text-white">{mod.title}</span>
                       {mod.isFreePreview && (
                         <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-500/20 text-sky-400 border border-sky-500/30">
                           Бесплатный модуль
@@ -166,7 +166,7 @@ export const CourseDetailPage: React.FC = () => {
                       )}
                     </div>
                     {mod.description && (
-                      <p className="text-[11px] text-[#8b949e] mt-1">{mod.description}</p>
+                      <p className="text-xs text-[#8b949e] mt-1">{mod.description}</p>
                     )}
                   </div>
 

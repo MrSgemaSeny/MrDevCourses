@@ -33,7 +33,7 @@ describe('AuthProvider', () => {
   it('restores authenticated user session on mount', async () => {
     const mockUser: User = {
       id: 1,
-      email: 'student@mrdevcourses.com',
+      email: 'student@mrdev.com',
       name: 'Murat',
       role: 'STUDENT',
       createdAt: '2026-08-25T10:00:00Z',
@@ -51,7 +51,7 @@ describe('AuthProvider', () => {
     await waitFor(() => {
       expect(screen.getByTestId('auth-status')).toHaveTextContent('Authenticated');
       expect(screen.getByTestId('admin-status')).toHaveTextContent('Not Admin');
-      expect(screen.getByTestId('user-email')).toHaveTextContent('student@mrdevcourses.com');
+      expect(screen.getByTestId('user-email')).toHaveTextContent('student@mrdev.com');
     });
   });
 
@@ -74,7 +74,7 @@ describe('AuthProvider', () => {
   it('identifies admin role correctly', async () => {
     const adminUser: User = {
       id: 99,
-      email: 'admin@mrdevcourses.com',
+      email: 'admin@mrdev.com',
       name: 'Admin User',
       role: 'ADMIN',
       createdAt: '2026-08-25T10:00:00Z',
@@ -95,7 +95,7 @@ describe('AuthProvider', () => {
   it('clears user state on logout', async () => {
     const mockUser: User = {
       id: 1,
-      email: 'student@mrdevcourses.com',
+      email: 'student@mrdev.com',
       role: 'STUDENT',
       createdAt: '2026-08-25T10:00:00Z',
     };

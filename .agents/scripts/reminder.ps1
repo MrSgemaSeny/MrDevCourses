@@ -1,3 +1,4 @@
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $today = Get-Date -Format "yyyy-MM-dd"
 $journalPath = "C:\Users\murat\IdeaProjects\new_world\Brain's protocol - second brain\journal\$today\mrdevcourses.md"
 

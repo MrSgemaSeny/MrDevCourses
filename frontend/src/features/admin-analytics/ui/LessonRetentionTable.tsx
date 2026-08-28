@@ -32,7 +32,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
               <tr key={lesson.lessonId} className="hover:bg-zinc-800/30 transition-colors">
                 <td className="p-3.5 font-medium text-white">
                   <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded bg-zinc-800 border border-white/5 flex items-center justify-center text-[11px] font-mono font-bold text-zinc-300">
+                    <span className="w-7 h-7 rounded bg-zinc-800 border border-white/5 flex items-center justify-center text-[10px] font-mono font-bold text-zinc-300">
                       Д{lesson.dayNumber}
                     </span>
                     <span className="truncate max-w-xs">{lesson.lessonTitle}</span>
@@ -51,7 +51,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
                         style={{ width: `${Math.min(100, Math.max(0, lesson.completionRate))}%` }}
                       />
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-300 w-10 text-right">
+                    <span className="text-[10px] font-mono text-zinc-300 w-10 text-right">
                       {lesson.completionRate}%
                     </span>
                   </div>
@@ -63,7 +63,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
                       -{lesson.dropOffRate}%
                     </span>
                   ) : (
-                    <span className="text-zinc-500 text-[11px]">0%</span>
+                    <span className="text-zinc-500 text-[10px]">0%</span>
                   )}
                 </td>
 

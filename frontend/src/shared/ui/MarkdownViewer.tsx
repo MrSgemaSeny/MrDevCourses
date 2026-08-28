@@ -19,7 +19,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
     return parts.map((part, pIdx) => {
       if (part.startsWith('`') && part.endsWith('`') && part.length > 1) {
         return (
-          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/5 font-mono text-[11px] text-emerald-400">
+          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/5 font-mono text-[10px] text-emerald-400">
             {part.slice(1, -1)}
           </code>
         );
@@ -48,7 +48,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
 
     const renderCodeBlock = (key: string, codeText: string, idx: number) => (
       <div key={key} className="my-4 rounded-sm bg-zinc-950 border border-white/5 overflow-hidden font-mono text-xs">
-        <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900/90 border-b border-white/5 text-[11px] text-zinc-400">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900/90 border-b border-white/5 text-[10px] text-zinc-400">
           <span>code</span>
           <button
             onClick={() => handleCopy(codeText, idx)}
@@ -147,19 +147,19 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
       // Headings
       if (line.startsWith('### ')) {
         elements.push(
-          <h3 key={`h3-${i}`} className="text-base font-bold text-white mt-5 mb-2">
+          <h3 key={`h3-${i}`} className="text-sm font-bold text-white mt-5 mb-2">
             {renderFormattedText(line.replace('### ', ''))}
           </h3>
         );
       } else if (line.startsWith('## ')) {
         elements.push(
-          <h2 key={`h2-${i}`} className="text-lg font-bold text-white mt-6 mb-3 pb-1 border-b border-white/5">
+          <h2 key={`h2-${i}`} className="text-sm font-bold text-white mt-6 mb-3 pb-1 border-b border-white/5">
             {renderFormattedText(line.replace('## ', ''))}
           </h2>
         );
       } else if (line.startsWith('# ')) {
         elements.push(
-          <h1 key={`h1-${i}`} className="text-xl font-extrabold text-white mt-6 mb-3">
+          <h1 key={`h1-${i}`} className="text-2xl font-bold text-white mt-6 mb-3">
             {renderFormattedText(line.replace('# ', ''))}
           </h1>
         );
@@ -171,7 +171,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
         );
       } else if (line.trim().length > 0) {
         elements.push(
-          <p key={`p-${i}`} className="text-xs sm:text-sm text-zinc-300 mb-3 leading-relaxed">
+          <p key={`p-${i}`} className="text-xs text-zinc-300 mb-3 leading-relaxed">
             {renderFormattedText(line)}
           </p>
         );

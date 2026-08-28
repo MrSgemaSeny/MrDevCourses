@@ -49,11 +49,11 @@ export const CertificateVerifyPage: React.FC = () => {
                 <line x1="9" y1="9" x2="15" y2="15" />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-red-400 mb-2">Ошибка верификации</h1>
-            <p className="text-sm text-[#8b949e] mb-6">{error}</p>
+            <h1 className="text-2xl font-bold text-red-400 mb-2">Ошибка верификации</h1>
+            <p className="text-xs text-[#8b949e] mb-6">{error}</p>
             <Link
               to="/courses"
-              className="inline-block px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-white/5"
+              className="inline-block px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs text-[#fafafa] transition-colors border border-white/5"
             >
               К каталогу курсов
             </Link>
@@ -67,7 +67,7 @@ export const CertificateVerifyPage: React.FC = () => {
               </svg>
             </div>
 
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
               ОФИЦИАЛЬНО ПОДТВЕРЖДЕНО
             </span>
 
@@ -108,13 +108,13 @@ export const CertificateVerifyPage: React.FC = () => {
                 href={certificateApi.getPdfDownloadUrl(certificate.certificateCode)}
                 target="_blank"
                 rel="noreferrer"
-                className="px-5 py-2.5 rounded-sm bg-[#238636] hover:bg-[#2ea043] text-sm font-semibold text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                className="px-5 py-2.5 rounded-sm bg-[#238636] hover:bg-[#2ea043] text-xs font-semibold text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
               >
                 Скачать официальный PDF
               </a>
               <Link
                 to="/courses"
-                className="px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-white/5"
+                className="px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs text-[#fafafa] transition-colors border border-white/5"
               >
                 Все курсы MrDevCourses
               </Link>

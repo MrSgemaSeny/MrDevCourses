@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
         {/* Brand */}
         <Link
           to={ROUTES.HOME}
-          aria-label="MrDevCourses Главная"
+          aria-label="MrDev Главная"
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <Logo />

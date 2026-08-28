@@ -6,9 +6,9 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
     term: 'JWT (JSON Web Token)',
     category: 'security',
     shortDefinition: 'Компактный и самодостаточный формат безопасной передачи информации между сторонами в виде JSON-объекта.',
-    fullExplanation: 'В архитектуре MrDevCourses JWT генерируется после успешной Google OAuth2 авторизации и сохраняется в защищенную httpOnly cookie (`mrdevcourses_token`). Содержит зашифрованный userId, email, роль и срок жизни (exp). Сервер проверяет подпись с помощью HMAC-SHA256 без обращения к базе данных на каждый запрос.',
+    fullExplanation: 'В архитектуре MrDev JWT генерируется после успешной Google OAuth2 авторизации и сохраняется в защищенную httpOnly cookie (`mrdev_token`). Содержит зашифрованный userId, email, роль и срок жизни (exp). Сервер проверяет подпись с помощью HMAC-SHA256 без обращения к базе данных на каждый запрос.',
     codeSnippet: `// Spring Security JWT Filter validation
-String token = extractTokenFromCookie(request, "mrdevcourses_token");
+String token = extractTokenFromCookie(request, "mrdev_token");
 if (token != null && jwtProvider.validateToken(token)) {
     Long userId = jwtProvider.getUserId(token);
     UserPrincipal principal = new UserPrincipal(userId, email, role);
@@ -65,7 +65,7 @@ public CourseProgressDto getProgress(Long courseId) {
     term: 'Drip-Content (Капельный контент)',
     category: 'backend',
     shortDefinition: 'Механика постепенного открытия уроков по расписанию относительно даты записи студента.',
-    fullExplanation: 'В MrDevCourses уроки открываются по строгой формуле: `(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL \'1 day\')`. Расчет выполняется динамически на уровне базы данных и бизнес-логики без фоновых cron-задач. Если урок еще заблокирован, выбрасывается LessonLockedException с датой opensAt.',
+    fullExplanation: 'В MrDev уроки открываются по строгой формуле: `(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL \'1 day\')`. Расчет выполняется динамически на уровне базы данных и бизнес-логики без фоновых cron-задач. Если урок еще заблокирован, выбрасывается LessonLockedException с датой opensAt.',
     codeSnippet: `-- Drip calculation in SQL query
 SELECT l.*,
        (NOW() >= (e.enrolled_at + ((l.day_number - 1) * INTERVAL '1 day'))) AS is_accessible,
@@ -127,7 +127,7 @@ ON lesson_progress (user_id, lesson_id);`,
     term: 'Tailwind CSS v4 & Dark Aesthetic',
     category: 'frontend',
     shortDefinition: 'Утилитарный CSS-фреймворк нового поколения на базе LightningCSS с единой дизайн-системой.',
-    fullExplanation: 'В MrDevCourses используется строгая темная палитра: `#0d1117` (основной фон/сайдбар), `#161b22` (карточки и контейнеры), `#21262d`/`#30363d` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
+    fullExplanation: 'В MrDev используется строгая темная палитра: `#0d1117` (основной фон/сайдбар), `#161b22` (карточки и контейнеры), `#21262d`/`#30363d` (границы), `#e2b340` (акцентный золотой), `#10b981` (изумрудный статус завершения). Стили компилируются на лету через Vite плагин `@tailwindcss/vite`.',
     codeSnippet: `/* Modern Dark Palette in Tailwind v4 */
 .custom-card {
   background-color: #161b22;
@@ -145,7 +145,7 @@ ON lesson_progress (user_id, lesson_id);`,
     fullExplanation: 'AI-ассистент в уроках использует модель Llama 3.3 70B через Groq API. Системный промпт жестко заземляет ответы на текущий markdown-контент урока и фильтрует попытки prompt injection. Ответы стримятся по Server-Sent Events (SSE) в реальном времени.',
     codeSnippet: `// AI Tutor Prompt Grounding
 String systemPrompt = """
-Ты — AI-наставник курса MrDevCourses.
+Ты — AI-наставник курса MrDev.
 Отвечай ТОЛЬКО на основе предоставленного контекста урока.
 Контекст урока:
 """ + sanitizedLessonMarkdown;`,
@@ -172,8 +172,8 @@ builder.run();`,
     term: 'OAuth2 + httpOnly Cookie Security',
     category: 'security',
     shortDefinition: 'Защищенная схема аутентификации, исключающая доступ JavaScript к токенам сессии (XSS-defense).',
-    fullExplanation: 'После авторизации через Google Identity провайдер перенаправляет на бэкенд, который генерирует JWT и устанавливает его в заголовок `Set-Cookie: mrdevcourses_token=...; HttpOnly; Secure; SameSite=Lax; Path=/api/`. Фронтенд выполняет запросы с `withCredentials: true`, гарантируя иммунитет к краже токенов через XSS.',
-    codeSnippet: `ResponseCookie cookie = ResponseCookie.from("mrdevcourses_token", jwtToken)
+    fullExplanation: 'После авторизации через Google Identity провайдер перенаправляет на бэкенд, который генерирует JWT и устанавливает его в заголовок `Set-Cookie: mrdev_token=...; HttpOnly; Secure; SameSite=Lax; Path=/api/`. Фронтенд выполняет запросы с `withCredentials: true`, гарантируя иммунитет к краже токенов через XSS.',
+    codeSnippet: `ResponseCookie cookie = ResponseCookie.from("mrdev_token", jwtToken)
     .httpOnly(true)
     .secure(true)
     .sameSite("Lax")

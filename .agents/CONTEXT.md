@@ -16,7 +16,9 @@
   - `navigation`: Quick-Nav Drawer (Glossary, Progress, Roadmap) with in-lesson term cards and deep-linking without resetting video player iframe state.
   - `certificate`: Automated PDF Certificate generator (Thymeleaf + OpenHTMLtoPDF) upon 100% completion with public verification by code (`/v1/certificates/verify/{code}`).
   - `analytics`: Enterprise Admin Cohort Analytics dashboard (Funnel by day, drop-off rates, streak distribution, time-to-complete retention).
+  - `lifecycle-hooks`: Antigravity workflow automation (`hooks.json`, `pre-invocation`, `safety-gate`, `enforce-workflow`, `stop-commit-check`).
 - **Test Verification**:
   - Backend: 118/118 unit & integration tests PASSED (100% Green, `:jacocoTestReport` verified).
-  - Frontend: 35/35 Vitest tests PASSED across 13 test suites (100% Green).
+  - Frontend: 37/37 Vitest tests PASSED across 14 test suites (100% Green).
   - Production Build: `npm run build` SUCCESSFUL (0 errors, 0 warnings).
+

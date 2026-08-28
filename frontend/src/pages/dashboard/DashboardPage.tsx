@@ -31,7 +31,7 @@ export const DashboardPage: React.FC = () => {
               <Terminal className="w-3.5 h-3.5 text-zinc-500" />
               <span>Личный кабинет</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-white tracking-tight">
               Привет, {user?.name || user?.email}!
             </h1>
             <p className="text-xs text-zinc-400 mt-2">
@@ -63,7 +63,7 @@ export const DashboardPage: React.FC = () => {
       {/* Enrolled Courses Progress */}
       <div>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-white tracking-tight">Мои курсы</h2>
+          <h2 className="text-sm font-bold text-white tracking-tight">Мои курсы</h2>
           <Link
             to="/courses"
             className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono uppercase tracking-wider transition-colors"
@@ -107,7 +107,7 @@ export const DashboardPage: React.FC = () => {
                         Пройдено {item.completedCount} из {item.totalLessons} уроков
                       </span>
                     </div>
-                    <h3 className="text-base font-semibold text-white">{item.courseTitle}</h3>
+                    <h3 className="text-sm font-semibold text-white">{item.courseTitle}</h3>
                   </div>
 
                   <Link

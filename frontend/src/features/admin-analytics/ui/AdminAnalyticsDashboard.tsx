@@ -137,7 +137,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
                 <BarChart3 className="w-3.5 h-3.5" />
                 <span>Воронка курса (Drop-off Rate)</span>
               </div>
-              <h3 className="text-base font-bold text-white">Прохождение по дням</h3>
+              <h3 className="text-sm font-bold text-white">Прохождение по дням</h3>
             </div>
 
             {/* Course Selector */}
@@ -174,7 +174,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
               <Flame className="w-3.5 h-3.5" />
               <span>Ударный режим</span>
             </div>
-            <h3 className="text-base font-bold text-white">Распределение Streak</h3>
+            <h3 className="text-sm font-bold text-white">Распределение Streak</h3>
           </div>
 
           {streaksLoading ? (
@@ -189,7 +189,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-white">Когортное удержание по урокам</h3>
+            <h3 className="text-sm font-bold text-white">Когортное удержание по урокам</h3>
             <p className="text-xs text-zinc-400">
               Конверсия и время прохождения каждого дня выбранного курса
             </p>

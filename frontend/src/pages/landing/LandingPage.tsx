@@ -21,12 +21,12 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
             <div className="max-w-2xl flex-1">
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-8 leading-tight">
+              <h1 className="text-2xl font-bold tracking-tight text-white mb-8 leading-tight">
                 Практическая разработка <br />
                 <span className="text-zinc-500 font-medium">промышленных систем</span>
               </h1>
 
-              <p className="text-sm sm:text-base text-zinc-400 mb-8 leading-relaxed max-w-xl">
+              <p className="text-sm text-zinc-400 mb-8 leading-relaxed max-w-xl">
                 Погружение в современный стек: Spring Boot 3, React 19, PostgreSQL, pgvector RAG и архитектура сложных систем. Проектирование и написание production-кода без абстрактной теории.
               </p>
 
@@ -110,7 +110,7 @@ export const LandingPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">Доступные программы</h2>
+              <h2 className="text-sm font-bold text-white tracking-tight">Доступные программы</h2>
             </div>
             <Link 
               to="/courses"

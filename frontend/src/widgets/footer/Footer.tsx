@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
           <div className="max-w-sm space-y-3">
             <Link
               to={ROUTES.HOME}
-              className="text-base font-bold text-white tracking-tight hover:text-zinc-200 transition-colors inline-block"
+              className="text-sm font-bold text-white tracking-tight hover:text-zinc-200 transition-colors inline-block"
             >
               {brand.title}
             </Link>
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
               {brand.description}
             </p>
 
-            <p className="text-[11px] text-zinc-600 pt-2">
+            <p className="text-[10px] text-zinc-600 pt-2">
               &copy; {legal.copyrightYear} {legal.copyrightHolder}. Все права защищены.
             </p>
           </div>
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
 
         {/* Нижний бар: Ссылки на условия и конфиденциальность */}
         {legal.links.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-zinc-900 flex items-center justify-between text-[11px] text-zinc-600">
+          <div className="mt-8 pt-6 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
             <div className="flex items-center gap-4">
               {legal.links.map((item) => (
                 <a

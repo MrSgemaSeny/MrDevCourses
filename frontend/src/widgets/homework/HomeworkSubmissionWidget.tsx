@@ -110,7 +110,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] text-[#8b949e]">
+              <span className="text-xs text-[#8b949e]">
                 Проверка безопасности, FSD-архитектуры и авто-зачет урока (при балле &ge; 80)
               </span>
               <button
@@ -208,7 +208,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
                     </span>
                   </div>
                   {sub.aiFeedback && (
-                    <div className="text-[11px] text-[#8b949e] line-clamp-3">
+                    <div className="text-xs text-[#8b949e] line-clamp-3">
                       {sub.aiFeedback}
                     </div>
                   )}

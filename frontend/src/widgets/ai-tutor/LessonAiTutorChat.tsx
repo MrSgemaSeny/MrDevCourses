@@ -90,7 +90,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
             Senior AI Tutor (Hybrid RAG)
           </span>
         </div>
-        <span className="text-[11px] text-[#8b949e] font-mono truncate max-w-[200px]">
+        <span className="text-[10px] text-[#8b949e] font-mono truncate max-w-[200px]">
           {lessonTitle}
         </span>
       </div>
@@ -155,7 +155,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
               key={i}
               type="button"
               onClick={() => handleSend(prompt)}
-              className="text-[11px] whitespace-nowrap px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] transition-colors cursor-pointer border border-white/5"
+              className="text-xs whitespace-nowrap px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] transition-colors cursor-pointer border border-white/5"
             >
               {prompt}
             </button>

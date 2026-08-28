@@ -46,7 +46,7 @@ export const CoursesPage: React.FC = () => {
       <div className="border-b border-white/5 bg-[#0a0a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12">
           <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight mb-3">
+            <h1 className="text-2xl font-bold text-white tracking-tight leading-tight mb-3">
               Каталог курсов и программ
             </h1>
 
@@ -61,7 +61,7 @@ export const CoursesPage: React.FC = () => {
                   <Code2 className="w-4 h-4 text-white" />
                   <span>100% Практика</span>
                 </div>
-                <p className="text-[11px] text-zinc-400 mt-1">Реальные проекты с нуля</p>
+                <p className="text-xs text-zinc-400 mt-1">Реальные проекты с нуля</p>
               </div>
 
               <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
@@ -69,7 +69,7 @@ export const CoursesPage: React.FC = () => {
                   <Cpu className="w-4 h-4 text-white" />
                   <span>AI Code Grader</span>
                 </div>
-                <p className="text-[11px] text-zinc-400 mt-1">Ревью кода и тесты 24/7</p>
+                <p className="text-xs text-zinc-400 mt-1">Ревью кода и тесты 24/7</p>
               </div>
 
               <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
@@ -77,7 +77,7 @@ export const CoursesPage: React.FC = () => {
                   <BookOpen className="w-4 h-4 text-white" />
                   <span>RAG Наставник</span>
                 </div>
-                <p className="text-[11px] text-zinc-400 mt-1">Контекстный поиск и чат</p>
+                <p className="text-xs text-zinc-400 mt-1">Контекстный поиск и чат</p>
               </div>
 
               <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
@@ -85,7 +85,7 @@ export const CoursesPage: React.FC = () => {
                   <Award className="w-4 h-4 text-white" />
                   <span>Сертификат</span>
                 </div>
-                <p className="text-[11px] text-zinc-400 mt-1">Цифровая верификация</p>
+                <p className="text-xs text-zinc-400 mt-1">Цифровая верификация</p>
               </div>
             </div>
           </div>
@@ -150,18 +150,18 @@ export const CoursesPage: React.FC = () => {
                   {/* Card Header Tags */}
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
                         <Layers className="w-3 h-3 text-white" />
                         5 модулей
                       </span>
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
                         <Calendar className="w-3 h-3 text-white" />
                         30 уроков
                       </span>
                     </div>
 
                     {course.enrolled && (
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-200 border border-white/5 flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-800 text-zinc-200 border border-white/5 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                         Вы записаны
                       </span>
@@ -169,7 +169,7 @@ export const CoursesPage: React.FC = () => {
                   </div>
 
                   {/* Title & Description */}
-                  <h2 className="text-xl font-bold text-white mb-2.5 tracking-tight leading-snug">
+                  <h2 className="text-sm font-bold text-white mb-2.5 tracking-tight leading-snug">
                     {course.title}
                   </h2>
 

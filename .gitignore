@@ -32,6 +32,29 @@ dist-ssr/
 coverage/
 *.tsbuildinfo
 
-# Temporary
+# Temporary & Scratch
 tmp/
 temp/
+scratch/
+*.tmp
+*.bak
+*.orig
+
+# Agent & AI metadata
+.gemini/
+.antigravity/
+
+# Frontend / Vite / Vitest
+.vite/
+frontend/.vite/
+frontend/dist/
+frontend/node_modules/
+frontend/coverage/
+frontend/*.tsbuildinfo
+
+# Backend / Gradle
+backend/.gradle/
+backend/build/
+backend/out/
+backend/bin/
+
