@@ -15,10 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Enterprise .env loader for local development.
+ * Dotenv loader for local development.
  * Automatically loads key-value pairs from .env into Spring Environment property sources
  * and System properties without requiring hardcoded secrets in YAML or source code.
  */
+
 public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
     @Override

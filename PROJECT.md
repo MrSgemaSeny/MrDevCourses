@@ -1,9 +1,9 @@
-# Project: MrDevCourses Enterprise Scaling & Security Hardening
+# Project: MrDevCourses (Educational LMS Platform MVP)
 
 ## Architecture
-- **Backend Architecture**: Spring Boot 3.3.0, Java 17, PostgreSQL 16, Spring Security 6 (Stateless JWT in httpOnly cookie + Google OAuth2), Flyway (V1..V10), Bucket4j (Rate Limiting), OpenHTMLtoPDF + Thymeleaf (PDF Certificates), Groq API / Llama 3.3 70B (AI Tutor).
-- **Frontend Architecture**: React 19, TypeScript, Vite, FSD (Feature-Sliced Design), Tailwind CSS v4 (Envie Dark Theme), TanStack React Query v5, Lucide Icons, Pure SVG Visualizations.
-- **Design System**: Strict modern dark aesthetic (`#0d1117` background, `#161b22` cards, `#30363d` borders, `#d97706`/`#f59e0b` gold accents). No emojis.
+- **Backend Architecture**: Spring Boot 3.3.0, Java 17, PostgreSQL 16, Spring Security 6 (Stateless JWT in httpOnly cookie + Google OAuth2), Flyway (V1..V12), Bucket4j (Rate Limiting), OpenHTMLtoPDF + Thymeleaf (PDF Certificates), Groq API / Llama 3.3 70B (AI Tutor).
+- **Frontend Architecture**: React 19, TypeScript, Vite, FSD (Feature-Sliced Design), Tailwind CSS v4, TanStack React Query v5, Lucide Icons.
+- **Design System**: Strict dark aesthetic (`#0a0a0c` base, `#18181b` cards, `rgba(255,255,255,0.08)` borders, 4-level typography). No emojis.
 
 ## Feature Inventory
 | # | Feature | Description | Milestone | Source |
@@ -14,7 +14,7 @@
 | 4 | In-Lesson Contextual Term Cards | Clickable term chips with 1-click focus into Quick-Nav Drawer | M2 | ORIGINAL_REQUEST §R2 |
 | 5 | AI Lesson Tutor Backend Module | Groq API (Llama 3.3 70B), prompt grounding in lesson markdown, XML prompt injection defense | M3 | ORIGINAL_REQUEST §R3 |
 | 6 | AI Lesson Tutor Frontend Chat | Slide-in chat widget with streaming/markdown rendering, quick prompts, 429 cooldown | M3 | ORIGINAL_REQUEST §R3 |
-| 7 | Automated PDF Certificate Generator | OpenHTMLtoPDF + Thymeleaf dark/gold vector PDF certificate upon 100% course completion | M4 | ORIGINAL_REQUEST §R4 |
+| 7 | Automated PDF Certificate Generator | OpenHTMLtoPDF + Thymeleaf vector PDF certificate upon 100% course completion | M4 | ORIGINAL_REQUEST §R4 |
 | 8 | Certificate Verification Endpoint & UI | Public verify endpoint GET /api/v1/certificates/verify/{uuid} & /certificates/verify/:uuid page | M4 | ORIGINAL_REQUEST §R4 |
 | 9 | Admin Analytics Backend Engine | Day completion funnel, drop-off rates, average time per lesson, streak distributions | M5 | ORIGINAL_REQUEST §R5 |
 | 10 | Admin Analytics Dashboard UI | KPI cards, pure SVG Funnel Chart, Streak Distribution bars, Lesson Retention table | M5 | ORIGINAL_REQUEST §R5 |
@@ -23,7 +23,8 @@
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Enterprise Security & Rate Limiting | Bucket4j service & filter (Auth, AI, General tiers), RLS/IDOR verification, unit/integration tests | none | IN_PROGRESS |
+| M1 | Security & Rate Limiting | Bucket4j service & filter (Auth, AI, General tiers), RLS/IDOR verification, unit/integration tests | none | COMPLETED |
+
 | M2 | Quick-Nav Drawer & Navigation Engine | QuickNavDrawer (GlossaryView, ProgressView, RoadmapView), LessonContextPanel, video preservation | none | IN_PROGRESS |
 | M3 | AI Lesson Tutor Engine & Chat | Groq client, prompt grounding, XML sanitizer, V10 Flyway migration, frontend AI Chat widget | M1 | PLANNED |
 | M4 | Automated PDF Certificate & Verification | Certificate entity, OpenHTMLtoPDF+Thymeleaf template, verify endpoint & page, PDF download | none | PLANNED |
