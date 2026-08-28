@@ -101,8 +101,9 @@ export const DashboardPage: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono tracking-wider uppercase bg-white/5 border border-white/10 text-zinc-300">
-                        День {item.currentDay}
+                        Урок {item.currentDay}
                       </span>
+
                       <span className="text-xs text-zinc-400 font-mono">
                         Пройдено {item.completedCount} из {item.totalLessons} уроков
                       </span>

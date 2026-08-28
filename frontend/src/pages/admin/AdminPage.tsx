@@ -461,18 +461,19 @@ export const AdminPage: React.FC = () => {
                       value={lessonForm.title}
                       onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
                       className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-xs text-white focus:outline-none focus:border-zinc-500"
-                      placeholder="День 1: Введение и основы"
+                      placeholder="Урок 1: Введение и основы"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs text-zinc-400 mb-1">Номер дня (Day Number)</label>
+                      <label className="block text-xs text-zinc-400 mb-1">Порядковый номер урока (Sort Order)</label>
                       <input
                         type="number"
                         min={1}
                         required
                         value={lessonForm.dayNumber}
+
                         onChange={(e) =>
                           setLessonForm({
                             ...lessonForm,

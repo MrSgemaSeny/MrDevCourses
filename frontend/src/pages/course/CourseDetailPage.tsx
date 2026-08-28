@@ -200,10 +200,13 @@ export const CourseDetailPage: React.FC = () => {
                         </div>
                         <div className="min-w-0">
                           <div className="font-medium text-white truncate">
-                            {lessonItem.title.startsWith(`День ${lessonItem.dayNumber}:`)
+                            {lessonItem.title.startsWith(`Урок ${lessonItem.dayNumber}:`)
                               ? lessonItem.title
-                              : `День ${lessonItem.dayNumber}: ${lessonItem.title}`}
+                              : lessonItem.title.startsWith(`День ${lessonItem.dayNumber}:`)
+                              ? lessonItem.title.replace(`День ${lessonItem.dayNumber}:`, `Урок ${lessonItem.dayNumber}:`)
+                              : `Урок ${lessonItem.dayNumber}: ${lessonItem.title}`}
                           </div>
+
                           <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
                             <span>{lessonItem.lessonType || 'VIDEO'}</span>
                             {lessonItem.durationMinutes ? (

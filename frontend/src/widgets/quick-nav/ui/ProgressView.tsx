@@ -70,8 +70,9 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
               </span>
             ) : (
               <span className="px-2.5 py-1 rounded-full text-[10px] bg-zinc-800 border border-white/5 text-zinc-300 font-mono shrink-0">
-                День {courseProgress.currentDay}
+                Урок {courseProgress.currentDay}
               </span>
+
             )}
           </div>
 
@@ -213,8 +214,9 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
                     <CheckCircle2 className="w-3 h-3" /> Завершен
                   </span>
                 ) : (
-                  <span>День {item.currentDay}</span>
+                  <span>Урок {item.currentDay}</span>
                 )}
+
               </div>
             </div>
           ))

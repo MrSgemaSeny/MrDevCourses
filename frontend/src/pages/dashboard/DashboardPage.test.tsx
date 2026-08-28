@@ -44,6 +44,7 @@ describe('DashboardPage Component', () => {
 
     expect(screen.getByText(/Личный кабинет/i)).toBeInTheDocument();
     expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
-    expect(screen.getByText(/День 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Урок 1/i)).toBeInTheDocument();
   });
+
 });

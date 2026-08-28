@@ -78,7 +78,7 @@ public class DataSeeder {
         // 2. Primary Course: Вайбкодинг с нуля
         Course vibeCourse = Course.builder()
                 .title("Вайбкодинг: от Новичка до Продукта за 5 недель")
-                .description("Практический курс по разработке современных веб-приложений с использованием ИИ, архитектурных протоколов и лучших инженерных практик. 1 день — 1 урок.")
+                .description("Практический курс по разработке современных веб-приложений с использованием ИИ, архитектурных протоколов и лучших инженерных практик. 1 неделя — 6 уроков.")
                 .slug("vibecoding-zero-to-one")
                 .active(true)
                 .createdAt(Instant.now())
@@ -138,78 +138,79 @@ public class DataSeeder {
         );
         glossaryEmbeddingRepository.saveAll(terms);
 
-        // 5. Lessons for Course (30 lessons, 6 per module)
+        // 5. Lessons for Course (30 lessons, 6 per module / 1 week = 6 lessons)
         List<Lesson> lessonsToSave = new ArrayList<>();
 
-        // Module 1: Lessons 1-6
+        // Module 1 / Неделя 1 (Lessons 1-6)
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Мышление разработчика и настройка окружения", 1, LessonType.VIDEO, 25, true,
-                "### Введение в курс\nДобро пожаловать в первый день обучения! Разбираем постановку целей, Second Brain и сетап окружения."));
+                "### Урок 1: Введение в курс\nДобро пожаловать в обучение! Разбираем постановку целей, Second Brain и сетап окружения."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Промпт-инжиниринг, спецификации и протоколы", 2, LessonType.ARTICLE, 30, true,
-                "### Промпт-инжиниринг\nКак управлять AI-агентами через структурированные системные протоколы и четкие спецификации."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Настройка проекта, линтеры и Git-воркфлоу", 3, LessonType.PRACTICE, 40, false,
-                "### Базовый сетап\nИнициализация монорепозитория, правила коммитов, eslint, prettier и pre-commit хуки."));
+                "### Урок 2: Промпт-инжиниринг\nКак управлять AI-агентами через структурированные системные протоколы и четкие спецификации."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Настройка проекта, линтеры и Git-воркфлоу", 3, LessonType.VIDEO, 35, false,
+                "### Урок 3: Базовый сетап\nИнициализация монорепозитория, правила коммитов, eslint, prettier и pre-commit хуки."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Векторный поиск, RAG и эмбеддинги", 4, LessonType.VIDEO, 35, false,
-                "### Векторный RAG\nМатематика косинусного расстояния, модели эмбеддингов и семантический поиск по кодовой базе."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Аттестация по базовым протоколам и AI-разработке", 5, LessonType.QUIZ, 20, false,
-                "### Квиз по модулю 1\nПроверка фундаментальных знаний по архитектурному мышлению и работе с AI."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Практикум: создание первого автономного AI-пайплайна", 6, LessonType.PRACTICE, 45, false,
-                "### Практикум\nРеализация сквозного сценария интеграции LLM с локальной базой знаний."));
+                "### Урок 4: Векторный RAG\nМатематика косинусного расстояния, модели эмбеддингов и семантический поиск по кодовой базе."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Практикум: Разработка UI дизайн-системы и сдача отчета", 5, LessonType.PRACTICE, 50, false,
+                "### Урок 5: Сложный практикум\nСоздание переиспользуемых атомарных компонентов и отправка отчета на AI-ревью."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Инженерный дайджест: Разбор архитектурных ошибок и квиз", 6, LessonType.QUIZ, 15, false,
+                "### Урок 6: Итоги 1-й недели\nИнформационный разбор типичных ошибок и легкий проверочный квиз."));
 
-        // Module 2: Lessons 7-12
+        // Module 2 / Неделя 2 (Lessons 7-12)
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Feature-Sliced Design: архитектура слоев", 7, LessonType.VIDEO, 35, false,
-                "### FSD Архитектура\nСлои app, pages, widgets, features, entities, shared. Правила импортов и изоляция модулей."));
+                "### Урок 7: FSD Архитектура\nСлои app, pages, widgets, features, entities, shared. Правила импортов и изоляция модулей."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "React 19: хуки, оптимистичные мутации и рендер", 8, LessonType.ARTICLE, 30, false,
-                "### React 19 Core\nНовые возможности React 19, useActionState, useOptimistic и Server Actions."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Стилизация и дизайн-система на Tailwind CSS v4", 9, LessonType.PRACTICE, 40, false,
-                "### Tailwind CSS v4\nCSS-first конфигурация, дизайн-токены, строгая темная палитра (#0d1117)."));
+                "### Урок 8: React 19 Core\nНовые возможности React 19, useActionState, useOptimistic и Server Actions."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Стилизация и дизайн-система на Tailwind CSS v4", 9, LessonType.VIDEO, 40, false,
+                "### Урок 9: Tailwind CSS v4\nCSS-first конфигурация, дизайн-токены, строгая темная палитра."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Управление состоянием и кеширование с TanStack Query", 10, LessonType.VIDEO, 35, false,
-                "### TanStack Query v5\nКеширование запросов, инвалидация, фоновая ревалидация и обработка ошибок."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Тестирование фронтенда: Vitest и React Testing Library", 11, LessonType.QUIZ, 25, false,
-                "### Frontend Testing\nКвиз и практика по компонентному тестированию и мокированию API."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Практикум: разработка интерактивного дашборда", 12, LessonType.PRACTICE, 50, false,
-                "### Практикум\nСоздание полнофункционального личного кабинета студента со статистикой прогресса."));
+                "### Урок 10: TanStack Query v5\nКеширование запросов, инвалидация, фоновая ревалидация и обработка ошибок."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Практикум: Разработка REST сервиса с тестами и отчетом", 11, LessonType.PRACTICE, 55, false,
+                "### Урок 11: Сложный практикум\nРеализация сервисного слоя, интеграционные тесты с WebMvcTest и сдача отчета."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Инженерный дайджест: Факапы REST API, лайфхаки и квиз", 12, LessonType.QUIZ, 15, false,
+                "### Урок 12: Итоги 2-й недели\nРазбор антипаттернов API, полезные инструменты и легкий проверочный квиз."));
 
-        // Module 3: Lessons 13-18
+        // Module 3 / Неделя 3 (Lessons 13-18)
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Модульный монолит на Spring Boot 3 и Java 17", 13, LessonType.VIDEO, 40, false,
-                "### Spring Boot 3\nАрхитектура модульного монолита, разделение по пакетам modules, SRP и DI."));
+                "### Урок 13: Spring Boot 3\nАрхитектура модульного монолита, разделение по пакетам modules, SRP и DI."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Проектирование схемы БД, PostgreSQL 17 и Flyway", 14, LessonType.ARTICLE, 35, false,
-                "### Database Design\nРеляционная схема, внешние ключи, каскадные удаления, версионирование миграций Flyway."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "JPA & Hibernate: оптимизация запросов и N+1", 15, LessonType.PRACTICE, 45, false,
-                "### JPA Optimization\nEntityGraph, JOIN FETCH, проекции DTO, индексы и профилирование Hibernate SQL."));
+                "### Урок 14: Database Design\nРеляционная схема, внешние ключи, каскадные удаления, версионирование миграций Flyway."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "JPA & Hibernate: оптимизация запросов и N+1", 15, LessonType.VIDEO, 45, false,
+                "### Урок 15: JPA Optimization\nEntityGraph, JOIN FETCH, проекции DTO, индексы и профилирование Hibernate SQL."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "DTO, маппинг, валидация и Global Exception Handling", 16, LessonType.VIDEO, 35, false,
-                "### API Contracts\nСтандартизированный ApiResponse<T>, Bean Validation (@NotNull, @Size), ControllerAdvice."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Квиз по архитектуре сервисов и репозиториев", 17, LessonType.QUIZ, 25, false,
-                "### Квиз по модулю 3\nТестирование знаний транзакционности (@Transactional), уровней изоляции и Spring Data."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Практикум: построение REST API с Row-Level Security", 18, LessonType.PRACTICE, 50, false,
-                "### Практикум\nРеализация API с фильтрацией данных по текущему аутентифицированному пользователю."));
+                "### Урок 16: API Contracts\nСтандартизированный ApiResponse<T>, Bean Validation (@NotNull, @Size), ControllerAdvice."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Практикум: Оптимизация сложных запросов и отчет по производительности", 17, LessonType.PRACTICE, 55, false,
+                "### Урок 17: Сложный практикум\nEXPLAIN ANALYZE, когортные воронки и формирование отчета по оптимизации SQL."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Инженерный дайджест: История падений реальных БД и квиз", 18, LessonType.QUIZ, 15, false,
+                "### Урок 18: Итоги 3-й недели\nИнформационный обзор аварий в продакшене баз данных и закрепляющий квиз."));
 
-        // Module 4: Lessons 19-24
+        // Module 4 / Неделя 4 (Lessons 19-24)
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Spring Security 6: Google OAuth2 и stateless JWT", 19, LessonType.VIDEO, 40, false,
-                "### Spring Security 6\nSecurityFilterChain, Google OAuth2 Client, выпуск и валидация JWT токенов."));
+                "### Урок 19: Spring Security 6\nSecurityFilterChain, Google OAuth2 Client, выпуск и валидация JWT токенов."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Защита от XSS, CSRF, IDOR и безопасные cookies", 20, LessonType.ARTICLE, 35, false,
-                "### Web Security\nhttpOnly cookie (SameSite=Strict, Secure), IDOR защита в сервисах через SecurityUtils."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Token Bucket Rate Limiting с Bucket4j и Caffeine", 21, LessonType.PRACTICE, 40, false,
-                "### Rate Limiting\nОграничение запросов по IP и User ID, заголовки X-RateLimit-Remaining и Retry-After."));
+                "### Урок 20: Web Security\nhttpOnly cookie (SameSite=Strict, Secure), IDOR защита в сервисах через SecurityUtils."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Token Bucket Rate Limiting с Bucket4j и Caffeine", 21, LessonType.VIDEO, 40, false,
+                "### Урок 21: Rate Limiting\nОграничение запросов по IP и User ID, заголовки X-RateLimit-Remaining и Retry-After."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "pgvector: HNSW индексы и Hybrid RAG поиск", 22, LessonType.VIDEO, 45, false,
-                "### Hybrid Search\nОбъединение векторного поиска по HNSW косинусу и полнотекстового поиска по pg_trgm."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Аттестация: Аутентификация, IDOR и pgvector", 23, LessonType.QUIZ, 30, false,
-                "### Квиз по безопасности и RAG\nКомплексная проверка устойчивости приложения к распространенным атакам."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Практикум: защита эндпоинтов и проверка на уязвимости", 24, LessonType.PRACTICE, 50, false,
-                "### Практикум\nНаписание интеграционных тестов с MockMvc для проверки разграничения прав доступа."));
+                "### Урок 22: Hybrid Search\nОбъединение векторного поиска по HNSW косинусу и полнотекстового поиска по pg_trgm."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Практикум: Аудит безопасности, IDOR тестирование и защитный отчет", 23, LessonType.PRACTICE, 60, false,
+                "### Урок 23: Сложный практикум\nПентест эндпоинтов, исправление уязвимостей и сдача отчета по безопасности."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Инженерный дайджест: Истории эпичных взломов, Security-мемы и квиз", 24, LessonType.QUIZ, 15, false,
+                "### Урок 24: Итоги 4-й недели\nРазвлекательно-информационный обзор утечек данных в IT и квиз."));
 
-        // Module 5: Lessons 25-30
+        // Module 5 / Неделя 5 (Lessons 25-30)
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Transactional Outbox Pattern и надежные события", 25, LessonType.VIDEO, 40, false,
-                "### Transactional Outbox\nТаблица outbox_events, фоновый OutboxProcessor (@Scheduled) и гарантия доставки at-least-once."));
+                "### Урок 25: Transactional Outbox\nТаблица outbox_events, фоновый OutboxProcessor (@Scheduled) и гарантия доставки at-least-once."));
         lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "AI Code Reviewer и автоматический грейдер заданий", 26, LessonType.ARTICLE, 35, false,
-                "### AI Reviewer\nСтатический анализ кода, проверка безопасности регулярными выражениями и LLM-грейдинг."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Генерация PDF-сертификатов с OpenHTMLtoPDF", 27, LessonType.PRACTICE, 45, false,
-                "### PDF Certificates\nРендеринг HTML-шаблона в Thymeleaf, конвертация в PDF и верификация по уникальному коду."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Аналитика когорт, удержание и воронки студентов", 28, LessonType.VIDEO, 35, false,
-                "### Cohort Analytics\nРасчет retention rate по дням, воронка завершения уроков и выявление дроп-оффов."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Финальная аттестация по всей платформе", 29, LessonType.QUIZ, 30, false,
-                "### Финальный экзамен\nИтоговый тест по всем модулям программы для допуска к выдаче сертификата."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "CI/CD, Fly.io деплой и получение сертификата", 30, LessonType.PRACTICE, 60, false,
-                "### Production Release\nДеплой бэкенда на Fly.io, фронтенда на Vercel, прогон автотестов и выпуск сертификата."));
+                "### Урок 26: AI Reviewer\nСтатический анализ кода, проверка безопасности регулярными выражениями и LLM-грейдинг."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Генерация PDF-сертификатов с OpenHTMLtoPDF", 27, LessonType.VIDEO, 45, false,
+                "### Урок 27: PDF Certificates\nРендеринг HTML-шаблона в Thymeleaf, конвертация в PDF и верификация по уникальному коду."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Аналитика когорт, удержание и воронки студентов", 28, LessonType.ARTICLE, 35, false,
+                "### Урок 28: Cohort Analytics\nРасчет retention rate по урокам, воронка завершения уроков и выявление дроп-оффов."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Выпускной практикум: Финальная сборка MVP и сводный отчет", 29, LessonType.PRACTICE, 60, false,
+                "### Урок 29: Сложный выпускной практикум\nИнтеграция всех модулей, подготовка продакшн-бандла и сдача итогового отчета."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Финишная прямая: Инсайты курса, награждение и выдача сертификата", 30, LessonType.QUIZ, 20, false,
+                "### Урок 30: Торжественное завершение\nПодведение итогов 5 недель, генерация именного диплома и дальнейшие шаги."));
+
 
         List<Lesson> savedLessons = lessonRepository.saveAll(lessonsToSave);
         log.info("Seeded 1 course, 5 modules and {} lessons successfully.", savedLessons.size());

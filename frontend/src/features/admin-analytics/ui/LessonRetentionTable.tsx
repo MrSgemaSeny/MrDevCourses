@@ -20,7 +20,8 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
         <table className="w-full text-left text-xs">
           <thead className="bg-zinc-900/80 border-b border-white/5 text-zinc-400 font-mono">
             <tr>
-              <th className="p-3.5">День / Урок</th>
+              <th className="p-3.5">Урок</th>
+
               <th className="p-3.5">Завершили</th>
               <th className="p-3.5">Конверсия</th>
               <th className="p-3.5">Отсев (Drop-off)</th>

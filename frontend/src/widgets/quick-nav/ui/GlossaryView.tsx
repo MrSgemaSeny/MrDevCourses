@@ -252,8 +252,9 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                                 key={day}
                                 className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[10px]"
                               >
-                                День {day}
+                                Урок {day}
                               </span>
+
                             ))}
                           </div>
                         </div>

@@ -39,7 +39,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
       <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/5">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight">Интерактивный Roadmap курса</h3>
-          <p className="text-xs text-zinc-400">1 день — 1 урок. График последовательного открытия.</p>
+          <p className="text-xs text-zinc-400">1 неделя — 6 уроков. График последовательного открытия.</p>
         </div>
         <span className="text-xs font-mono text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-white/5">
           {lessons.filter((l) => l.completed).length} / {lessons.length} завершено
@@ -52,9 +52,15 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
           {lessons.map((lesson, idx) => {
             const isCurrent = lesson.id === currentLessonId;
             const isLast = idx === lessons.length - 1;
-            const labelText = `День ${lesson.dayNumber}: ${lesson.title}${
+            const lessonTitle = lesson.title.startsWith(`Урок ${lesson.dayNumber}:`)
+              ? lesson.title
+              : lesson.title.startsWith(`День ${lesson.dayNumber}:`)
+              ? lesson.title.replace(`День ${lesson.dayNumber}:`, `Урок ${lesson.dayNumber}:`)
+              : `Урок ${lesson.dayNumber}: ${lesson.title}`;
+            const labelText = `${lessonTitle}${
               lesson.completed ? ' (Завершен)' : lesson.accessible ? ' (Доступен)' : ' (Заблокирован)'
             }`;
+
 
             return (
               <div key={lesson.id} className="relative flex items-start gap-4">
@@ -114,11 +120,16 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-zinc-400">День {lesson.dayNumber}</span>
+                      <span className="text-[10px] font-mono text-zinc-400">Урок {lesson.dayNumber}</span>
                       <h4 className={`text-xs font-semibold ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
-                        {lesson.title}
+                        {lesson.title.startsWith(`Урок ${lesson.dayNumber}:`)
+                          ? lesson.title
+                          : lesson.title.startsWith(`День ${lesson.dayNumber}:`)
+                          ? lesson.title.replace(`День ${lesson.dayNumber}:`, `Урок ${lesson.dayNumber}:`)
+                          : lesson.title}
                       </h4>
                     </div>
+
 
                     {lesson.completed ? (
                       <span className="text-[10px] text-emerald-400 font-medium self-start sm:self-auto">Завершен</span>

@@ -80,7 +80,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
       {
         id: 101,
         courseId: 1,
-        title: 'День 1: Введение и JWT аутентификация',
+        title: 'Урок 1: Введение и JWT аутентификация',
         dayNumber: 1,
         sortOrder: 1,
         accessible: true,
@@ -90,7 +90,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
       {
         id: 102,
         courseId: 1,
-        title: 'День 2: Rate Limiting через Bucket4j',
+        title: 'Урок 2: Rate Limiting через Bucket4j',
         dayNumber: 2,
         sortOrder: 2,
         accessible: true,
@@ -100,7 +100,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
       {
         id: 103,
         courseId: 1,
-        title: 'День 3: Drip-Content и Row-Level Security',
+        title: 'Урок 3: Drip-Content и Row-Level Security',
         dayNumber: 3,
         sortOrder: 3,
         accessible: true,
@@ -108,6 +108,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
         completed: false,
       },
     ]);
+
   });
 
   const renderWithProviders = (ui: React.ReactNode, initialCourseId = 1, initialLessonId = 103) => {
@@ -206,9 +207,10 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
     // Switch to Roadmap tab
     fireEvent.click(screen.getByTestId('quick-nav-tab-roadmap'));
     expect(await screen.findByText('Траектория обучения')).toBeInTheDocument();
-    expect(screen.getByText(/День 1: Введение и JWT аутентификация/i)).toBeInTheDocument();
-    expect(screen.getByText(/День 2: Rate Limiting через Bucket4j/i)).toBeInTheDocument();
+    expect(screen.getByText(/Урок 1: Введение и JWT аутентификация/i)).toBeInTheDocument();
+    expect(screen.getByText(/Урок 2: Rate Limiting через Bucket4j/i)).toBeInTheDocument();
   });
+
 
   it('filters glossary terms in GlossaryView by search keyword and category pill', async () => {
     renderWithProviders(

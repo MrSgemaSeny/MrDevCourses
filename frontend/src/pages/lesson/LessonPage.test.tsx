@@ -39,7 +39,7 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
       courseId: 1,
       courseTitle: 'Вайбкодинг с нуля',
       courseSlug: 'vibecoding-zero',
-      title: 'День 1: Настройка окружения и JWT',
+      title: 'Урок 1: Настройка окружения и JWT',
       content: '# Контент урока\n\nРазбор JWT токенов и аутентификации.',
       youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       dayNumber: 1,
@@ -54,7 +54,7 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
       {
         id: 101,
         courseId: 1,
-        title: 'День 1: Настройка окружения и JWT',
+        title: 'Урок 1: Настройка окружения и JWT',
         dayNumber: 1,
         sortOrder: 1,
         accessible: true,
@@ -64,7 +64,7 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
       {
         id: 102,
         courseId: 1,
-        title: 'День 2: Token Bucket Rate Limiting',
+        title: 'Урок 2: Token Bucket Rate Limiting',
         dayNumber: 2,
         sortOrder: 2,
         accessible: true,
@@ -72,6 +72,7 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
         completed: false,
       },
     ]);
+
 
     vi.spyOn(progressApiModule.progressApi, 'getCourseProgress').mockResolvedValue({
       courseId: 1,
@@ -103,11 +104,11 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
     renderLessonPage();
 
     // Verify lesson title and markdown content
-    expect(await screen.findByText('День 1: Настройка окружения и JWT')).toBeInTheDocument();
+    expect(await screen.findByText('Урок 1: Настройка окружения и JWT')).toBeInTheDocument();
     expect(screen.getByText('Разбор JWT токенов и аутентификации.')).toBeInTheDocument();
 
     // Verify YouTube iframe exists in DOM
-    const iframe = screen.getByTitle('День 1: Настройка окружения и JWT');
+    const iframe = screen.getByTitle('Урок 1: Настройка окружения и JWT');
     expect(iframe).toBeInTheDocument();
     expect(iframe.getAttribute('src')).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
 
@@ -130,14 +131,15 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
     expect(drawer.className).toContain('translate-x-0');
 
     // Crucial check: YouTube iframe remains in DOM without unmounting
-    expect(screen.getByTitle('День 1: Настройка окружения и JWT')).toBeInTheDocument();
-    expect(screen.getByTitle('День 1: Настройка окружения и JWT')).toBe(iframe);
+    expect(screen.getByTitle('Урок 1: Настройка окружения и JWT')).toBeInTheDocument();
+    expect(screen.getByTitle('Урок 1: Настройка окружения и JWT')).toBe(iframe);
 
     // Close drawer
     fireEvent.click(screen.getByTestId('quick-nav-close-btn'));
     expect(drawer.className).toContain('translate-x-full');
 
     // iframe still remains in DOM
-    expect(screen.getByTitle('День 1: Настройка окружения и JWT')).toBe(iframe);
+    expect(screen.getByTitle('Урок 1: Настройка окружения и JWT')).toBe(iframe);
   });
+
 });

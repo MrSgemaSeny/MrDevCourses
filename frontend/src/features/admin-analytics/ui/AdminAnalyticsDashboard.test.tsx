@@ -49,7 +49,7 @@ describe('AdminAnalyticsDashboard Component', () => {
       },
       {
         stepOrder: 1,
-        stepName: 'День 1: Введение',
+        stepName: 'Урок 1: Введение',
         dayNumber: 1,
         lessonId: 101,
         lessonTitle: 'Введение',
@@ -59,10 +59,11 @@ describe('AdminAnalyticsDashboard Component', () => {
       },
       {
         stepOrder: 2,
-        stepName: 'День 2: Архитектура',
+        stepName: 'Урок 2: Архитектура',
         dayNumber: 2,
         lessonId: 102,
         lessonTitle: 'Архитектура',
+
         studentsCount: 35,
         conversionRate: 70,
         dropOffRate: 22.2,

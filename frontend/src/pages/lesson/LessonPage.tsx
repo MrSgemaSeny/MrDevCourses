@@ -113,8 +113,9 @@ const LessonPageContent: React.FC = () => {
 
 
           <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 border border-white/5 text-zinc-300">
-            День {lesson.dayNumber}
+            Урок {lesson.dayNumber}
           </span>
+
           {lesson.completed && (
             <span className="px-2.5 py-0.5 rounded text-[10px] bg-emerald-950/80 border border-emerald-800 text-emerald-400 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" />

@@ -36,7 +36,7 @@ describe('CourseDetailPage Component', () => {
       {
         id: 101,
         courseId: 1,
-        title: 'День 1: Настройка окружения',
+        title: 'Урок 1: Настройка окружения',
         dayNumber: 1,
         sortOrder: 1,
         accessible: true,
@@ -56,7 +56,8 @@ describe('CourseDetailPage Component', () => {
     );
 
     expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
-    expect(await screen.findByText('День 1: Настройка окружения')).toBeInTheDocument();
+    expect(await screen.findByText('Урок 1: Настройка окружения')).toBeInTheDocument();
     expect(screen.getAllByText(/Открыть урок/i).length).toBeGreaterThan(0);
   });
+
 });

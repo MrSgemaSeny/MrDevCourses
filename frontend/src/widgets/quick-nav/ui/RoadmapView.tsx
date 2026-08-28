@@ -134,7 +134,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                 >
                   <div className="flex items-center justify-between gap-1 mb-0.5">
                     <span className="text-[10px] font-mono text-zinc-400">
-                      День {lesson.dayNumber}
+                      Урок {lesson.dayNumber}
                     </span>
                     {lesson.completed ? (
                       <span className="text-[10px] text-emerald-400 font-medium">Пройден</span>
@@ -146,8 +146,13 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   </div>
 
                   <h5 className={`font-semibold text-xs leading-snug truncate ${lesson.accessible ? 'text-white' : 'text-zinc-500'}`}>
-                    {lesson.title}
+                    {lesson.title.startsWith(`Урок ${lesson.dayNumber}:`)
+                      ? lesson.title
+                      : lesson.title.startsWith(`День ${lesson.dayNumber}:`)
+                      ? lesson.title.replace(`День ${lesson.dayNumber}:`, `Урок ${lesson.dayNumber}:`)
+                      : lesson.title}
                   </h5>
+
 
                   {!lesson.accessible && lesson.opensAt && (
                     <div className="mt-1.5 pt-1.5 border-t border-white/5 text-[10px]">
