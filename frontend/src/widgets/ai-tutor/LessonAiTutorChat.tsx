@@ -81,9 +81,9 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[520px] bg-[#161b22] border border-[#30363d] rounded-xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-[520px] bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
-      <div className="px-4 py-3 bg-[#0d1117] border-b border-[#30363d] flex items-center justify-between">
+      <div className="px-4 py-3 bg-[#0d1117] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-xs font-semibold uppercase tracking-wider text-[#fafafa]">
@@ -103,10 +103,10 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
             className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
           >
             <div
-              className={`max-w-[85%] rounded-lg p-3 text-xs leading-relaxed ${
+              className={`max-w-[85%] rounded-sm p-3 text-xs leading-relaxed ${
                 msg.role === 'user'
                   ? 'bg-[#238636] text-white'
-                  : 'bg-[#0d1117] border border-[#30363d] text-[#c9d1d9]'
+                  : 'bg-[#0d1117] border border-white/5 text-[#c9d1d9]'
               }`}
             >
               {msg.role === 'user' ? (
@@ -124,7 +124,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
                           <div
                             key={cIdx}
                             title={cit.snippet}
-                            className="text-[10px] px-2 py-0.5 rounded bg-[#161b22] border border-[#30363d] text-[#58a6ff] hover:border-[#58a6ff] transition-colors cursor-help"
+                            className="text-[10px] px-2 py-0.5 rounded bg-[#18181b] border border-white/5 text-[#58a6ff] hover:border-[#58a6ff] transition-colors cursor-help"
                           >
                             {cit.header} ({cit.relevanceScore}%)
                           </div>
@@ -140,7 +140,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-[#0d1117] border border-[#30363d] w-fit">
+          <div className="flex items-center gap-2 p-3 rounded-sm bg-[#0d1117] border border-white/5 w-fit">
             <div className="w-4 h-4 border-2 border-[#e2b340] border-t-transparent rounded-full animate-spin" />
             <span className="text-xs text-[#8b949e]">AI анализирует семантический контекст урока...</span>
           </div>
@@ -155,7 +155,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
               key={i}
               type="button"
               onClick={() => handleSend(prompt)}
-              className="text-[11px] whitespace-nowrap px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] transition-colors cursor-pointer border border-[#30363d]"
+              className="text-[11px] whitespace-nowrap px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] transition-colors cursor-pointer border border-white/5"
             >
               {prompt}
             </button>
@@ -169,7 +169,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
           e.preventDefault();
           handleSend();
         }}
-        className="p-3 bg-[#0d1117] border-t border-[#30363d] flex gap-2"
+        className="p-3 bg-[#0d1117] border-t border-white/5 flex gap-2"
       >
         <input
           type="text"
@@ -177,12 +177,12 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Задать вопрос по уроку..."
           disabled={isLoading}
-          className="flex-1 bg-[#161b22] border border-[#30363d] rounded-lg px-3 py-2 text-xs text-[#fafafa] placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
+          className="flex-1 bg-[#18181b] border border-white/5 rounded-sm px-3 py-2 text-xs text-[#fafafa] placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
         />
         <button
           type="submit"
           disabled={isLoading || !question.trim()}
-          className="px-4 py-2 rounded-lg bg-[#238636] hover:bg-[#2ea043] disabled:opacity-50 text-xs font-semibold text-white transition-colors cursor-pointer"
+          className="px-4 py-2 rounded-sm bg-[#238636] hover:bg-[#2ea043] disabled:opacity-50 text-xs font-semibold text-white transition-colors cursor-pointer"
         >
           Отправить
         </button>

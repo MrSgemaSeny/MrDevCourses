@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth, LogoutButton } from '@/features/auth';
+import { ScrollToTop } from '@/app/providers/ScrollToTop';
 
 interface AdminNavItem {
   to: string;
@@ -49,7 +50,8 @@ export const AdminLayout: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-[#fafafa]">
+    <div className="flex min-h-screen bg-[#0a0a0c] text-[#fafafa]">
+      <ScrollToTop />
       {/* Sidebar */}
       <aside className="fixed top-0 left-0 h-full w-60 bg-[#0d1117] border-r border-[#21262d] flex flex-col z-40">
         {/* Logo + Admin badge */}
@@ -74,7 +76,7 @@ export const AdminLayout: React.FC = () => {
                 className="w-8 h-8 rounded-full object-cover border border-[#21262d]"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[#21262d] border border-[#30363d] flex items-center justify-center text-xs text-[#8b949e]">
+              <div className="w-8 h-8 rounded-full bg-[#21262d] border border-white/5 flex items-center justify-center text-xs text-[#8b949e]">
                 {user?.name?.[0]?.toUpperCase() ?? 'A'}
               </div>
             )}
@@ -96,7 +98,7 @@ export const AdminLayout: React.FC = () => {
                 `flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
                   isActive
                     ? 'bg-[#21262d] text-[#fafafa]'
-                    : 'text-[#8b949e] hover:text-[#fafafa] hover:bg-[#161b22]'
+                    : 'text-[#8b949e] hover:text-[#fafafa] hover:bg-[#18181b]'
                 }`
               }
             >
@@ -110,7 +112,7 @@ export const AdminLayout: React.FC = () => {
         <div className="px-3 py-4 border-t border-[#21262d] space-y-1">
           <NavLink
             to="/courses"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs text-[#8b949e] hover:text-[#fafafa] hover:bg-[#161b22] transition-colors"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs text-[#8b949e] hover:text-[#fafafa] hover:bg-[#18181b] transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 5l-7 7 7 7" />

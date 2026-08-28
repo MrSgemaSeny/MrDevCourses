@@ -8,17 +8,17 @@ interface LessonRetentionTableProps {
 export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ retention }) => {
   if (!retention || !retention.lessonRetention || retention.lessonRetention.length === 0) {
     return (
-      <div className="p-8 text-center bg-zinc-900/60 border border-[#27272a] rounded-lg text-zinc-400 text-xs">
+      <div className="p-8 text-center bg-zinc-900/60 border border-white/5 rounded-sm text-zinc-400 text-xs">
         Нет данных об удержании студентов по урокам.
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-[#27272a] bg-[rgba(24,24,27,0.85)] overflow-hidden backdrop-blur-md">
+    <div className="rounded-sm border border-white/5 bg-[#18181b] overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
-          <thead className="bg-zinc-900/80 border-b border-[#27272a] text-zinc-400 font-mono">
+          <thead className="bg-zinc-900/80 border-b border-white/5 text-zinc-400 font-mono">
             <tr>
               <th className="p-3.5">День / Урок</th>
               <th className="p-3.5">Завершили</th>
@@ -32,7 +32,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
               <tr key={lesson.lessonId} className="hover:bg-zinc-800/30 transition-colors">
                 <td className="p-3.5 font-medium text-white">
                   <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[11px] font-mono font-bold text-zinc-300">
+                    <span className="w-7 h-7 rounded bg-zinc-800 border border-white/5 flex items-center justify-center text-[11px] font-mono font-bold text-zinc-300">
                       Д{lesson.dayNumber}
                     </span>
                     <span className="truncate max-w-xs">{lesson.lessonTitle}</span>
@@ -47,7 +47,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
                   <div className="flex items-center gap-2 max-w-[140px]">
                     <div className="flex-1 bg-zinc-800 rounded-full h-1.5 overflow-hidden">
                       <div
-                        className="bg-blue-500 h-full rounded-full transition-all duration-300"
+                        className="bg-zinc-100 text-black h-full rounded-full transition-all duration-300"
                         style={{ width: `${Math.min(100, Math.max(0, lesson.completionRate))}%` }}
                       />
                     </div>

@@ -53,7 +53,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
     return (
       <div className="space-y-5">
         {/* Header & Course Title */}
-        <div className="p-4 rounded-xl bg-[#161b22] border border-[#30363d] space-y-3">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
@@ -69,7 +69,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
                 Пройден
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full text-[11px] bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono shrink-0">
+              <span className="px-2.5 py-1 rounded-full text-[11px] bg-zinc-800 border border-white/5 text-zinc-300 font-mono shrink-0">
                 День {courseProgress.currentDay}
               </span>
             )}
@@ -98,7 +98,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
 
         {/* Streak & Velocity KPIs */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] space-y-1">
+          <div className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] space-y-1">
             <div className="flex items-center gap-1.5 text-orange-400 text-xs">
               <Flame className="w-4 h-4" />
               <span className="font-semibold">Текущий стрик</span>
@@ -109,7 +109,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
             <p className="text-[10px] text-zinc-500">Рекорд: {longestStreak} дн.</p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] space-y-1">
+          <div className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] space-y-1">
             <div className="flex items-center gap-1.5 text-emerald-400 text-xs">
               <TrendingUp className="w-4 h-4" />
               <span className="font-semibold">Темп обучения</span>
@@ -123,7 +123,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
 
         {/* Next Lesson Countdown */}
         {courseProgress.nextUnlockAt && !isCompleted && (
-          <div className="p-4 rounded-xl bg-[#161b22] border border-amber-900/40 space-y-2">
+          <div className="p-4 rounded-sm bg-[#18181b] border border-amber-900/40 space-y-2">
             <div className="flex items-center gap-2 text-amber-300 text-xs font-semibold">
               <Clock className="w-4 h-4" />
               <span>Следующий урок откроется через:</span>
@@ -139,7 +139,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
 
         {/* Completion Milestone Card */}
         {isCompleted && (
-          <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-950/40 to-[#161b22] border border-emerald-700/60 space-y-2 text-center">
+          <div className="p-4 rounded-sm bg-gradient-to-br from-emerald-950/40 to-[#161b22] border border-emerald-700/60 space-y-2 text-center">
             <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-600 text-emerald-400 flex items-center justify-center mx-auto">
               <Award className="w-5 h-5" />
             </div>
@@ -157,7 +157,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
   return (
     <div className="space-y-4">
       {/* Global Streak Card */}
-      <div className="p-4 rounded-xl bg-[#161b22] border border-[#30363d] flex items-center justify-between">
+      <div className="p-4 rounded-sm bg-[#18181b] border border-white/5 flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-1.5 text-orange-400 text-xs font-semibold">
             <Flame className="w-4 h-4" />
@@ -168,7 +168,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
           </div>
           <p className="text-[11px] text-zinc-400">Рекордный стрик: {longestStreak} дн.</p>
         </div>
-        <div className="w-12 h-12 rounded-full bg-[#0d1117] border border-[#30363d] flex items-center justify-center text-orange-400">
+        <div className="w-12 h-12 rounded-full bg-[#0d1117] border border-white/5 flex items-center justify-center text-orange-400">
           <Zap className="w-6 h-6" />
         </div>
       </div>
@@ -180,7 +180,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
         </h4>
 
         {allProgress.length === 0 ? (
-          <div className="py-8 text-center text-zinc-500 text-xs flex flex-col items-center justify-center space-y-2 bg-[#161b22] rounded-xl border border-[#21262d] p-4">
+          <div className="py-8 text-center text-zinc-500 text-xs flex flex-col items-center justify-center space-y-2 bg-[#18181b] rounded-sm border border-[#21262d] p-4">
             <BookOpen className="w-6 h-6 text-zinc-600" />
             <p>Вы пока не записаны на курсы.</p>
           </div>
@@ -188,7 +188,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({ courseId }) => {
           allProgress.map((item) => (
             <div
               key={item.courseId}
-              className="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] space-y-2.5"
+              className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] space-y-2.5"
             >
               <div className="flex items-center justify-between gap-2">
                 <h5 className="text-xs font-bold text-white truncate">{item.courseTitle}</h5>

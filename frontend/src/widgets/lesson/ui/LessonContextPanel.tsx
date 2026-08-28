@@ -37,12 +37,12 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
   return (
     <div
       data-testid="lesson-context-panel"
-      className="p-5 rounded-xl bg-[#161b22] border border-[#27272a] shadow-lg space-y-4"
+      className="p-5 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-4"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#21262d]">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300">
+          <div className="w-7 h-7 rounded-sm bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-300">
             <HelpCircle className="w-4 h-4" />
           </div>
           <div>
@@ -77,7 +77,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
               key={termName}
               data-testid={`term-chip-${termName}`}
               onClick={() => openQuickNav('glossary', termName)}
-              className="px-3 py-1.5 rounded-lg bg-[#0d1117] border border-[#30363d] hover:border-amber-400/60 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
+              className="px-3 py-1.5 rounded-sm bg-[#0d1117] border border-white/5 hover:border-amber-400/60 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
             >
               <span className="text-amber-400 font-mono">#</span>
               <span>{termName}</span>
@@ -95,7 +95,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => openQuickNav('progress')}
-            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Flame className="w-3.5 h-3.5 text-orange-400" />
             <span>Мой прогресс</span>
@@ -103,9 +103,9 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 
           <button
             onClick={() => openQuickNav('roadmap')}
-            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-[11px] flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Map className="w-3.5 h-3.5 text-indigo-400" />
+            <Map className="w-3.5 h-3.5 text-zinc-100" />
             <span>Roadmap курса</span>
           </button>
         </div>

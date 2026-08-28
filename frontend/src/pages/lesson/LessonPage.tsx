@@ -88,9 +88,9 @@ const LessonPageContent: React.FC = () => {
   const embedUrl = getEmbedUrl(lesson.youtubeUrl);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Top Breadcrumb */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#27272a]">
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
         <Link
           to={`/courses/${lesson.courseSlug || ''}`}
           className="text-xs text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors"
@@ -102,14 +102,14 @@ const LessonPageContent: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => openQuickNav('glossary')}
-            className="px-2.5 py-1 rounded text-xs bg-[#161b22] hover:bg-zinc-800 border border-[#30363d] hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 py-1 rounded text-xs bg-[#18181b] hover:bg-zinc-800 border border-white/5 hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
             aria-label="Открыть быструю навигацию"
           >
             <Layers className="w-3.5 h-3.5 text-amber-400" />
             <span>Быстрая навигация</span>
           </button>
 
-          <span className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-700 text-zinc-300">
+          <span className="px-2.5 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-white/5 text-zinc-300">
             День {lesson.dayNumber}
           </span>
           {lesson.completed && (
@@ -126,7 +126,7 @@ const LessonPageContent: React.FC = () => {
         <div className="lg:col-span-3 space-y-6">
           {/* Video Player */}
           {embedUrl ? (
-            <div className="aspect-video w-full rounded-xl overflow-hidden bg-zinc-950 border border-[#27272a] shadow-2xl">
+            <div className="aspect-video w-full rounded-sm overflow-hidden bg-zinc-950 border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
               <iframe
                 src={embedUrl}
                 title={lesson.title}
@@ -136,14 +136,14 @@ const LessonPageContent: React.FC = () => {
               />
             </div>
           ) : (
-            <div className="aspect-video w-full rounded-xl bg-zinc-950/60 border border-[#27272a] flex flex-col items-center justify-center text-zinc-500 text-xs">
+            <div className="aspect-video w-full rounded-sm bg-zinc-950/60 border border-white/5 flex flex-col items-center justify-center text-zinc-500 text-xs">
               <BookOpen className="w-8 h-8 mb-2 opacity-50" />
               <span>Текстовый урок</span>
             </div>
           )}
 
           {/* Lesson Title & Actions */}
-          <div className="p-6 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+          <div className="p-6 rounded-sm bg-[#18181b] border border-white/5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
                 {lesson.moduleTitle && (
@@ -159,7 +159,7 @@ const LessonPageContent: React.FC = () => {
                 disabled={lesson.completed || completeMutation.isPending}
                 className={`px-4 py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition-all ${
                   lesson.completed
-                    ? 'bg-zinc-800/60 border border-zinc-700 text-emerald-400 cursor-default'
+                    ? 'bg-zinc-800/60 border border-white/5 text-emerald-400 cursor-default'
                     : 'bg-[#fafafa] hover:bg-white text-[#09090b] shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer'
                 }`}
               >
@@ -169,14 +169,14 @@ const LessonPageContent: React.FC = () => {
             </div>
 
             {/* Lesson Tabs */}
-            <div className="pt-4 border-t border-[#27272a]">
+            <div className="pt-4 border-t border-white/5">
               <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
                 <button
                   type="button"
                   onClick={() => setActiveTab('content')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0 ${
+                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors cursor-pointer shrink-0 ${
                     activeTab === 'content'
-                      ? 'bg-[#21262d] text-[#fafafa] border border-[#30363d]'
+                      ? 'bg-[#21262d] text-[#fafafa] border border-white/5'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
                   }`}
                 >
@@ -186,7 +186,7 @@ const LessonPageContent: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setActiveTab('quiz')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                    className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                       activeTab === 'quiz'
                         ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                         : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -199,7 +199,7 @@ const LessonPageContent: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('homework')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'homework'
                       ? 'bg-[#58a6ff]/20 text-[#58a6ff] border border-[#58a6ff]/40'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -211,7 +211,7 @@ const LessonPageContent: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab('tutor')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'tutor'
                       ? 'bg-[#238636]/20 text-emerald-400 border border-emerald-500/40'
                       : 'text-[#8b949e] hover:text-[#fafafa]'
@@ -226,7 +226,7 @@ const LessonPageContent: React.FC = () => {
                 <div className="space-y-6">
                   <MarkdownViewer content={lesson.content} />
                   <LessonMaterialsList materials={lesson.materials} />
-                  <div className="pt-6 border-t border-[#27272a]">
+                  <div className="pt-6 border-t border-white/5">
                     <LessonContextPanel
                       dayNumber={lesson.dayNumber}
                       courseId={cId}
@@ -262,11 +262,11 @@ const LessonPageContent: React.FC = () => {
             </div>
 
             {/* Prev / Next navigation */}
-            <div className="mt-8 pt-6 border-t border-[#27272a] flex items-center justify-between">
+            <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
               {lesson.prevLessonId ? (
                 <button
                   onClick={() => navigate(`/courses/${cId}/lessons/${lesson.prevLessonId}`)}
-                  className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-xs rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span>Предыдущий урок</span>
@@ -278,7 +278,7 @@ const LessonPageContent: React.FC = () => {
               {lesson.nextLessonId ? (
                 <button
                   onClick={() => navigate(`/courses/${cId}/lessons/${lesson.nextLessonId}`)}
-                  className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-xs rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-zinc-300 text-xs rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <span>Следующий урок</span>
                   <ChevronRight className="w-4 h-4" />
@@ -292,7 +292,7 @@ const LessonPageContent: React.FC = () => {
 
         {/* Sidebar Curriculum (1 col) */}
         <div className="lg:col-span-1">
-          <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] sticky top-20 backdrop-blur-md">
+          <div className="p-4 rounded-sm bg-[#18181b] border border-white/5 sticky top-20">
             <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-zinc-400" />
               <span>Уроки курса</span>
@@ -312,11 +312,11 @@ const LessonPageContent: React.FC = () => {
                           navigate(`/courses/${cId}/lessons/${item.id}`);
                         }
                       }}
-                      className={`p-2.5 rounded-lg border text-xs flex items-center justify-between transition-all ${
+                      className={`p-2.5 rounded-sm border text-xs flex items-center justify-between transition-all ${
                         isActive
                           ? 'bg-zinc-800 border-zinc-500 text-white font-medium'
                           : item.accessible
-                          ? 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700 text-zinc-300 cursor-pointer'
+                          ? 'bg-zinc-900/60 border-white/5 hover:border-white/5 text-zinc-300 cursor-pointer'
                           : 'bg-zinc-950/40 border-zinc-900 text-zinc-600 cursor-not-allowed'
                       }`}
                     >

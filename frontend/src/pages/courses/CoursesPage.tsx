@@ -12,7 +12,6 @@ import {
   Code2,
   Cpu,
   Award,
-  Zap,
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -42,9 +41,9 @@ export const CoursesPage: React.FC = () => {
   }, [courses, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa]">
+    <div className="min-h-screen bg-[#0a0a0c] text-[#fafafa]">
       {/* Header Section */}
-      <div className="border-b border-[#27272a] bg-[#09090b]">
+      <div className="border-b border-white/5 bg-[#0a0a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12">
           <div className="max-w-3xl">
             <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight mb-3">
@@ -57,7 +56,7 @@ export const CoursesPage: React.FC = () => {
 
             {/* Platform Highlights / Badges - Solid Monochrome */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a]">
+              <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
                   <Code2 className="w-4 h-4 text-white" />
                   <span>100% Практика</span>
@@ -65,7 +64,7 @@ export const CoursesPage: React.FC = () => {
                 <p className="text-[11px] text-zinc-400 mt-1">Реальные проекты с нуля</p>
               </div>
 
-              <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a]">
+              <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
                   <Cpu className="w-4 h-4 text-white" />
                   <span>AI Code Grader</span>
@@ -73,7 +72,7 @@ export const CoursesPage: React.FC = () => {
                 <p className="text-[11px] text-zinc-400 mt-1">Ревью кода и тесты 24/7</p>
               </div>
 
-              <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a]">
+              <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
                   <BookOpen className="w-4 h-4 text-white" />
                   <span>RAG Наставник</span>
@@ -81,7 +80,7 @@ export const CoursesPage: React.FC = () => {
                 <p className="text-[11px] text-zinc-400 mt-1">Контекстный поиск и чат</p>
               </div>
 
-              <div className="p-3.5 rounded-lg bg-[#121214] border border-[#27272a]">
+              <div className="p-3.5 rounded-sm bg-[#121214] border border-white/5">
                 <div className="flex items-center gap-2 text-xs font-semibold text-white">
                   <Award className="w-4 h-4 text-white" />
                   <span>Сертификат</span>
@@ -106,7 +105,7 @@ export const CoursesPage: React.FC = () => {
                 className={`px-3 py-1.5 rounded text-xs font-medium transition-colors shrink-0 cursor-pointer ${
                   selectedCategory === cat.id
                     ? 'bg-zinc-800 text-white border border-zinc-600'
-                    : 'bg-[#121214] text-zinc-400 border border-[#27272a] hover:text-white hover:border-zinc-600'
+                    : 'bg-[#121214] text-zinc-400 border border-white/5 hover:text-white hover:border-zinc-600'
                 }`}
               >
                 {cat.label}
@@ -122,7 +121,7 @@ export const CoursesPage: React.FC = () => {
               placeholder="Поиск по курсам..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#121214] border border-[#27272a] rounded pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
+              className="w-full bg-[#121214] border border-white/5 rounded pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
             />
           </div>
         </div>
@@ -133,7 +132,7 @@ export const CoursesPage: React.FC = () => {
             <span>Загрузка каталога курсов...</span>
           </div>
         ) : filteredCourses.length === 0 ? (
-          <div className="p-12 text-center bg-[#121214] border border-[#27272a] rounded-lg max-w-lg mx-auto">
+          <div className="p-12 text-center bg-[#121214] border border-white/5 rounded-sm max-w-lg mx-auto">
             <BookOpen className="w-8 h-8 text-zinc-500 mx-auto mb-3 opacity-60" />
             <h3 className="text-sm font-semibold text-white mb-1">Курсы не найдены</h3>
             <p className="text-xs text-zinc-400">
@@ -145,31 +144,26 @@ export const CoursesPage: React.FC = () => {
             {filteredCourses.map((course) => (
               <div
                 key={course.id}
-                className="p-6 rounded-lg bg-[#121214] border border-[#27272a] hover:border-zinc-600 transition-colors flex flex-col justify-between"
+                className="p-6 rounded-sm bg-[#121214] border border-white/5 hover:border-zinc-600 transition-colors flex flex-col justify-between"
               >
                 <div>
                   {/* Card Header Tags */}
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 text-zinc-300 border border-zinc-800 flex items-center gap-1.5">
-                        <Calendar className="w-3 h-3 text-white" />
-                        {course.totalLessons || 5} уроков
-                      </span>
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-900 text-zinc-300 border border-zinc-800 flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
                         <Layers className="w-3 h-3 text-white" />
-                        2 модуля
+                        5 модулей
+                      </span>
+                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-900 text-zinc-300 border border-white/5 flex items-center gap-1.5">
+                        <Calendar className="w-3 h-3 text-white" />
+                        30 уроков
                       </span>
                     </div>
 
-                    {course.enrolled ? (
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-200 border border-zinc-700 flex items-center gap-1.5">
+                    {course.enrolled && (
+                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-200 border border-white/5 flex items-center gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                         Вы записаны
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-900 text-zinc-300 border border-zinc-800 flex items-center gap-1">
-                        <Zap className="w-3 h-3 text-white" />
-                        Открыт набор
                       </span>
                     )}
                   </div>
@@ -189,7 +183,7 @@ export const CoursesPage: React.FC = () => {
                     {['Spring Boot 3', 'React 19', 'PostgreSQL', 'pgvector', 'FSD Architecture', 'Docker'].map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-zinc-800"
+                        className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-white/5"
                       >
                         {tech}
                       </span>
@@ -198,7 +192,7 @@ export const CoursesPage: React.FC = () => {
                 </div>
 
                 {/* Card Footer */}
-                <div className="pt-4 border-t border-[#27272a] flex items-center justify-between gap-4">
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-4">
                   <div className="text-xs text-zinc-400 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-white" />
                     <span>Интерактивная практика</span>

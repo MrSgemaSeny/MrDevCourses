@@ -42,7 +42,7 @@ describe('DashboardPage Component', () => {
       </QueryClientProvider>
     );
 
-    expect(screen.getByText(/Личный кабинет студента/i)).toBeInTheDocument();
+    expect(screen.getByText(/Личный кабинет/i)).toBeInTheDocument();
     expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
     expect(screen.getByText(/День 1/i)).toBeInTheDocument();
   });

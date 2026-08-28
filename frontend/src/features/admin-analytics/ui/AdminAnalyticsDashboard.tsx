@@ -53,10 +53,10 @@ export const AdminAnalyticsDashboard: React.FC = () => {
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
         {/* Total Students */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Студентов</span>
-            <Users className="w-4 h-4 text-blue-400" />
+            <Users className="w-4 h-4 text-zinc-100" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalStudents ?? 0}
@@ -67,10 +67,10 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Total Enrollments */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Записей</span>
-            <BookOpen className="w-4 h-4 text-indigo-400" />
+            <BookOpen className="w-4 h-4 text-zinc-100" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalEnrollments ?? 0}
@@ -79,7 +79,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Total Lessons Completed */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Уроков пройдено</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -91,7 +91,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Course Completions */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Завершений</span>
             <Award className="w-4 h-4 text-amber-400" />
@@ -103,7 +103,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Completion Rate */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Конверсия</span>
             <TrendingUp className="w-4 h-4 text-teal-400" />
@@ -115,7 +115,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Average Streak */}
-        <div className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md">
+        <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Ср. Streak</span>
             <Flame className="w-4 h-4 text-amber-500" />
@@ -130,10 +130,10 @@ export const AdminAnalyticsDashboard: React.FC = () => {
       {/* Main Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Course Funnel */}
-        <div className="lg:col-span-2 p-6 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#27272a]">
+        <div className="lg:col-span-2 p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/5">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-blue-400 mb-0.5">
+              <div className="flex items-center gap-2 text-xs font-mono text-zinc-100 mb-0.5">
                 <BarChart3 className="w-3.5 h-3.5" />
                 <span>Воронка курса (Drop-off Rate)</span>
               </div>
@@ -148,7 +148,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
                   id="funnelCourseSelect"
                   value={effectiveCourseId || ''}
                   onChange={(e) => setSelectedCourseId(Number(e.target.value))}
-                  className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-white focus:outline-none"
+                  className="px-3 py-1.5 bg-zinc-900 border border-white/5 rounded-md text-xs text-white focus:outline-none"
                 >
                   {courses.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -168,8 +168,8 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         </div>
 
         {/* Right 1 Col: Streak Distribution */}
-        <div className="p-6 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md space-y-4">
-          <div className="pb-3 border-b border-[#27272a]">
+        <div className="p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
+          <div className="pb-3 border-b border-white/5">
             <div className="flex items-center gap-2 text-xs font-mono text-amber-400 mb-0.5">
               <Flame className="w-3.5 h-3.5" />
               <span>Ударный режим</span>
@@ -206,7 +206,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         ) : retention ? (
           <LessonRetentionTable retention={retention} />
         ) : (
-          <div className="p-8 text-center bg-zinc-900/60 border border-[#27272a] rounded-lg text-zinc-400 text-xs">
+          <div className="p-8 text-center bg-zinc-900/60 border border-white/5 rounded-sm text-zinc-400 text-xs">
             Выберите курс для просмотра аналитики удержания.
           </div>
         )}

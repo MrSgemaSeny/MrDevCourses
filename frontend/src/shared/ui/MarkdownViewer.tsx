@@ -19,7 +19,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
     return parts.map((part, pIdx) => {
       if (part.startsWith('`') && part.endsWith('`') && part.length > 1) {
         return (
-          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 font-mono text-[11px] text-emerald-400">
+          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/5 font-mono text-[11px] text-emerald-400">
             {part.slice(1, -1)}
           </code>
         );
@@ -47,8 +47,8 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
     let codeBlockIndex = 0;
 
     const renderCodeBlock = (key: string, codeText: string, idx: number) => (
-      <div key={key} className="my-4 rounded-lg bg-zinc-950 border border-zinc-800 overflow-hidden font-mono text-xs">
-        <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900/90 border-b border-zinc-800 text-[11px] text-zinc-400">
+      <div key={key} className="my-4 rounded-sm bg-zinc-950 border border-white/5 overflow-hidden font-mono text-xs">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900/90 border-b border-white/5 text-[11px] text-zinc-400">
           <span>code</span>
           <button
             onClick={() => handleCopy(codeText, idx)}
@@ -115,7 +115,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
 
         let containerClass = 'bg-blue-950/30 border-blue-800/40 text-blue-300';
         let IconComponent = Info;
-        let iconClass = 'text-blue-400';
+        let iconClass = 'text-zinc-100';
 
         if (alertType === 'TIP') {
           containerClass = 'bg-emerald-950/30 border-emerald-800/40 text-emerald-300';
@@ -132,7 +132,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
         }
 
         elements.push(
-          <div key={`alert-${i}`} className={`my-3 p-3.5 rounded-lg border text-xs flex items-start gap-2.5 ${containerClass}`}>
+          <div key={`alert-${i}`} className={`my-3 p-3.5 rounded-sm border text-xs flex items-start gap-2.5 ${containerClass}`}>
             <IconComponent className={`w-4 h-4 shrink-0 mt-0.5 ${iconClass}`} />
             <div className="space-y-1 leading-relaxed">
               {calloutContent.map((cLine, cIdx) => (
@@ -153,7 +153,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
         );
       } else if (line.startsWith('## ')) {
         elements.push(
-          <h2 key={`h2-${i}`} className="text-lg font-bold text-white mt-6 mb-3 pb-1 border-b border-zinc-800">
+          <h2 key={`h2-${i}`} className="text-lg font-bold text-white mt-6 mb-3 pb-1 border-b border-white/5">
             {renderFormattedText(line.replace('## ', ''))}
           </h2>
         );

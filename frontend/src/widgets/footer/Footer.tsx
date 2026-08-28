@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
   const { brand, sections, legal } = FOOTER_CONFIG;
 
   return (
-    <footer className="border-t border-[#27272a] bg-[#09090b] text-zinc-400 mt-auto">
+    <footer className="border-t border-white/5 bg-[#0a0a0c] text-zinc-400 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col md:flex-row items-start justify-between gap-10">
           {/* Левая колонка: Бренд и описание */}

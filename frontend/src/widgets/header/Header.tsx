@@ -3,23 +3,22 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { ROUTES } from '@/shared/config/routes';
 import { UserProfileDropdown } from './UserProfileDropdown';
+import { Logo } from '@/shared/ui/Logo';
 import { BookOpen, LayoutDashboard, Shield, LogIn, Flame } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#27272a] bg-[#09090b]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0c]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand */}
         <Link
           to={ROUTES.HOME}
           aria-label="MrDevCourses Главная"
-          className="flex items-center gap-2 text-sm font-bold text-white tracking-tight hover:text-zinc-200 transition-colors"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <span>
-            MrDev<span className="text-zinc-400 font-normal">Courses</span>
-          </span>
+          <Logo />
         </Link>
 
         {/* Navigation */}
@@ -45,7 +44,7 @@ export const Header: React.FC = () => {
           {user?.role === 'ADMIN' && (
             <Link
               to={ROUTES.ADMIN}
-              className="text-white hover:text-zinc-200 flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700"
+              className="text-white hover:text-zinc-200 flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded bg-zinc-900 border border-white/5"
             >
               <Shield className="w-3.5 h-3.5 text-zinc-300" />
               <span>Админ-панель</span>
@@ -61,7 +60,7 @@ export const Header: React.FC = () => {
               {(user.currentStreak ?? 0) > 0 && (
                 <div
                   title={`Ваш текущий стрик: ${user.currentStreak} дн.`}
-                  className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-mono font-medium"
+                  className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-900 border border-white/5 text-zinc-300 text-xs font-mono font-medium"
                 >
                   <Flame className="w-3.5 h-3.5 text-white" />
                   <span>{user.currentStreak} дн.</span>

@@ -27,7 +27,7 @@ export const AuthCallbackPage: React.FC = () => {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <div className="text-center space-y-4">
-        <div className="w-8 h-8 border-2 border-[#27272a] border-t-[#fafafa] rounded-full animate-spin mx-auto" />
+        <div className="w-8 h-8 border-2 border-white/5 border-t-[#fafafa] rounded-full animate-spin mx-auto" />
         <p className="text-sm text-[#a1a1aa]">Завершение авторизации...</p>
       </div>
     </div>

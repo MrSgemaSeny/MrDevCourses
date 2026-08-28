@@ -6,7 +6,7 @@ import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { useAuth } from '@/features/auth';
 import { VisualRoadmap } from '@/widgets/roadmap/VisualRoadmap';
 import { CertificateModal } from '@/widgets/certificate/CertificateModal';
-import { Lock, Play, Calendar, Clock, ArrowRight, Award, ChevronDown, CheckCircle2, FileText, HelpCircle, Code2 } from 'lucide-react';
+import { Lock, Play, Calendar, Clock, ArrowRight, Award, CheckCircle2, FileText, HelpCircle, Code2 } from 'lucide-react';
 
 export const CourseDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -14,7 +14,6 @@ export const CourseDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { user, isAuthenticated } = useAuth();
   const [showCertificate, setShowCertificate] = useState(false);
-  const [expandedModules, setExpandedModules] = useState<Record<number, boolean>>({ 1: true, 2: true });
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -43,13 +42,6 @@ export const CourseDetailPage: React.FC = () => {
       return;
     }
     enrollMutation.mutate();
-  };
-
-  const toggleModule = (moduleId: number) => {
-    setExpandedModules((prev) => ({
-      ...prev,
-      [moduleId]: !prev[moduleId],
-    }));
   };
 
   const getLessonTypeIcon = (type?: string) => {
@@ -85,15 +77,12 @@ export const CourseDetailPage: React.FC = () => {
   const modules = course.modules || [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Course Hero */}
-      <div className="p-8 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] mb-8 backdrop-blur-md">
+      <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-emerald-950/60 border border-emerald-800/60 text-emerald-400">
-            Практическая программа
-          </span>
-          <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-zinc-700 font-mono">
-            {course.totalLessons || 5} уроков &bull; {modules.length || 2} модуля
+          <span className="px-2.5 py-0.5 rounded text-[11px] font-medium bg-zinc-800 text-zinc-300 border border-white/5 font-mono">
+            5 модулей &bull; 30 уроков
           </span>
         </div>
 
@@ -103,7 +92,7 @@ export const CourseDetailPage: React.FC = () => {
           {course.description || 'Пошаговый курс с практическими уроками, ориентированный на реальный результат.'}
         </p>
 
-        <div className="pt-6 border-t border-[#27272a] flex flex-wrap items-center justify-between gap-4">
+        <div className="pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
@@ -161,97 +150,85 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           <div className="space-y-3">
-            {modules.map((mod) => {
-              const isExpanded = expandedModules[mod.id] ?? true;
-              return (
-                <div
-                  key={mod.id}
-                  className="bg-[#161b22] border border-[#30363d] rounded-xl overflow-hidden shadow-lg"
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleModule(mod.id)}
-                    className="w-full px-5 py-4 bg-[#0d1117] flex items-center justify-between hover:bg-[#161b22] transition-colors cursor-pointer text-left"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-xs font-semibold text-white">{mod.title}</span>
-                        {mod.isFreePreview && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-500/20 text-sky-400 border border-sky-500/30">
-                            Бесплатный модуль
-                          </span>
-                        )}
-                      </div>
-                      {mod.description && (
-                        <p className="text-[11px] text-[#8b949e] mt-1">{mod.description}</p>
+            {modules.map((mod) => (
+              <div
+                key={mod.id}
+                className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+              >
+                <div className="w-full px-5 py-4 bg-[#0d1117] flex items-center justify-between text-left">
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xs font-semibold text-white">{mod.title}</span>
+                      {mod.isFreePreview && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                          Бесплатный модуль
+                        </span>
                       )}
                     </div>
+                    {mod.description && (
+                      <p className="text-[11px] text-[#8b949e] mt-1">{mod.description}</p>
+                    )}
+                  </div>
 
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-[#8b949e]">
-                        {mod.completedLessonsCount || 0} / {mod.lessonsCount}
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 text-[#8b949e] transition-transform duration-200 ${
-                          isExpanded ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </div>
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-mono text-[#8b949e]">
+                      {mod.completedLessonsCount || 0} / {mod.lessonsCount}
+                    </span>
+                  </div>
+                </div>
 
-                  {isExpanded && (
-                    <div className="p-4 space-y-2 border-t border-[#30363d] bg-[#161b22]/50">
-                      {mod.lessons.map((lessonItem) => (
-                        <div
-                          key={lessonItem.id}
-                          onClick={() => {
-                            if (lessonItem.accessible && course.enrolled) {
-                              navigate(`/courses/${course.id}/lessons/${lessonItem.id}`);
-                            }
-                          }}
-                          className={`p-3 rounded-lg border text-xs flex items-center justify-between transition-all ${
-                            lessonItem.accessible && course.enrolled
-                              ? 'bg-[#0d1117] border-[#30363d] hover:border-zinc-500 text-zinc-200 cursor-pointer'
-                              : 'bg-[#090d13]/60 border-[#21262d] text-[#8b949e] cursor-default'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="p-1 rounded bg-[#21262d] shrink-0">
-                              {getLessonTypeIcon(lessonItem.lessonType)}
-                            </div>
-                            <div className="min-w-0">
-                              <div className="font-medium text-white truncate">
-                                День {lessonItem.dayNumber}: {lessonItem.title}
-                              </div>
-                              <div className="text-[10px] text-[#8b949e] flex items-center gap-2 mt-0.5">
-                                <span>{lessonItem.lessonType || 'VIDEO'}</span>
-                                {lessonItem.durationMinutes ? (
-                                  <span>&bull; {lessonItem.durationMinutes} мин</span>
-                                ) : null}
-                              </div>
-                            </div>
+                <div className="p-4 space-y-2 border-t border-white/5 bg-[#18181b]/50">
+                  {mod.lessons.map((lessonItem) => (
+                    <div
+                      key={lessonItem.id}
+                      onClick={() => {
+                        if (lessonItem.accessible && course.enrolled) {
+                          navigate(`/courses/${course.id}/lessons/${lessonItem.id}`);
+                        }
+                      }}
+                      className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
+                        lessonItem.accessible && course.enrolled
+                          ? 'bg-[#0d1117] border-white/5 hover:border-zinc-500 text-zinc-200 cursor-pointer'
+                          : 'bg-[#090d13]/60 border-[#21262d] text-[#8b949e] cursor-default'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="p-1 rounded bg-[#21262d] shrink-0">
+                          {getLessonTypeIcon(lessonItem.lessonType)}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-medium text-white truncate">
+                            {lessonItem.title.startsWith(`День ${lessonItem.dayNumber}:`)
+                              ? lessonItem.title
+                              : `День ${lessonItem.dayNumber}: ${lessonItem.title}`}
                           </div>
-
-                          <div className="flex items-center gap-2 shrink-0">
-                            {lessonItem.completed ? (
-                              <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1">
-                                <CheckCircle2 className="w-3 h-3" /> Пройден
-                              </span>
-                            ) : lessonItem.accessible && course.enrolled ? (
-                              <span className="px-2 py-0.5 rounded text-[10px] bg-[#21262d] text-white">
-                                Доступен
-                              </span>
-                            ) : (
-                              <Lock className="w-3.5 h-3.5 text-[#8b949e]" />
-                            )}
+                          <div className="text-[10px] text-[#8b949e] flex items-center gap-2 mt-0.5">
+                            <span>{lessonItem.lessonType || 'VIDEO'}</span>
+                            {lessonItem.durationMinutes ? (
+                              <span>&bull; {lessonItem.durationMinutes} мин</span>
+                            ) : null}
                           </div>
                         </div>
-                      ))}
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {lessonItem.completed ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" /> Пройден
+                          </span>
+                        ) : lessonItem.accessible && course.enrolled ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-[#21262d] text-white">
+                            Доступен
+                          </span>
+                        ) : (
+                          <Lock className="w-3.5 h-3.5 text-[#8b949e]" />
+                        )}
+                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       ) : null}

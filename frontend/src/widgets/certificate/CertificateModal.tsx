@@ -50,9 +50,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="certificate-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
     >
-      <div className="relative w-full max-w-2xl p-8 rounded-2xl bg-[#09090b] border-2 border-zinc-700 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-2xl p-8 rounded-sm bg-[#0a0a0c] border-2 border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] overflow-hidden">
         {/* Decorative corner glows */}
         <div className="absolute -top-20 -left-20 w-48 h-48 bg-zinc-700/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -67,7 +67,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         </button>
 
         {/* Certificate Frame */}
-        <div className="p-8 rounded-xl border border-zinc-800 bg-[rgba(24,24,27,0.7)] text-center relative z-10">
+        <div className="p-8 rounded-sm border border-white/5 bg-[#18181b] text-center relative z-10">
           <div className="w-12 h-12 rounded-full bg-emerald-950 border border-emerald-600/60 text-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
             <Award className="w-6 h-6" />
           </div>
@@ -86,11 +86,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           </h3>
 
           <p className="text-xs text-zinc-400 mb-2">успешно освоил(а) программу курса</p>
-          <div className="text-base font-semibold text-zinc-200 mb-6 bg-zinc-900/80 py-2 px-4 rounded-lg inline-block border border-zinc-800">
+          <div className="text-base font-semibold text-zinc-200 mb-6 bg-zinc-900/80 py-2 px-4 rounded-sm inline-block border border-white/5">
             {courseTitle}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 pt-4 border-t border-zinc-800 gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-zinc-500 pt-4 border-t border-white/5 gap-2">
             <div>Дата: {formattedDate}</div>
             <div className="flex items-center gap-1 text-emerald-400">
               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -115,7 +115,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               target="_blank"
               rel="noreferrer"
               aria-label="Скачать официальный PDF сертификат"
-              className="px-4 py-2 bg-[#238636] hover:bg-[#2ea043] text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all cursor-pointer shadow-lg"
+              className="px-4 py-2 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
             >
               <Download className="w-4 h-4" />
               <span>Официальный PDF</span>
@@ -123,7 +123,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             <button
               onClick={() => window.print()}
               aria-label="Распечатать сертификат"
-              className="px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-[#fafafa] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all border border-[#30363d] cursor-pointer"
+              className="px-4 py-2 bg-[#21262d] hover:bg-[#30363d] text-[#fafafa] text-xs font-semibold rounded-md flex items-center gap-1.5 transition-all border border-white/5 cursor-pointer"
             >
               <span>Печать</span>
             </button>

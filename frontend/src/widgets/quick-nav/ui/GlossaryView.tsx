@@ -82,7 +82,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
       case 'devops':
         return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-300';
       default:
-        return 'bg-zinc-800 border-zinc-700 text-zinc-300';
+        return 'bg-zinc-800 border-white/5 text-zinc-300';
     }
   };
 
@@ -96,7 +96,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Поиск терминов, концепций, тегов..."
-          className="w-full pl-9 pr-8 py-2 text-xs bg-[#161b22] border border-[#30363d] rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 transition-colors"
+          className="w-full pl-9 pr-8 py-2 text-xs bg-[#18181b] border border-white/5 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 transition-colors"
           aria-label="Поиск по глоссарию"
         />
         {search && (
@@ -121,7 +121,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
               className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
                 isActive
                   ? 'bg-zinc-200 text-zinc-900 shadow-sm'
-                  : 'bg-[#161b22] border border-[#21262d] text-zinc-400 hover:text-white hover:border-[#30363d]'
+                  : 'bg-[#18181b] border border-[#21262d] text-zinc-400 hover:text-white hover:border-white/5'
               }`}
             >
               {cat.label}
@@ -171,10 +171,10 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
               <div
                 key={term.id}
                 data-testid={`glossary-card-${term.id}`}
-                className={`p-3.5 rounded-xl border transition-all ${
+                className={`p-3.5 rounded-sm border transition-all ${
                   isExpanded
-                    ? 'bg-[#161b22] border-zinc-500/80 shadow-lg'
-                    : 'bg-[#161b22]/70 border-[#21262d] hover:border-[#30363d]'
+                    ? 'bg-[#18181b] border-zinc-500/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
+                    : 'bg-[#18181b]/70 border-[#21262d] hover:border-white/5'
                 }`}
               >
                 {/* Header */}
@@ -210,8 +210,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
 
                     {/* Code Snippet */}
                     {term.codeSnippet && (
-                      <div className="rounded-lg bg-[#0d1117] border border-[#21262d] overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#161b22] border-b border-[#21262d] text-[11px] text-zinc-400">
+                      <div className="rounded-sm bg-[#0d1117] border border-[#21262d] overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-[#21262d] text-[11px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Code className="w-3.5 h-3.5 text-zinc-500" />
                             <span>Пример реализации</span>

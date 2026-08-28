@@ -46,7 +46,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#161b22] border border-[#30363d] rounded-xl">
+      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#18181b] border border-white/5 rounded-sm">
         Загрузка квиза...
       </div>
     );
@@ -54,7 +54,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (error || !quiz) {
     return (
-      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#161b22] border border-[#30363d] rounded-xl">
+      <div className="p-8 text-center text-xs text-[#8b949e] bg-[#18181b] border border-white/5 rounded-sm">
         Квиз для данного урока не настроен или доступ ограничен.
       </div>
     );
@@ -92,11 +92,11 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
   ).length;
 
   return (
-    <div className="bg-[#161b22] border border-[#30363d] rounded-xl overflow-hidden shadow-2xl">
+    <div className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
-      <div className="px-5 py-4 bg-[#0d1117] border-b border-[#30363d] flex items-center justify-between">
+      <div className="px-5 py-4 bg-[#0d1117] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400">
+          <div className="p-1.5 rounded-sm bg-amber-500/10 text-amber-400">
             <HelpCircle className="w-4 h-4" />
           </div>
           <div>
@@ -124,12 +124,12 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
           return (
             <div
               key={q.id}
-              className={`p-4 rounded-xl border transition-all ${
+              className={`p-4 rounded-sm border transition-all ${
                 result
                   ? isCorrect
                     ? 'bg-emerald-950/15 border-emerald-800/40'
                     : 'bg-rose-950/15 border-rose-800/40'
-                  : 'bg-[#0d1117] border-[#30363d]'
+                  : 'bg-[#0d1117] border-white/5'
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -168,10 +168,10 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                       type="button"
                       disabled={!!result}
                       onClick={() => handleSelectOption(q.id, opt.id, isMulti)}
-                      className={`w-full text-left p-3 rounded-lg text-xs transition-all flex items-center gap-3 border ${
+                      className={`w-full text-left p-3 rounded-sm text-xs transition-all flex items-center gap-3 border ${
                         isSelected
                           ? 'bg-[#1f242c] border-[#58a6ff] text-white shadow-sm'
-                          : 'bg-[#161b22] border-[#30363d] text-[#c9d1d9] hover:border-zinc-500'
+                          : 'bg-[#18181b] border-white/5 text-[#c9d1d9] hover:border-zinc-500'
                       }`}
                     >
                       <div
@@ -193,7 +193,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
               {/* Explanation note after submission */}
               {result && explanation && (
-                <div className="mt-3 p-2.5 rounded bg-[#161b22] border border-[#30363d] text-[11px] text-[#8b949e]">
+                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-[11px] text-[#8b949e]">
                   <strong className="text-zinc-300">Пояснение:</strong> {explanation}
                 </div>
               )}
@@ -204,7 +204,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
         {/* Result Banner / Submit action */}
         {result ? (
           <div
-            className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+            className={`p-4 rounded-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
               result.passed
                 ? 'bg-emerald-950/20 border-emerald-800/50 text-emerald-300'
                 : 'bg-rose-950/20 border-rose-800/50 text-rose-300'
@@ -236,7 +236,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
               <button
                 type="button"
                 onClick={handleRetry}
-                className="px-4 py-2 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white border border-[#30363d] flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white border border-white/5 flex items-center gap-1.5 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Попробовать снова</span>
@@ -244,7 +244,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
             )}
           </div>
         ) : (
-          <div className="pt-2 flex items-center justify-between border-t border-[#30363d]">
+          <div className="pt-2 flex items-center justify-between border-t border-white/5">
             <span className="text-[11px] text-[#8b949e]">
               Урок будет автоматически зачтен при результате &ge; {quiz.passingScorePercentage}%
             </span>
@@ -253,7 +253,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
               type="button"
               disabled={submitMutation.isPending || answeredCount === 0}
               onClick={() => submitMutation.mutate()}
-              className="px-5 py-2.5 rounded-lg bg-[#238636] hover:bg-[#2ea043] disabled:opacity-50 text-xs font-semibold text-white transition-colors cursor-pointer flex items-center gap-2 shadow-lg"
+              className="px-5 py-2.5 rounded-sm bg-[#238636] hover:bg-[#2ea043] disabled:opacity-50 text-xs font-semibold text-white transition-colors cursor-pointer flex items-center gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
             >
               {submitMutation.isPending ? (
                 <>

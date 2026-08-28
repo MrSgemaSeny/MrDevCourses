@@ -122,9 +122,9 @@ export const AdminPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 pb-6 border-b border-[#27272a]">
+      <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1">
             <Shield className="w-3.5 h-3.5" />
@@ -134,7 +134,7 @@ export const AdminPage: React.FC = () => {
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
+        <div className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-white/5 rounded-sm">
           <button
             onClick={() => setActiveTab('courses')}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
@@ -191,7 +191,7 @@ export const AdminPage: React.FC = () => {
               {courses.map((course) => (
                 <div
                   key={course.id}
-                  className="p-5 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] backdrop-blur-md flex flex-col justify-between"
+                  className="p-5 rounded-sm bg-[#18181b] border border-white/5 flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -211,7 +211,7 @@ export const AdminPage: React.FC = () => {
                     <p className="text-xs text-zinc-400 line-clamp-2 mb-4">{course.description}</p>
                   </div>
 
-                  <div className="pt-3 border-t border-[#27272a] flex items-center justify-between text-xs">
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
                     <span className="text-zinc-500 font-mono">{course.totalLessons || 0} уроков</span>
 
                     <button
@@ -241,10 +241,10 @@ export const AdminPage: React.FC = () => {
               role="dialog"
               aria-modal="true"
               aria-labelledby="create-course-title"
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
             >
-              <div className="w-full max-w-lg p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl relative">
-                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+              <div className="w-full max-w-lg p-6 bg-[#0a0a0c] border border-white/5 rounded-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] relative">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
                   <h3 id="create-course-title" className="text-lg font-bold text-white">Создать новый курс</h3>
                   <button
                     onClick={() => setShowCourseModal(false)}
@@ -275,7 +275,7 @@ export const AdminPage: React.FC = () => {
                           .replace(/(^-|-$)+/g, '');
                         setCourseForm({ ...courseForm, title, slug });
                       }}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
                       placeholder="Вайбкодинг с нуля"
                     />
                   </div>
@@ -287,7 +287,7 @@ export const AdminPage: React.FC = () => {
                       required
                       value={courseForm.slug}
                       onChange={(e) => setCourseForm({ ...courseForm, slug: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
                       placeholder="vibecoding-zero"
                     />
                   </div>
@@ -298,7 +298,7 @@ export const AdminPage: React.FC = () => {
                       rows={3}
                       value={courseForm.description || ''}
                       onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
                       placeholder="Краткое описание целей и программы курса"
                     />
                   </div>
@@ -309,14 +309,14 @@ export const AdminPage: React.FC = () => {
                       id="activeCheckbox"
                       checked={courseForm.active}
                       onChange={(e) => setCourseForm({ ...courseForm, active: e.target.checked })}
-                      className="rounded border-zinc-700 text-white focus:ring-0"
+                      className="rounded border-white/5 text-white focus:ring-0"
                     />
                     <label htmlFor="activeCheckbox" className="text-xs text-zinc-300">
                       Опубликовать (активен)
                     </label>
                   </div>
 
-                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
+                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
                     <button
                       type="button"
                       onClick={() => setShowCourseModal(false)}
@@ -350,7 +350,7 @@ export const AdminPage: React.FC = () => {
                 id="courseSelect"
                 value={effectiveCourseId || ''}
                 onChange={(e) => setSelectedCourseId(Number(e.target.value))}
-                className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-white focus:outline-none"
+                className="px-3 py-1.5 bg-zinc-900 border border-white/5 rounded-md text-xs text-white focus:outline-none"
               >
                 {courses.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -383,7 +383,7 @@ export const AdminPage: React.FC = () => {
           {lessonsLoading ? (
             <div className="text-center py-12 text-zinc-500 text-xs">Загрузка уроков...</div>
           ) : lessons.length === 0 ? (
-            <div className="p-8 text-center bg-zinc-900/60 border border-[#27272a] rounded-lg text-zinc-400 text-xs">
+            <div className="p-8 text-center bg-zinc-900/60 border border-white/5 rounded-sm text-zinc-400 text-xs">
               В этом курсе пока нет уроков.
             </div>
           ) : (
@@ -391,10 +391,10 @@ export const AdminPage: React.FC = () => {
               {lessons.map((lesson) => (
                 <div
                   key={lesson.id}
-                  className="p-4 rounded-xl bg-[rgba(24,24,27,0.85)] border border-[#27272a] flex items-center justify-between backdrop-blur-md"
+                  className="p-4 rounded-sm bg-[#18181b] border border-white/5 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-md bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-mono font-bold text-zinc-300">
+                    <div className="w-8 h-8 rounded-md bg-zinc-800 border border-white/5 flex items-center justify-center text-xs font-mono font-bold text-zinc-300">
                       Д{lesson.dayNumber}
                     </div>
                     <div>
@@ -433,10 +433,10 @@ export const AdminPage: React.FC = () => {
               role="dialog"
               aria-modal="true"
               aria-labelledby="create-lesson-title"
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
             >
-              <div className="w-full max-w-lg p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl relative">
-                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+              <div className="w-full max-w-lg p-6 bg-[#0a0a0c] border border-white/5 rounded-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] relative">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
                   <h3 id="create-lesson-title" className="text-lg font-bold text-white">Добавить урок в курс</h3>
                   <button
                     onClick={() => setShowLessonModal(false)}
@@ -460,7 +460,7 @@ export const AdminPage: React.FC = () => {
                       required
                       value={lessonForm.title}
                       onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500"
                       placeholder="День 1: Введение и основы"
                     />
                   </div>
@@ -480,7 +480,7 @@ export const AdminPage: React.FC = () => {
                             sortOrder: Number(e.target.value),
                           })
                         }
-                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
+                        className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
                       />
                     </div>
 
@@ -490,7 +490,7 @@ export const AdminPage: React.FC = () => {
                         type="url"
                         value={lessonForm.youtubeUrl || ''}
                         onChange={(e) => setLessonForm({ ...lessonForm, youtubeUrl: e.target.value })}
-                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
+                        className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white font-mono focus:outline-none focus:border-zinc-500"
                         placeholder="https://youtube.com/watch?v=..."
                       />
                     </div>
@@ -502,12 +502,12 @@ export const AdminPage: React.FC = () => {
                       rows={5}
                       value={lessonForm.content || ''}
                       onChange={(e) => setLessonForm({ ...lessonForm, content: e.target.value })}
-                      className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500 font-mono text-xs"
+                      className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-sm text-white focus:outline-none focus:border-zinc-500 font-mono text-xs"
                       placeholder="Markdown конспект урока..."
                     />
                   </div>
 
-                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
+                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
                     <button
                       type="button"
                       onClick={() => setShowLessonModal(false)}
@@ -538,10 +538,10 @@ export const AdminPage: React.FC = () => {
           {studentsLoading ? (
             <div className="text-center py-12 text-zinc-500 text-xs">Загрузка студентов...</div>
           ) : (
-            <div className="rounded-xl border border-[#27272a] bg-[rgba(24,24,27,0.85)] overflow-hidden backdrop-blur-md">
+            <div className="rounded-sm border border-white/5 bg-[#18181b] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-zinc-900/80 border-b border-[#27272a] text-zinc-400 font-mono">
+                  <thead className="bg-zinc-900/80 border-b border-white/5 text-zinc-400 font-mono">
                     <tr>
                       <th className="p-3.5">Студент</th>
                       <th className="p-3.5">Email</th>
@@ -583,7 +583,7 @@ export const AdminPage: React.FC = () => {
                               {student.enrollments.map((enr) => (
                                 <span
                                   key={enr.id}
-                                  className="px-2 py-0.5 bg-zinc-900 border border-zinc-700 rounded text-[10px] text-zinc-300"
+                                  className="px-2 py-0.5 bg-zinc-900 border border-white/5 rounded text-[10px] text-zinc-300"
                                 >
                                   {enr.courseTitle}
                                 </span>
@@ -632,9 +632,9 @@ export const AdminPage: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="delete-confirm-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
         >
-          <div className="w-full max-w-md p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl">
+          <div className="w-full max-w-md p-6 bg-[#0a0a0c] border border-white/5 rounded-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-9 h-9 rounded-full bg-red-950/80 border border-red-800/80 flex items-center justify-center text-red-400 shrink-0">
                 <AlertTriangle className="w-5 h-5" />
@@ -650,7 +650,7 @@ export const AdminPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#27272a]">
+            <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-white/5">
               <button
                 type="button"
                 onClick={() => setDeleteConfirm(null)}
@@ -683,10 +683,10 @@ export const AdminPage: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="enroll-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
         >
-          <div className="w-full max-w-md p-6 bg-[#09090b] border border-[#27272a] rounded-xl shadow-2xl">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#27272a]">
+          <div className="w-full max-w-md p-6 bg-[#0a0a0c] border border-white/5 rounded-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
               <h3 id="enroll-modal-title" className="text-sm font-bold text-white">
                 Зачислить студента на курс
               </h3>
@@ -702,7 +702,7 @@ export const AdminPage: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <span className="block text-xs text-zinc-400 mb-1">Студент</span>
-                <div className="px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-zinc-200 font-mono">
+                <div className="px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-xs text-zinc-200 font-mono">
                   {enrollModal.studentEmail}
                 </div>
               </div>
@@ -720,7 +720,7 @@ export const AdminPage: React.FC = () => {
                       courseId: Number(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-xs text-white focus:outline-none focus:border-zinc-500"
+                  className="w-full px-3 py-2 bg-zinc-900 border border-white/5 rounded-md text-xs text-white focus:outline-none focus:border-zinc-500"
                 >
                   {courses.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -730,7 +730,7 @@ export const AdminPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#27272a]">
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-white/5">
                 <button
                   type="button"
                   onClick={() => setEnrollModal(null)}

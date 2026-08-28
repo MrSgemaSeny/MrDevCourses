@@ -12,135 +12,150 @@ export const LandingPage: React.FC = () => {
     queryFn: courseApi.getCourses,
   });
 
+  const focusClasses = "focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-[#0a0a0c]";
+
   return (
-    <div className="min-h-full bg-[#09090b] text-[#fafafa]">
+    <div className="min-h-full bg-[#0a0a0c] text-zinc-100 font-sans">
       {/* Hero Section */}
-      <section className="pt-16 pb-16 border-b border-[#27272a] bg-[#09090b]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-            Практическая разработка <br />
-            <span className="text-zinc-400 font-normal">промышленных систем</span>
-          </h1>
+      <section className="py-16 md:py-24 border-b border-white/5 bg-[#0a0a0c] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+            <div className="max-w-2xl flex-1">
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-8 leading-tight">
+                Практическая разработка <br />
+                <span className="text-zinc-500 font-medium">промышленных систем</span>
+              </h1>
 
-          <p className="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
-            Погружение в современный стек: Spring Boot 3, React 19, PostgreSQL, pgvector RAG и архитектура сложных систем. Проектирование и написание production-кода.
-          </p>
+              <p className="text-sm sm:text-base text-zinc-400 mb-8 leading-relaxed max-w-xl">
+                Погружение в современный стек: Spring Boot 3, React 19, PostgreSQL, pgvector RAG и архитектура сложных систем. Проектирование и написание production-кода без абстрактной теории.
+              </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            <Link
-              to="/courses"
-              className="w-full sm:w-auto px-5 py-2.5 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded flex items-center justify-center gap-2 transition-colors"
-            >
-              <span>Каталог курсов</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <Link
+                  to="/courses"
+                  className={`w-full sm:w-auto px-6 py-3 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-sm flex items-center justify-center gap-2 transition-colors ${focusClasses}`}
+                >
+                  <span>Каталог курсов</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
 
-            {isAuthenticated ? (
-              <Link
-                to="/dashboard"
-                className="w-full sm:w-auto px-5 py-2.5 bg-[#121214] hover:bg-zinc-800 text-zinc-200 border border-[#27272a] font-semibold text-xs rounded transition-colors"
-              >
-                Мой кабинет
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="w-full sm:w-auto px-5 py-2.5 bg-[#121214] hover:bg-zinc-800 text-zinc-200 border border-[#27272a] font-semibold text-xs rounded transition-colors"
-              >
-                Войти через Google
-              </Link>
-            )}
+                {isAuthenticated ? (
+                  <Link
+                    to="/dashboard"
+                    className={`w-full sm:w-auto px-6 py-3 bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-medium text-xs rounded-sm transition-colors text-center ${focusClasses}`}
+                  >
+                    Мой кабинет
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    className={`w-full sm:w-auto px-6 py-3 bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-medium text-xs rounded-sm transition-colors text-center ${focusClasses}`}
+                  >
+                    Войти через Google
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            <div className="hidden md:flex flex-shrink-0 justify-center items-center">
+              <div className="w-[440px] lg:w-[540px] rounded-sm overflow-hidden border border-white/5 shadow-[0_0_80px_rgba(255,255,255,0.02)] bg-[#18181b]">
+                <img 
+                  src="/hero-image.png" 
+                  alt="Вайбкодинг" 
+                  className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" 
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Highlights */}
-      <section className="py-14 max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="p-6 rounded-lg bg-[#121214] border border-[#27272a]">
-            <div className="w-8 h-8 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-white">
-              <Code2 className="w-4 h-4 text-white" />
+      {/* Functional List Highlights */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-4">
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
+            <Code2 className="w-5 h-5 text-white shrink-0" />
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-2">100% Практический код</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                От архитектуры модульных монолитов и Spring Security до FSD на фронтенде и развертывания в облаке.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white mb-2">100% Практический код</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              От архитектуры модульных монолитов и Spring Security до FSD на фронтенде и развертывания в облаке.
-            </p>
           </div>
 
-          <div className="p-6 rounded-lg bg-[#121214] border border-[#27272a]">
-            <div className="w-8 h-8 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-white">
-              <Cpu className="w-4 h-4 text-white" />
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
+            <Cpu className="w-5 h-5 text-white shrink-0" />
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-2">AI Code Reviewer</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Мгновенный анализ качества кода и проверка домашних заданий с обратной связью уровня Tech Lead.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white mb-2">AI Code Reviewer</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Мгновенный анализ качества кода и проверка домашних заданий с обратной связью уровня Tech Lead.
-            </p>
           </div>
 
-          <div className="p-6 rounded-lg bg-[#121214] border border-[#27272a]">
-            <div className="w-8 h-8 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 text-white">
-              <Award className="w-4 h-4 text-white" />
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
+            <Award className="w-5 h-5 text-white shrink-0" />
+            <div>
+              <h3 className="text-sm font-semibold text-white mb-2">Сертификация</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Цифровой диплом с уникальным идентификатором и публичной верификацией в блокчейне.
+              </p>
             </div>
-            <h3 className="text-sm font-semibold text-white mb-2">Сертификация</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Цифровой диплом с уникальным идентификатором и возможностью публичной верификации.
-            </p>
           </div>
         </div>
       </section>
 
       {/* Featured Courses */}
-      <section className="py-12 border-t border-[#27272a]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <section className="py-16 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">Доступные программы</h2>
-              <p className="text-xs text-zinc-400 mt-1">Выберите направление и начните обучение</p>
+              <h2 className="text-lg font-bold text-white tracking-tight">Доступные программы</h2>
             </div>
-            <Link to="/courses" className="text-xs text-zinc-300 hover:text-white flex items-center gap-1">
+            <Link 
+              to="/courses"
+              className={`text-xs text-zinc-400 hover:text-white transition-colors flex items-center gap-2 font-mono uppercase tracking-wider rounded-sm ${focusClasses}`}
+            >
               <span>Смотреть все</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           {isLoading ? (
-            <div className="text-center py-12 text-xs text-zinc-500">Загрузка курсов...</div>
+            <div className="text-center py-16 text-xs text-zinc-500 font-mono">Загрузка...</div>
           ) : courses.length === 0 ? (
-            <div className="p-8 text-center bg-[#121214] border border-[#27272a] rounded-lg text-xs text-zinc-400">
-              Курсы формируются и скоро появятся в каталоге.
+            <div className="p-8 text-center bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] rounded-sm text-xs text-zinc-500 font-mono">
+              [ Каталог пуст ]
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {courses.map((course) => (
                 <Link
                   key={course.id}
                   to={`/courses/${course.slug}`}
-                  className="group block p-6 rounded-lg bg-[#121214] border border-[#27272a] hover:border-zinc-600 transition-colors"
+                  className={`group block p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-white/15 transition-colors ${focusClasses}`}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-900 border border-zinc-800 text-zinc-300">
-                      Открыт набор
-                    </span>
-                    <span className="text-xs text-zinc-400 font-mono">
-                      {course.totalLessons || 5} уроков
+                  <div className="flex items-center justify-end mb-4">
+                    <span className="text-xs text-zinc-500 font-mono">
+                      30 уроков
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white group-hover:text-zinc-200 transition-colors mb-2">
+                  <h3 className="text-sm font-semibold text-white mb-2">
                     {course.title}
                   </h3>
 
-                  <p className="text-xs text-zinc-400 line-clamp-2 mb-4 leading-relaxed font-normal">
+                  <p className="text-xs text-zinc-400 line-clamp-2 mb-8 leading-relaxed">
                     {course.description || 'Пошаговый курс с практическими заданиями и ежедневным закреплением материала.'}
                   </p>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-[#27272a] text-xs">
-                    <span className="text-zinc-400 flex items-center gap-1.5">
-                      <Layers className="w-3.5 h-3.5 text-white" />
-                      Интерактивные модули
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-500 flex items-center gap-2 font-mono">
+                      <Layers className="w-4 h-4" />
+                      5 модулей
                     </span>
-                    <span className="text-white font-medium group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                      Подробнее <ArrowRight className="w-3 h-3" />
+                    <span className="text-white font-medium opacity-80 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                      Подробнее <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
                 </Link>

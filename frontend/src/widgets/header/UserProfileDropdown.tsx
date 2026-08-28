@@ -61,16 +61,17 @@ export const UserProfileDropdown: React.FC = () => {
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="Профиль пользователя"
-        className="flex items-center gap-2 py-1 px-2 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-zinc-700 focus:outline-none"
+        className="flex items-center gap-2 py-1 px-2 rounded-sm hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-white/5 focus:outline-none"
       >
         {user.avatarUrl ? (
           <img
             src={user.avatarUrl}
             alt={displayName}
-            className="w-7 h-7 rounded-full border border-zinc-700 object-cover shrink-0"
+            referrerPolicy="no-referrer"
+            className="w-7 h-7 rounded-full border border-white/5 object-cover shrink-0"
           />
         ) : (
-          <div className="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs text-zinc-200 font-bold shrink-0">
+          <div className="w-7 h-7 rounded-full bg-zinc-800 border border-white/5 flex items-center justify-center text-xs text-zinc-200 font-bold shrink-0">
             {displayName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -93,18 +94,19 @@ export const UserProfileDropdown: React.FC = () => {
 
       {/* Dropdown Menu Modal / Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-72 rounded-xl bg-[#121214] border border-[#27272a] shadow-2xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-72 rounded-sm bg-[#121214] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] z-50 overflow-hidden">
           {/* Header Info */}
-          <div className="p-4 border-b border-[#27272a] bg-[#161618]">
+          <div className="p-4 border-b border-white/5 bg-[#161618]">
             <div className="flex items-center gap-3">
               {user.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
                   alt={displayName}
-                  className="w-10 h-10 rounded-full border border-zinc-700 object-cover"
+                  referrerPolicy="no-referrer"
+                  className="w-10 h-10 rounded-full border border-white/5 object-cover"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-sm text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-zinc-800 border border-white/5 flex items-center justify-center text-sm text-white font-bold">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -112,7 +114,7 @@ export const UserProfileDropdown: React.FC = () => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-1">
                   <p className="text-xs font-semibold text-white truncate">{displayName}</p>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-zinc-800 border border-zinc-700 text-zinc-300">
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-zinc-800 border border-white/5 text-zinc-300">
                     {user.role}
                   </span>
                 </div>
@@ -121,8 +123,8 @@ export const UserProfileDropdown: React.FC = () => {
             </div>
 
             {/* Streak & Record Stats */}
-            <div className="mt-3 grid grid-cols-2 gap-2 pt-2 border-t border-zinc-800/80">
-              <div className="p-2 rounded bg-zinc-900 border border-zinc-800 flex items-center gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2 pt-2 border-t border-white/5/80">
+              <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
                 <Flame className="w-3.5 h-3.5 text-white shrink-0" />
                 <div className="min-w-0">
                   <div className="text-[9px] text-zinc-500 uppercase font-mono">Стрик</div>
@@ -130,7 +132,7 @@ export const UserProfileDropdown: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-2 rounded bg-zinc-900 border border-zinc-800 flex items-center gap-2">
+              <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
                 <Trophy className="w-3.5 h-3.5 text-white shrink-0" />
                 <div className="min-w-0">
                   <div className="text-[9px] text-zinc-500 uppercase font-mono">Рекорд</div>
@@ -145,7 +147,7 @@ export const UserProfileDropdown: React.FC = () => {
             <Link
               to={ROUTES.DASHBOARD}
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-lg transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-sm transition-colors"
             >
               <LayoutDashboard className="w-4 h-4 text-zinc-400" />
               <span>Моё обучение</span>
@@ -154,7 +156,7 @@ export const UserProfileDropdown: React.FC = () => {
             <Link
               to={ROUTES.COURSES}
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-lg transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-sm transition-colors"
             >
               <BookOpen className="w-4 h-4 text-zinc-400" />
               <span>Каталог курсов</span>
@@ -164,7 +166,7 @@ export const UserProfileDropdown: React.FC = () => {
               <Link
                 to={ROUTES.ADMIN}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 text-xs text-white bg-zinc-900/60 hover:bg-zinc-800 rounded-lg transition-colors border border-zinc-800"
+                className="flex items-center gap-2.5 px-3 py-2 text-xs text-white bg-zinc-900/60 hover:bg-zinc-800 rounded-sm transition-colors border border-white/5"
               >
                 <Shield className="w-4 h-4 text-white" />
                 <span>Админ-панель</span>
@@ -173,11 +175,11 @@ export const UserProfileDropdown: React.FC = () => {
           </div>
 
           {/* Logout Action */}
-          <div className="p-1.5 border-t border-[#27272a]">
+          <div className="p-1.5 border-t border-white/5">
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 rounded-lg transition-colors cursor-pointer text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 rounded-sm transition-colors cursor-pointer text-left"
             >
               <LogOut className="w-4 h-4" />
               <span>Выйти из аккаунта</span>

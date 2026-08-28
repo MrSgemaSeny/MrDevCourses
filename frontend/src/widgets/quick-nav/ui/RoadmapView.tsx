@@ -65,12 +65,12 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Header Summary */}
-      <div className="p-3.5 rounded-xl bg-[#161b22] border border-[#21262d] flex items-center justify-between">
+      <div className="p-3.5 rounded-sm bg-[#18181b] border border-[#21262d] flex items-center justify-between">
         <div>
           <h4 className="text-xs font-bold text-white tracking-tight">Траектория обучения</h4>
           <p className="text-[11px] text-zinc-400">1 день = 1 урок (капельный доступ)</p>
         </div>
-        <span className="text-[11px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+        <span className="text-[11px] font-mono text-zinc-300 px-2 py-0.5 rounded bg-zinc-900 border border-white/5">
           {completedCount} / {lessons.length}
         </span>
       </div>
@@ -105,7 +105,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                       ? 'bg-white text-black border border-white ring-2 ring-white/30'
                       : lesson.accessible
                       ? 'bg-zinc-800 border border-zinc-600 text-white hover:border-zinc-400'
-                      : 'bg-zinc-950 border border-zinc-800 text-zinc-600'
+                      : 'bg-zinc-950 border border-white/5 text-zinc-600'
                   }`}
                 >
                   {lesson.completed ? (
@@ -120,7 +120,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                 {/* Lesson Details Card */}
                 <div
                   onClick={() => handleLessonClick(lesson)}
-                  className={`flex-1 p-2.5 rounded-lg border text-xs transition-all ${
+                  className={`flex-1 p-2.5 rounded-sm border text-xs transition-all ${
                     lesson.accessible
                       ? 'cursor-pointer hover:border-zinc-500'
                       : 'cursor-not-allowed opacity-75'
@@ -128,8 +128,8 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                     isCurrent
                       ? 'bg-zinc-800/90 border-zinc-500 text-white'
                       : lesson.accessible
-                      ? 'bg-[#161b22] border-[#21262d] text-zinc-200'
-                      : 'bg-[#161b22]/40 border-[#21262d]/50 text-zinc-500'
+                      ? 'bg-[#18181b] border-[#21262d] text-zinc-200'
+                      : 'bg-[#18181b]/40 border-[#21262d]/50 text-zinc-500'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1 mb-0.5">

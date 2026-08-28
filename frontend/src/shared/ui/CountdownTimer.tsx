@@ -75,12 +75,12 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
     <div className={`inline-flex items-center gap-1.5 font-mono text-xs text-zinc-300 ${className}`}>
       {showIcon && <Clock className="w-3.5 h-3.5 text-zinc-400 animate-pulse" />}
       <div className="flex items-center gap-1">
-        {timeLeft.days > 0 && <span className="px-1 py-0.5 rounded bg-zinc-900 border border-zinc-800">{formatUnit(timeLeft.days, 'д')}</span>}
-        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-zinc-800">{formatUnit(timeLeft.hours, 'ч')}</span>
+        {timeLeft.days > 0 && <span className="px-1 py-0.5 rounded bg-zinc-900 border border-white/5">{formatUnit(timeLeft.days, 'д')}</span>}
+        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-white/5">{formatUnit(timeLeft.hours, 'ч')}</span>
         <span>:</span>
-        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-zinc-800">{formatUnit(timeLeft.minutes, 'м')}</span>
+        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-white/5">{formatUnit(timeLeft.minutes, 'м')}</span>
         <span>:</span>
-        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">{formatUnit(timeLeft.seconds, 'с')}</span>
+        <span className="px-1 py-0.5 rounded bg-zinc-900 border border-white/5 text-zinc-400">{formatUnit(timeLeft.seconds, 'с')}</span>
       </div>
     </div>
   );

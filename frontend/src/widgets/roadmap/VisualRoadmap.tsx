@@ -35,13 +35,13 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
   };
 
   return (
-    <div className="py-6 px-4 rounded-xl bg-[rgba(24,24,27,0.8)] border border-[#27272a] backdrop-blur-md">
-      <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#27272a]">
+    <div className="py-6 px-4 rounded-sm bg-[rgba(24,24,27,0.8)] border border-white/5">
+      <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/5">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight">Интерактивный Roadmap курса</h3>
           <p className="text-xs text-zinc-400">1 день — 1 урок. График последовательного открытия.</p>
         </div>
-        <span className="text-xs font-mono text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+        <span className="text-xs font-mono text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-white/5">
           {lessons.filter((l) => l.completed).length} / {lessons.length} завершено
         </span>
       </div>
@@ -83,7 +83,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                       ? 'bg-white text-black border-2 border-white shadow-[0_0_16px_rgba(255,255,255,0.4)] animate-pulse'
                       : lesson.accessible
                       ? 'bg-zinc-800 border border-zinc-600 text-white hover:border-white'
-                      : 'bg-zinc-950 border border-zinc-800 text-zinc-600'
+                      : 'bg-zinc-950 border border-white/5 text-zinc-600'
                   }`}
                 >
                   {lesson.completed ? (
@@ -102,13 +102,13 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                   aria-label={labelText}
                   onClick={() => handleLessonClick(lesson)}
                   onKeyDown={(e) => handleKeyDown(e, lesson)}
-                  className={`flex-1 p-3.5 rounded-lg border transition-all ${
+                  className={`flex-1 p-3.5 rounded-sm border transition-all ${
                     lesson.accessible ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-400' : 'cursor-not-allowed'
                   } ${
                     isCurrent
                       ? 'bg-zinc-800/90 border-zinc-500 text-white'
                       : lesson.accessible
-                      ? 'bg-zinc-900/60 border-zinc-800/90 hover:border-zinc-700 text-zinc-200'
+                      ? 'bg-zinc-900/60 border-white/5/90 hover:border-white/5 text-zinc-200'
                       : 'bg-zinc-950/40 border-zinc-900 text-zinc-500'
                   }`}
                 >

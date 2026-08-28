@@ -1,0 +1,35 @@
+{
+  "task": {
+    "id": "6",
+    "source": "user-request",
+    "title": "Add C and C++ language support"
+  },
+  "workflow": {
+    "id": "implementation",
+    "status": "complete",
+    "currentPhase": "implementation-complete"
+  },
+  "git": {
+    "mainRepoPath": "/c/Users/avife/agent-sh/deslop",
+    "worktreePath": "/c/Users/avife/agent-sh/deslop/.claude/worktrees/c-cpp-support-6",
+    "branch": "feature/c-cpp-language-support-6",
+    "isWorktree": true,
+    "currentSha": "87c4e06"
+  },
+  "implementation": {
+    "implementationComplete": true,
+    "stepsCompleted": 6,
+    "totalSteps": 6,
+    "filesModified": 4,
+    "filesCreated": 1,
+    "testsAdded": 68,
+    "commitsCreated": 2,
+    "verificationPassed": true
+  },
+  "resume": {
+    "canResume": true,
+    "resumeFromStep": "review"
+  },
+  "lastActivityAt": "2026-02-25T19:30:00Z",
+  "createdAt": "2026-02-25T19:00:00Z"
+}

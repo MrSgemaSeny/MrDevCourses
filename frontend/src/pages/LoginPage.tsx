@@ -13,7 +13,7 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md p-8 rounded-2xl bg-[#18181b]/80 border border-[#27272a] backdrop-blur-xl shadow-2xl">
+      <div className="w-full max-w-md p-8 rounded-sm bg-[#18181b]/80 border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight mb-2">
             Вход в MrDev<span className="text-[#a1a1aa]">Courses</span>
@@ -24,7 +24,7 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {errorParam && (
-          <div className="mb-6 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
+          <div className="mb-6 p-3 rounded-sm bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
             {errorParam}
           </div>
         )}
@@ -34,7 +34,7 @@ export const LoginPage: React.FC = () => {
           <GoogleLoginButton text="Войти через Google" />
 
           {/* Recommendation banner */}
-          <div className="flex items-start gap-2.5 p-3 rounded-lg bg-[#09090b] border border-[#27272a]">
+          <div className="flex items-start gap-2.5 p-3 rounded-sm bg-[#0a0a0c] border border-white/5">
             <span className="text-[#71717a] mt-0.5 shrink-0">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" />
@@ -50,15 +50,15 @@ export const LoginPage: React.FC = () => {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 border-t border-[#27272a]" />
+          <div className="flex-1 border-t border-white/5" />
           <span className="text-xs text-[#52525b]">или через email</span>
-          <div className="flex-1 border-t border-[#27272a]" />
+          <div className="flex-1 border-t border-white/5" />
         </div>
 
         {/* Email/password — secondary */}
         <EmailAuthForm />
 
-        <div className="mt-6 pt-5 border-t border-[#27272a] text-center text-xs text-[#71717a]">
+        <div className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-[#71717a]">
           Авторизуясь, вы соглашаетесь с правилами платформы
         </div>
       </div>

@@ -39,7 +39,7 @@ export const CertificateVerifyPage: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
-      <div className="p-8 rounded-2xl bg-[#161b22] border border-[#30363d] shadow-2xl text-center">
+      <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] text-center">
         {error ? (
           <div>
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">
@@ -53,7 +53,7 @@ export const CertificateVerifyPage: React.FC = () => {
             <p className="text-sm text-[#8b949e] mb-6">{error}</p>
             <Link
               to="/courses"
-              className="inline-block px-5 py-2.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-[#30363d]"
+              className="inline-block px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-white/5"
             >
               К каталогу курсов
             </Link>
@@ -78,7 +78,7 @@ export const CertificateVerifyPage: React.FC = () => {
               ID: {certificate.certificateCode}
             </p>
 
-            <div className="space-y-3 bg-[#0d1117] p-5 rounded-xl border border-[#21262d] text-left text-xs mb-6">
+            <div className="space-y-3 bg-[#0d1117] p-5 rounded-sm border border-[#21262d] text-left text-xs mb-6">
               <div className="flex justify-between border-b border-[#21262d] pb-2">
                 <span className="text-[#8b949e]">Студент:</span>
                 <span className="font-semibold text-[#fafafa]">{certificate.userName}</span>
@@ -108,13 +108,13 @@ export const CertificateVerifyPage: React.FC = () => {
                 href={certificateApi.getPdfDownloadUrl(certificate.certificateCode)}
                 target="_blank"
                 rel="noreferrer"
-                className="px-5 py-2.5 rounded-lg bg-[#238636] hover:bg-[#2ea043] text-sm font-semibold text-white transition-colors shadow-lg"
+                className="px-5 py-2.5 rounded-sm bg-[#238636] hover:bg-[#2ea043] text-sm font-semibold text-white transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
               >
                 Скачать официальный PDF
               </a>
               <Link
                 to="/courses"
-                className="px-5 py-2.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-[#30363d]"
+                className="px-5 py-2.5 rounded-sm bg-[#21262d] hover:bg-[#30363d] text-sm text-[#fafafa] transition-colors border border-white/5"
               >
                 Все курсы MrDevCourses
               </Link>

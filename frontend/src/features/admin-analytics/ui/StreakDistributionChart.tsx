@@ -8,7 +8,7 @@ interface StreakDistributionChartProps {
 export const StreakDistributionChart: React.FC<StreakDistributionChartProps> = ({ distributions }) => {
   if (!distributions || distributions.length === 0) {
     return (
-      <div className="p-8 text-center bg-zinc-900/60 border border-[#27272a] rounded-lg text-zinc-400 text-xs">
+      <div className="p-8 text-center bg-zinc-900/60 border border-white/5 rounded-sm text-zinc-400 text-xs">
         Нет данных о распределении ударного режима.
       </div>
     );
