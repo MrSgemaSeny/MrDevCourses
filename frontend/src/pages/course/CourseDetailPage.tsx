@@ -47,15 +47,16 @@ export const CourseDetailPage: React.FC = () => {
   const getLessonTypeIcon = (type?: string) => {
     switch (type) {
       case 'ARTICLE':
-        return <FileText className="w-3.5 h-3.5 text-sky-400" />;
+        return <FileText className="w-3.5 h-3.5 text-zinc-400" />;
       case 'QUIZ':
-        return <HelpCircle className="w-3.5 h-3.5 text-amber-400" />;
+        return <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />;
       case 'PRACTICE':
-        return <Code2 className="w-3.5 h-3.5 text-emerald-400" />;
+        return <Code2 className="w-3.5 h-3.5 text-zinc-400" />;
       default:
         return <Play className="w-3.5 h-3.5 text-zinc-400" />;
     }
   };
+
 
   if (courseLoading) {
     return <div className="text-center py-20 text-zinc-500 text-xs">Загрузка информации о курсе...</div>;
@@ -160,11 +161,12 @@ export const CourseDetailPage: React.FC = () => {
                     <div className="flex items-center gap-2.5">
                       <span className="text-sm font-semibold text-white">{mod.title}</span>
                       {mod.isFreePreview && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-sky-500/20 text-sky-400 border border-sky-500/30">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 text-zinc-300 border border-white/10">
                           Бесплатный модуль
                         </span>
                       )}
                     </div>
+
                     {mod.description && (
                       <p className="text-xs text-zinc-400 mt-1">{mod.description}</p>
                     )}

@@ -57,7 +57,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 
         <button
           onClick={() => openQuickNav('glossary', null)}
-          className="self-start sm:self-auto text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 transition-colors cursor-pointer"
+          className="self-start sm:self-auto text-xs text-zinc-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
         >
           <span>Полный глоссарий</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -77,14 +77,15 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
               key={termName}
               data-testid={`term-chip-${termName}`}
               onClick={() => openQuickNav('glossary', termName)}
-              className="px-3 py-1.5 rounded-sm bg-[#0a0a0c] border border-white/5 hover:border-amber-400/60 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
+              className="px-3 py-1.5 rounded-sm bg-[#0a0a0c] border border-white/5 hover:border-zinc-500 hover:bg-zinc-900 text-zinc-300 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer group"
             >
-              <span className="text-amber-400 font-mono">#</span>
+              <span className="text-zinc-500 font-mono">#</span>
               <span>{termName}</span>
             </button>
           ))}
         </div>
       </div>
+
 
       {/* Fast Navigation Shortcuts */}
       <div className="pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-3 text-xs">

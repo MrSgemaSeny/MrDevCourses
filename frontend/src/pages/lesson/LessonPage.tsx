@@ -20,7 +20,9 @@ import {
   Layers,
   Code2,
   HelpCircle,
+  Bot,
 } from 'lucide-react';
+
 
 const LessonPageContent: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
@@ -105,9 +107,10 @@ const LessonPageContent: React.FC = () => {
             className="px-2.5 py-1 rounded text-xs bg-[#18181b] hover:bg-zinc-800 border border-white/5 hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
             aria-label="Открыть быструю навигацию"
           >
-            <Layers className="w-3.5 h-3.5 text-amber-400" />
+            <Layers className="w-3.5 h-3.5 text-zinc-400" />
             <span>Быстрая навигация</span>
           </button>
+
 
           <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-zinc-900 border border-white/5 text-zinc-300">
             День {lesson.dayNumber}
@@ -188,11 +191,11 @@ const LessonPageContent: React.FC = () => {
                     onClick={() => setActiveTab('quiz')}
                     className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                       activeTab === 'quiz'
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'text-zinc-500 hover:text-white'
+                        ? 'bg-zinc-800 text-white border border-white/10'
+                        : 'text-zinc-400 hover:text-white'
                     }`}
                   >
-                    <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+                    <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />
                     <span>Квиз & Аттестация</span>
                   </button>
                 )}
@@ -201,11 +204,11 @@ const LessonPageContent: React.FC = () => {
                   onClick={() => setActiveTab('homework')}
                   className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'homework'
-                      ? 'bg-[#58a6ff]/20 text-[#58a6ff] border border-[#58a6ff]/40'
-                      : 'text-zinc-500 hover:text-white'
+                      ? 'bg-zinc-800 text-white border border-white/10'
+                      : 'text-zinc-400 hover:text-white'
                   }`}
                 >
-                  <Code2 className="w-3.5 h-3.5 text-[#58a6ff]" />
+                  <Code2 className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Задание и AI-ревью</span>
                 </button>
                 <button
@@ -213,14 +216,15 @@ const LessonPageContent: React.FC = () => {
                   onClick={() => setActiveTab('tutor')}
                   className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
                     activeTab === 'tutor'
-                      ? 'bg-[#238636]/20 text-emerald-400 border border-emerald-500/40'
-                      : 'text-zinc-500 hover:text-white'
+                      ? 'bg-zinc-800 text-white border border-white/10'
+                      : 'text-zinc-400 hover:text-white'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <Bot className="w-3.5 h-3.5 text-zinc-400" />
                   <span>AI Наставник (RAG)</span>
                 </button>
               </div>
+
 
               {activeTab === 'content' ? (
                 <div className="space-y-6">
