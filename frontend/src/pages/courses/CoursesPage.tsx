@@ -193,11 +193,6 @@ export const CoursesPage: React.FC = () => {
 
                 {/* Card Footer */}
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-4">
-                  <div className="text-xs text-zinc-400 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white" />
-                    <span>Интерактивная практика</span>
-                  </div>
-
                   <Link
                     to={`/courses/${course.slug}`}
                     className="px-4 py-2 rounded bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
