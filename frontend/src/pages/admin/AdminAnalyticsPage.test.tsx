@@ -66,6 +66,6 @@ describe('AdminAnalyticsPage', () => {
 
     expect(await screen.findByText('Аналитика и телеметрия платформы')).toBeInTheDocument();
     expect(screen.getByText('Platform Telemetry & Analytics')).toBeInTheDocument();
-    expect(screen.getByTestId('admin-analytics-dashboard')).toBeInTheDocument();
+    expect(await screen.findByTestId('admin-analytics-dashboard')).toBeInTheDocument();
   });
 });
