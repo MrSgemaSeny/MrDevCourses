@@ -33,6 +33,7 @@ export interface LessonSummary {
   lessonType?: LessonType;
   durationMinutes?: number;
   isFreePreview?: boolean;
+  isPublished?: boolean;
   dayNumber: number;
   sortOrder: number;
   accessible: boolean;
@@ -77,6 +78,7 @@ export interface LessonDetail {
   lessonType?: LessonType;
   durationMinutes?: number;
   isFreePreview?: boolean;
+  isPublished?: boolean;
   content?: string;
   youtubeUrl?: string;
   dayNumber: number;
