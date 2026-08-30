@@ -75,11 +75,11 @@ public class DataSeeder {
             log.info("Default admin user created: admin@mrdev.com");
         }
 
-        // 2. Primary Course: Вайбкодинг с нуля
+        // 2. Primary Course: MrDeveloper
         Course vibeCourse = Course.builder()
-                .title("Вайбкодинг: от Новичка до Продукта за 5 недель")
-                .description("Практический курс по разработке современных веб-приложений с использованием ИИ, архитектурных протоколов и лучших инженерных практик. 1 неделя — 6 уроков.")
-                .slug("vibecoding-zero-to-one")
+                .title("MrDeveloper")
+                .description("Практический курс по разработке современных веб-приложений с использованием ИИ, архитектурных протоколов и лучших инженерных практик. 5 модулей, 30 уроков.")
+                .slug("mrdeveloper")
                 .active(true)
                 .createdAt(Instant.now())
                 .build();

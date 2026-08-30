@@ -26,7 +26,7 @@ export const LessonMaterialsList: React.FC<LessonMaterialsListProps> = ({ materi
   };
 
   return (
-    <div className="bg-[#18181b] border border-white/5 rounded-sm p-4 space-y-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="bg-[#0e0e11] border border-white/5 rounded-sm p-4 space-y-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       <h3 className="text-xs font-semibold text-white uppercase tracking-wider flex items-center gap-2">
         <FileText className="w-3.5 h-3.5 text-zinc-400" />
         <span>Материалы и ссылки к уроку ({materials.length})</span>
@@ -39,7 +39,7 @@ export const LessonMaterialsList: React.FC<LessonMaterialsListProps> = ({ materi
             href={mat.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between p-3 rounded-sm bg-[#0a0a0c] border border-white/5 hover:border-zinc-500 hover:bg-[#18181b] transition-all group cursor-pointer"
+            className="flex items-center justify-between p-3 rounded-sm bg-[#0a0a0c] border border-white/5 hover:border-zinc-500 hover:bg-[#141418] transition-all group cursor-pointer"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="p-1.5 rounded bg-zinc-900 border border-white/5 shrink-0">{getIcon(mat.materialType)}</div>

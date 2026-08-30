@@ -191,7 +191,7 @@ export const AdminPage: React.FC = () => {
               {courses.map((course) => (
                 <div
                   key={course.id}
-                  className="p-5 rounded-sm bg-[#18181b] border border-white/5 flex flex-col justify-between"
+                  className="p-5 rounded-sm bg-[#0e0e11] border border-white/5 flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -391,7 +391,7 @@ export const AdminPage: React.FC = () => {
               {lessons.map((lesson) => (
                 <div
                   key={lesson.id}
-                  className="p-4 rounded-sm bg-[#18181b] border border-white/5 flex items-center justify-between"
+                  className="p-4 rounded-sm bg-[#0e0e11] border border-white/5 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-md bg-zinc-800 border border-white/5 flex items-center justify-center text-xs font-mono font-bold text-zinc-300">
@@ -539,7 +539,7 @@ export const AdminPage: React.FC = () => {
           {studentsLoading ? (
             <div className="text-center py-12 text-zinc-500 text-xs">Загрузка студентов...</div>
           ) : (
-            <div className="rounded-sm border border-white/5 bg-[#18181b] overflow-hidden">
+            <div className="rounded-sm border border-white/5 bg-[#0e0e11] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-zinc-900/80 border-b border-white/5 text-zinc-400 font-mono">

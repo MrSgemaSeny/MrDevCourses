@@ -67,7 +67,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         </button>
 
         {/* Certificate Frame */}
-        <div className="p-8 rounded-sm border border-white/5 bg-[#18181b] text-center relative z-10">
+        <div className="p-8 rounded-sm border border-white/5 bg-[#0e0e11] text-center relative z-10">
           <div className="w-12 h-12 rounded-full bg-emerald-950 border border-emerald-600/60 text-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
             <Award className="w-6 h-6" />
           </div>

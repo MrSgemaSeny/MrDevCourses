@@ -96,7 +96,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Поиск терминов, концепций, тегов..."
-          className="w-full pl-9 pr-8 py-2 text-xs bg-[#18181b] border border-white/5 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 transition-colors"
+          className="w-full pl-9 pr-8 py-2 text-xs bg-[#0e0e11] border border-white/5 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 transition-colors"
           aria-label="Поиск по глоссарию"
         />
         {search && (
@@ -121,7 +121,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
               className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 isActive
                   ? 'bg-zinc-200 text-zinc-900 shadow-sm'
-                  : 'bg-[#18181b] border border-white/5 text-zinc-400 hover:text-white hover:border-white/5'
+                  : 'bg-[#0e0e11] border border-white/5 text-zinc-400 hover:text-white hover:border-white/5'
               }`}
             >
               {cat.label}
@@ -173,8 +173,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                 data-testid={`glossary-card-${term.id}`}
                 className={`p-3.5 rounded-sm border transition-all ${
                   isExpanded
-                    ? 'bg-[#18181b] border-zinc-500/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                    : 'bg-[#18181b]/70 border-white/5 hover:border-white/5'
+                    ? 'bg-[#0e0e11] border-zinc-500/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
+                    : 'bg-[#0e0e11]/70 border-white/5 hover:border-white/5'
                 }`}
               >
                 {/* Header */}
@@ -211,7 +211,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                     {/* Code Snippet */}
                     {term.codeSnippet && (
                       <div className="rounded-sm bg-[#0a0a0c] border border-white/5 overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#18181b] border-b border-white/5 text-[10px] text-zinc-400">
+                        <div className="flex items-center justify-between px-3 py-1.5 bg-[#0e0e11] border-b border-white/5 text-[10px] text-zinc-400">
                           <div className="flex items-center gap-1.5">
                             <Code className="w-3.5 h-3.5 text-zinc-500" />
                             <span>Пример реализации</span>

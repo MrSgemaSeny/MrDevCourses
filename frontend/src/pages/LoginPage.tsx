@@ -13,10 +13,10 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md p-8 rounded-sm bg-[#18181b]/80 border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <div className="w-full max-w-md p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-white tracking-tight mb-2">
-            Вход в MrDeveloper<span className="text-[#a1a1aa]">Courses</span>
+            Вход в MrDeveloper
           </h1>
           <p className="text-sm text-[#a1a1aa]">
             Доступ к материалам курсов и синхронизация прогресса

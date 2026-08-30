@@ -46,7 +46,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-xs text-zinc-500 bg-[#18181b] border border-white/5 rounded-sm">
+      <div className="p-8 text-center text-xs text-zinc-500 bg-[#0e0e11] border border-white/5 rounded-sm">
         Загрузка квиза...
       </div>
     );
@@ -54,7 +54,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
   if (error || !quiz) {
     return (
-      <div className="p-8 text-center text-xs text-zinc-500 bg-[#18181b] border border-white/5 rounded-sm">
+      <div className="p-8 text-center text-xs text-zinc-500 bg-[#0e0e11] border border-white/5 rounded-sm">
         Квиз для данного урока не настроен или доступ ограничен.
       </div>
     );
@@ -92,7 +92,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
   ).length;
 
   return (
-    <div className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="bg-[#0e0e11] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
       <div className="px-5 py-4 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -171,7 +171,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                       className={`w-full text-left p-3 rounded-sm text-xs transition-all flex items-center gap-3 border ${
                         isSelected
                           ? 'bg-[#1f242c] border-[#58a6ff] text-white shadow-sm'
-                          : 'bg-[#18181b] border-white/5 text-[#c9d1d9] hover:border-zinc-500'
+                          : 'bg-[#0e0e11] border-white/5 text-[#c9d1d9] hover:border-zinc-500'
                       }`}
                     >
                       <div
@@ -193,7 +193,7 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
               {/* Explanation note after submission */}
               {result && explanation && (
-                <div className="mt-3 p-2.5 rounded bg-[#18181b] border border-white/5 text-xs text-zinc-500">
+                <div className="mt-3 p-2.5 rounded bg-[#0e0e11] border border-white/5 text-xs text-zinc-500">
                   <strong className="text-zinc-300">Пояснение:</strong> {explanation}
                 </div>
               )}

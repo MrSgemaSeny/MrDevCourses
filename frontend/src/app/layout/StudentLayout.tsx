@@ -42,7 +42,7 @@ export const StudentLayout: React.FC = () => {
     <div className="flex min-h-screen bg-[#0a0a0c] text-zinc-100">
       <ScrollToTop />
       {/* Sidebar */}
-      <aside className="fixed top-0 left-0 h-full w-60 bg-[#18181b] border-r border-white/5 flex flex-col z-40">
+      <aside className="fixed top-0 left-0 h-full w-60 bg-[#0a0a0c] border-r border-white/5 flex flex-col z-40">
         {/* Logo */}
         <div className="px-5 py-5 border-b border-white/5">
           <Logo />

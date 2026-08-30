@@ -39,7 +39,7 @@ export const CertificateVerifyPage: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
-      <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] text-center">
+      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] text-center">
         {error ? (
           <div>
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400">

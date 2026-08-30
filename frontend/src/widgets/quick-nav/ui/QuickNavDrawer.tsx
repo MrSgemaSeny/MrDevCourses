@@ -68,7 +68,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
         }`}
       >
         {/* Drawer Header */}
-        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-[#18181b]/80">
+        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between bg-[#0e0e11]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-sm bg-zinc-800 border border-white/5 flex items-center justify-center text-zinc-300">
               <Layers className="w-4 h-4" />
@@ -93,7 +93,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
 
         {/* Tab Navigation */}
         <div className="px-5 pt-3 pb-2 border-b border-white/5 bg-[#0a0a0c]">
-          <div className="grid grid-cols-3 gap-1 bg-[#18181b] p-1 rounded-sm border border-white/5">
+          <div className="grid grid-cols-3 gap-1 bg-[#0e0e11] p-1 rounded-sm border border-white/5">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.key;
               return (

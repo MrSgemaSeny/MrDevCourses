@@ -14,6 +14,7 @@ export const CourseDetailPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { user, isAuthenticated } = useAuth();
   const [showCertificate, setShowCertificate] = useState(false);
+  const [showEnrollConfirm, setShowEnrollConfirm] = useState(false);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -30,6 +31,7 @@ export const CourseDetailPage: React.FC = () => {
   const enrollMutation = useMutation({
     mutationFn: () => courseApi.enroll(course!.id),
     onSuccess: () => {
+      setShowEnrollConfirm(false);
       queryClient.invalidateQueries({ queryKey: ['course', slug] });
       queryClient.invalidateQueries({ queryKey: ['lessons', course?.id] });
       queryClient.invalidateQueries({ queryKey: ['progress'] });
@@ -41,7 +43,7 @@ export const CourseDetailPage: React.FC = () => {
       navigate('/login');
       return;
     }
-    enrollMutation.mutate();
+    setShowEnrollConfirm(true);
   };
 
   const getLessonTypeIcon = (type?: string) => {
@@ -80,9 +82,9 @@ export const CourseDetailPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Course Hero */}
-      <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
+      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
         <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-zinc-800 text-zinc-300 border border-white/5 font-mono">
+          <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-[#141418] text-zinc-300 border border-white/5 font-mono">
             5 модулей &bull; 30 уроков
           </span>
         </div>
@@ -154,14 +156,14 @@ export const CourseDetailPage: React.FC = () => {
             {modules.map((mod) => (
               <div
                 key={mod.id}
-                className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                className="bg-[#0a0a0c] border border-white/5 rounded-sm overflow-hidden"
               >
-                <div className="w-full px-5 py-4 bg-[#0a0a0c] flex items-center justify-between text-left">
+                <div className="w-full px-5 py-4 bg-[#0a0a0c] flex items-center justify-between text-left border-b border-white/5">
                   <div>
                     <div className="flex items-center gap-2.5">
                       <span className="text-sm font-semibold text-white">{mod.title}</span>
                       {mod.isFreePreview && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 text-zinc-300 border border-white/10">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#141418] text-zinc-300 border border-white/10">
                           Бесплатный модуль
                         </span>
                       )}
@@ -179,7 +181,7 @@ export const CourseDetailPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 space-y-2 border-t border-white/5 bg-[#18181b]/50">
+                <div className="p-4 space-y-2 bg-[#0a0a0c]">
                   {mod.lessons.map((lessonItem) => (
                     <div
                       key={lessonItem.id}
@@ -188,14 +190,14 @@ export const CourseDetailPage: React.FC = () => {
                           navigate(`/courses/${course.id}/lessons/${lessonItem.id}`);
                         }
                       }}
-                      className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
+                      className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all bg-[#0e0e11] border-white/5 ${
                         lessonItem.accessible && course.enrolled
-                          ? 'bg-[#18181b] border-white/5 hover:border-zinc-500 text-zinc-200 cursor-pointer'
-                          : 'bg-[#0a0a0c] border-white/5 text-zinc-500 cursor-default'
+                          ? 'hover:border-zinc-500 hover:bg-[#141418] text-zinc-200 cursor-pointer'
+                          : 'opacity-70 text-zinc-500 cursor-default'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="p-1 rounded bg-zinc-900 border border-white/5 shrink-0">
+                        <div className="p-1 rounded bg-[#0a0a0c] border border-white/5 shrink-0">
                           {getLessonTypeIcon(lessonItem.lessonType)}
                         </div>
                         <div className="min-w-0">
@@ -222,7 +224,7 @@ export const CourseDetailPage: React.FC = () => {
                             <CheckCircle2 className="w-3 h-3" /> Пройден
                           </span>
                         ) : lessonItem.accessible && course.enrolled ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-800 border border-white/5 text-white">
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-[#141418] border border-white/10 text-zinc-300">
                             Доступен
                           </span>
                         ) : (
@@ -242,6 +244,39 @@ export const CourseDetailPage: React.FC = () => {
       {course.enrolled && lessons.length > 0 && (
         <div className="space-y-6">
           <VisualRoadmap courseId={course.id} lessons={lessons} />
+        </div>
+      )}
+
+      {/* Confirmation Modal for Enrollment */}
+      {showEnrollConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md bg-[#0e0e11] border border-white/10 rounded-sm p-6 shadow-2xl space-y-4">
+            <div className="space-y-2">
+              <h3 className="text-base font-bold text-white tracking-tight">Подтверждение записи на курс</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Вы собираетесь начать обучение на курсе <span className="text-white font-medium">&laquo;{course.title}&raquo;</span>. 
+                После подтверждения вам сразу откроются материалы первой недели и запустится персональный график уроков.
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-white/5 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowEnrollConfirm(false)}
+                disabled={enrollMutation.isPending}
+                className="px-4 py-2 text-xs font-medium text-zinc-400 hover:text-white bg-transparent hover:bg-white/5 rounded-sm transition-colors cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={() => enrollMutation.mutate()}
+                disabled={enrollMutation.isPending}
+                className="px-4 py-2 text-xs font-semibold text-black bg-white hover:bg-zinc-200 rounded-sm transition-colors flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+              >
+                <span>{enrollMutation.isPending ? 'Запись...' : 'Подтвердить запись'}</span>
+                <ArrowRight className="w-3.5 h-3.5 text-black" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

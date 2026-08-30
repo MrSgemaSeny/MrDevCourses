@@ -24,7 +24,7 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans text-zinc-100">
       {/* User Welcome Banner with Streaks */}
-      <div className="p-8 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
+      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 text-xs text-zinc-400 mb-2 font-mono uppercase tracking-wider">
@@ -76,7 +76,7 @@ export const DashboardPage: React.FC = () => {
         {isLoading ? (
           <div className="text-center py-16 text-zinc-500 text-xs font-mono">Загрузка...</div>
         ) : progressList.length === 0 ? (
-          <div className="p-10 text-center rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="p-10 text-center rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
             <BookOpen className="w-8 h-8 text-zinc-600 mx-auto mb-4" />
             <h3 className="text-sm font-semibold text-white mb-2">Вы пока не записаны на курсы</h3>
             <p className="text-xs text-zinc-400 max-w-sm mx-auto mb-6 leading-relaxed">
@@ -95,7 +95,7 @@ export const DashboardPage: React.FC = () => {
             {progressList.map((item) => (
               <div
                 key={item.courseId}
-                className="p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-white/15 transition-colors"
+                className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-white/15 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                   <div>

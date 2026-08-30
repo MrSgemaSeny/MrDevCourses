@@ -44,7 +44,7 @@ export const HomeworkSubmissionWidget: React.FC<HomeworkSubmissionWidgetProps> =
   const latestSubmission: HomeworkSubmission | undefined = submissions[0];
 
   return (
-    <div className="bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="bg-[#0e0e11] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
       <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">

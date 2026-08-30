@@ -35,7 +35,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
   };
 
   return (
-    <div className="py-6 px-4 rounded-sm bg-[rgba(24,24,27,0.8)] border border-white/5">
+    <div className="py-6 px-4 rounded-sm bg-[#0e0e11] border border-white/5">
       <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/5">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight">Интерактивный Roadmap курса</h3>

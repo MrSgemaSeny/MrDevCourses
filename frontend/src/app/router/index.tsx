@@ -1,8 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { App } from '../App';
-import { StudentLayout } from '../layout/StudentLayout';
-import { AdminLayout } from '../layout/AdminLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
 const PageLoader: React.FC = () => (

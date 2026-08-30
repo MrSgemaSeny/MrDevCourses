@@ -81,7 +81,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[520px] bg-[#18181b] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="flex flex-col h-[520px] bg-[#0e0e11] border border-white/5 rounded-sm overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       {/* Header */}
       <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
                           <div
                             key={cIdx}
                             title={cit.snippet}
-                            className="text-[10px] px-2 py-0.5 rounded bg-[#18181b] border border-white/5 text-[#58a6ff] hover:border-[#58a6ff] transition-colors cursor-help"
+                            className="text-[10px] px-2 py-0.5 rounded bg-[#0e0e11] border border-white/5 text-[#58a6ff] hover:border-[#58a6ff] transition-colors cursor-help"
                           >
                             {cit.header} ({cit.relevanceScore}%)
                           </div>
@@ -177,7 +177,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Задать вопрос по уроку..."
           disabled={isLoading}
-          className="flex-1 bg-[#18181b] border border-white/5 rounded-sm px-3 py-2 text-xs text-white placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
+          className="flex-1 bg-[#0e0e11] border border-white/5 rounded-sm px-3 py-2 text-xs text-white placeholder-[#8b949e] focus:outline-none focus:border-[#e2b340] transition-colors"
         />
         <button
           type="submit"

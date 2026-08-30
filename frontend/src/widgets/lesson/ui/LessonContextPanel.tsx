@@ -37,7 +37,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
   return (
     <div
       data-testid="lesson-context-panel"
-      className="p-5 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-4"
+      className="p-5 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-4"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/5">
