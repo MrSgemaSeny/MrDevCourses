@@ -67,6 +67,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             log.warn("Rate limit exceeded for tier: {}, key: {}, path: {}, retryAfter: {}s",
                     tier, rateLimitKey, path, retryAfterSeconds);
 
+            rateLimiterService.recordThrottle(tier, rateLimitKey, path, retryAfterSeconds);
             handleRateLimitExceeded(request, response, retryAfterSeconds);
         }
     }
