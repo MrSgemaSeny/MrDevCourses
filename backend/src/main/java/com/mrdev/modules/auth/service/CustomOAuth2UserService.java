@@ -69,12 +69,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 }
                 user = userRepository.save(user);
             } else {
+                boolean isAdmin = email.equalsIgnoreCase("admin@mrdev.com")
+                        || email.toLowerCase().contains("mrsgemaseny")
+                        || email.equalsIgnoreCase("orkathebestt@gmail.com");
+
                 user = User.builder()
                         .email(email)
                         .googleId(googleId)
                         .name(name != null ? name : email.split("@")[0])
                         .avatarUrl(picture)
-                        .role(Role.STUDENT)
+                        .role(isAdmin ? Role.ADMIN : Role.STUDENT)
                         .createdAt(Instant.now())
                         .build();
                 user = userRepository.save(user);

@@ -55,6 +55,17 @@ public class DataSeeder {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void seedInitialData() {
+        // Elevate mrsgemaseny to ADMIN if present
+        userRepository.findAll().forEach(u -> {
+            if (u.getEmail() != null && (u.getEmail().toLowerCase().contains("mrsgemaseny") || u.getEmail().equalsIgnoreCase("orkathebestt@gmail.com"))) {
+                if (u.getRole() != Role.ADMIN) {
+                    u.setRole(Role.ADMIN);
+                    userRepository.save(u);
+                    log.info("Elevated user {} to ADMIN role.", u.getEmail());
+                }
+            }
+        });
+
         if (courseRepository.count() > 0) {
             log.info("Database already seeded with courses, skipping initial seeding.");
             return;
