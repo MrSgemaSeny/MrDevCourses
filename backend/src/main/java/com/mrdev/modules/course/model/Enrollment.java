@@ -44,6 +44,10 @@ public class Enrollment {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cohort_id")
+    private Cohort cohort;
+
     @Column(name = "enrolled_at", nullable = false)
     @Builder.Default
     private Instant enrolledAt = Instant.now();

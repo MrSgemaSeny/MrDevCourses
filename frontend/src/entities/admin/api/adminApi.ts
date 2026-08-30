@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/base';
-import { ApiResponse, Course, Enrollment, LessonDetail, Student } from '@/shared/types';
+import { ApiResponse, Course, CourseModule, Enrollment, LessonDetail, LessonMaterial, LessonType, MaterialType, QuestionType, Quiz, Student } from '@/shared/types';
 
 export interface CreateCoursePayload {
   title: string;
@@ -15,12 +15,37 @@ export interface UpdateCoursePayload {
   active: boolean;
 }
 
+export interface CreateModulePayload {
+  title: string;
+  description?: string;
+  sortOrder?: number;
+  isFreePreview?: boolean;
+}
+
+export interface UpdateModulePayload {
+  title: string;
+  description?: string;
+  sortOrder?: number;
+  isFreePreview?: boolean;
+}
+
+export interface ReorderItemPayload {
+  id: number;
+  sortOrder?: number;
+  moduleId?: number;
+}
+
 export interface CreateLessonPayload {
   title: string;
   content?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder?: number;
+  moduleId?: number;
+  lessonType?: LessonType;
+  durationMinutes?: number;
+  isFreePreview?: boolean;
+  isPublished?: boolean;
 }
 
 export interface UpdateLessonPayload {
@@ -28,10 +53,50 @@ export interface UpdateLessonPayload {
   content?: string;
   youtubeUrl?: string;
   dayNumber: number;
-  sortOrder: number;
+  sortOrder?: number;
+  moduleId?: number;
+  lessonType?: LessonType;
+  durationMinutes?: number;
+  isFreePreview?: boolean;
+  isPublished?: boolean;
+}
+
+export interface CreateMaterialPayload {
+  title: string;
+  materialType: MaterialType;
+  url: string;
+  fileSizeBytes?: number;
+  sortOrder?: number;
+}
+
+export interface CreateQuizOptionPayload {
+  id?: number;
+  optionText: string;
+  isCorrect?: boolean;
+  sortOrder?: number;
+}
+
+export interface CreateQuizQuestionPayload {
+  id?: number;
+  questionText: string;
+  questionType?: QuestionType;
+  explanation?: string;
+  points?: number;
+  sortOrder?: number;
+  options?: CreateQuizOptionPayload[];
+}
+
+export interface CreateQuizPayload {
+  title: string;
+  description?: string;
+  passingScorePercentage?: number;
+  maxAttempts?: number;
+  timeLimitSeconds?: number;
+  questions?: CreateQuizQuestionPayload[];
 }
 
 export const adminApi = {
+  // Course Endpoints
   getCourses: async (): Promise<Course[]> => {
     const res = await apiClient.get<ApiResponse<Course[]>>('/v1/admin/courses');
     return res.data.data;
@@ -51,6 +116,32 @@ export const adminApi = {
     await apiClient.delete<ApiResponse<void>>(`/v1/admin/courses/${courseId}`);
   },
 
+  // Module Endpoints
+  getModules: async (courseId: number): Promise<CourseModule[]> => {
+    const res = await apiClient.get<ApiResponse<CourseModule[]>>(`/v1/admin/courses/${courseId}/modules`);
+    return res.data.data;
+  },
+
+  createModule: async (courseId: number, data: CreateModulePayload): Promise<CourseModule> => {
+    const res = await apiClient.post<ApiResponse<CourseModule>>(`/v1/admin/courses/${courseId}/modules`, data);
+    return res.data.data;
+  },
+
+  updateModule: async (moduleId: number, data: UpdateModulePayload): Promise<CourseModule> => {
+    const res = await apiClient.put<ApiResponse<CourseModule>>(`/v1/admin/modules/${moduleId}`, data);
+    return res.data.data;
+  },
+
+  deleteModule: async (moduleId: number): Promise<void> => {
+    await apiClient.delete<ApiResponse<void>>(`/v1/admin/modules/${moduleId}`);
+  },
+
+  reorderModules: async (courseId: number, items: ReorderItemPayload[]): Promise<CourseModule[]> => {
+    const res = await apiClient.put<ApiResponse<CourseModule[]>>(`/v1/admin/courses/${courseId}/modules/reorder`, items);
+    return res.data.data;
+  },
+
+  // Lesson Endpoints
   getLessons: async (courseId: number): Promise<LessonDetail[]> => {
     const res = await apiClient.get<ApiResponse<LessonDetail[]>>(`/v1/admin/courses/${courseId}/lessons`);
     return res.data.data;
@@ -70,6 +161,41 @@ export const adminApi = {
     await apiClient.delete<ApiResponse<void>>(`/v1/admin/lessons/${lessonId}`);
   },
 
+  reorderLessons: async (courseId: number, items: ReorderItemPayload[]): Promise<LessonDetail[]> => {
+    const res = await apiClient.put<ApiResponse<LessonDetail[]>>(`/v1/admin/courses/${courseId}/lessons/reorder`, items);
+    return res.data.data;
+  },
+
+  // Material Endpoints
+  addMaterial: async (lessonId: number, data: CreateMaterialPayload): Promise<LessonMaterial> => {
+    const res = await apiClient.post<ApiResponse<LessonMaterial>>(`/v1/admin/lessons/${lessonId}/materials`, data);
+    return res.data.data;
+  },
+
+  deleteMaterial: async (materialId: number): Promise<void> => {
+    await apiClient.delete<ApiResponse<void>>(`/v1/admin/materials/${materialId}`);
+  },
+
+  // Quiz Endpoints
+  getQuiz: async (lessonId: number): Promise<Quiz | null> => {
+    try {
+      const res = await apiClient.get<ApiResponse<Quiz>>(`/v1/admin/lessons/${lessonId}/quiz`);
+      return res.data.data;
+    } catch {
+      return null;
+    }
+  },
+
+  saveQuiz: async (lessonId: number, data: CreateQuizPayload): Promise<Quiz> => {
+    const res = await apiClient.post<ApiResponse<Quiz>>(`/v1/admin/lessons/${lessonId}/quiz`, data);
+    return res.data.data;
+  },
+
+  deleteQuiz: async (quizId: number): Promise<void> => {
+    await apiClient.delete<ApiResponse<void>>(`/v1/admin/quizzes/${quizId}`);
+  },
+
+  // Student Endpoints
   getStudents: async (): Promise<Student[]> => {
     const res = await apiClient.get<ApiResponse<Student[]>>('/v1/admin/students');
     return res.data.data;

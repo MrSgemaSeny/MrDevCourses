@@ -34,4 +34,7 @@ public interface LessonProgressRepository extends JpaRepository<LessonProgress, 
 
     @Query("SELECT lp FROM LessonProgress lp JOIN FETCH lp.lesson l JOIN FETCH lp.user u WHERE l.course.id = :courseId")
     List<LessonProgress> findAllByCourseIdWithUserAndLesson(@Param("courseId") Long courseId);
+
+    @Query("SELECT lp FROM LessonProgress lp JOIN FETCH lp.lesson l JOIN FETCH l.course c WHERE lp.user.id = :userId ORDER BY lp.completedAt DESC")
+    List<LessonProgress> findAllByUserIdWithLessonAndCourseOrderByCompletedAtDesc(@Param("userId") Long userId);
 }

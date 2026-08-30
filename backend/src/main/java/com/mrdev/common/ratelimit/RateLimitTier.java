@@ -8,7 +8,7 @@ import java.time.Duration;
 @Getter
 @RequiredArgsConstructor
 public enum RateLimitTier {
-    AUTH(100, 100, Duration.ofMinutes(1)),
+    AUTH(10, 10, Duration.ofMinutes(15)),
     AI(5, 5, Duration.ofMinutes(1)),
     GENERAL(60, 60, Duration.ofMinutes(1));
 

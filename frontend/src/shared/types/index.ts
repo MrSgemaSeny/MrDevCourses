@@ -122,8 +122,105 @@ export interface Student {
   name?: string;
   avatarUrl?: string;
   role: UserRole;
+  currentStreak?: number;
+  longestStreak?: number;
+  lastActiveDate?: string;
   createdAt: string;
   enrollments: Enrollment[];
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}
+
+export interface CompletedLesson {
+  lessonId: number;
+  lessonTitle: string;
+  dayNumber: number;
+  courseId: number;
+  courseTitle: string;
+  completedAt: string;
+}
+
+export interface StudentQuizScore {
+  submissionId: number;
+  quizId?: number;
+  quizTitle?: string;
+  lessonId?: number;
+  lessonTitle?: string;
+  scorePercentage: number;
+  passed: boolean;
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface StudentHomeworkStatus {
+  submissionId: number;
+  lessonId: number;
+  lessonTitle: string;
+  courseId?: number;
+  courseTitle?: string;
+  codeSnippet: string;
+  repositoryUrl?: string;
+  status: SubmissionStatus;
+  score: number;
+  aiFeedback?: string;
+  passedTestsCount: number;
+  totalTestsCount: number;
+  reviewedAt?: string;
+  createdAt: string;
+}
+
+export interface StudentProgressDetail {
+  userId: number;
+  email: string;
+  name?: string;
+  avatarUrl?: string;
+  role: UserRole;
+  currentStreak: number;
+  longestStreak: number;
+  lastActiveDate?: string;
+  createdAt: string;
+  enrolledCourses: CourseProgress[];
+  completedLessons: CompletedLesson[];
+  quizScores: StudentQuizScore[];
+  homeworkSubmissions: StudentHomeworkStatus[];
+}
+
+export interface Cohort {
+  id: number;
+  courseId: number;
+  courseTitle: string;
+  courseSlug?: string;
+  name: string;
+  startDate: string;
+  endDate?: string;
+  maxStudents: number;
+  currentStudentsCount: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface CreateCohortPayload {
+  courseId?: number;
+  name: string;
+  startDate: string;
+  endDate?: string;
+  maxStudents?: number;
+  isActive?: boolean;
+}
+
+export interface UpdateCohortPayload {
+  name: string;
+  startDate: string;
+  endDate?: string;
+  maxStudents?: number;
+  isActive?: boolean;
 }
 
 export interface ApiResponse<T> {

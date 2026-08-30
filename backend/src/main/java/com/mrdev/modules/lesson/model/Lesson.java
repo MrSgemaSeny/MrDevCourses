@@ -49,6 +49,10 @@ public class Lesson {
     @Builder.Default
     private Boolean isFreePreview = false;
 
+    @Column(name = "is_published", nullable = false)
+    @Builder.Default
+    private Boolean isPublished = true;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 

@@ -1,11 +1,10 @@
 package com.mrdev.modules.admin.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrdev.common.exception.ResourceNotFoundException;
-import com.mrdev.modules.admin.dto.AdminOverviewMetricsDto;
-import com.mrdev.modules.admin.dto.CourseFunnelStepDto;
-import com.mrdev.modules.admin.dto.CourseRetentionDto;
-import com.mrdev.modules.admin.dto.LessonRetentionDto;
-import com.mrdev.modules.admin.dto.StreakDistributionDto;
+import com.mrdev.modules.admin.dto.*;
+import com.mrdev.modules.audit.model.AuditLog;
+import com.mrdev.modules.audit.repository.AuditLogRepository;
 import com.mrdev.modules.auth.model.Role;
 import com.mrdev.modules.auth.model.User;
 import com.mrdev.modules.auth.repository.UserRepository;
@@ -17,12 +16,20 @@ import com.mrdev.modules.lesson.model.Lesson;
 import com.mrdev.modules.lesson.model.LessonProgress;
 import com.mrdev.modules.lesson.repository.LessonProgressRepository;
 import com.mrdev.modules.lesson.repository.LessonRepository;
+import com.mrdev.modules.quiz.model.Quiz;
+import com.mrdev.modules.quiz.model.QuizQuestion;
+import com.mrdev.modules.quiz.model.QuizQuestionOption;
+import com.mrdev.modules.quiz.model.QuizSubmission;
+import com.mrdev.modules.quiz.repository.QuizQuestionRepository;
+import com.mrdev.modules.quiz.repository.QuizRepository;
+import com.mrdev.modules.quiz.repository.QuizSubmissionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -31,12 +38,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +63,21 @@ class AdminAnalyticsServiceTest {
 
     @Mock
     private LessonProgressRepository lessonProgressRepository;
+
+    @Mock
+    private AuditLogRepository auditLogRepository;
+
+    @Mock
+    private QuizRepository quizRepository;
+
+    @Mock
+    private QuizSubmissionRepository quizSubmissionRepository;
+
+    @Mock
+    private QuizQuestionRepository quizQuestionRepository;
+
+    @Spy
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private AdminAnalyticsService adminAnalyticsService;
@@ -294,5 +316,154 @@ class AdminAnalyticsServiceTest {
         assertThat(l2.getCompletedCount()).isEqualTo(1);
         assertThat(l2.getCompletionRate()).isEqualTo(50.0);
         assertThat(l2.getAvgDaysToComplete()).isEqualTo(3.0);
+    }
+
+    @Test
+    @DisplayName("getAiTutorSummary should aggregate AI questions, tokens and top lesson topics")
+    void getAiTutorSummary_AggregatesCorrectly() {
+        AuditLog log1 = AuditLog.builder()
+                .id(1L)
+                .user(student1)
+                .action("AI_TUTOR_QUERY")
+                .entityType("Lesson")
+                .entityId(10L)
+                .createdAt(Instant.now())
+                .build();
+
+        AuditLog log2 = AuditLog.builder()
+                .id(2L)
+                .user(student1)
+                .action("AI_TUTOR_QUERY")
+                .entityType("Lesson")
+                .entityId(10L)
+                .createdAt(Instant.now())
+                .build();
+
+        AuditLog log3 = AuditLog.builder()
+                .id(3L)
+                .user(student2)
+                .action("AI_TUTOR_QUERY")
+                .entityType("Lesson")
+                .entityId(11L)
+                .createdAt(Instant.now())
+                .build();
+
+        AuditLog rateLog = AuditLog.builder()
+                .id(4L)
+                .user(student2)
+                .action("RATE_LIMIT_EXCEEDED")
+                .createdAt(Instant.now())
+                .build();
+
+        when(auditLogRepository.findByAction("AI_TUTOR_QUERY")).thenReturn(List.of(log1, log2, log3));
+        when(auditLogRepository.findByActionIn(anyList())).thenReturn(List.of(rateLog));
+        when(lessonRepository.findAllById(any())).thenReturn(List.of(lesson1, lesson2));
+
+        AiTutorTelemetryDto summary = adminAnalyticsService.getAiTutorSummary();
+
+        assertThat(summary).isNotNull();
+        assertThat(summary.getTotalQuestions()).isEqualTo(3);
+        assertThat(summary.getThrottledCount()).isEqualTo(1);
+        assertThat(summary.getActiveUsersCount()).isEqualTo(2);
+        assertThat(summary.getEstimatedTokensUsed()).isEqualTo(3 * 340L);
+        assertThat(summary.getAvgQuestionsPerUser()).isEqualTo(1.5);
+        assertThat(summary.getTopLessonTopics()).hasSize(2);
+
+        AiTutorTopicDto topTopic = summary.getTopLessonTopics().get(0);
+        assertThat(topTopic.getLessonId()).isEqualTo(10L);
+        assertThat(topTopic.getQuestionCount()).isEqualTo(2);
+        assertThat(topTopic.getPercentage()).isEqualTo(66.7);
+    }
+
+    @Test
+    @DisplayName("getQuizHotspots should identify failed questions and most common wrong options")
+    void getQuizHotspots_CalculatesFailuresAndWrongOptions() {
+        QuizQuestionOption opt1 = QuizQuestionOption.builder().id(101L).optionText("Option A (Wrong)").isCorrect(false).build();
+        QuizQuestionOption opt2 = QuizQuestionOption.builder().id(102L).optionText("Option B (Correct)").isCorrect(true).build();
+        QuizQuestionOption opt3 = QuizQuestionOption.builder().id(103L).optionText("Option C (Wrong)").isCorrect(false).build();
+
+        QuizQuestion q1 = QuizQuestion.builder()
+                .id(201L)
+                .questionText("What is Spring Boot?")
+                .options(List.of(opt1, opt2, opt3))
+                .build();
+
+        Quiz quiz = Quiz.builder()
+                .id(301L)
+                .title("Architecture Quiz")
+                .lesson(lesson1)
+                .questions(List.of(q1))
+                .build();
+        q1.setQuiz(quiz);
+
+        // Student 1 selected wrong option 101
+        QuizSubmission sub1 = QuizSubmission.builder()
+                .id(1L)
+                .quiz(quiz)
+                .user(student1)
+                .scorePercentage(0)
+                .passed(false)
+                .answersPayload("{\"201\": [101]}")
+                .build();
+
+        // Student 2 selected wrong option 101
+        QuizSubmission sub2 = QuizSubmission.builder()
+                .id(2L)
+                .quiz(quiz)
+                .user(student2)
+                .scorePercentage(0)
+                .passed(false)
+                .answersPayload("{\"201\": [101]}")
+                .build();
+
+        when(quizRepository.findAll()).thenReturn(List.of(quiz));
+        when(quizSubmissionRepository.findAll()).thenReturn(List.of(sub1, sub2));
+
+        List<QuizHotspotDto> hotspots = adminAnalyticsService.getQuizHotspots();
+
+        assertThat(hotspots).hasSize(1);
+        QuizHotspotDto hotspot = hotspots.get(0);
+        assertThat(hotspot.getQuestionId()).isEqualTo(201L);
+        assertThat(hotspot.getQuestionText()).isEqualTo("What is Spring Boot?");
+        assertThat(hotspot.getTotalAttempts()).isEqualTo(2);
+        assertThat(hotspot.getFailureCount()).isEqualTo(2);
+        assertThat(hotspot.getFailureRate()).isEqualTo(100.0);
+        assertThat(hotspot.getPassRate()).isEqualTo(0.0);
+        assertThat(hotspot.getMostCommonWrongOption()).isEqualTo("Option A (Wrong)");
+    }
+
+    @Test
+    @DisplayName("exportAnalyticsJson and exportAnalyticsCsv should generate valid exportable structures")
+    void exportAnalytics_ReturnsValidExportData() {
+        when(userRepository.findAll()).thenReturn(List.of(student1, student2));
+        when(enrollmentRepository.count()).thenReturn(2L);
+        when(lessonProgressRepository.count()).thenReturn(2L);
+        when(courseRepository.findAll()).thenReturn(List.of(course));
+        when(courseRepository.findById(100L)).thenReturn(Optional.of(course));
+        when(enrollmentRepository.countByCourseId(100L)).thenReturn(2L);
+        when(lessonRepository.findByCourseIdOrderBySortOrderAscDayNumberAsc(100L)).thenReturn(List.of(lesson1));
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of());
+        when(enrollmentRepository.findAllByCourseIdWithUser(100L)).thenReturn(List.of());
+        when(lessonProgressRepository.findAllByCourseIdWithUserAndLesson(100L)).thenReturn(List.of());
+        when(lessonRepository.countLessonsByCourseIds(any())).thenReturn(List.of());
+        when(lessonProgressRepository.countCompletedUsersByLessonIds(any())).thenReturn(List.of());
+        when(auditLogRepository.findByAction("AI_TUTOR_QUERY")).thenReturn(List.of());
+        when(auditLogRepository.findByActionIn(anyList())).thenReturn(List.of());
+        when(quizRepository.findAll()).thenReturn(List.of());
+        when(quizSubmissionRepository.findAll()).thenReturn(List.of());
+
+        AdminAnalyticsExportDto exportJson = adminAnalyticsService.exportAnalyticsJson(100L);
+        assertThat(exportJson).isNotNull();
+        assertThat(exportJson.getCourseTitle()).isEqualTo("Full-Stack Course");
+        assertThat(exportJson.getOverview()).isNotNull();
+
+        String exportCsv = adminAnalyticsService.exportAnalyticsCsv(100L);
+        assertThat(exportCsv).isNotNull();
+        assertThat(exportCsv).contains("=== 1. PLATFORM OVERVIEW KPIS ===");
+        assertThat(exportCsv).contains("=== 2. COURSE FUNNEL DROP-OFF ===");
+        assertThat(exportCsv).contains("=== 3. LESSON RETENTION MATRIX ===");
+        assertThat(exportCsv).contains("=== 4. STREAK DISTRIBUTION ===");
+        assertThat(exportCsv).contains("=== 5. AI TUTOR TELEMETRY ===");
+        assertThat(exportCsv).contains("=== 6. QUIZ FAILURE HOTSPOTS ===");
     }
 }

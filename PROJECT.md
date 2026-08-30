@@ -1,82 +1,102 @@
-# Project: MrDevCourses (Educational LMS Platform MVP)
+# Project: MrDevCourses Admin Suite & Management Console
 
 ## Architecture
-- **Backend Architecture**: Spring Boot 3.3.0, Java 17, PostgreSQL 16, Spring Security 6 (Stateless JWT in httpOnly cookie + Google OAuth2), Flyway (V1..V12), Bucket4j (Rate Limiting), OpenHTMLtoPDF + Thymeleaf (PDF Certificates), Groq API / Llama 3.3 70B (AI Tutor).
-- **Frontend Architecture**: React 19, TypeScript, Vite, FSD (Feature-Sliced Design), Tailwind CSS v4, TanStack React Query v5, Lucide Icons.
-- **Design System**: Strict dark aesthetic (`#0a0a0c` base, `#18181b` cards, `rgba(255,255,255,0.08)` borders, 4-level typography). No emojis.
+- **Backend Architecture**: Spring Boot 3.3.0, Java 17, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V15), Spring Security 6 (stateless JWT in httpOnly cookie `MrDev_token` / `mrdevcourses_token`, RBAC with STUDENT and ADMIN roles).
+- **Frontend Architecture**: React 19, TypeScript, Vite, Feature-Sliced Design (FSD: `app`, `pages`, `widgets`, `features`, `entities`, `shared`), Tailwind CSS v4, TanStack React Query v5.
+- **Design System**: Strict modern dark monochrome aesthetic (`#0a0a0c` base background, `#18181b` cards/surfaces, `rgba(255, 255, 255, 0.08)` / `border-white/5` borders, 4 font sizes: `text-2xl`, `text-sm`, `text-xs`, `text-[10px]`, zero blue noise, zero emojis).
+- **Scope Limit**: Level 3 — Educational MVP (учебная LMS-платформа; локальный запуск, чистая архитектура без избыточного оверинжиниринга).
 
 ## Feature Inventory
 | # | Feature | Description | Milestone | Source |
 |---|---------|-------------|-----------|--------|
-| 1 | Bucket4j Rate Limiting | Tiered Token Bucket policies (Auth: 10/15m per IP, AI: 5/1m per User, General: 60/1m per IP/User) | M1 | ORIGINAL_REQUEST §R1 |
-| 2 | RLS & IDOR Defense | Strict Row-Level Security & IDOR checks via SecurityUtils.getCurrentUserId() | M1 | ORIGINAL_REQUEST §R1 |
-| 3 | Quick-Nav Slide-over Drawer | 3-tab drawer (GlossaryView, ProgressView, RoadmapView) without resetting video | M2 | ORIGINAL_REQUEST §R2 |
-| 4 | In-Lesson Contextual Term Cards | Clickable term chips with 1-click focus into Quick-Nav Drawer | M2 | ORIGINAL_REQUEST §R2 |
-| 5 | AI Lesson Tutor Backend Module | Groq API (Llama 3.3 70B), prompt grounding in lesson markdown, XML prompt injection defense | M3 | ORIGINAL_REQUEST §R3 |
-| 6 | AI Lesson Tutor Frontend Chat | Slide-in chat widget with streaming/markdown rendering, quick prompts, 429 cooldown | M3 | ORIGINAL_REQUEST §R3 |
-| 7 | Automated PDF Certificate Generator | OpenHTMLtoPDF + Thymeleaf vector PDF certificate upon 100% course completion | M4 | ORIGINAL_REQUEST §R4 |
-| 8 | Certificate Verification Endpoint & UI | Public verify endpoint GET /api/v1/certificates/verify/{uuid} & /certificates/verify/:uuid page | M4 | ORIGINAL_REQUEST §R4 |
-| 9 | Admin Analytics Backend Engine | Day completion funnel, drop-off rates, average time per lesson, streak distributions | M5 | ORIGINAL_REQUEST §R5 |
-| 10 | Admin Analytics Dashboard UI | KPI cards, pure SVG Funnel Chart, Streak Distribution bars, Lesson Retention table | M5 | ORIGINAL_REQUEST §R5 |
-| 11 | Full Verification & Second Brain | 100% green tests, production build, Flyway validation, Second Brain journal & status update | M6 | ORIGINAL_REQUEST §AC |
+| 1 | Course Management CRUD | Create, read, update, delete courses; instant draft/publish toggling | M1 | ORIGINAL_REQUEST §R1 |
+| 2 | CourseModule Management & Reorder | Create, edit, delete modules, sort order, free preview flag, batch reorder | M1 | ORIGINAL_REQUEST §R1 |
+| 3 | Lesson Authoring Suite | Create, edit, delete lessons with module binding, type, duration, content | M1 | ORIGINAL_REQUEST §R1 |
+| 4 | Batch Drag-and-Drop Reordering | Visual DnD reordering of modules and lessons with atomic two-phase update and drip recalculation | M1 | ORIGINAL_REQUEST §R1 |
+| 5 | Live Markdown Preview & Video Embed | Split-screen Markdown editing with live preview and YouTube video URL validation/embed | M1 | ORIGINAL_REQUEST §R1 |
+| 6 | Lesson Materials Attachment | Attach, edit, remove cheat sheets, source code links, PDFs, and repository URLs | M1 | ORIGINAL_REQUEST §R1 |
+| 7 | Quiz Builder & Question Editor | Bind quizzes to lessons, configure passing score (80%), attempts, questions, and options | M1 | ORIGINAL_REQUEST §R1 |
+| 8 | Student Search & Filter | Server-side and client-side real-time student search by name/email, filter by role/course | M2 | ORIGINAL_REQUEST §R2 |
+| 9 | Instant RBAC Role Switch | Toggle user role between STUDENT and ADMIN with Self-Demotion and Last-Admin protection | M2 | ORIGINAL_REQUEST §R2 |
+| 10 | Manual Enrollment & Unenrollment | Enroll/unenroll students with audit logging and immediate UI state synchronization | M2 | ORIGINAL_REQUEST §R2 |
+| 11 | Student Progress & Streak Inspector | Slide-over drawer with detailed lesson completion history, streak metrics, quiz scores | M2 | ORIGINAL_REQUEST §R2 |
+| 12 | Cohort Management & Unlock Schedules | Create and manage cohorts with start/end dates, max capacity, and student assignments | M2 | ORIGINAL_REQUEST §R2 |
+| 13 | Overview KPI Dashboard | Real-time platform KPI metrics (total students, enrollments, completions, average streak) | M3 | ORIGINAL_REQUEST §R3 |
+| 14 | Course Step-by-Step Funnel | Interactive course funnel chart with conversion rates and drop-off percentages per lesson | M3 | ORIGINAL_REQUEST §R3 |
+| 15 | Streak Distribution Histogram | Student activity distribution across streak buckets (0, 1-3, 4-7, 8-14, 15+ days) | M3 | ORIGINAL_REQUEST §R3 |
+| 16 | Granular Lesson Retention Matrix | Lesson retention table showing drop-offs, completion rates, and average time to complete | M3 | ORIGINAL_REQUEST §R3 |
+| 17 | AI Tutor Telemetry Summary | Query volume, token usage, rate-limit throttling counts, and top question topics | M3 | ORIGINAL_REQUEST §R3 |
+| 18 | Quiz Failure Hotspots | Top problematic quiz questions with highest failure rates and common wrong options | M3 | ORIGINAL_REQUEST §R3 |
+| 19 | CSV/JSON Analytics Export | Export aggregated course, funnel, and student analytics to CSV or JSON format | M3 | ORIGINAL_REQUEST §R3 |
+| 20 | Immutable Audit Log Viewer | Paginated audit log table with filter by actor, action, entity, dates, and diff modal | M4 | ORIGINAL_REQUEST §R4 |
+| 21 | Rate Limit Real-time Telemetry | Live monitor for Bucket4j token bucket cache tiers (AUTH, AI, GENERAL) and throttled events | M4 | ORIGINAL_REQUEST §R4 |
+| 22 | System & DB Health Telemetry | Telemetry for HikariCP connection pool, PostgreSQL uptime, Flyway version, Outbox queue | M4 | ORIGINAL_REQUEST §R4 |
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Security & Rate Limiting | Bucket4j service & filter (Auth, AI, General tiers), RLS/IDOR verification, unit/integration tests | none | COMPLETED |
-
-| M2 | Quick-Nav Drawer & Navigation Engine | QuickNavDrawer (GlossaryView, ProgressView, RoadmapView), LessonContextPanel, video preservation | none | IN_PROGRESS |
-| M3 | AI Lesson Tutor Engine & Chat | Groq client, prompt grounding, XML sanitizer, V10 Flyway migration, frontend AI Chat widget | M1 | PLANNED |
-| M4 | Automated PDF Certificate & Verification | Certificate entity, OpenHTMLtoPDF+Thymeleaf template, verify endpoint & page, PDF download | none | PLANNED |
-| M5 | Admin Analytics & Retention Dashboard | AdminAnalyticsService, repository aggregations, SVG Funnel, Streak & Retention table | none | PLANNED |
-| M6 | Full E2E Verification & Second Brain Sync | ./gradlew test jacocoTestReport, npm test, npm run build, Second Brain journal & projects update | M1, M2, M3, M4, M5 | PLANNED |
-
-## Interface Contracts
-
-### M1: Rate Limiting & RLS
-- **Service**: `RateLimiterService.resolveBucket(String key, RateLimitTier tier) -> Bucket`
-- **Filter**: `RateLimitingFilter extends OncePerRequestFilter` returning HTTP 429 Too Many Requests with JSON `ErrorResponse` and `Retry-After` header.
-- **Tiers**: `AUTH` (10 req/15 min/IP), `AI` (5 req/1 min/User), `GENERAL` (60 req/1 min/IP/User).
-
-### M2: Quick-Nav Drawer
-- **Context**: `QuickNavContext` (`isOpen`, `activeTab: 'glossary'|'progress'|'roadmap'`, `selectedTerm?: string`, `openQuickNav(tab, term)`, `closeQuickNav()`).
-- **DOM**: Overlay fixed slide-over without unmounting parent components or resetting video playback.
-
-### M3: AI Lesson Tutor
-- **API**: `POST /api/v1/ai/tutor/chat` (Payload: `{ courseId, lessonId, prompt, history }` -> Response: `{ message, groundedLessonId, tokensUsed }` or SSE stream).
-- **Security**: System prompt XML-isolation `<lesson_content>`, `<student_question>`, PII masking.
-- **Flyway**: `V10__create_ai_usage.sql` table `ai_usage`.
-
-### M4: Certificate Generation & Verification
-- **API**:
-  - `GET /api/v1/certificates/courses/{courseId}/download` (returns `application/pdf`).
-  - `GET /api/v1/certificates/verify/{certificateCode}` (Public permitAll -> returns `{ uuid, studentName, courseTitle, issuedAt, valid: true }`).
-- **Engine**: OpenHTMLtoPDF `PdfRendererBuilder` with Thymeleaf template `templates/certificate.html`.
-
-### M5: Admin Analytics
-- **API**:
-  - `GET /api/v1/admin/analytics/overview` -> `AdminOverviewMetricsDto`
-  - `GET /api/v1/admin/analytics/courses/{courseId}/funnel` -> `List<FunnelStageDto>`
-  - `GET /api/v1/admin/analytics/streaks` -> `List<StreakDistributionDto>`
-- **Security**: `@PreAuthorize("hasRole('ADMIN')")`.
+| E2E | E2E Testing Suite Track | Requirement-driven opaque-box test suite across Tiers 1-4 | none | IN_PROGRESS (2346a98e) |
+| M1 | Course & Curriculum Authoring (R1) | Backend Module/Lesson/Material/Quiz APIs + Frontend Visual DnD Curriculum Editor & Markdown Preview | none | IN_PROGRESS (d5c630c5) |
+| M2 | Student & Cohort Management (R2) | Backend Student search, RBAC toggle, Cohorts APIs + Frontend Student Console & Progress Drawer | M1 | IN_PROGRESS (cddef211) |
+| M3 | Platform Analytics & Telemetry (R3) | Backend Analytics, AI Telemetry, Quiz Hotspots, Export + Frontend Charts & Dashboard | M1 | IN_PROGRESS (ee6161a4) |
+| M4 | Security, Audit Logs & Health (R4) | Backend Audit Log REST API, Rate Limit & DB Health + Frontend Audit Viewer & Health Monitor | M2 | IN_PROGRESS (ca53c59b) |
+| M5 | Final E2E Pass & Hardening | 100% E2E test pass (Tiers 1-4), Tier 5 Adversarial hardening, Forensic Integrity Audit | E2E, M1-M4 | PLANNED |
 
 ## Code Layout
-### Backend (`backend/src/main/java/com/mrdevcourses/`)
-- `common/ratelimit/`: `RateLimiterService`, `RateLimitingFilter`, `RateLimitTier`, `IpResolver`
-- `modules/ai/`: `controller/AiTutorController`, `service/AiTutorService`, `service/GroqClient`, `service/ContextSanitizer`, `service/TokenAccountingService`, `entity/AiUsage`, `repository/AiUsageRepository`
-- `modules/certificate/`: `controller/CertificateController`, `service/CertificateService`, `service/PdfCertificateGenerator`, `entity/Certificate`, `repository/CertificateRepository`
-- `modules/admin/`: `controller/AdminAnalyticsController`, `service/AdminAnalyticsService`
-- `resources/db/migration/`: `V10__create_ai_usage.sql`
-- `resources/templates/`: `certificate.html`
-- `resources/fonts/`: embedded font files for PDF rendering
+### Backend (`backend/src/main/java/com/mrdev/`)
+- `modules/admin/controller/`: `AdminController.java`, `AdminModuleController.java`, `AdminCurriculumController.java`, `AdminMaterialController.java`, `AdminQuizController.java`, `AdminStudentController.java`, `AdminCohortController.java`, `AdminAnalyticsController.java`, `AdminAuditController.java`, `AdminSystemController.java`.
+- `modules/admin/service/`: `AdminService.java`, `AdminCurriculumService.java`, `AdminStudentService.java`, `AdminAnalyticsService.java`, `AdminAuditQueryService.java`, `AdminSystemService.java`.
+- `modules/admin/dto/`: DTO classes for requests and responses across R1-R4.
+- `modules/audit/service/`: `AuditService.java`.
+- `db/migration/`: `V15__admin_suite_schema_extensions.sql`.
 
 ### Frontend (`frontend/src/`)
-- `entities/ai/api/aiTutorApi.ts`
-- `entities/certificate/api/certificateApi.ts`
-- `entities/admin/api/adminAnalyticsApi.ts`
-- `entities/glossary/`: `model/types.ts`, `data/glossaryData.ts`
-- `features/ai-tutor/`: `ui/AiLessonTutor.tsx`, `model/useAiTutor.ts`
-- `features/admin-analytics/`: `ui/AdminAnalyticsDashboard.tsx`, `ui/CourseFunnelChart.tsx`, `ui/StreakDistributionChart.tsx`, `ui/LessonRetentionTable.tsx`
-- `widgets/quick-nav/`: `ui/QuickNavDrawer.tsx`, `ui/GlossaryView.tsx`, `ui/ProgressView.tsx`, `ui/RoadmapView.tsx`, `model/QuickNavContext.tsx`
-- `widgets/lesson/ui/LessonContextPanel.tsx`
-- `pages/certificate/CertificateVerifyPage.tsx`
+- `app/layout/`: `AdminLayout.tsx` (Admin Shell with sidebar navigation).
+- `app/router/`: `index.tsx`, `ProtectedRoute.tsx`.
+- `pages/admin/`: `AdminPage.tsx`, `AdminCurriculumPage.tsx`, `AdminStudentsPage.tsx`, `AdminAnalyticsPage.tsx`, `AdminAuditPage.tsx`, `AdminSystemPage.tsx`.
+- `widgets/admin-curriculum/`: Visual curriculum tree, module block, lesson item, drag-and-drop reorder, Live Markdown preview modal, YouTube validator, quiz editor.
+- `widgets/admin-students/`: Student search/filter table, RBAC role toggle, student progress drawer, cohort management modal.
+- `widgets/admin-telemetry/`: Overview KPI cards, Funnel chart, Streak distribution, AI tutor telemetry, Quiz hotspots, CSV/JSON export.
+- `widgets/admin-audit/`: Audit log table, filter toolbar, JSON change diff modal, Rate limit monitor, DB health status card.
+- `entities/`: `adminApi.ts`, `adminAnalyticsApi.ts`, `adminAuditApi.ts`, `adminSystemApi.ts`.
+
+## Interface Contracts
+### Admin Curriculum API ↔ Frontend Curriculum Editor
+- `GET /api/v1/admin/courses` -> `ApiResponse<List<CourseDto>>`
+- `POST /api/v1/admin/courses` -> `ApiResponse<CourseDto>`
+- `PUT /api/v1/admin/courses/{id}` -> `ApiResponse<CourseDto>`
+- `DELETE /api/v1/admin/courses/{id}` -> `ApiResponse<Void>`
+- `GET /api/v1/admin/courses/{courseId}/modules` -> `ApiResponse<List<CourseModuleDto>>`
+- `POST /api/v1/admin/courses/{courseId}/modules` -> `ApiResponse<CourseModuleDto>`
+- `PUT /api/v1/admin/modules/{moduleId}` -> `ApiResponse<CourseModuleDto>`
+- `DELETE /api/v1/admin/modules/{moduleId}` -> `ApiResponse<Void>`
+- `PUT /api/v1/admin/courses/{courseId}/modules/reorder` -> `ApiResponse<List<CourseModuleDto>>`
+- `POST /api/v1/admin/courses/{courseId}/lessons` -> `ApiResponse<LessonDetailDto>`
+- `PUT /api/v1/admin/lessons/{lessonId}` -> `ApiResponse<LessonDetailDto>`
+- `DELETE /api/v1/admin/lessons/{lessonId}` -> `ApiResponse<Void>`
+- `PUT /api/v1/admin/courses/{courseId}/lessons/reorder` -> `ApiResponse<List<LessonDetailDto>>`
+- `POST /api/v1/admin/lessons/{lessonId}/materials` -> `ApiResponse<LessonMaterialDto>`
+- `DELETE /api/v1/admin/materials/{materialId}` -> `ApiResponse<Void>`
+- `POST /api/v1/admin/lessons/{lessonId}/quiz` -> `ApiResponse<QuizDto>`
+- `DELETE /api/v1/admin/quizzes/{quizId}` -> `ApiResponse<Void>`
+
+### Admin Student & Cohort API ↔ Frontend Student Console
+- `GET /api/v1/admin/students?q={}&role={}&courseId={}&page={}&size={}` -> `ApiResponse<PageResponse<StudentDto>>`
+- `PATCH /api/v1/admin/students/{userId}/role` (body: `{"role": "ADMIN"|"STUDENT"}`) -> `ApiResponse<StudentDto>`
+- `POST /api/v1/admin/students/{userId}/enroll/{courseId}` -> `ApiResponse<EnrollmentDto>`
+- `DELETE /api/v1/admin/students/{userId}/enroll/{courseId}` -> `ApiResponse<Void>`
+- `GET /api/v1/admin/students/{userId}/progress` -> `ApiResponse<StudentProgressDetailDto>`
+- `GET /api/v1/admin/courses/{courseId}/cohorts` -> `ApiResponse<List<CohortDto>>`
+- `POST /api/v1/admin/courses/{courseId}/cohorts` -> `ApiResponse<CohortDto>`
+
+### Admin Analytics & Audit API ↔ Frontend Telemetry & Security
+- `GET /api/v1/admin/analytics/overview` -> `ApiResponse<AdminOverviewMetricsDto>`
+- `GET /api/v1/admin/analytics/courses/{courseId}/funnel` -> `ApiResponse<List<CourseFunnelStepDto>>`
+- `GET /api/v1/admin/analytics/streaks` -> `ApiResponse<List<StreakDistributionDto>>`
+- `GET /api/v1/admin/analytics/courses/{courseId}/retention` -> `ApiResponse<CourseRetentionDto>`
+- `GET /api/v1/admin/analytics/ai-tutor/summary` -> `ApiResponse<AiTutorTelemetryDto>`
+- `GET /api/v1/admin/analytics/quizzes/hotspots` -> `ApiResponse<List<QuizHotspotDto>>`
+- `GET /api/v1/admin/analytics/export?courseId={}&format={csv|json}` -> File stream / JSON
+- `GET /api/v1/admin/audit-logs?userId={}&action={}&entityType={}&from={}&to={}&page={}&size={}` -> `ApiResponse<PageResponse<AuditLogDto>>`
+- `GET /api/v1/admin/system/rate-limits` -> `ApiResponse<RateLimitTelemetryDto>`
+- `GET /api/v1/admin/system/health` -> `ApiResponse<SystemHealthDto>`

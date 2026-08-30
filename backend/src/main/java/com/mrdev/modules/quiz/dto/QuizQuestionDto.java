@@ -16,6 +16,7 @@ public class QuizQuestionDto {
     private Long id;
     private String questionText;
     private QuestionType questionType;
+    private String explanation;
     private Integer points;
     private Integer sortOrder;
     private List<QuizOptionDto> options;

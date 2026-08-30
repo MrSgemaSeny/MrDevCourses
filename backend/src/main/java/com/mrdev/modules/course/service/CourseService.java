@@ -94,7 +94,6 @@ public class CourseService {
     @Transactional(readOnly = true)
     public CourseDetailDto getCourseBySlug(String slug, Optional<Long> currentUserId) {
         Course course = courseRepository.findBySlugAndActiveTrue(slug)
-                .or(() -> courseRepository.findByActiveTrueOrderByCreatedAtDesc().stream().findFirst())
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "slug", slug));
         return toDetailDto(course, currentUserId);
     }

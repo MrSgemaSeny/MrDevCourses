@@ -1,5 +1,6 @@
 package com.mrdev.modules.lesson.dto;
 
+import com.mrdev.modules.lesson.model.LessonType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,4 +29,14 @@ public class CreateLessonRequest {
 
     @Builder.Default
     private int sortOrder = 0;
+
+    private Long moduleId;
+
+    private LessonType lessonType;
+
+    private Integer durationMinutes;
+
+    private Boolean isFreePreview;
+
+    private Boolean isPublished;
 }

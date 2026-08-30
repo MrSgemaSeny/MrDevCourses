@@ -24,6 +24,8 @@ public class LessonDetailDto {
     private LessonType lessonType;
     private Integer durationMinutes;
     private boolean isFreePreview;
+    @Builder.Default
+    private boolean isPublished = true;
     private String content;
     private String youtubeUrl;
     private int dayNumber;

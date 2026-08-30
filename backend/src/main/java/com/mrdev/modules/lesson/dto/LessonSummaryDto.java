@@ -20,6 +20,8 @@ public class LessonSummaryDto {
     private LessonType lessonType;
     private Integer durationMinutes;
     private boolean isFreePreview;
+    @Builder.Default
+    private boolean isPublished = true;
     private int dayNumber;
     private int sortOrder;
     private boolean accessible;

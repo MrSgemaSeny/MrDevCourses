@@ -1,5 +1,6 @@
 package com.mrdev.modules.lesson.dto;
 
+import com.mrdev.modules.lesson.model.LessonType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,4 +28,14 @@ public class UpdateLessonRequest {
     private int dayNumber;
 
     private int sortOrder;
+
+    private Long moduleId;
+
+    private LessonType lessonType;
+
+    private Integer durationMinutes;
+
+    private Boolean isFreePreview;
+
+    private Boolean isPublished;
 }

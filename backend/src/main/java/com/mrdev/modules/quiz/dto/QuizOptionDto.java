@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class QuizOptionDto {
     private Long id;
     private String optionText;
+    private Boolean isCorrect;
     private Integer sortOrder;
 }

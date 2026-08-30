@@ -2,6 +2,7 @@ package com.mrdev.modules.admin.controller;
 
 import com.mrdev.modules.ai.rag.repository.GlossaryEmbeddingRepository;
 import com.mrdev.modules.ai.rag.repository.LessonChunkRepository;
+import com.mrdev.modules.audit.model.AuditLog;
 import com.mrdev.modules.audit.repository.AuditLogRepository;
 import com.mrdev.modules.auth.model.Role;
 import com.mrdev.modules.auth.model.User;
@@ -19,6 +20,10 @@ import com.mrdev.modules.lesson.model.LessonProgress;
 import com.mrdev.modules.lesson.repository.LessonMaterialRepository;
 import com.mrdev.modules.lesson.repository.LessonProgressRepository;
 import com.mrdev.modules.lesson.repository.LessonRepository;
+import com.mrdev.modules.quiz.model.Quiz;
+import com.mrdev.modules.quiz.model.QuizQuestion;
+import com.mrdev.modules.quiz.model.QuizQuestionOption;
+import com.mrdev.modules.quiz.model.QuizSubmission;
 import com.mrdev.modules.quiz.repository.QuizQuestionOptionRepository;
 import com.mrdev.modules.quiz.repository.QuizQuestionRepository;
 import com.mrdev.modules.quiz.repository.QuizRepository;
@@ -30,15 +35,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,6 +117,10 @@ class AdminAnalyticsControllerTest {
     private String adminToken;
     private Course testCourse;
     private Lesson testLesson;
+    private Quiz testQuiz;
+    private QuizQuestion testQuestion;
+    private QuizQuestionOption opt1;
+    private QuizQuestionOption opt2;
 
     @BeforeEach
     void setUp() {
@@ -178,6 +192,63 @@ class AdminAnalyticsControllerTest {
                 .completedAt(Instant.now())
                 .build();
         lessonProgressRepository.save(progress);
+
+        // Seed Quiz with questions & options
+        testQuiz = Quiz.builder()
+                .lesson(testLesson)
+                .title("Intro Assessment")
+                .passingScorePercentage(80)
+                .maxAttempts(3)
+                .timeLimitSeconds(300)
+                .build();
+        testQuiz = quizRepository.save(testQuiz);
+
+        testQuestion = QuizQuestion.builder()
+                .quiz(testQuiz)
+                .questionText("What is Spring Boot?")
+                .sortOrder(1)
+                .points(1)
+                .build();
+        testQuestion = quizQuestionRepository.save(testQuestion);
+
+        opt1 = QuizQuestionOption.builder()
+                .question(testQuestion)
+                .optionText("Framework (Correct)")
+                .isCorrect(true)
+                .sortOrder(1)
+                .build();
+        opt1 = quizQuestionOptionRepository.save(opt1);
+
+        opt2 = QuizQuestionOption.builder()
+                .question(testQuestion)
+                .optionText("Database (Wrong)")
+                .isCorrect(false)
+                .sortOrder(2)
+                .build();
+        opt2 = quizQuestionOptionRepository.save(opt2);
+
+        // Seed Quiz Submission (failed)
+        QuizSubmission submission = QuizSubmission.builder()
+                .quiz(testQuiz)
+                .user(studentUser)
+                .scorePercentage(0)
+                .passed(false)
+                .answersPayload("{\"" + testQuestion.getId() + "\": [" + opt2.getId() + "]}")
+                .startedAt(Instant.now())
+                .completedAt(Instant.now())
+                .build();
+        quizSubmissionRepository.save(submission);
+
+        // Seed AI Tutor query in Audit Logs
+        AuditLog aiLog = AuditLog.builder()
+                .user(studentUser)
+                .action("AI_TUTOR_QUERY")
+                .entityType("Lesson")
+                .entityId(testLesson.getId())
+                .details("Asked AI tutor on lesson: " + testLesson.getTitle())
+                .createdAt(Instant.now())
+                .build();
+        auditLogRepository.save(aiLog);
     }
 
     @Test
@@ -254,5 +325,66 @@ class AdminAnalyticsControllerTest {
                 .andExpect(jsonPath("$.data.lessonRetention", hasSize(1)))
                 .andExpect(jsonPath("$.data.lessonRetention[0].lessonTitle", is("Day 1: Intro")))
                 .andExpect(jsonPath("$.data.lessonRetention[0].completedCount", is(1)));
+    }
+
+    @Test
+    @DisplayName("GET /v1/admin/analytics/ai-tutor/summary as ADMIN returns AI telemetry metrics")
+    void getAiTutorSummary_AsAdmin_ReturnsSummary() throws Exception {
+        mockMvc.perform(get("/v1/admin/analytics/ai-tutor/summary")
+                        .cookie(new Cookie("MrDev_token", adminToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data.totalQuestions", is(1)))
+                .andExpect(jsonPath("$.data.activeUsersCount", is(1)))
+                .andExpect(jsonPath("$.data.estimatedTokensUsed", is(340)))
+                .andExpect(jsonPath("$.data.topLessonTopics", hasSize(1)))
+                .andExpect(jsonPath("$.data.topLessonTopics[0].lessonTitle", is("Day 1: Intro")));
+    }
+
+    @Test
+    @DisplayName("GET /v1/admin/analytics/quizzes/hotspots as ADMIN returns hotspots with failure rates")
+    void getQuizHotspots_AsAdmin_ReturnsHotspots() throws Exception {
+        mockMvc.perform(get("/v1/admin/analytics/quizzes/hotspots")
+                        .cookie(new Cookie("MrDev_token", adminToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].questionText", is("What is Spring Boot?")))
+                .andExpect(jsonPath("$.data[0].totalAttempts", is(1)))
+                .andExpect(jsonPath("$.data[0].failureCount", is(1)))
+                .andExpect(jsonPath("$.data[0].failureRate", is(100.0)))
+                .andExpect(jsonPath("$.data[0].mostCommonWrongOption", is("Database (Wrong)")));
+    }
+
+    @Test
+    @DisplayName("GET /v1/admin/analytics/export as ADMIN with format=json returns aggregated payload")
+    void exportAnalytics_Json_ReturnsExportPayload() throws Exception {
+        mockMvc.perform(get("/v1/admin/analytics/export")
+                        .param("courseId", testCourse.getId().toString())
+                        .param("format", "json")
+                        .cookie(new Cookie("MrDev_token", adminToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data.courseTitle", is("Analytics Test Course")))
+                .andExpect(jsonPath("$.data.overview.totalStudents", is(1)))
+                .andExpect(jsonPath("$.data.funnel", hasSize(3)))
+                .andExpect(jsonPath("$.data.aiTutorSummary.totalQuestions", is(1)))
+                .andExpect(jsonPath("$.data.quizHotspots", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("GET /v1/admin/analytics/export as ADMIN with format=csv returns CSV file attachment")
+    void exportAnalytics_Csv_ReturnsCsvFile() throws Exception {
+        mockMvc.perform(get("/v1/admin/analytics/export")
+                        .param("courseId", testCourse.getId().toString())
+                        .param("format", "csv")
+                        .cookie(new Cookie("MrDev_token", adminToken)))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", containsString("text/csv")))
+                .andExpect(header().string("Content-Disposition", containsString("analytics-report-")))
+                .andExpect(content().string(containsString("=== 1. PLATFORM OVERVIEW KPIS ===")))
+                .andExpect(content().string(containsString("=== 2. COURSE FUNNEL DROP-OFF ===")))
+                .andExpect(content().string(containsString("=== 3. LESSON RETENTION MATRIX ===")))
+                .andExpect(content().string(containsString("=== 6. QUIZ FAILURE HOTSPOTS ===")));
     }
 }
