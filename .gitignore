@@ -46,17 +46,17 @@ scratch/
 ORIGINAL_REQUEST.md
 .agents/ORIGINAL_REQUEST.md
 .agents/BRIEFING.md
-.agents/sentinel/
-.agents/orchestrator*
-.agents/worker*
-.agents/reviewer*
-.agents/challenger*
-.agents/synthesizer*
-.agents/auditor*
-.agents/sub_orch*
-.agents/explorer*
-.agents/implementer*
-.agents/teamwork*
+.agents/*/
+!.agents/scripts/
+!.agents/cc-skills/
+!.agents/deslop-agent-sh/
+!.agents/deslop-ai-that-works/
+!.agents/deslop-dabit3/
+!.agents/deslop-fayerman/
+!.agents/avoid-ai-design/
+!.agents/interface-design/
+!.agents/tastecheck/
+
 
 
 # Frontend / Vite / Vitest
