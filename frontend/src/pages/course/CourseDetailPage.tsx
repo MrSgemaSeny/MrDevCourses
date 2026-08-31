@@ -124,7 +124,13 @@ export const CourseDetailPage: React.FC = () => {
               </span>
               <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-[#141418] text-zinc-300 border border-white/5 font-mono flex items-center gap-1.5">
                 <Star className="w-3 h-3 text-zinc-400" />
-                <span>Уровень 2 (Middle)</span>
+                <span>
+                  {course.level === '1' || course.level?.toString().includes('1') || course.level?.toLowerCase().includes('junior')
+                    ? 'Уровень 1'
+                    : course.level === '3' || course.level?.toString().includes('3') || course.level?.toLowerCase().includes('senior')
+                    ? 'Уровень 3'
+                    : 'Уровень 2'}
+                </span>
               </span>
             </div>
 

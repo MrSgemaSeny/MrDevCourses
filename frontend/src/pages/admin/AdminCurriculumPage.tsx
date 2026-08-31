@@ -285,7 +285,7 @@ export const AdminCurriculumPage: React.FC = () => {
                 <textarea
                   value={courseDescription}
                   onChange={(e) => setCourseDescription(e.target.value)}
-                  placeholder="Полная программа подготовки от middle до lead..."
+                  placeholder="Полная программа практической разработки веб-сервисов..."
                   rows={3}
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-white/20"
                 />
