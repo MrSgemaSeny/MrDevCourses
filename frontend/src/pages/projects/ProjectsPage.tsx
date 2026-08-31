@@ -44,8 +44,8 @@ export const ProjectsPage: React.FC = () => {
       <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs text-emerald-400 font-mono uppercase tracking-wider font-bold">
-              <Rocket className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-2 text-xs text-zinc-400 font-mono uppercase tracking-wider font-bold">
+              <Rocket className="w-3.5 h-3.5 text-zinc-400" />
               <span>Стена проектов выпускников</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -59,9 +59,9 @@ export const ProjectsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="px-5 py-2.5 rounded-sm bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer self-start md:self-auto shrink-0 shadow-lg shadow-emerald-950/40"
+            className="px-5 py-2.5 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer self-start md:self-auto shrink-0 shadow-lg shadow-black/40"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-black" />
             <span>Добавить свой проект</span>
           </button>
         </div>
@@ -104,7 +104,7 @@ export const ProjectsPage: React.FC = () => {
                 : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <Sparkles className="w-3.5 h-3.5 text-zinc-300" />
             <span>Популярные</span>
           </button>
         </div>
@@ -156,7 +156,7 @@ export const ProjectsPage: React.FC = () => {
 
                 {/* Title & Description */}
                 <div>
-                  <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-base font-bold text-white group-hover:text-zinc-200 transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-xs text-zinc-400 line-clamp-2 mt-1 leading-relaxed">

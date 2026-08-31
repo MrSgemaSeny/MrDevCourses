@@ -55,15 +55,15 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Global Search in Header */}
-        <div className="flex-1 max-w-md relative hidden sm:block">
-          <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="relative hidden md:block w-52 lg:w-64">
+          <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Поиск по курсам..."
             value={searchTerm}
             onChange={handleSearchChange}
             onKeyDown={handleSearchKeyDown}
-            className="w-full bg-[#121214] border border-white/10 rounded-sm pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
+            className="w-full bg-[#121214] border border-white/10 rounded-sm pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors font-mono"
           />
         </div>
 
@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
             to={ROUTES.PROJECTS}
             className="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
           >
-            <Rocket className="w-4 h-4 text-emerald-400" />
+            <Rocket className="w-4 h-4 text-zinc-400" />
             <span>Проекты</span>
           </Link>
 

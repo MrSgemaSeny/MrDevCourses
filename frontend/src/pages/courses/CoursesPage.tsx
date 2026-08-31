@@ -11,7 +11,7 @@ import {
   Search,
   Play,
   Clock,
-  Sparkles,
+  Star,
 } from 'lucide-react';
 
 export const CoursesPage: React.FC = () => {
@@ -33,8 +33,9 @@ export const CoursesPage: React.FC = () => {
 
       const matchesLevel =
         selectedLevel === 'ALL' ||
-        (selectedLevel === 'JUNIOR' && (course.level?.toLowerCase().includes('junior') || !course.level)) ||
-        (selectedLevel === 'MIDDLE' && course.level?.toLowerCase().includes('middle'));
+        (selectedLevel === '1' && (course.level?.toLowerCase().includes('junior') || course.level === '1' || !course.level)) ||
+        (selectedLevel === '2' && (course.level?.toLowerCase().includes('middle') || course.level === '2')) ||
+        (selectedLevel === '3' && (course.level?.toLowerCase().includes('senior') || course.level === '3'));
 
       const matchesFormat =
         selectedFormat === 'ALL' ||
@@ -49,13 +50,8 @@ export const CoursesPage: React.FC = () => {
     <div className="min-h-screen bg-[#0a0a0c] text-white">
       {/* Header Banner */}
       <div className="border-b border-white/5 bg-[#0a0a0c]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
-          <div className="max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#141418] border border-white/10 text-[10px] font-mono text-zinc-300">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Практическая платформа обучения Mr Developer</span>
-            </div>
-
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
+          <div className="max-w-3xl space-y-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
               Каталог курсов и программ
             </h1>
@@ -70,16 +66,16 @@ export const CoursesPage: React.FC = () => {
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Minimalist Filter Bar: [Поиск] [Уровень] [Формат] */}
-        <div className="p-3 bg-[#0e0e11] border border-white/5 rounded-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="p-3 bg-[#0e0e11] border border-white/5 rounded-sm flex flex-wrap items-center justify-between gap-3">
           {/* Search Input */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-80">
+            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Поиск по названию курса..."
-              className="w-full pl-9 pr-4 py-2 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded text-xs text-white placeholder-zinc-500 outline-none transition-colors"
+              placeholder="Поиск по курсам..."
+              className="w-full pl-8 pr-3 py-1.5 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded-sm text-xs text-white placeholder-zinc-500 outline-none transition-colors font-mono"
             />
           </div>
 
@@ -90,13 +86,14 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={selectedLevel}
                 onChange={(e) => setSelectedLevel(e.target.value)}
-                className="px-3 py-2 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded text-xs text-zinc-300 outline-none transition-colors cursor-pointer appearance-none pr-8 font-mono"
+                className="px-3 py-1.5 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded-sm text-xs text-zinc-300 outline-none transition-colors cursor-pointer appearance-none pr-7 font-mono"
               >
                 <option value="ALL">Уровень: Все</option>
-                <option value="JUNIOR">Junior / Базовый</option>
-                <option value="MIDDLE">Middle / Продвинутый</option>
+                <option value="1">★ Уровень 1</option>
+                <option value="2">★★ Уровень 2</option>
+                <option value="3">★★★ Уровень 3</option>
               </select>
-              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 text-[10px]">
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 text-[10px]">
                 ▼
               </div>
             </div>
@@ -106,13 +103,13 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={selectedFormat}
                 onChange={(e) => setSelectedFormat(e.target.value)}
-                className="px-3 py-2 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded text-xs text-zinc-300 outline-none transition-colors cursor-pointer appearance-none pr-8 font-mono"
+                className="px-3 py-1.5 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded-sm text-xs text-zinc-300 outline-none transition-colors cursor-pointer appearance-none pr-7 font-mono"
               >
                 <option value="ALL">Формат: Все</option>
                 <option value="VIDEO">Видео + Практика</option>
                 <option value="PRACTICE">Интенсив с ДЗ</option>
               </select>
-              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 text-[10px]">
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 text-[10px]">
                 ▼
               </div>
             </div>
@@ -148,6 +145,14 @@ export const CoursesPage: React.FC = () => {
                     {/* Card Top Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                       <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1">
+                          <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                          {course.level === '2' || course.level?.toLowerCase().includes('middle')
+                            ? '★★ Уровень 2'
+                            : course.level === '3' || course.level?.toLowerCase().includes('senior')
+                            ? '★★★ Уровень 3'
+                            : '★ Уровень 1'}
+                        </span>
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
                           <Layers className="w-3 h-3 text-zinc-400" />
                           5 модулей

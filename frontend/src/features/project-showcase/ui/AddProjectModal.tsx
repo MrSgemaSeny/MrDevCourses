@@ -62,8 +62,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
         </button>
 
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-emerald-400 font-mono text-[10px] uppercase tracking-wider font-bold">
-            <Rocket className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-2 text-zinc-400 font-mono text-[10px] uppercase tracking-wider font-bold">
+            <Rocket className="w-3.5 h-3.5 text-zinc-400" />
             <span>Стена выпускников</span>
           </div>
           <h2 className="text-xl font-bold tracking-tight text-white">Опубликовать свой проект</h2>
@@ -90,7 +90,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Например: SaaS Dashboard или Трекер Привычек"
-              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
             />
           </div>
 
@@ -104,7 +104,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Кратко расскажите какую проблему решает ваш проект..."
-              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none"
             />
           </div>
 
@@ -120,7 +120,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 value={liveDemoUrl}
                 onChange={(e) => setLiveDemoUrl(e.target.value)}
                 placeholder="https://my-app.vercel.app"
-                className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
               />
             </div>
 
@@ -135,7 +135,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 value={githubRepoUrl}
                 onChange={(e) => setGithubRepoUrl(e.target.value)}
                 placeholder="https://github.com/user/repo"
-                className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
               />
             </div>
           </div>
@@ -149,7 +149,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               value={techStack}
               onChange={(e) => setTechStack(e.target.value)}
               placeholder="React 19, TypeScript, Tailwind CSS"
-              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full px-3 py-2 text-xs bg-[#0a0a0c] border border-white/10 rounded-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors"
             />
           </div>
 
@@ -164,7 +164,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="px-4 py-2 text-xs font-semibold rounded-sm bg-emerald-600 hover:bg-emerald-500 text-white transition-colors cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 text-xs font-semibold rounded-sm bg-white hover:bg-zinc-200 text-black transition-colors cursor-pointer disabled:opacity-50"
             >
               {mutation.isPending ? 'Публикация...' : 'Опубликовать'}
             </button>
