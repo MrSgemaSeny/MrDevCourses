@@ -93,6 +93,30 @@ public class TelegramNotificationService {
         }
     }
 
+    public void sendDirectMessage(String targetChatId, String text) {
+        if (!enabled || targetChatId == null || targetChatId.isBlank()) {
+            log.info("[Telegram Disabled] Direct message to {}: {}", targetChatId, text);
+            return;
+        }
+
+        try {
+            String url = "https://api.telegram.org/bot" + botToken + "/sendMessage";
+
+            Map<String, Object> body = new HashMap<>();
+            body.put("chat_id", targetChatId);
+            body.put("text", text);
+            body.put("parse_mode", "Markdown");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForEntity(url, request, String.class);
+        } catch (Exception e) {
+            log.error("Failed to send direct Telegram message: {}", e.getMessage());
+        }
+    }
+
     private String escapeMarkdown(String text) {
         if (text == null) return "";
         return text.replace("_", "\\_")

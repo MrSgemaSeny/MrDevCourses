@@ -9,6 +9,7 @@ import { HomeworkSubmissionWidget } from '@/widgets/homework/HomeworkSubmissionW
 import { LessonQuizWidget } from '@/widgets/quiz/LessonQuizWidget';
 import { LessonMaterialsList } from '@/widgets/materials/LessonMaterialsList';
 import { StudentHelpModal } from '@/widgets/help/StudentHelpModal';
+import { LessonActionCard } from '@/widgets/lesson-action-card/LessonActionCard';
 import {
   Play,
   CheckCircle2,
@@ -228,6 +229,13 @@ const LessonPageContent: React.FC = () => {
 
               {activeTab === 'content' ? (
                 <div className="space-y-6">
+                  <LessonActionCard
+                    lessonId={lId}
+                    courseTitle={lesson.courseTitle}
+                    lessonTitle={lesson.title}
+                    dayNumber={lesson.dayNumber}
+                    onOpenHelp={() => setIsHelpModalOpen(true)}
+                  />
                   <MarkdownViewer content={lesson.content} />
                   <LessonMaterialsList materials={lesson.materials} />
                   <div className="pt-6 border-t border-white/5">

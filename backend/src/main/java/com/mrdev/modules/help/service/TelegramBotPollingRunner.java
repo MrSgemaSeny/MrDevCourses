@@ -1,0 +1,87 @@
+package com.mrdev.modules.help.service;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.Duration;
+
+@Slf4j
+@Component
+@ConditionalOnProperty(name = "app.telegram.polling-enabled", havingValue = "true", matchIfMissing = false)
+public class TelegramBotPollingRunner {
+
+    private final TelegramBotCommandService commandService;
+    private final TelegramNotificationService notificationService;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+    private final String botToken;
+    private final String authorizedChatId;
+    private long lastUpdateId = 0;
+
+    public TelegramBotPollingRunner(
+            TelegramBotCommandService commandService,
+            TelegramNotificationService notificationService,
+            RestTemplateBuilder restTemplateBuilder,
+            ObjectMapper objectMapper,
+            @Value("${app.telegram.bot-token:}") String botToken,
+            @Value("${app.telegram.chat-id:}") String authorizedChatId) {
+        this.commandService = commandService;
+        this.notificationService = notificationService;
+        this.objectMapper = objectMapper;
+        this.botToken = botToken != null ? botToken.trim() : "";
+        this.authorizedChatId = authorizedChatId != null ? authorizedChatId.trim() : "";
+        this.restTemplate = restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(3))
+                .setReadTimeout(Duration.ofSeconds(10))
+                .build();
+    }
+
+    @Scheduled(fixedDelay = 3000, initialDelay = 5000)
+    public void pollTelegramUpdates() {
+        if (botToken.isBlank() || authorizedChatId.isBlank()) {
+            return;
+        }
+
+        try {
+            String url = "https://api.telegram.org/bot" + botToken + "/getUpdates?offset=" + (lastUpdateId + 1) + "&timeout=2";
+            String rawResponse = restTemplate.getForObject(url, String.class);
+            if (rawResponse == null) return;
+
+            JsonNode root = objectMapper.readTree(rawResponse);
+            if (!root.path("ok").asBoolean(false)) return;
+
+            JsonNode results = root.path("result");
+            if (!results.isArray()) return;
+
+            for (JsonNode update : results) {
+                long updateId = update.path("update_id").asLong();
+                if (updateId > lastUpdateId) {
+                    lastUpdateId = updateId;
+                }
+
+                JsonNode message = update.path("message");
+                if (message.isMissingNode() || message.isNull()) continue;
+
+                String chatId = String.valueOf(message.path("chat").path("id").asLong());
+                String text = message.path("text").asText("");
+
+                if (!text.isBlank() && text.startsWith("/")) {
+                    log.info("Received Telegram bot command from chatId={}: {}", chatId, text);
+                    String reply = commandService.processCommand(chatId, text);
+                    if (reply != null) {
+                        notificationService.sendDirectMessage(chatId, reply);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Telegram polling error: {}", e.getMessage());
+        }
+    }
+}
