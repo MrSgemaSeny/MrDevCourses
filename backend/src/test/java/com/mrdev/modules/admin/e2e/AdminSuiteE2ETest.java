@@ -432,8 +432,8 @@ class AdminSuiteE2ETest {
             mockMvc.perform(get("/v1/admin/students/" + studentUser.getId() + "/progress")
                             .cookie(adminCookie()))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.data.studentEmail", is("alex.student@gmail.com")))
-                    .andExpect(jsonPath("$.data.courses", hasSize(1)));
+                    .andExpect(jsonPath("$.data.email", is("alex.student@gmail.com")))
+                    .andExpect(jsonPath("$.data.enrolledCourses", hasSize(1)));
 
             // Role Switch (Demote/Promote)
             StudentRoleUpdateRequest roleReq = StudentRoleUpdateRequest.builder().role(Role.ADMIN).build();
@@ -878,7 +878,7 @@ class AdminSuiteE2ETest {
                     .andExpect(jsonPath("$.data.active", is(true)));
 
             // Step 7: Public API verification - Students can now view the published course
-            mockMvc.perform(get("/v1/courses/" + courseId))
+            mockMvc.perform(get("/v1/courses/cloud-arch-masterclass"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.title", is("Cloud Architecture Masterclass")))
                     .andExpect(jsonPath("$.data.modules", hasSize(2)))

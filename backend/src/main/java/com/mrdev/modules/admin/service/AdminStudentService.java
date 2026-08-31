@@ -126,7 +126,7 @@ public class AdminStudentService {
         // Self-demotion guard
         if (currentAdminId != null && currentAdminId.equals(targetUserId)
                 && user.getRole() == Role.ADMIN && newRole == Role.STUDENT) {
-            throw new ApiException("Cannot demote yourself from admin role", HttpStatus.FORBIDDEN);
+            throw new ApiException("Cannot demote yourself from admin role", HttpStatus.BAD_REQUEST);
         }
 
         // Last admin protection

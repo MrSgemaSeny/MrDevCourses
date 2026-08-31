@@ -23,6 +23,7 @@ import com.mrdev.modules.lesson.repository.LessonRepository;
 import com.mrdev.modules.quiz.dto.QuizDto;
 import com.mrdev.modules.quiz.dto.QuizOptionDto;
 import com.mrdev.modules.quiz.dto.QuizQuestionDto;
+import com.mrdev.modules.quiz.model.QuestionType;
 import com.mrdev.modules.quiz.model.Quiz;
 import com.mrdev.modules.quiz.model.QuizQuestion;
 import com.mrdev.modules.quiz.model.QuizQuestionOption;
@@ -192,7 +193,10 @@ public class AdminCurriculumService {
         }
 
         int dayNumber = request.getDayNumber();
-        if (dayNumber <= 0 || lessonRepository.existsByCourseIdAndDayNumber(courseId, dayNumber)) {
+        if (dayNumber > 0 && lessonRepository.existsByCourseIdAndDayNumber(courseId, dayNumber)) {
+            throw new ApiException("Lesson with day number " + dayNumber + " already exists in this course", HttpStatus.CONFLICT);
+        }
+        if (dayNumber <= 0) {
             // Pick next available dayNumber
             List<Lesson> allLessons = lessonRepository.findByCourseIdOrderBySortOrderAscDayNumberAsc(courseId);
             dayNumber = allLessons.stream().mapToInt(Lesson::getDayNumber).max().orElse(0) + 1;
@@ -399,48 +403,42 @@ public class AdminCurriculumService {
         quiz.setMaxAttempts(request.getMaxAttempts() != null ? request.getMaxAttempts() : 3);
         quiz.setTimeLimitSeconds(request.getTimeLimitSeconds() != null ? request.getTimeLimitSeconds() : 600);
 
-        Quiz savedQuiz = quizRepository.save(quiz);
-
-        // Update questions if provided
         if (request.getQuestions() != null) {
-            // Clear existing questions if replacing
-            savedQuiz.getQuestions().clear();
-            quizRepository.flush();
+            if (quiz.getQuestions() == null) {
+                quiz.setQuestions(new ArrayList<>());
+            } else {
+                quiz.getQuestions().clear();
+            }
 
-            List<QuizQuestion> questions = new ArrayList<>();
             for (int qIdx = 0; qIdx < request.getQuestions().size(); qIdx++) {
                 CreateQuizQuestionRequest qReq = request.getQuestions().get(qIdx);
                 QuizQuestion question = QuizQuestion.builder()
-                        .quiz(savedQuiz)
+                        .quiz(quiz)
                         .questionText(qReq.getQuestionText())
-                        .questionType(qReq.getQuestionType())
+                        .questionType(qReq.getQuestionType() != null ? qReq.getQuestionType() : QuestionType.SINGLE_CHOICE)
                         .explanation(qReq.getExplanation())
                         .points(qReq.getPoints() != null ? qReq.getPoints() : 1)
                         .sortOrder(qReq.getSortOrder() != null ? qReq.getSortOrder() : (qIdx + 1))
+                        .options(new ArrayList<>())
                         .build();
 
-                QuizQuestion savedQ = quizQuestionRepository.save(question);
-
                 if (qReq.getOptions() != null) {
-                    List<QuizQuestionOption> options = new ArrayList<>();
                     for (int oIdx = 0; oIdx < qReq.getOptions().size(); oIdx++) {
                         CreateQuizOptionRequest oReq = qReq.getOptions().get(oIdx);
                         QuizQuestionOption option = QuizQuestionOption.builder()
-                                .question(savedQ)
+                                .question(question)
                                 .optionText(oReq.getOptionText())
                                 .isCorrect(Boolean.TRUE.equals(oReq.getIsCorrect()))
                                 .sortOrder(oReq.getSortOrder() != null ? oReq.getSortOrder() : (oIdx + 1))
                                 .build();
-                        options.add(quizQuestionOptionRepository.save(option));
+                        question.getOptions().add(option);
                     }
-                    savedQ.setOptions(options);
                 }
-                questions.add(savedQ);
+                quiz.getQuestions().add(question);
             }
-            savedQuiz.setQuestions(questions);
         }
 
-        Quiz finalSaved = quizRepository.save(savedQuiz);
+        Quiz finalSaved = quizRepository.saveAndFlush(quiz);
         log.info("Admin created/updated quiz ID: {} for lesson ID: {}", finalSaved.getId(), lessonId);
 
         Long adminId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
