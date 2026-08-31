@@ -12,6 +12,7 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long>, JpaSp
     List<AuditLog> findByUserIdOrderByCreatedAtDesc(Long userId);
     List<AuditLog> findTop50ByOrderByCreatedAtDesc();
     List<AuditLog> findByAction(String action);
+    List<AuditLog> findByActionOrderByCreatedAtDesc(String action);
     List<AuditLog> findByActionIn(List<String> actions);
     long countByAction(String action);
 }
