@@ -41,11 +41,18 @@ public class HomeworkService {
     private final CourseRepository courseRepository;
     private final LessonService lessonService;
     private final AuditService auditService;
+    private final com.mrdev.modules.help.service.TelegramNotificationService telegramNotificationService;
 
     @Transactional
     public HomeworkSubmissionDto submitHomework(Long courseId, Long lessonId, Long userId, Role role, HomeworkSubmitRequest request) {
         Lesson lesson = lessonRepository.findByIdAndCourseId(lessonId, courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", lessonId));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         if (role != Role.ADMIN) {
             if (!enrollmentRepository.existsByUserIdAndCourseId(userId, courseId)) {
@@ -67,6 +74,17 @@ public class HomeworkService {
                 .build();
 
         submission = submissionRepository.save(submission);
+
+        // Telegram alert to mentor
+        telegramNotificationService.sendHomeworkAlert(
+                user.getName(),
+                user.getEmail(),
+                course.getTitle(),
+                lesson.getTitle(),
+                request.getRepositoryUrl(),
+                request.getLiveDemoUrl(),
+                request.getCodeSnippet()
+        );
 
         auditService.logAction(userId, "HOMEWORK_SUBMITTED", "Lesson", lessonId,
                 "Submitted homework for review: repo=" + request.getRepositoryUrl() + ", liveDemo=" + request.getLiveDemoUrl(), null);

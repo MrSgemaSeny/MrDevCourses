@@ -53,16 +53,30 @@ class HomeworkServiceTest {
     @Mock
     private AuditService auditService;
 
+    @Mock
+    private com.mrdev.modules.help.service.TelegramNotificationService telegramNotificationService;
+
     @InjectMocks
     private HomeworkService homeworkService;
 
     private Lesson lesson;
+    private com.mrdev.modules.course.model.Course course;
+    private com.mrdev.modules.auth.model.User user;
 
     @BeforeEach
     void setUp() {
         lesson = Lesson.builder()
                 .id(5L)
                 .title("Day 5: React Architecture")
+                .build();
+        course = com.mrdev.modules.course.model.Course.builder()
+                .id(1L)
+                .title("Fullstack Vibe Course")
+                .build();
+        user = com.mrdev.modules.auth.model.User.builder()
+                .id(10L)
+                .name("Alex Student")
+                .email("alex@test.com")
                 .build();
     }
 
@@ -76,6 +90,8 @@ class HomeworkServiceTest {
                 .build();
 
         when(lessonRepository.findByIdAndCourseId(5L, 1L)).thenReturn(Optional.of(lesson));
+        when(courseRepository.findById(1L)).thenReturn(Optional.of(course));
+        when(userRepository.findById(10L)).thenReturn(Optional.of(user));
         when(enrollmentRepository.existsByUserIdAndCourseId(10L, 1L)).thenReturn(true);
         when(submissionRepository.save(any(HomeworkSubmission.class))).thenAnswer(invocation -> {
             HomeworkSubmission sub = invocation.getArgument(0);
@@ -91,6 +107,7 @@ class HomeworkServiceTest {
         assertThat(result.getLiveDemoUrl()).isEqualTo("https://student.github.io/hw5");
 
         verify(submissionRepository).save(any(HomeworkSubmission.class));
+        verify(telegramNotificationService).sendHomeworkAlert(eq("Alex Student"), eq("alex@test.com"), eq("Fullstack Vibe Course"), eq("Day 5: React Architecture"), eq("https://github.com/student/hw5"), eq("https://student.github.io/hw5"), any());
         verify(auditService).logAction(eq(10L), eq("HOMEWORK_SUBMITTED"), eq("Lesson"), eq(5L), any(), any());
     }
 
