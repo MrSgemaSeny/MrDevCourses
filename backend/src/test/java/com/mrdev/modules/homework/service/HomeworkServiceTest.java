@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AiCodeGraderServiceTest {
+class HomeworkServiceTest {
 
     @Mock
     private HomeworkSubmissionRepository submissionRepository;
@@ -54,7 +54,7 @@ class AiCodeGraderServiceTest {
     private AuditService auditService;
 
     @InjectMocks
-    private AiCodeGraderService aiCodeGraderService;
+    private HomeworkService homeworkService;
 
     private Lesson lesson;
 
@@ -67,8 +67,8 @@ class AiCodeGraderServiceTest {
     }
 
     @Test
-    @DisplayName("submitAndEvaluate should save submission with PENDING status for mentor review")
-    void submitAndEvaluate_ShouldSavePendingSubmission() {
+    @DisplayName("submitHomework should save submission with PENDING status for mentor review")
+    void submitHomework_ShouldSavePendingSubmission() {
         HomeworkSubmitRequest request = HomeworkSubmitRequest.builder()
                 .codeSnippet("export const useUser = () => useQuery({ queryKey: ['user'] });")
                 .repositoryUrl("https://github.com/student/hw5")
@@ -83,7 +83,7 @@ class AiCodeGraderServiceTest {
             return sub;
         });
 
-        HomeworkSubmissionDto result = aiCodeGraderService.submitAndEvaluate(1L, 5L, 10L, Role.STUDENT, request);
+        HomeworkSubmissionDto result = homeworkService.submitHomework(1L, 5L, 10L, Role.STUDENT, request);
 
         assertThat(result).isNotNull();
         assertThat(result.getStatus()).isEqualTo(SubmissionStatus.PENDING);
@@ -113,7 +113,7 @@ class AiCodeGraderServiceTest {
                 .mentorFeedback("Отличный чистый код и живой сайт!")
                 .build();
 
-        HomeworkSubmissionDto result = aiCodeGraderService.reviewSubmission(100L, 1L, reviewRequest);
+        HomeworkSubmissionDto result = homeworkService.reviewSubmission(100L, 1L, reviewRequest);
 
         assertThat(result).isNotNull();
         assertThat(result.getStatus()).isEqualTo(SubmissionStatus.PASSED);

@@ -5,7 +5,7 @@ import com.mrdev.common.util.SecurityUtils;
 import com.mrdev.modules.auth.model.Role;
 import com.mrdev.modules.homework.dto.HomeworkSubmissionDto;
 import com.mrdev.modules.homework.dto.HomeworkSubmitRequest;
-import com.mrdev.modules.homework.service.AiCodeGraderService;
+import com.mrdev.modules.homework.service.HomeworkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeworkController {
 
-    private final AiCodeGraderService aiCodeGraderService;
+    private final HomeworkService homeworkService;
 
     @PostMapping("/courses/{courseId}/lessons/{lessonId}/homework/submit")
     public ResponseEntity<ApiResponse<HomeworkSubmissionDto>> submitHomework(
@@ -29,7 +29,7 @@ public class HomeworkController {
         Role userRole = SecurityUtils.getCurrentUserRole();
         Long userId = SecurityUtils.getCurrentUserId();
 
-        HomeworkSubmissionDto result = aiCodeGraderService.submitAndEvaluate(courseId, lessonId, userId, userRole, request);
+        HomeworkSubmissionDto result = homeworkService.submitHomework(courseId, lessonId, userId, userRole, request);
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
@@ -39,7 +39,7 @@ public class HomeworkController {
             @PathVariable Long lessonId) {
 
         Long userId = SecurityUtils.getCurrentUserId();
-        List<HomeworkSubmissionDto> list = aiCodeGraderService.getUserSubmissions(userId, lessonId);
+        List<HomeworkSubmissionDto> list = homeworkService.getUserSubmissions(userId, lessonId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
@@ -50,7 +50,7 @@ public class HomeworkController {
         Role userRole = SecurityUtils.getCurrentUserRole();
         Long userId = SecurityUtils.getCurrentUserId();
 
-        HomeworkSubmissionDto dto = aiCodeGraderService.getSubmissionById(submissionId, userId, userRole);
+        HomeworkSubmissionDto dto = homeworkService.getSubmissionById(submissionId, userId, userRole);
         return ResponseEntity.ok(ApiResponse.success(dto));
     }
 }

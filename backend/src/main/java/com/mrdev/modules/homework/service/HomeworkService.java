@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AiCodeGraderService {
+public class HomeworkService {
 
     private final HomeworkSubmissionRepository submissionRepository;
     private final LessonRepository lessonRepository;
@@ -43,7 +43,7 @@ public class AiCodeGraderService {
     private final AuditService auditService;
 
     @Transactional
-    public HomeworkSubmissionDto submitAndEvaluate(Long courseId, Long lessonId, Long userId, Role role, HomeworkSubmitRequest request) {
+    public HomeworkSubmissionDto submitHomework(Long courseId, Long lessonId, Long userId, Role role, HomeworkSubmitRequest request) {
         Lesson lesson = lessonRepository.findByIdAndCourseId(lessonId, courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", lessonId));
 
@@ -55,7 +55,6 @@ public class AiCodeGraderService {
 
         log.info("Student submission for userId={}, lessonId={}", userId, lessonId);
 
-        // 1. Save submission with status PENDING for mentor review
         HomeworkSubmission submission = HomeworkSubmission.builder()
                 .lessonId(lessonId)
                 .userId(userId)
@@ -190,4 +189,3 @@ public class AiCodeGraderService {
                 .build();
     }
 }
-

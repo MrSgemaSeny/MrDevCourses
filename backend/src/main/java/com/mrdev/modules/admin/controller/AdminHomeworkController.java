@@ -5,7 +5,7 @@ import com.mrdev.common.util.SecurityUtils;
 import com.mrdev.modules.homework.dto.AdminReviewHomeworkRequest;
 import com.mrdev.modules.homework.dto.HomeworkSubmissionDto;
 import com.mrdev.modules.homework.model.SubmissionStatus;
-import com.mrdev.modules.homework.service.AiCodeGraderService;
+import com.mrdev.modules.homework.service.HomeworkService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminHomeworkController {
 
-    private final AiCodeGraderService homeworkService;
+    private final HomeworkService homeworkService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<HomeworkSubmissionDto>>> getHomeworks(
