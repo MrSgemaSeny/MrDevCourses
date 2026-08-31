@@ -201,6 +201,9 @@ class HomeworkControllerTest {
                 .courseId(testCourse.getId())
                 .userId(studentUser.getId())
                 .codeSnippet("const x = 1;")
+                .repositoryUrl("https://github.com/student/hw")
+                .liveDemoUrl("https://student-hw.vercel.app")
+                .mentorFeedback("Отличная работа!")
                 .status(SubmissionStatus.PASSED)
                 .score(90)
                 .build();
@@ -210,6 +213,72 @@ class HomeworkControllerTest {
                         .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
-                .andExpect(jsonPath("$.data[0].score", is(90)));
+                .andExpect(jsonPath("$.data[0].score", is(90)))
+                .andExpect(jsonPath("$.data[0].liveDemoUrl", is("https://student-hw.vercel.app")))
+                .andExpect(jsonPath("$.data[0].mentorFeedback", is("Отличная работа!")));
+    }
+
+    @Test
+    @DisplayName("IDOR Guard: Student 2 cannot see Student 1's homework submissions")
+    void getSubmissions_IdorProtection_ReturnsOnlyOwnSubmissions() throws Exception {
+        // Save submission for Student 1
+        submissionRepository.save(HomeworkSubmission.builder()
+                .lessonId(testLesson.getId())
+                .courseId(testCourse.getId())
+                .userId(studentUser.getId())
+                .codeSnippet("student1 code")
+                .repositoryUrl("https://github.com/student1/secret")
+                .status(SubmissionStatus.PASSED)
+                .build());
+
+        // Create Student 2
+        User student2 = userRepository.save(User.builder()
+                .email("student2@test.com")
+                .name("Student Two")
+                .role(Role.STUDENT)
+                .build());
+        String student2Token = jwtTokenProvider.generateToken(student2);
+
+        enrollmentRepository.save(Enrollment.builder()
+                .user(student2)
+                .course(testCourse)
+                .enrolledAt(Instant.now())
+                .build());
+
+        // Student 2 queries submissions for the lesson
+        mockMvc.perform(get("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/homework/submissions")
+                        .cookie(new Cookie("MrDev_token", student2Token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", org.hamcrest.Matchers.hasSize(0)));
+    }
+
+    @Test
+    @DisplayName("Unenrolled student cannot submit homework -> 403 Forbidden")
+    void submitHomework_Unenrolled_Returns403() throws Exception {
+        User unenrolledUser = userRepository.save(User.builder()
+                .email("unenrolled@test.com")
+                .name("Unenrolled User")
+                .role(Role.STUDENT)
+                .build());
+        String unenrolledToken = jwtTokenProvider.generateToken(unenrolledUser);
+
+        HomeworkSubmitRequest req = HomeworkSubmitRequest.builder()
+                .codeSnippet("const code = 'unauthorized';")
+                .repositoryUrl("https://github.com/user/repo")
+                .build();
+
+        mockMvc.perform(post("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/homework/submit")
+                        .cookie(new Cookie("MrDev_token", unenrolledToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Unauthenticated request to homework endpoint -> 401 Unauthorized")
+    void homework_Unauthenticated_Returns401() throws Exception {
+        mockMvc.perform(get("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/homework/submissions"))
+                .andExpect(status().isUnauthorized());
     }
 }

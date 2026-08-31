@@ -149,4 +149,66 @@ class StudentHelpControllerTest {
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].problemText", is("Ошибка запуска")));
     }
+
+    @Test
+    @DisplayName("IDOR Guard: Student 2 cannot see Student 1's help requests")
+    void getHelpRequests_IdorProtection() throws Exception {
+        helpRequestRepository.save(StudentHelpRequest.builder()
+                .userId(studentUser.getId())
+                .courseId(testCourse.getId())
+                .lessonId(testLesson.getId())
+                .stepIdentifier("STEP_1")
+                .stepTitle("Шаг 1")
+                .problemText("Секретный вопрос Студента 1")
+                .status(HelpRequestStatus.OPEN)
+                .build());
+
+        User student2 = userRepository.save(User.builder()
+                .name("Student Two")
+                .email("student2@test.com")
+                .role(Role.STUDENT)
+                .build());
+        String student2Token = jwtTokenProvider.generateToken(student2);
+
+        enrollmentRepository.save(Enrollment.builder()
+                .user(student2)
+                .course(testCourse)
+                .enrolledAt(Instant.now())
+                .build());
+
+        mockMvc.perform(get("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/help-requests")
+                        .cookie(new Cookie("MrDev_token", student2Token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", hasSize(0)));
+    }
+
+    @Test
+    @DisplayName("Unenrolled student cannot create help request -> 403 Forbidden")
+    void createHelpRequest_Unenrolled_Returns403() throws Exception {
+        User unenrolled = userRepository.save(User.builder()
+                .name("Unenrolled")
+                .email("unenrolled_help@test.com")
+                .role(Role.STUDENT)
+                .build());
+        String unenrolledToken = jwtTokenProvider.generateToken(unenrolled);
+
+        CreateHelpRequest request = CreateHelpRequest.builder()
+                .stepIdentifier("STEP_1")
+                .problemText("Помогите")
+                .build();
+
+        mockMvc.perform(post("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/help-requests")
+                        .cookie(new Cookie("MrDev_token", unenrolledToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("Unauthenticated request to help endpoint -> 401 Unauthorized")
+    void helpRequests_Unauthenticated_Returns401() throws Exception {
+        mockMvc.perform(get("/v1/courses/" + testCourse.getId() + "/lessons/" + testLesson.getId() + "/help-requests"))
+                .andExpect(status().isUnauthorized());
+    }
 }

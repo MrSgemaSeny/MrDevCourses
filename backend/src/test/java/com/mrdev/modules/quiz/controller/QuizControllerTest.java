@@ -215,18 +215,20 @@ class QuizControllerTest {
     }
 
     @Test
-    @DisplayName("GET /v1/lessons/{lessonId}/quiz returns quiz questions")
-    void getQuiz_ReturnsQuizDetails() throws Exception {
+    @DisplayName("GET /v1/lessons/{lessonId}/quiz returns quiz questions with option masking (anti-cheat)")
+    void getQuiz_ReturnsQuizDetailsWithOptionMasking() throws Exception {
         mockMvc.perform(get("/v1/lessons/" + testLesson.getId() + "/quiz")
                         .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.title", is("Intro Quiz Title")))
-                .andExpect(jsonPath("$.data.questionsCount", is(1)));
+                .andExpect(jsonPath("$.data.questionsCount", is(1)))
+                // Anti-Cheat: isCorrect must be completely masked/null in student DTO
+                .andExpect(jsonPath("$.data.questions[0].options[0].isCorrect").doesNotExist());
     }
 
     @Test
-    @DisplayName("POST /v1/lessons/{lessonId}/quiz/submit calculates score and completes lesson")
+    @DisplayName("POST /v1/lessons/{lessonId}/quiz/submit calculates score and completes lesson on pass")
     void submitQuiz_ReturnsResultAndAutoCompletes() throws Exception {
         QuizSubmitRequest req = QuizSubmitRequest.builder()
                 .quizId(testQuiz.getId())
@@ -241,5 +243,33 @@ class QuizControllerTest {
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.scorePercentage", is(100)))
                 .andExpect(jsonPath("$.data.passed", is(true)));
+    }
+
+    @Test
+    @DisplayName("POST /v1/lessons/{lessonId}/quiz/submit with wrong answers returns passed=false")
+    void submitQuiz_WrongAnswers_ReturnsFailed() throws Exception {
+        // Find wrong option
+        Long wrongOptId = optCorrect.getId() + 1; // second option created in setUp
+
+        QuizSubmitRequest req = QuizSubmitRequest.builder()
+                .quizId(testQuiz.getId())
+                .selectedOptionIds(Map.of(question.getId(), List.of(wrongOptId)))
+                .build();
+
+        mockMvc.perform(post("/v1/lessons/" + testLesson.getId() + "/quiz/submit")
+                        .cookie(new Cookie("MrDev_token", studentToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data.scorePercentage", is(0)))
+                .andExpect(jsonPath("$.data.passed", is(false)));
+    }
+
+    @Test
+    @DisplayName("GET /v1/lessons/{lessonId}/quiz unauthenticated returns 401")
+    void getQuiz_Unauthenticated_Returns401() throws Exception {
+        mockMvc.perform(get("/v1/lessons/" + testLesson.getId() + "/quiz"))
+                .andExpect(status().isUnauthorized());
     }
 }
