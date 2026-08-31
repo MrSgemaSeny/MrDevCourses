@@ -31,9 +31,9 @@ export const CoursesPage: React.FC = () => {
 
       const matchesLevel =
         selectedLevel === 'ALL' ||
-        (selectedLevel === '1' && (course.level?.toLowerCase().includes('junior') || course.level === '1' || !course.level)) ||
-        (selectedLevel === '2' && (course.level?.toLowerCase().includes('middle') || course.level === '2')) ||
-        (selectedLevel === '3' && (course.level?.toLowerCase().includes('senior') || course.level === '3'));
+        (selectedLevel === '1' && (course.level === '1' || !course.level)) ||
+        (selectedLevel === '2' && course.level === '2') ||
+        (selectedLevel === '3' && course.level === '3');
 
       const matchesFormat =
         selectedFormat === 'ALL' ||
@@ -141,13 +141,7 @@ export const CoursesPage: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
                           <Star className="w-3 h-3 text-zinc-400" />
-                          <span>
-                            {course.level === '2' || course.level?.toLowerCase().includes('middle')
-                              ? 'Уровень 2'
-                              : course.level === '3' || course.level?.toLowerCase().includes('senior')
-                              ? 'Уровень 3'
-                              : 'Уровень 1'}
-                          </span>
+                          <span>Уровень {course.level || '1'}</span>
                         </span>
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
                           <Layers className="w-3 h-3 text-zinc-400" />
