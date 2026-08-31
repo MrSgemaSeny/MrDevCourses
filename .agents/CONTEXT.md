@@ -1,27 +1,30 @@
 # Current Project Context — MrDevCourses
 
-## Status
-- **Project Stage**: Level 3 — Educational MVP (Учебная LMS платформа. Максимальный уровень проекта — 3. Проект НЕ предназначен для коммерческого релиза и НЕ является Enterprise).
-- **Developer Level**: Senior Full-Stack / Tech Lead
-- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V12), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j, OpenHTMLtoPDF, Thymeleaf.
-- **Core Modules & Capabilities**:
+## Roadmap & Product Philosophy (Первоисточник)
+- **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
+- **Ключевые принципы Mr Developer**:
+  1. **Zero Friction Setup через сайт**: Все ссылки на софт, шаблоны, промпты и пошаговые чеклисты установки — прямо в карточке урока. Студент не ищет ничего в Discord.
+  2. **Кнопка «Не получается / Сложно справляться»**: SOS-сигнал на каждом шаге урока → моментальное push-уведомление ментору в Telegram с именем студента, уроком, шагом и описанием проблемы.
+  3. **Telegram Dashboard Ментора**: Уведомления о сданных ДЗ, SOS-тикеты, алерты о неактивности 3+ дней (`/stuck`), Telegram-команды `/hw`, `/status`, `/approve <id>`, `/reject <id> <комментарий>`.
+  4. **Будущий AI с реальной RAG-системой**: Vector search по PostgreSQL (pgvector) + FAQ как первая линия автоматической поддержки перед эскалацией ментору.
+  5. **GitHub-Grade UX**: Максимально чистый, плотный, честный интерфейс (`#0d1117`, monochrome), фокус на реальном знании и первом задеплоенном онлайн веб-приложении.
 
+## Status & Architecture
+- **Project Stage**: Level 3 — Strong Educational MVP (Pre-Release Pilot with 2 live students).
+- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V16), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j.
+- **Core Modules & Capabilities**:
+  - `homework-pipeline`: Human-centric submission (GitHub Repo URL, Live Demo URL, notes) + Admin Review Triage Queue (`/admin/homeworks`) with instant 1-click approve (auto-complete lesson + early drip unlock) or revision feedback.
+  - `onboarding`: `WelcomeOnboardingModal` on course entry (outcome goal, Discord invite, tools checklist).
   - `domain-hierarchy`: Deep course structure (`Course -> CourseModule -> Lesson -> Materials/Quizzes`), Lesson Types (`VIDEO`, `ARTICLE`, `PRACTICE`, `QUIZ`), cohorts, free preview gates.
-  - `quiz-engine`: Interactive assessment subsystem (`Quiz`, `QuizQuestion`, `QuizQuestionOption`, `QuizSubmission`, anti-cheat option masking, auto-scoring, explanation feedback, `LessonQuizWidget`).
-  - `materials`: Per-lesson downloadable resources (`CHEAT_SHEET`, `SOURCE_CODE`, `REPO_LINK`, `PDF`, `LessonMaterialsList`).
-  - `rag`: Hybrid Search (pgvector HNSW Dense Cosine + Sparse FTS with Reciprocal Rank Fusion), MarkdownSemanticChunker (AST-aware chunking with code block preservation), EmbeddingService.
-  - `grader`: Automated AI Code Grader & Reviewer (Static Security Scanner, LLM Rubric Evaluation, auto-completion of lessons on score >= 80, HomeworkSubmissionWidget).
-  - `automation`: Transactional Outbox Engine (`outbox_events`, OutboxProcessor @Scheduled), SemanticLinkingService (automated glossary term extraction), StudentLifecycleService (drop-off prediction & re-engagement nudges).
-  - `auth`: Google OAuth2 + Email/Password registration/login, JWT stateless session in httpOnly cookie (`mrdevcourses_token`), custom rate limiting.
-  - `ratelimit`: Token Bucket (Bucket4j + Caffeine) with 3 tiers: Auth (10 req/15m/IP), AI (5 req/min/user), General (60 req/min/user/IP). Standardized `X-RateLimit-Remaining` and `Retry-After`.
-  - `navigation`: Quick-Nav Drawer (Glossary, Progress, Roadmap) with in-lesson term cards and deep-linking without resetting video player iframe state.
-  - `certificate`: Automated PDF Certificate generator (Thymeleaf + OpenHTMLtoPDF) upon 100% completion with public verification by code (`/v1/certificates/verify/{code}`).
-  - `analytics`: Enterprise Admin Cohort Analytics dashboard (Funnel by day, drop-off rates, streak distribution, time-to-complete retention).
-  - `design-system`: Strict 4 font sizes typography scale (`text-2xl` for H1, `text-sm` for descriptions/modules/headers, `text-xs` for lessons/body/inputs/buttons, `text-[10px]` for badges/tags/statuses). All non-standard sizes removed.
-  - `admin-suite`: Comprehensive authoring and management console (Curriculum Tree, Drip schedule calculator, Module reordering, Lesson & Markdown authoring, Material manager, Quiz builder, Student triage & Role toggle, Cohort manager, Real-time analytics & Audit logs).
-  - `b2c-discovery`: Modern B2C course catalog (`/courses`) with minimalist filter-bar (`[Поиск] [Уровень] [Формат]`) and hover video teaser preview; 2-column B2C landing (`/courses/:slug`) with CourseCurriculumAccordion, CourseStickyCard, author badge, learning outcomes, and FAQ accordion.
-- **Test Verification**:
-  - Backend: 21/21 E2E tests in `AdminSuiteE2ETest` PASSED (100% Green, `:jacocoTestReport` verified).
-  - Frontend: 63/63 Vitest tests PASSED across 26 test suites (100% Green).
-  - Production Build: `npm run build` (`tsc -b && vite build`) SUCCESSFUL (1790 modules transformed, 0 errors).
+  - `quiz-engine`: Interactive assessment subsystem with anti-cheat option masking, auto-scoring, explanation feedback.
+  - `materials`: Per-lesson downloadable resources (`CHEAT_SHEET`, `SOURCE_CODE`, `REPO_LINK`, `PDF`).
+  - `auth`: Google OAuth2 + Email/Password, JWT stateless session in httpOnly cookie (`MrDev_token`), custom rate limiting.
+  - `ratelimit`: Token Bucket (Bucket4j + Caffeine) with 3 tiers: Auth (10 req/15m/IP), AI (5 req/min/user), General (60 req/min/user/IP).
+  - `admin-suite`: Complete management console (Curriculum Tree, Drip schedule, Module reordering, Markdown authoring, Material manager, Quiz builder, Student triage & Role toggle, Cohort manager, Telemetry & Audit logs).
+  - `b2c-discovery`: Modern B2C course catalog (`/courses`) with hover video preview; 2-column B2C landing (`/courses/:slug`) with Syllabus accordion, Sticky card, author badge, and FAQ.
+
+## Test Verification & Quality Gates
+- **Backend (JUnit)**: 184/184 tests PASSED (100% Green, `:jacocoTestReport` verified).
+- **Frontend (Vitest)**: 64/64 tests PASSED across 27 test suites (100% Green).
+- **Production Build**: `tsc -b && vite build` SUCCESSFUL (1789 modules transformed, 0 errors).
 
