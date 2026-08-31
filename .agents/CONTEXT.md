@@ -19,9 +19,9 @@
   - `analytics`: Enterprise Admin Cohort Analytics dashboard (Funnel by day, drop-off rates, streak distribution, time-to-complete retention).
   - `design-system`: Strict 4 font sizes typography scale (`text-2xl` for H1, `text-sm` for descriptions/modules/headers, `text-xs` for lessons/body/inputs/buttons, `text-[10px]` for badges/tags/statuses). All non-standard sizes removed.
   - `admin-suite`: Comprehensive authoring and management console (Curriculum Tree, Drip schedule calculator, Module reordering, Lesson & Markdown authoring, Material manager, Quiz builder, Student triage & Role toggle, Cohort manager, Real-time analytics & Audit logs).
-  - `course-data`: 5 modules and 30 lessons (6 lessons per module) seeded with complete metadata, permanent non-collapsible module blocks.
+  - `b2c-discovery`: Modern B2C course catalog (`/courses`) with minimalist filter-bar (`[Поиск] [Уровень] [Формат]`) and hover video teaser preview; 2-column B2C landing (`/courses/:slug`) with CourseCurriculumAccordion, CourseStickyCard, author badge, learning outcomes, and FAQ accordion.
 - **Test Verification**:
   - Backend: 21/21 E2E tests in `AdminSuiteE2ETest` PASSED (100% Green, `:jacocoTestReport` verified).
-  - Frontend: 60/60 Vitest tests PASSED across 24 test suites (100% Green).
-  - Production Build: `npm run build` (`tsc -b && vite build`) SUCCESSFUL (1787 modules transformed, 0 errors).
+  - Frontend: 63/63 Vitest tests PASSED across 26 test suites (100% Green).
+  - Production Build: `npm run build` (`tsc -b && vite build`) SUCCESSFUL (1790 modules transformed, 0 errors).
 

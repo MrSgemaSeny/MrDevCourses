@@ -60,6 +60,7 @@ export interface Course {
   description?: string;
   slug: string;
   active: boolean;
+  level?: string;
   createdAt: string;
   enrolled?: boolean;
   enrolledAt?: string;

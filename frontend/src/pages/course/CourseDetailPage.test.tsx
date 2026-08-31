@@ -55,9 +55,8 @@ describe('CourseDetailPage Component', () => {
       </QueryClientProvider>
     );
 
-    expect(await screen.findByText('Вайбкодинг с нуля')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Вайбкодинг с нуля' })).toBeInTheDocument();
     expect(await screen.findByText('Урок 1: Настройка окружения')).toBeInTheDocument();
-    expect(screen.getAllByText(/Открыть урок/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Продолжить обучение/i).length).toBeGreaterThan(0);
   });
-
 });

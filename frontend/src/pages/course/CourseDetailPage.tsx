@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
@@ -6,15 +6,35 @@ import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { useAuth } from '@/features/auth';
 import { VisualRoadmap } from '@/widgets/roadmap/VisualRoadmap';
 import { CertificateModal } from '@/widgets/certificate/CertificateModal';
-import { Lock, Play, Calendar, Clock, ArrowRight, Award, CheckCircle2, FileText, HelpCircle, Code2 } from 'lucide-react';
+import { CourseCurriculumAccordion } from '@/widgets/course-curriculum/CourseCurriculumAccordion';
+import { CourseStickyCard } from '@/widgets/course-sidebar/CourseStickyCard';
+import { CourseFaqSection } from '@/widgets/course-faq/CourseFaqSection';
+import { CheckCircle2, ChevronRight, X, Github, Send, ArrowRight } from 'lucide-react';
+
+const learningOutcomes = [
+  'Проектирование чистой модульной архитектуры на Spring Boot 3',
+  'Построение защищённого API с JWT в stateless httpOnly cookies',
+  'Эффективная работа с PostgreSQL, индексами и исключение N+1 запросов',
+  'Полноценный фронтенд на React 19, Vite и Feature-Sliced Design (FSD)',
+  'Автоматизация тестирования и устойчивый CI/CD пайплайн',
+  'Интеграция современных AI-инструментов и вайбкодинг на практике',
+];
+
+const courseRequirements = [
+  'Базовое понимание синтаксиса Java или любого другого C-подобного языка',
+  'Установленная среда разработки (IntelliJ IDEA или VS Code)',
+  'Готовность практиковаться и писать реальный код каждый день',
+];
 
 export const CourseDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, isAuthenticated } = useAuth();
+
   const [showCertificate, setShowCertificate] = useState(false);
   const [showEnrollConfirm, setShowEnrollConfirm] = useState(false);
+  const [showTrailerModal, setShowTrailerModal] = useState(false);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -46,22 +66,15 @@ export const CourseDetailPage: React.FC = () => {
     setShowEnrollConfirm(true);
   };
 
-  const getLessonTypeIcon = (type?: string) => {
-    switch (type) {
-      case 'ARTICLE':
-        return <FileText className="w-3.5 h-3.5 text-zinc-400" />;
-      case 'QUIZ':
-        return <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />;
-      case 'PRACTICE':
-        return <Code2 className="w-3.5 h-3.5 text-zinc-400" />;
-      default:
-        return <Play className="w-3.5 h-3.5 text-zinc-400" />;
-    }
-  };
-
-
   if (courseLoading) {
-    return <div className="text-center py-20 text-zinc-500 text-xs">Загрузка информации о курсе...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-white/5 border-t-[#fafafa] rounded-full animate-spin" />
+          <span className="text-xs text-zinc-500 font-mono">Загрузка курса...</span>
+        </div>
+      </div>
+    );
   }
 
   if (!course) {
@@ -75,175 +88,190 @@ export const CourseDetailPage: React.FC = () => {
     );
   }
 
-  const firstAccessibleLesson = lessons.find((l) => l.accessible);
-  const isCourseFinished = lessons.length > 0 && lessons.every((l) => l.completed);
   const modules = course.modules || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Course Hero */}
-      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-[#141418] text-zinc-300 border border-white/5 font-mono">
-            5 модулей &bull; 30 уроков
-          </span>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+      {/* Breadcrumbs */}
+      <nav className="flex items-center gap-2 text-xs font-mono text-zinc-500">
+        <Link to="/courses" className="hover:text-zinc-300 transition-colors">
+          Каталог
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5" />
+        <span className="text-zinc-300 truncate max-w-xs sm:max-w-md">{course.title}</span>
+      </nav>
 
-        <h1 className="text-2xl font-bold text-white tracking-tight mb-4">{course.title}</h1>
+      {/* Main 2-Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+        {/* Left Column (70%) */}
+        <div className="lg:col-span-2 space-y-10">
+          {/* Hero Section */}
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-[#141418] text-zinc-300 border border-white/5 font-mono">
+                {modules.length} модулей &bull; {course.totalLessons || 30} уроков
+              </span>
+              <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-mono">
+                {course.level || 'Middle / Junior'}
+              </span>
+            </div>
 
-        <p className="text-sm text-zinc-300 max-w-3xl leading-relaxed mb-6 font-normal">
-          {course.description || 'Пошаговый курс с практическими уроками, ориентированный на реальный результат.'}
-        </p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
+              {course.title}
+            </h1>
 
-        <div className="pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-xs text-zinc-400">
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              Ежедневный доступ
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              Старт в момент записи
-            </span>
+            <p className="text-sm text-zinc-300 leading-relaxed max-w-2xl font-normal">
+              {course.description || 'Пошаговый курс с практическими уроками, ориентированный на реальный результат.'}
+            </p>
+
+            {/* Author compact plate */}
+            <div className="pt-2 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center font-bold text-xs text-white">
+                MD
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-white">Mr Developer</span>
+                  <div className="flex items-center gap-1.5 text-zinc-500">
+                    <a
+                      href="https://github.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-zinc-300 transition-colors"
+                      aria-label="GitHub"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href="https://t.me"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-zinc-300 transition-colors"
+                      aria-label="Telegram"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+                <p className="text-[10px] text-zinc-400">
+                  практикующий разработчик, который прошёл этот путь сам
+                </p>
+              </div>
+            </div>
           </div>
 
-          {course.enrolled ? (
-            <div className="flex items-center gap-3">
-              {isCourseFinished && (
-                <button
-                  onClick={() => setShowCertificate(true)}
-                  className="px-4 py-2 bg-emerald-950 border border-emerald-700 text-emerald-300 text-xs font-semibold rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Award className="w-4 h-4" />
-                  <span>Сертификат</span>
-                </button>
-              )}
+          {/* Block: What You'll Learn (Learning Outcomes) */}
+          <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
+            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono text-[11px] text-zinc-400">
+              Чему вы научитесь на курсе
+            </h2>
 
-              {firstAccessibleLesson && (
-                <Link
-                  to={`/courses/${course.id}/lessons/${firstAccessibleLesson.id}`}
-                  className="px-5 py-2.5 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Открыть урок</span>
-                </Link>
-              )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {learningOutcomes.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-2.5 text-xs text-zinc-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span className="leading-snug">{item}</span>
+                </div>
+              ))}
             </div>
-          ) : (
-            <button
-              onClick={handleEnrollClick}
-              disabled={enrollMutation.isPending}
-              className="px-6 py-2.5 bg-[#fafafa] hover:bg-white text-[#09090b] text-xs font-semibold rounded-md flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] cursor-pointer"
-            >
-              <span>{enrollMutation.isPending ? 'Запись...' : 'Записаться на курс'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+          </div>
+
+          {/* Block: Requirements & Target Audience */}
+          <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
+            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono text-[11px] text-zinc-400">
+              Требования и кому подойдёт курс
+            </h2>
+
+            <ul className="space-y-2 text-xs text-zinc-300 list-disc list-inside">
+              {courseRequirements.map((req, idx) => (
+                <li key={idx} className="leading-relaxed">
+                  {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Block: Course Curriculum Accordion */}
+          <CourseCurriculumAccordion
+            courseId={course.id}
+            modules={modules}
+            enrolled={course.enrolled}
+          />
+
+          {/* Visual Roadmap if Enrolled */}
+          {course.enrolled && lessons.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-base font-bold text-white tracking-tight">Ваша дорожная карта</h2>
+              <VisualRoadmap courseId={course.id} lessons={lessons} />
+            </div>
           )}
+
+          {/* Block: FAQ Accordion */}
+          <CourseFaqSection />
+        </div>
+
+        {/* Right Column (30%) — Sticky Action Sidebar */}
+        <div className="lg:col-span-1">
+          <CourseStickyCard
+            course={course}
+            lessons={lessons}
+            onEnroll={handleEnrollClick}
+            isEnrolling={enrollMutation.isPending}
+            onOpenCertificate={() => setShowCertificate(true)}
+            onPlayTrailer={() => setShowTrailerModal(true)}
+          />
         </div>
       </div>
 
-      {/* Module Hierarchy Section */}
-      {modules.length > 0 ? (
-        <div className="space-y-4 mb-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-white tracking-tight">Структура и модули программы</h2>
-            <span className="text-xs text-zinc-400">
-              {modules.reduce((acc, m) => acc + (m.lessonsCount || 0), 0)} уроков всего
-            </span>
-          </div>
-
-          <div className="space-y-3">
-            {modules.map((mod) => (
-              <div
-                key={mod.id}
-                className="bg-[#0a0a0c] border border-white/5 rounded-sm overflow-hidden"
-              >
-                <div className="w-full px-5 py-4 bg-[#0a0a0c] flex items-center justify-between text-left border-b border-white/5">
-                  <div>
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-sm font-semibold text-white">{mod.title}</span>
-                      {mod.isFreePreview && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#141418] text-zinc-300 border border-white/10">
-                          Бесплатный модуль
-                        </span>
-                      )}
-                    </div>
-
-                    {mod.description && (
-                      <p className="text-xs text-zinc-400 mt-1">{mod.description}</p>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-zinc-500">
-                      {mod.completedLessonsCount || 0} / {mod.lessonsCount}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-4 space-y-2 bg-[#0a0a0c]">
-                  {mod.lessons.map((lessonItem) => (
-                    <div
-                      key={lessonItem.id}
-                      onClick={() => {
-                        if (lessonItem.accessible && course.enrolled) {
-                          navigate(`/courses/${course.id}/lessons/${lessonItem.id}`);
-                        }
-                      }}
-                      className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all bg-[#0e0e11] border-white/5 ${
-                        lessonItem.accessible && course.enrolled
-                          ? 'hover:border-zinc-500 hover:bg-[#141418] text-zinc-200 cursor-pointer'
-                          : 'opacity-70 text-zinc-500 cursor-default'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="p-1 rounded bg-[#0a0a0c] border border-white/5 shrink-0">
-                          {getLessonTypeIcon(lessonItem.lessonType)}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="font-medium text-white truncate">
-                            {lessonItem.title.startsWith(`Урок ${lessonItem.dayNumber}:`)
-                              ? lessonItem.title
-                              : lessonItem.title.startsWith(`День ${lessonItem.dayNumber}:`)
-                              ? lessonItem.title.replace(`День ${lessonItem.dayNumber}:`, `Урок ${lessonItem.dayNumber}:`)
-                              : `Урок ${lessonItem.dayNumber}: ${lessonItem.title}`}
-                          </div>
-
-                          <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
-                            <span>{lessonItem.lessonType || 'VIDEO'}</span>
-                            {lessonItem.durationMinutes ? (
-                              <span>&bull; {lessonItem.durationMinutes} мин</span>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        {lessonItem.completed ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3" /> Пройден
-                          </span>
-                        ) : lessonItem.accessible && course.enrolled ? (
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-[#141418] border border-white/10 text-zinc-300">
-                            Доступен
-                          </span>
-                        ) : (
-                          <Lock className="w-3.5 h-3.5 text-zinc-600" />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+      {/* Video Trailer Modal */}
+      {showTrailerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-xs p-4">
+          <div className="w-full max-w-3xl bg-[#0e0e11] border border-white/10 rounded-sm overflow-hidden shadow-2xl space-y-3">
+            <div className="p-4 flex items-center justify-between border-b border-white/5">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <h3 className="text-xs font-semibold text-white font-mono uppercase">
+                  Трейлер курса &bull; {course.title}
+                </h3>
               </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
+              <button
+                type="button"
+                onClick={() => setShowTrailerModal(false)}
+                className="text-zinc-400 hover:text-white p-1 transition-colors cursor-pointer"
+                aria-label="Закрыть"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-      {/* Visual Roadmap or Syllabus */}
-      {course.enrolled && lessons.length > 0 && (
-        <div className="space-y-6">
-          <VisualRoadmap courseId={course.id} lessons={lessons} />
+            <div className="aspect-video w-full bg-black">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="Course Trailer"
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
+            <div className="p-4 flex items-center justify-between border-t border-white/5 bg-[#0a0a0c]">
+              <span className="text-[10px] text-zinc-500 font-mono">
+                Полный доступ ко всем урокам открывается сразу после записи
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowTrailerModal(false);
+                  if (!course.enrolled) {
+                    handleEnrollClick();
+                  }
+                }}
+                className="px-4 py-1.5 bg-white text-black hover:bg-zinc-200 text-xs font-semibold rounded-sm transition-colors cursor-pointer"
+              >
+                {course.enrolled ? 'Закрыть' : 'Записаться на курс'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -261,6 +289,7 @@ export const CourseDetailPage: React.FC = () => {
 
             <div className="pt-3 border-t border-white/5 flex items-center justify-end gap-3">
               <button
+                type="button"
                 onClick={() => setShowEnrollConfirm(false)}
                 disabled={enrollMutation.isPending}
                 className="px-4 py-2 text-xs font-medium text-zinc-400 hover:text-white bg-transparent hover:bg-white/5 rounded-sm transition-colors cursor-pointer"
@@ -268,6 +297,7 @@ export const CourseDetailPage: React.FC = () => {
                 Отмена
               </button>
               <button
+                type="button"
                 onClick={() => enrollMutation.mutate()}
                 disabled={enrollMutation.isPending}
                 className="px-4 py-2 text-xs font-semibold text-black bg-white hover:bg-zinc-200 rounded-sm transition-colors flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.1)]"
