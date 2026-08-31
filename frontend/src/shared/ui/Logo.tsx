@@ -7,7 +7,7 @@ export const Logo: React.FC<{ className?: string }> = ({ className = '' }) => {
         <img 
           src="/author-avatar.png" 
           alt="MrDeveloper Logo" 
-          className="w-full h-full object-cover scale-[1.35] translate-y-[5%] origin-center"
+          className="w-full h-full object-cover"
         />
       </div>
       <span className="text-sm font-bold tracking-tight text-white uppercase">

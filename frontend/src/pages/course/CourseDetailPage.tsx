@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
@@ -126,9 +126,11 @@ export const CourseDetailPage: React.FC = () => {
 
             {/* Author compact plate */}
             <div className="pt-2 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center font-bold text-xs text-white">
-                MD
-              </div>
+              <img
+                src="/author-avatar.png"
+                alt="Mr Developer"
+                className="w-9 h-9 rounded-full object-cover border border-white/10"
+              />
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-white">Mr Developer</span>
