@@ -93,6 +93,11 @@ public class TelegramNotificationService {
         }
     }
 
+    public void sendMentorAlert(String title, String details) {
+        String msg = "⚠️ *" + escapeMarkdown(title) + "*\n\n" + details;
+        sendDirectMessage(chatId, msg);
+    }
+
     public void sendDirectMessage(String targetChatId, String text) {
         if (!enabled || targetChatId == null || targetChatId.isBlank()) {
             log.info("[Telegram Disabled] Direct message to {}: {}", targetChatId, text);

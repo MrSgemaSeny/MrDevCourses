@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth';
 import { ROUTES } from '@/shared/config/routes';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { Logo } from '@/shared/ui/Logo';
-import { BookOpen, LayoutDashboard, Shield, LogIn, Flame, Search } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Shield, LogIn, Flame, Search, Rocket } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -77,6 +77,14 @@ export const Header: React.FC = () => {
           >
             <BookOpen className="w-4 h-4 text-zinc-400" />
             <span>Каталог курсов</span>
+          </Link>
+
+          <Link
+            to={ROUTES.PROJECTS}
+            className="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
+          >
+            <Rocket className="w-4 h-4 text-emerald-400" />
+            <span>Проекты</span>
           </Link>
 
           {isAuthenticated && (

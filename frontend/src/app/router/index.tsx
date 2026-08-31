@@ -26,6 +26,7 @@ const AdminHomeworksPage = React.lazy(() => import('@/pages/admin/AdminHomeworks
 const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/CertificateVerifyPage').then((m) => ({ default: m.CertificateVerifyPage })));
+const ProjectsPage = React.lazy(() => import('@/pages/projects/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
 
 const wrap = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
       { path: 'auth', element: wrap(<LoginPage />) },
       { path: 'login', element: wrap(<LoginPage />) },
       { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
+      { path: 'projects', element: wrap(<ProjectsPage />) },
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
 
       // ── Protected Student/Core App Pages (Auth Required) ───────────
