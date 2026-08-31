@@ -177,7 +177,7 @@ export const CourseDetailPage: React.FC = () => {
 
           {/* Block: What You'll Learn (Learning Outcomes) */}
           <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
-            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono text-[11px] text-zinc-400">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
               Чему вы научитесь на курсе
             </h2>
 
@@ -193,7 +193,7 @@ export const CourseDetailPage: React.FC = () => {
 
           {/* Block: Requirements & Target Audience */}
           <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
-            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono text-[11px] text-zinc-400">
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
               Требования и кому подойдёт курс
             </h2>
 
@@ -224,7 +224,7 @@ export const CourseDetailPage: React.FC = () => {
           {/* Block: Course Deliverables & Tech Stack (Between Curriculum & FAQ) */}
           <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-6">
             <div>
-              <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono text-[11px] text-zinc-400 mb-1">
+              <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-1.5">
                 Результаты обучения и стек программы
               </h2>
               <p className="text-xs text-zinc-400 leading-relaxed">
