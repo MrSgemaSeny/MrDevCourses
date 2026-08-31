@@ -18,10 +18,8 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
   onEnroll,
   isEnrolling = false,
   onOpenCertificate,
-  onPlayTrailer,
 }) => {
   const [copied, setCopied] = useState(false);
-  const [isHoveredVideo, setIsHoveredVideo] = useState(false);
 
   const completedCount = lessons.filter((l) => l.completed).length;
   const totalCount = lessons.length || (course.modules?.reduce((acc: number, m: CourseModule) => acc + (m.lessonsCount || 0), 0) ?? 0);
