@@ -61,6 +61,15 @@ public class HomeworkSubmission {
     @Column(name = "security_flags", columnDefinition = "TEXT")
     private String securityFlags;
 
+    @Column(name = "live_demo_url", length = 500)
+    private String liveDemoUrl;
+
+    @Column(name = "mentor_feedback", columnDefinition = "TEXT")
+    private String mentorFeedback;
+
+    @Column(name = "reviewed_by")
+    private Long reviewedBy;
+
     @Column(name = "reviewed_at")
     private Instant reviewedAt;
 

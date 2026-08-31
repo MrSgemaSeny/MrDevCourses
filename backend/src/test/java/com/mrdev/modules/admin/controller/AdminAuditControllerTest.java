@@ -55,6 +55,27 @@ class AdminAuditControllerTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
+    private com.mrdev.modules.homework.repository.HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.lesson.repository.LessonProgressRepository lessonProgressRepository;
+
+    @Autowired
+    private com.mrdev.modules.lesson.repository.LessonMaterialRepository lessonMaterialRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizQuestionOptionRepository quizQuestionOptionRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizQuestionRepository quizQuestionRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizRepository quizRepository;
+
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     private User studentUser;
@@ -65,6 +86,13 @@ class AdminAuditControllerTest {
     @BeforeEach
     void setUp() {
         auditLogRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
+        quizQuestionOptionRepository.deleteAll();
+        quizQuestionRepository.deleteAll();
+        quizRepository.deleteAll();
+        lessonMaterialRepository.deleteAll();
+        lessonProgressRepository.deleteAll();
         enrollmentRepository.deleteAll();
         lessonRepository.deleteAll();
         courseModuleRepository.deleteAll();

@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HomeworkSubmitRequest {
 
-    @NotBlank(message = "Код решения не может быть пустым")
-    @Size(max = 20000, message = "Размер кода не должен превышать 20000 символов")
+    @Size(max = 20000, message = "Размер описания/кода не должен превышать 20000 символов")
     private String codeSnippet;
 
     @Size(max = 500, message = "Ссылка на репозиторий слишком длинная")
     private String repositoryUrl;
+
+    @Size(max = 500, message = "Ссылка на демо-сайт слишком длинная")
+    private String liveDemoUrl;
 }

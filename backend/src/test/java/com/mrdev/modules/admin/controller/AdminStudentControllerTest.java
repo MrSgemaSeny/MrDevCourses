@@ -198,7 +198,7 @@ class AdminStudentControllerTest {
     @DisplayName("GET /v1/admin/students should return paginated list of students")
     void searchStudents_AsAdmin_ShouldReturnPage() throws Exception {
         mockMvc.perform(get("/v1/admin/students")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .param("q", "alex")
                         .param("page", "0")
                         .param("size", "10"))
@@ -213,7 +213,7 @@ class AdminStudentControllerTest {
     @DisplayName("GET /v1/admin/students as STUDENT should return 403 Forbidden")
     void searchStudents_AsStudent_ShouldReturnForbidden() throws Exception {
         mockMvc.perform(get("/v1/admin/students")
-                        .cookie(new Cookie("mrdevcourses_token", studentToken)))
+                        .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isForbidden());
     }
 
@@ -225,7 +225,7 @@ class AdminStudentControllerTest {
                 .build();
 
         mockMvc.perform(patch("/v1/admin/students/" + studentUser.getId() + "/role")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -241,7 +241,7 @@ class AdminStudentControllerTest {
                 .build();
 
         mockMvc.perform(patch("/v1/admin/students/" + adminUser.getId() + "/role")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden())
@@ -269,7 +269,7 @@ class AdminStudentControllerTest {
 
         // Try demoting adminUser via callerToken (caller has ADMIN role in JWT)
         mockMvc.perform(patch("/v1/admin/students/" + adminUser.getId() + "/role")
-                        .cookie(new Cookie("mrdevcourses_token", callerToken))
+                        .cookie(new Cookie("MrDev_token", callerToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -284,14 +284,14 @@ class AdminStudentControllerTest {
 
         // 1. Enroll
         mockMvc.perform(post("/v1/admin/students/" + studentUser.getId() + "/enroll/" + course2.getId())
-                        .cookie(new Cookie("mrdevcourses_token", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.courseId", is(course2.getId().intValue())));
 
         // 2. Unenroll
         mockMvc.perform(delete("/v1/admin/students/" + studentUser.getId() + "/enroll/" + course2.getId())
-                        .cookie(new Cookie("mrdevcourses_token", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)));
     }
@@ -307,7 +307,7 @@ class AdminStudentControllerTest {
         lessonProgressRepository.save(lp);
 
         mockMvc.perform(get("/v1/admin/students/" + studentUser.getId() + "/progress")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.userId", is(studentUser.getId().intValue())))

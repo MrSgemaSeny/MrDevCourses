@@ -2,10 +2,14 @@ package com.mrdev.modules.homework.service;
 
 import com.mrdev.common.exception.ApiException;
 import com.mrdev.common.exception.ResourceNotFoundException;
-import com.mrdev.modules.ai.service.GroqClient;
 import com.mrdev.modules.audit.service.AuditService;
 import com.mrdev.modules.auth.model.Role;
+import com.mrdev.modules.auth.model.User;
+import com.mrdev.modules.auth.repository.UserRepository;
+import com.mrdev.modules.course.model.Course;
+import com.mrdev.modules.course.repository.CourseRepository;
 import com.mrdev.modules.course.repository.EnrollmentRepository;
+import com.mrdev.modules.homework.dto.AdminReviewHomeworkRequest;
 import com.mrdev.modules.homework.dto.HomeworkSubmissionDto;
 import com.mrdev.modules.homework.dto.HomeworkSubmitRequest;
 import com.mrdev.modules.homework.model.HomeworkSubmission;
@@ -21,26 +25,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AiCodeGraderService {
 
-    private static final Pattern SECRET_PATTERN = Pattern.compile("(?i)(password|secret|apikey|token)\\s*=\\s*[\"'][^\"']{8,}[\"']|sk-[a-zA-Z0-9]{24,}|ghp_[a-zA-Z0-9]{30,}");
-    private static final Pattern SQL_CONCAT_PATTERN = Pattern.compile("(?i)(select|insert|update|delete)\\s+.*\\+\\s*[a-zA-Z0-9_]+");
-    private static final Pattern DANGEROUS_EXEC_PATTERN = Pattern.compile("Runtime\\.getRuntime\\(\\)\\.exec|ProcessBuilder");
-    private static final Pattern SCORE_PATTERN = Pattern.compile("(?ui)(?:оценка|score|балл[а-я]*)\\s*[:=-]?\\s*(\\d{1,3})");
-
     private final HomeworkSubmissionRepository submissionRepository;
     private final LessonRepository lessonRepository;
     private final EnrollmentRepository enrollmentRepository;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
     private final LessonService lessonService;
-    private final GroqClient groqClient;
     private final AuditService auditService;
 
     @Transactional
@@ -54,51 +53,66 @@ public class AiCodeGraderService {
             }
         }
 
-        log.info("Evaluating homework submission for user={}, lessonId={}", userId, lessonId);
+        log.info("Student submission for userId={}, lessonId={}", userId, lessonId);
 
-        // 1. Static Security & Architecture Scanning
-        List<String> securityFlags = runStaticSecurityScan(request.getCodeSnippet());
-        boolean hasCriticalSecurityFlaw = !securityFlags.isEmpty();
-
-        // 2. LLM Code Evaluation
-        EvaluationResult evaluation = evaluateWithAi(lesson, request.getCodeSnippet(), securityFlags);
-
-        int finalScore = hasCriticalSecurityFlaw ? Math.min(evaluation.score(), 45) : evaluation.score();
-        SubmissionStatus status = finalScore >= 80 ? SubmissionStatus.PASSED :
-                (finalScore >= 50 ? SubmissionStatus.NEEDS_IMPROVEMENT : SubmissionStatus.FAILED);
-
-        // 3. Save submission
+        // 1. Save submission with status PENDING for mentor review
         HomeworkSubmission submission = HomeworkSubmission.builder()
                 .lessonId(lessonId)
                 .userId(userId)
                 .courseId(courseId)
-                .codeSnippet(request.getCodeSnippet())
+                .codeSnippet(request.getCodeSnippet() != null ? request.getCodeSnippet() : "")
                 .repositoryUrl(request.getRepositoryUrl())
-                .status(status)
-                .score(finalScore)
-                .aiFeedback(evaluation.feedback())
-                .securityFlags(securityFlags.isEmpty() ? null : String.join("; ", securityFlags))
-                .passedTestsCount(status == SubmissionStatus.PASSED ? 5 : 2)
-                .totalTestsCount(5)
-                .reviewedAt(Instant.now())
+                .liveDemoUrl(request.getLiveDemoUrl())
+                .status(SubmissionStatus.PENDING)
+                .score(0)
                 .build();
 
         submission = submissionRepository.save(submission);
 
-        // 4. If passed, automatically mark lesson complete
-        if (status == SubmissionStatus.PASSED) {
+        auditService.logAction(userId, "HOMEWORK_SUBMITTED", "Lesson", lessonId,
+                "Submitted homework for review: repo=" + request.getRepositoryUrl() + ", liveDemo=" + request.getLiveDemoUrl(), null);
+
+        return mapToDto(submission);
+    }
+
+    @Transactional
+    public HomeworkSubmissionDto reviewSubmission(Long submissionId, Long adminId, AdminReviewHomeworkRequest request) {
+        HomeworkSubmission submission = submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new ResourceNotFoundException("HomeworkSubmission", "id", submissionId));
+
+        submission.setStatus(request.getStatus());
+        submission.setMentorFeedback(request.getMentorFeedback());
+        submission.setReviewedBy(adminId);
+        submission.setReviewedAt(Instant.now());
+        if (request.getStatus() == SubmissionStatus.PASSED) {
+            submission.setScore(100);
+        }
+
+        submission = submissionRepository.save(submission);
+
+        // If approved, complete the lesson for the student
+        if (request.getStatus() == SubmissionStatus.PASSED) {
             try {
-                lessonService.completeLesson(courseId, lessonId, userId, role);
-                log.info("Auto-completed lessonId={} for userId={} upon passing homework", lessonId, userId);
+                lessonService.completeLesson(submission.getCourseId(), submission.getLessonId(), submission.getUserId(), Role.ADMIN);
+                log.info("Mentor approved homework. Auto-completed lessonId={} for userId={}", submission.getLessonId(), submission.getUserId());
             } catch (Exception e) {
-                log.warn("Could not auto-complete lesson after passed submission: {}", e.getMessage());
+                log.warn("Could not auto-complete lesson after mentor approval: {}", e.getMessage());
             }
         }
 
-        auditService.logAction(userId, "HOMEWORK_SUBMISSION", "Lesson", lessonId,
-                "Submitted homework: score=" + finalScore + ", status=" + status, null);
+        auditService.logAction(adminId, "HOMEWORK_REVIEWED", "HomeworkSubmission", submissionId,
+                "Mentor review: status=" + request.getStatus() + ", feedback=" + request.getMentorFeedback(), null);
 
         return mapToDto(submission);
+    }
+
+    @Transactional(readOnly = true)
+    public List<HomeworkSubmissionDto> getAllSubmissions(SubmissionStatus status) {
+        List<HomeworkSubmission> list = (status != null)
+                ? submissionRepository.findByStatusOrderByCreatedAtDesc(status)
+                : submissionRepository.findAllByOrderByCreatedAtDesc();
+
+        return enrichAndMapList(list);
     }
 
     @Transactional(readOnly = true)
@@ -121,74 +135,37 @@ public class AiCodeGraderService {
         return mapToDto(sub);
     }
 
-    private List<String> runStaticSecurityScan(String code) {
-        List<String> flags = new ArrayList<>();
-        if (code == null) return flags;
+    private List<HomeworkSubmissionDto> enrichAndMapList(List<HomeworkSubmission> list) {
+        if (list.isEmpty()) return List.of();
 
-        if (SECRET_PATTERN.matcher(code).find()) {
-            flags.add("[SECURITY] Обнаружены захардкоженные пароли или API токены в коде");
-        }
-        if (SQL_CONCAT_PATTERN.matcher(code).find()) {
-            flags.add("[SECURITY] Обнаружена конкатенация SQL запросов без параметризации (уязвимость SQL Injection)");
-        }
-        if (DANGEROUS_EXEC_PATTERN.matcher(code).find()) {
-            flags.add("[CRITICAL] Запрещено выполнение системных команд (ProcessBuilder/Runtime)");
-        }
+        List<Long> userIds = list.stream().map(HomeworkSubmission::getUserId).distinct().toList();
+        List<Long> lessonIds = list.stream().map(HomeworkSubmission::getLessonId).distinct().toList();
+        List<Long> courseIds = list.stream().map(HomeworkSubmission::getCourseId).distinct().toList();
 
-        return flags;
-    }
+        Map<Long, User> userMap = userRepository.findAllById(userIds).stream()
+                .collect(Collectors.toMap(User::getId, u -> u));
+        Map<Long, Lesson> lessonMap = lessonRepository.findAllById(lessonIds).stream()
+                .collect(Collectors.toMap(Lesson::getId, l -> l));
+        Map<Long, Course> courseMap = courseRepository.findAllById(courseIds).stream()
+                .collect(Collectors.toMap(Course::getId, c -> c));
 
-    private EvaluationResult evaluateWithAi(Lesson lesson, String codeSnippet, List<String> securityFlags) {
-        String prompt = """
-                Ты — строгий Senior Full-Stack Architect / Tech Lead. Оцени практическое решение студента по уроку.
-                
-                УРОК: %s
-                ТРЕБОВАНИЯ К КОРРЕКТНОСТИ:
-                - Архитектурная чистота (SRP, FSD, строгая типизация, обработка ошибок).
-                - Безопасность и отсутствие уязвимостей.
-                - Эффективность алгоритма и структуры данных.
-                
-                ФЛАГИ БЕЗОПАСНОСТИ: %s
-                
-                КОД СТУДЕНТА:
-                ```
-                %s
-                ```
-                
-                Дай рецензию в формате Markdown:
-                1. Итоговая оценка (число от 0 до 100).
-                2. Сильные стороны решения.
-                3. Замечания и рекомендации по улучшению (с примерами чистого кода).
-                4. Вердикт (Зачтено / Требует доработки).
-                """.formatted(lesson.getTitle(), securityFlags.isEmpty() ? "Нет" : String.join(", ", securityFlags), codeSnippet);
-
-        String aiResponse = groqClient.generateAnswer(prompt, "Проведи детальный аудит и оценку кода.");
-
-        int score = 85;
-        if (aiResponse == null || aiResponse.isBlank()) {
-            aiResponse = """
-                    ### Рецензия на решение (Senior Tech Lead)
-                    
-                    **Сильные стороны:**
-                    - Структура кода соответствует базовым требованиям урока.
-                    - Логика выполнения разделена на читаемые методы/компоненты.
-                    
-                    **Рекомендации:**
-                    - Проверьте граничные условия и обработку исключений.
-                    - Убедитесь в отсутствии неиспользуемых импортов и переменных.
-                    
-                    **Вердикт:** Решение принято.
-                    """;
-        } else {
-            Matcher m = SCORE_PATTERN.matcher(aiResponse);
-            if (m.find()) {
-                try {
-                    score = Math.min(100, Math.max(0, Integer.parseInt(m.group(1))));
-                } catch (NumberFormatException ignored) {}
+        return list.stream().map(sub -> {
+            HomeworkSubmissionDto dto = mapToDto(sub);
+            User u = userMap.get(sub.getUserId());
+            if (u != null) {
+                dto.setStudentName(u.getName());
+                dto.setStudentEmail(u.getEmail());
             }
-        }
-
-        return new EvaluationResult(score, aiResponse);
+            Lesson l = lessonMap.get(sub.getLessonId());
+            if (l != null) {
+                dto.setLessonTitle(l.getTitle());
+            }
+            Course c = courseMap.get(sub.getCourseId());
+            if (c != null) {
+                dto.setCourseTitle(c.getTitle());
+            }
+            return dto;
+        }).toList();
     }
 
     private HomeworkSubmissionDto mapToDto(HomeworkSubmission sub) {
@@ -199,9 +176,12 @@ public class AiCodeGraderService {
                 .courseId(sub.getCourseId())
                 .codeSnippet(sub.getCodeSnippet())
                 .repositoryUrl(sub.getRepositoryUrl())
+                .liveDemoUrl(sub.getLiveDemoUrl())
                 .status(sub.getStatus())
                 .score(sub.getScore())
                 .aiFeedback(sub.getAiFeedback())
+                .mentorFeedback(sub.getMentorFeedback())
+                .reviewedBy(sub.getReviewedBy())
                 .passedTestsCount(sub.getPassedTestsCount())
                 .totalTestsCount(sub.getTotalTestsCount())
                 .securityFlags(sub.getSecurityFlags())
@@ -209,6 +189,5 @@ public class AiCodeGraderService {
                 .createdAt(sub.getCreatedAt())
                 .build();
     }
-
-    private record EvaluationResult(int score, String feedback) {}
 }
+

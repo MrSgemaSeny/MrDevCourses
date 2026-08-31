@@ -26,14 +26,23 @@ public final class SecurityUtils {
         return Optional.empty();
     }
 
-    public static Long getCurrentUserId() {
-        return getCurrentUserPrincipal()
-                .map(UserPrincipal::getId)
-                .orElseThrow(() -> new ApiException("User is not authenticated", HttpStatus.UNAUTHORIZED));
+    public static Optional<Long> getCurrentUserIdOptional() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == null) {
+            return Optional.empty();
+        }
+        if (authentication.getPrincipal() instanceof UserPrincipal principal) {
+            return Optional.of(principal.getId());
+        }
+        if (authentication.getPrincipal() instanceof Long userId) {
+            return Optional.of(userId);
+        }
+        return Optional.empty();
     }
 
-    public static Optional<Long> getCurrentUserIdOptional() {
-        return getCurrentUserPrincipal().map(UserPrincipal::getId);
+    public static Long getCurrentUserId() {
+        return getCurrentUserIdOptional()
+                .orElseThrow(() -> new ApiException("User is not authenticated", HttpStatus.UNAUTHORIZED));
     }
 
     public static Role getCurrentUserRole() {

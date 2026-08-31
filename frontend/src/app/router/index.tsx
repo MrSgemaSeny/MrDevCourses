@@ -22,6 +22,7 @@ const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage')
 const AdminPage = React.lazy(() => import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })));
 const AdminCurriculumPage = React.lazy(() => import('@/pages/admin/AdminCurriculumPage').then((m) => ({ default: m.AdminCurriculumPage })));
 const AdminStudentsPage = React.lazy(() => import('@/pages/admin/AdminStudentsPage').then((m) => ({ default: m.AdminStudentsPage })));
+const AdminHomeworksPage = React.lazy(() => import('@/pages/admin/AdminHomeworksPage').then((m) => ({ default: m.AdminHomeworksPage })));
 const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/CertificateVerifyPage').then((m) => ({ default: m.CertificateVerifyPage })));
@@ -89,6 +90,7 @@ export const router = createBrowserRouter([
           { path: 'curriculum', element: wrap(<AdminCurriculumPage />) },
           { path: 'courses', element: wrap(<AdminCurriculumPage />) },
           { path: 'students', element: wrap(<AdminStudentsPage />) },
+          { path: 'homeworks', element: wrap(<AdminHomeworksPage />) },
         ],
       },
     ],

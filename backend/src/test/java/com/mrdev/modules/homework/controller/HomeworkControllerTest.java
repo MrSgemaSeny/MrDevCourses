@@ -190,7 +190,7 @@ class HomeworkControllerTest {
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
-                .andExpect(jsonPath("$.data.status", is("PASSED")));
+                .andExpect(jsonPath("$.data.status", is("PENDING")));
     }
 
     @Test

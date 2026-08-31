@@ -1,9 +1,11 @@
 package com.mrdev.modules.homework.service;
 
-import com.mrdev.modules.ai.service.GroqClient;
 import com.mrdev.modules.audit.service.AuditService;
 import com.mrdev.modules.auth.model.Role;
+import com.mrdev.modules.auth.repository.UserRepository;
+import com.mrdev.modules.course.repository.CourseRepository;
 import com.mrdev.modules.course.repository.EnrollmentRepository;
+import com.mrdev.modules.homework.dto.AdminReviewHomeworkRequest;
 import com.mrdev.modules.homework.dto.HomeworkSubmissionDto;
 import com.mrdev.modules.homework.dto.HomeworkSubmitRequest;
 import com.mrdev.modules.homework.model.HomeworkSubmission;
@@ -24,7 +26,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -41,10 +42,13 @@ class AiCodeGraderServiceTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Mock
-    private LessonService lessonService;
+    private UserRepository userRepository;
 
     @Mock
-    private GroqClient groqClient;
+    private CourseRepository courseRepository;
+
+    @Mock
+    private LessonService lessonService;
 
     @Mock
     private AuditService auditService;
@@ -63,16 +67,16 @@ class AiCodeGraderServiceTest {
     }
 
     @Test
-    @DisplayName("submitAndEvaluate should detect clean code, grade high and auto-complete lesson")
-    void submitAndEvaluate_WhenCleanCode_PassesAndCompletesLesson() {
+    @DisplayName("submitAndEvaluate should save submission with PENDING status for mentor review")
+    void submitAndEvaluate_ShouldSavePendingSubmission() {
         HomeworkSubmitRequest request = HomeworkSubmitRequest.builder()
-                .codeSnippet("export const useUser = () => useQuery({ queryKey: ['user'], queryFn: fetchUser });")
+                .codeSnippet("export const useUser = () => useQuery({ queryKey: ['user'] });")
                 .repositoryUrl("https://github.com/student/hw5")
+                .liveDemoUrl("https://student.github.io/hw5")
                 .build();
 
         when(lessonRepository.findByIdAndCourseId(5L, 1L)).thenReturn(Optional.of(lesson));
         when(enrollmentRepository.existsByUserIdAndCourseId(10L, 1L)).thenReturn(true);
-        when(groqClient.generateAnswer(anyString(), anyString())).thenReturn("Оценка: 95. Отличная FSD типизация.");
         when(submissionRepository.save(any(HomeworkSubmission.class))).thenAnswer(invocation -> {
             HomeworkSubmission sub = invocation.getArgument(0);
             sub.setId(100L);
@@ -82,33 +86,40 @@ class AiCodeGraderServiceTest {
         HomeworkSubmissionDto result = aiCodeGraderService.submitAndEvaluate(1L, 5L, 10L, Role.STUDENT, request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.PASSED);
-        assertThat(result.getScore()).isEqualTo(95);
-        assertThat(result.getSecurityFlags()).isNull();
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.PENDING);
+        assertThat(result.getRepositoryUrl()).isEqualTo("https://github.com/student/hw5");
+        assertThat(result.getLiveDemoUrl()).isEqualTo("https://student.github.io/hw5");
 
-        verify(lessonService).completeLesson(1L, 5L, 10L, Role.STUDENT);
-        verify(auditService).logAction(eq(10L), eq("HOMEWORK_SUBMISSION"), eq("Lesson"), eq(5L), any(), any());
+        verify(submissionRepository).save(any(HomeworkSubmission.class));
+        verify(auditService).logAction(eq(10L), eq("HOMEWORK_SUBMITTED"), eq("Lesson"), eq(5L), any(), any());
     }
 
     @Test
-    @DisplayName("submitAndEvaluate should flag hardcoded secrets and reduce score")
-    void submitAndEvaluate_WhenHardcodedSecret_FlagsSecurityWarning() {
-        HomeworkSubmitRequest request = HomeworkSubmitRequest.builder()
-                .codeSnippet("const apiKey = \"sk-1234567890abcdef1234567890abcdef\";")
+    @DisplayName("reviewSubmission with PASSED should complete lesson and log audit")
+    void reviewSubmission_WhenPassed_CompletesLesson() {
+        HomeworkSubmission submission = HomeworkSubmission.builder()
+                .id(100L)
+                .lessonId(5L)
+                .userId(10L)
+                .courseId(1L)
+                .status(SubmissionStatus.PENDING)
                 .build();
 
-        when(lessonRepository.findByIdAndCourseId(5L, 1L)).thenReturn(Optional.of(lesson));
-        when(enrollmentRepository.existsByUserIdAndCourseId(10L, 1L)).thenReturn(true);
-        when(groqClient.generateAnswer(anyString(), anyString())).thenReturn("Оценка: 90. Код нормальный.");
+        when(submissionRepository.findById(100L)).thenReturn(Optional.of(submission));
         when(submissionRepository.save(any(HomeworkSubmission.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        HomeworkSubmissionDto result = aiCodeGraderService.submitAndEvaluate(1L, 5L, 10L, Role.STUDENT, request);
+        AdminReviewHomeworkRequest reviewRequest = AdminReviewHomeworkRequest.builder()
+                .status(SubmissionStatus.PASSED)
+                .mentorFeedback("Отличный чистый код и живой сайт!")
+                .build();
+
+        HomeworkSubmissionDto result = aiCodeGraderService.reviewSubmission(100L, 1L, reviewRequest);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.FAILED);
-        assertThat(result.getScore()).isLessThanOrEqualTo(45);
-        assertThat(result.getSecurityFlags()).contains("SECURITY");
+        assertThat(result.getStatus()).isEqualTo(SubmissionStatus.PASSED);
+        assertThat(result.getMentorFeedback()).isEqualTo("Отличный чистый код и живой сайт!");
 
-        verify(lessonService, never()).completeLesson(any(), any(), any(), any());
+        verify(lessonService).completeLesson(1L, 5L, 10L, Role.ADMIN);
+        verify(auditService).logAction(eq(1L), eq("HOMEWORK_REVIEWED"), eq("HomeworkSubmission"), eq(100L), any(), any());
     }
 }

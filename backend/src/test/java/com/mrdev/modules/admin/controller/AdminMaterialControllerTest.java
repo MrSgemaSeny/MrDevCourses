@@ -71,6 +71,24 @@ class AdminMaterialControllerTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
+    private com.mrdev.modules.audit.repository.AuditLogRepository auditLogRepository;
+
+    @Autowired
+    private com.mrdev.modules.homework.repository.HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.course.repository.CohortRepository cohortRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizQuestionOptionRepository quizQuestionOptionRepository;
+
+    @Autowired
+    private com.mrdev.modules.quiz.repository.QuizQuestionRepository quizQuestionRepository;
+
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
     private User adminUser;
@@ -80,11 +98,17 @@ class AdminMaterialControllerTest {
 
     @BeforeEach
     void setUp() {
+        auditLogRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
+        quizQuestionOptionRepository.deleteAll();
+        quizQuestionRepository.deleteAll();
         quizRepository.deleteAll();
         lessonMaterialRepository.deleteAll();
         lessonProgressRepository.deleteAll();
         lessonRepository.deleteAll();
         courseModuleRepository.deleteAll();
+        cohortRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();

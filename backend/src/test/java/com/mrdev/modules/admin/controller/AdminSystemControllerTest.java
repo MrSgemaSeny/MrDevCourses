@@ -36,6 +36,18 @@ class AdminSystemControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private com.mrdev.modules.audit.repository.AuditLogRepository auditLogRepository;
+
+    @Autowired
+    private com.mrdev.modules.homework.repository.HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.course.repository.EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private com.mrdev.modules.lesson.repository.LessonProgressRepository lessonProgressRepository;
+
+    @Autowired
     private OutboxEventRepository outboxEventRepository;
 
     @Autowired
@@ -52,6 +64,10 @@ class AdminSystemControllerTest {
     @BeforeEach
     void setUp() {
         rateLimiterService.reset();
+        auditLogRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        lessonProgressRepository.deleteAll();
+        enrollmentRepository.deleteAll();
         outboxEventRepository.deleteAll();
         userRepository.deleteAll();
 
@@ -101,7 +117,7 @@ class AdminSystemControllerTest {
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.totalActiveBuckets", greaterThanOrEqualTo(2)))
                 .andExpect(jsonPath("$.data.totalThrottledRequests", is(1)))
-                .andExpect(jsonPath("$.data.tiers.AUTH.capacity", is(100)))
+                .andExpect(jsonPath("$.data.tiers.AUTH.capacity", is(10)))
                 .andExpect(jsonPath("$.data.tiers.AI.capacity", is(5)))
                 .andExpect(jsonPath("$.data.tiers.GENERAL.capacity", is(60)))
                 .andExpect(jsonPath("$.data.recentThrottles", hasSize(1)))

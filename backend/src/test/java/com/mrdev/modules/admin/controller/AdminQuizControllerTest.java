@@ -76,10 +76,22 @@ class AdminQuizControllerTest {
     private QuizQuestionOptionRepository quizQuestionOptionRepository;
 
     @Autowired
+    private com.mrdev.modules.quiz.repository.QuizSubmissionRepository quizSubmissionRepository;
+
+    @Autowired
     private LessonProgressRepository lessonProgressRepository;
 
     @Autowired
     private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private com.mrdev.modules.audit.repository.AuditLogRepository auditLogRepository;
+
+    @Autowired
+    private com.mrdev.modules.homework.repository.HomeworkSubmissionRepository homeworkSubmissionRepository;
+
+    @Autowired
+    private com.mrdev.modules.course.repository.CohortRepository cohortRepository;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -91,6 +103,9 @@ class AdminQuizControllerTest {
 
     @BeforeEach
     void setUp() {
+        auditLogRepository.deleteAll();
+        homeworkSubmissionRepository.deleteAll();
+        quizSubmissionRepository.deleteAll();
         quizQuestionOptionRepository.deleteAll();
         quizQuestionRepository.deleteAll();
         quizRepository.deleteAll();
@@ -98,6 +113,7 @@ class AdminQuizControllerTest {
         lessonProgressRepository.deleteAll();
         lessonRepository.deleteAll();
         courseModuleRepository.deleteAll();
+        cohortRepository.deleteAll();
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
         userRepository.deleteAll();

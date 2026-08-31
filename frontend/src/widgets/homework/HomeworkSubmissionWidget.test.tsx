@@ -36,18 +36,19 @@ describe('HomeworkSubmissionWidget', () => {
       </QueryClientProvider>
     );
 
-    expect(screen.getByText(/AI Code Review & Auto-Grader/i)).toBeInTheDocument();
+    expect(screen.getByText(/Практика & Сдача ДЗ ментору/i)).toBeInTheDocument();
 
-    const textarea = screen.getByPlaceholderText(/Вставьте код решения/i);
-    fireEvent.change(textarea, { target: { value: 'const x = 1;' } });
+    const repoInput = screen.getByPlaceholderText(/your-username\/my-vibe-project/i);
+    fireEvent.change(repoInput, { target: { value: 'https://github.com/student/repo' } });
 
-    const submitBtn = screen.getByRole('button', { name: /Отправить на проверку/i });
+    const submitBtn = screen.getByRole('button', { name: /Отправить ментору/i });
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(submitSpy).toHaveBeenCalledWith(1, 101, {
-        codeSnippet: 'const x = 1;',
-        repositoryUrl: undefined,
+        codeSnippet: undefined,
+        repositoryUrl: 'https://github.com/student/repo',
+        liveDemoUrl: undefined,
       });
     });
   });

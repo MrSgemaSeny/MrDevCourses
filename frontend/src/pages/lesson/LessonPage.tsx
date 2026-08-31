@@ -5,7 +5,6 @@ import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { MarkdownViewer } from '@/shared/ui/MarkdownViewer';
 import { QuickNavProvider, QuickNavDrawer, useQuickNav } from '@/widgets/quick-nav';
 import { LessonContextPanel } from '@/widgets/lesson';
-import { LessonAiTutorChat } from '@/widgets/ai-tutor/LessonAiTutorChat';
 import { HomeworkSubmissionWidget } from '@/widgets/homework/HomeworkSubmissionWidget';
 import { LessonQuizWidget } from '@/widgets/quiz/LessonQuizWidget';
 import { LessonMaterialsList } from '@/widgets/materials/LessonMaterialsList';
@@ -20,7 +19,6 @@ import {
   Layers,
   Code2,
   HelpCircle,
-  Bot,
 } from 'lucide-react';
 
 
@@ -29,7 +27,7 @@ const LessonPageContent: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { openQuickNav } = useQuickNav();
-  const [activeTab, setActiveTab] = useState<'content' | 'quiz' | 'homework' | 'tutor'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'quiz' | 'homework'>('content');
 
   const cId = Number(courseId);
   const lId = Number(lessonId);
@@ -184,7 +182,19 @@ const LessonPageContent: React.FC = () => {
                       : 'text-zinc-500 hover:text-white'
                   }`}
                 >
-                  Материалы урока
+                  Конспект и материалы
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('homework')}
+                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                    activeTab === 'homework'
+                      ? 'bg-[#141418] text-white border border-white/10'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  <Code2 className="w-3.5 h-3.5 text-zinc-400" />
+                  <span>Практика и сдача ДЗ</span>
                 </button>
                 {lesson.hasQuiz && (
                   <button
@@ -197,33 +207,9 @@ const LessonPageContent: React.FC = () => {
                     }`}
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />
-                    <span>Квиз & Аттестация</span>
+                    <span>Квиз</span>
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('homework')}
-                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                    activeTab === 'homework'
-                      ? 'bg-[#141418] text-white border border-white/10'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  <Code2 className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>Задание и AI-ревью</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('tutor')}
-                  className={`px-3 py-1.5 rounded-sm text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shrink-0 ${
-                    activeTab === 'tutor'
-                      ? 'bg-[#141418] text-white border border-white/10'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  <Bot className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>AI Наставник (RAG)</span>
-                </button>
               </div>
 
 
@@ -248,7 +234,7 @@ const LessonPageContent: React.FC = () => {
                     queryClient.invalidateQueries({ queryKey: ['lessons', cId] });
                   }}
                 />
-              ) : activeTab === 'homework' ? (
+              ) : (
                 <HomeworkSubmissionWidget
                   courseId={cId}
                   lessonId={lId}
@@ -256,12 +242,6 @@ const LessonPageContent: React.FC = () => {
                     queryClient.invalidateQueries({ queryKey: ['lesson', cId, lId] });
                     queryClient.invalidateQueries({ queryKey: ['lessons', cId] });
                   }}
-                />
-              ) : (
-                <LessonAiTutorChat
-                  courseId={cId}
-                  lessonId={lId}
-                  lessonTitle={lesson.title}
                 />
               )}
             </div>

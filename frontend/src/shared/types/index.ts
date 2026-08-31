@@ -298,19 +298,32 @@ export interface HomeworkSubmission {
   courseId: number;
   codeSnippet: string;
   repositoryUrl?: string;
+  liveDemoUrl?: string;
   status: SubmissionStatus;
   score: number;
   aiFeedback?: string;
+  mentorFeedback?: string;
+  reviewedBy?: number;
   passedTestsCount: number;
   totalTestsCount: number;
   securityFlags?: string;
+  studentName?: string;
+  studentEmail?: string;
+  lessonTitle?: string;
+  courseTitle?: string;
   reviewedAt?: string;
   createdAt: string;
 }
 
 export interface HomeworkSubmitRequest {
-  codeSnippet: string;
+  codeSnippet?: string;
   repositoryUrl?: string;
+  liveDemoUrl?: string;
+}
+
+export interface AdminReviewHomeworkRequest {
+  status: SubmissionStatus;
+  mentorFeedback?: string;
 }
 
 export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'TEXT_INPUT';

@@ -19,5 +19,11 @@ public interface HomeworkSubmissionRepository extends JpaRepository<HomeworkSubm
 
     Optional<HomeworkSubmission> findFirstByUserIdAndLessonIdOrderByCreatedAtDesc(Long userId, Long lessonId);
 
+    List<HomeworkSubmission> findAllByOrderByCreatedAtDesc();
+
+    List<HomeworkSubmission> findByStatusOrderByCreatedAtDesc(SubmissionStatus status);
+
     long countByCourseIdAndStatus(Long courseId, SubmissionStatus status);
+
+    long countByStatus(SubmissionStatus status);
 }

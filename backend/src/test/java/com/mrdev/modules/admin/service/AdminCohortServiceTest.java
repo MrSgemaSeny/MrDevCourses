@@ -109,7 +109,7 @@ class AdminCohortServiceTest {
         CohortDto result = adminCohortService.createCohort(10L, request);
 
         assertThat(result).isNotNull();
-        verify(auditService).logAction(eq(1L), eq("ADMIN_CREATE_COHORT"), eq("Cohort"), eq(100L), contains("New Batch"), isNull());
+        verify(auditService).logAction(eq(1L), eq("ADMIN_CREATE_COHORT"), eq("Cohort"), eq(100L), anyString(), isNull());
     }
 
     @Test

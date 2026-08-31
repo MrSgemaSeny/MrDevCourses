@@ -162,7 +162,7 @@ class AdminCohortControllerTest {
                 .build();
 
         mockMvc.perform(post("/v1/admin/courses/" + testCourse.getId() + "/cohorts")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -186,7 +186,7 @@ class AdminCohortControllerTest {
 
         // GET all
         mockMvc.perform(get("/v1/admin/cohorts")
-                        .cookie(new Cookie("mrdevcourses_token", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].name", is("Spring 2026 Batch")));
@@ -200,7 +200,7 @@ class AdminCohortControllerTest {
                 .build();
 
         mockMvc.perform(put("/v1/admin/cohorts/" + cohort.getId())
-                        .cookie(new Cookie("mrdevcourses_token", adminToken))
+                        .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
@@ -210,7 +210,7 @@ class AdminCohortControllerTest {
 
         // DELETE
         mockMvc.perform(delete("/v1/admin/cohorts/" + cohort.getId())
-                        .cookie(new Cookie("mrdevcourses_token", adminToken)))
+                        .cookie(new Cookie("MrDev_token", adminToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)));
     }
