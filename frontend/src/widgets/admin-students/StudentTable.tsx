@@ -6,10 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   TrendingUp,
-  UserPlus,
   Loader2,
-  Calendar,
-  Layers,
 } from 'lucide-react';
 import { Student, UserRole } from '@/shared/types';
 import { RoleToggle } from './RoleToggle';

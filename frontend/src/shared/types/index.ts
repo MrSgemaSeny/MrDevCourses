@@ -358,17 +358,6 @@ export interface QuizResult {
   questionExplanations?: Record<number, string>;
 }
 
-export interface Cohort {
-  id: number;
-  courseId: number;
-  name: string;
-  startDate: string;
-  endDate?: string;
-  maxStudents?: number;
-  isActive: boolean;
-  createdAt: string;
-}
-
 export interface OutboxMetrics {
   pendingCount: number;
   processingCount: number;

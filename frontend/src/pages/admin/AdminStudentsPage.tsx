@@ -3,10 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Users,
   RefreshCw,
-  Layers,
-  GraduationCap,
-  Sparkles,
-  Shield,
 } from 'lucide-react';
 import { adminStudentApi, StudentFilterParams } from '@/entities/adminStudentApi';
 import { adminApi } from '@/entities/admin/api/adminApi';
@@ -28,9 +24,6 @@ import {
 export const AdminStudentsPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { user: currentUser } = useAuth();
-
-  // Active Tab: 'students' | 'cohorts'
-  const [activeTab, setActiveTab] = useState<'students' | 'cohorts'>('students');
 
   // Filter & Pagination state
   const [searchQuery, setSearchQuery] = useState('');

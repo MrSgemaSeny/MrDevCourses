@@ -77,7 +77,7 @@ export const AdminPage: React.FC = () => {
 
   // Mutations
   const createCourseMutation = useMutation({
-    mutationFn: adminApi.createCourse,
+    mutationFn: (payload: CreateCoursePayload) => adminApi.createCourse(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'courses'] });
       queryClient.invalidateQueries({ queryKey: ['courses'] });
@@ -87,7 +87,7 @@ export const AdminPage: React.FC = () => {
   });
 
   const deleteCourseMutation = useMutation({
-    mutationFn: adminApi.deleteCourse,
+    mutationFn: (id: number) => adminApi.deleteCourse(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'courses'] });
       queryClient.invalidateQueries({ queryKey: ['courses'] });
@@ -105,7 +105,7 @@ export const AdminPage: React.FC = () => {
   });
 
   const deleteLessonMutation = useMutation({
-    mutationFn: adminApi.deleteLesson,
+    mutationFn: (id: number) => adminApi.deleteLesson(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'lessons', effectiveCourseId] });
       setDeleteConfirm(null);

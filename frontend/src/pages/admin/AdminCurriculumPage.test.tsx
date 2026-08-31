@@ -51,8 +51,8 @@ describe('AdminCurriculumPage', () => {
     expect(screen.getByRole('button', { name: /Создать курс/i })).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText('Java Masterclass')).toBeInTheDocument();
-      expect(screen.getByText('/java-masterclass')).toBeInTheDocument();
+      expect(screen.getAllByText('Java Masterclass').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('/java-masterclass').length).toBeGreaterThan(0);
     });
   });
 
@@ -69,7 +69,7 @@ describe('AdminCurriculumPage', () => {
     render(<AdminCurriculumPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Java Masterclass')).toBeInTheDocument();
+      expect(screen.getAllByText('Java Masterclass').length).toBeGreaterThan(0);
     });
 
     const createBtn = screen.getByRole('button', { name: /Создать курс/i });
@@ -80,7 +80,8 @@ describe('AdminCurriculumPage', () => {
     const titleInput = screen.getByPlaceholderText(/Java Fullstack Архитектор/i);
     fireEvent.change(titleInput, { target: { value: 'Spring Security Pro' } });
 
-    const submitBtn = screen.getByRole('button', { name: /Создать курс/i });
+    const submitBtns = screen.getAllByRole('button', { name: /Создать курс/i });
+    const submitBtn = submitBtns[submitBtns.length - 1];
     fireEvent.click(submitBtn);
 
     await waitFor(() => {

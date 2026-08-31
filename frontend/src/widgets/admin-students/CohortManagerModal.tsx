@@ -10,8 +10,6 @@ import {
   Check,
   Loader2,
   AlertCircle,
-  Clock,
-  Layers,
 } from 'lucide-react';
 import { adminStudentApi } from '@/entities/adminStudentApi';
 import { Cohort, Course, CreateCohortPayload, UpdateCohortPayload } from '@/shared/types';

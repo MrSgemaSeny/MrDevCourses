@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   Plus,
-  ArrowUpDown,
   BookOpen,
   CheckCircle2,
   AlertCircle,
-  Sparkles,
   RefreshCw,
 } from 'lucide-react';
 import { Course, CourseModule, LessonSummary } from '@/shared/types';

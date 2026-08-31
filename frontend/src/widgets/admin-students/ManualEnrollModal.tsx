@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, BookOpen, Plus, Trash2, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, BookOpen, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { Student, Course } from '@/shared/types';
 
 interface ManualEnrollModalProps {

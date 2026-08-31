@@ -9,14 +9,11 @@ import {
   HelpCircle,
   Code2,
   BookOpen,
-  Award,
-  Clock,
   Loader2,
   AlertCircle,
-  ExternalLink,
 } from 'lucide-react';
 import { adminStudentApi } from '@/entities/adminStudentApi';
-import { StudentProgressDetail, UserRole } from '@/shared/types';
+import { StudentProgressDetail } from '@/shared/types';
 
 interface StudentProgressDrawerProps {
   userId: number | null;

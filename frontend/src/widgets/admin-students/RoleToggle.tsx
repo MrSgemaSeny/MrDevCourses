@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Shield, ShieldAlert, ShieldCheck, Check, X, Loader2 } from 'lucide-react';
+import { Shield, ShieldAlert, ShieldCheck, Check, Loader2 } from 'lucide-react';
 import { UserRole } from '@/shared/types';
 
 interface RoleToggleProps {
-  userId: number;
+  userId?: number;
   userEmail: string;
   currentRole: UserRole;
   isCurrentAdmin?: boolean;
@@ -12,7 +12,7 @@ interface RoleToggleProps {
 }
 
 export const RoleToggle: React.FC<RoleToggleProps> = ({
-  userId,
+  userId: _userId,
   userEmail,
   currentRole,
   isCurrentAdmin = false,

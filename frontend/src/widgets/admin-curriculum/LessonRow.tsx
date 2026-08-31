@@ -6,7 +6,6 @@ import {
   Code,
   HelpCircle,
   Clock,
-  Eye,
   Edit2,
   Trash2,
   Paperclip,
@@ -21,7 +20,7 @@ import { YouTubeValidator } from './YouTubeValidator';
 
 interface LessonRowProps {
   lesson: LessonSummary | LessonDetail;
-  courseId: number;
+  courseId?: number;
   onUpdated: () => void;
   onDelete: (id: number) => void;
   onDragStart?: (e: React.DragEvent, id: number) => void;
@@ -31,7 +30,7 @@ interface LessonRowProps {
 
 export const LessonRow: React.FC<LessonRowProps> = ({
   lesson,
-  courseId,
+  courseId: _courseId,
   onUpdated,
   onDelete,
   onDragStart,
@@ -46,7 +45,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   // Edit form state
   const [title, setTitle] = useState(lesson.title);
   const [dayNumber, setDayNumber] = useState(lesson.dayNumber);
-  const [sortOrder, setSortOrder] = useState(lesson.sortOrder);
+  const [sortOrder] = useState(lesson.sortOrder);
   const [lessonType, setLessonType] = useState<LessonType>(lesson.lessonType || 'VIDEO');
   const [durationMinutes, setDurationMinutes] = useState(lesson.durationMinutes || 0);
   const [isFreePreview, setIsFreePreview] = useState(Boolean(lesson.isFreePreview));

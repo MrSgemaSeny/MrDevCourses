@@ -7,9 +7,8 @@ import {
   ChevronDown,
   ChevronRight,
   Layers,
-  Sparkles,
 } from 'lucide-react';
-import { CourseModule, LessonDetail, LessonSummary } from '@/shared/types';
+import { CourseModule } from '@/shared/types';
 import { adminApi, CreateLessonPayload, UpdateModulePayload } from '@/entities/adminApi';
 import { LessonRow } from './LessonRow';
 import { YouTubeValidator } from './YouTubeValidator';

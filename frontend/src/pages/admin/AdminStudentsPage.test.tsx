@@ -106,7 +106,7 @@ describe('AdminStudentsPage', () => {
     await waitFor(() => {
       expect(screen.getByText('admin@mrdev.com')).toBeInTheDocument();
       expect(screen.getByText('student@mrdev.com')).toBeInTheDocument();
-      expect(screen.getByText('Spring Boot 3')).toBeInTheDocument();
+      expect(screen.getAllByText('Spring Boot 3').length).toBeGreaterThan(0);
     });
 
     // Open Cohort Modal

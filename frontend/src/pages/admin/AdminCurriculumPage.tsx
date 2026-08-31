@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   Plus,
-  BookOpen,
   Edit2,
   Trash2,
-  CheckCircle2,
   AlertCircle,
-  ExternalLink,
-  Layers,
-  Sparkles,
 } from 'lucide-react';
 import { Course } from '@/shared/types';
 import { adminApi, CreateCoursePayload, UpdateCoursePayload } from '@/entities/adminApi';

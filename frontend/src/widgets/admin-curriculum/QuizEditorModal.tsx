@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, CheckCircle2, HelpCircle, AlertCircle } from 'lucide-react';
+import { X, Plus, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { adminApi, CreateQuizPayload, CreateQuizQuestionPayload, CreateQuizOptionPayload } from '@/entities/adminApi';
 
 interface QuizEditorModalProps {
