@@ -340,7 +340,7 @@ export const CourseDetailPage: React.FC = () => {
 
             <div className="aspect-video w-full bg-black">
               <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                src="https://www.youtube-nocookie.com/embed/qnYl2ibf-rQ?autoplay=1"
                 title="Course Trailer"
                 className="w-full h-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
