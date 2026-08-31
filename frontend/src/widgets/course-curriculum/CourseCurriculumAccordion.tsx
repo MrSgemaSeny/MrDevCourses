@@ -112,12 +112,12 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
               >
                 <div className="min-w-0 pr-4">
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
-                      Модуль {idx + 1}
+                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                      Неделя {idx + 1}
                     </span>
                     <h3 className="text-sm font-semibold text-white truncate">{mod.title}</h3>
                     {mod.isFreePreview && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 text-zinc-300 border border-white/10">
                         Бесплатный модуль
                       </span>
                     )}
@@ -144,13 +144,12 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
               {/* Module Lessons Accordion Body */}
               {isExpanded && (
                 <div className="px-5 pb-4 pt-1 space-y-1.5 border-t border-white/5 bg-[#0a0a0c]/60">
-                  {moduleLessons.map((lessonItem) => {
+                  {moduleLessons.map((lessonItem, lessonIdx) => {
                     const isClickable = (lessonItem.accessible && enrolled) || lessonItem.isFreePreview;
-                    const displayTitle = lessonItem.title.startsWith(`Урок ${lessonItem.dayNumber}:`)
-                      ? lessonItem.title
-                      : lessonItem.title.startsWith(`День ${lessonItem.dayNumber}:`)
-                      ? lessonItem.title.replace(`День ${lessonItem.dayNumber}:`, `Урок ${lessonItem.dayNumber}:`)
-                      : `Урок ${lessonItem.dayNumber}: ${lessonItem.title}`;
+                    const cleanTitle = lessonItem.title
+                      .replace(/^(Урок|День)\s*\d+:\s*/i, '')
+                      .trim();
+                    const displayTitle = `Урок ${lessonIdx + 1}: ${cleanTitle}`;
 
                     return (
                       <div
@@ -183,11 +182,11 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
 
                         <div className="flex items-center gap-2 shrink-0">
                           {lessonItem.completed ? (
-                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1 font-mono">
-                              <CheckCircle2 className="w-3 h-3" /> Пройден
+                            <span className="px-2 py-0.5 rounded text-[10px] bg-white/10 text-white border border-white/20 flex items-center gap-1 font-mono">
+                              <CheckCircle2 className="w-3 h-3 text-white" /> Пройден
                             </span>
                           ) : lessonItem.isFreePreview && !enrolled ? (
-                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-mono">
+                            <span className="px-2 py-0.5 rounded text-[10px] bg-white/5 text-zinc-300 border border-white/10 font-mono">
                               Бесплатно
                             </span>
                           ) : lessonItem.accessible && enrolled ? (

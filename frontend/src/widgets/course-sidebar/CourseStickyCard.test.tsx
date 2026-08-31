@@ -55,7 +55,7 @@ describe('CourseStickyCard Component', () => {
     );
 
     expect(screen.getByText('Записаться на курс')).toBeInTheDocument();
-    expect(screen.getByText('Видео-превью курса')).toBeInTheDocument();
+    expect(screen.getByLabelText('Смотреть трейлер курса')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Записаться на курс'));
     expect(onEnroll).toHaveBeenCalledTimes(1);

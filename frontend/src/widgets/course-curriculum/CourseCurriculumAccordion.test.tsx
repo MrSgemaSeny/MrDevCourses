@@ -90,6 +90,6 @@ describe('CourseCurriculumAccordion Component', () => {
     const module2Header = screen.getByText('Модуль 2: Базы данных и RAG');
     fireEvent.click(module2Header);
 
-    expect(screen.getByText('Урок 3: Векторные индексы HNSW')).toBeInTheDocument();
+    expect(screen.getByText('Урок 1: Векторные индексы HNSW')).toBeInTheDocument();
   });
 });

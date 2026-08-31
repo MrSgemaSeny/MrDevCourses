@@ -21,6 +21,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
   onPlayTrailer,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isHoveredVideo, setIsHoveredVideo] = useState(false);
 
   const completedCount = lessons.filter((l) => l.completed).length;
   const totalCount = lessons.length || (course.modules?.reduce((acc: number, m: CourseModule) => acc + (m.lessonsCount || 0), 0) ?? 0);
@@ -47,26 +48,36 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
   const totalHours = Math.round((totalMinutes / 60) * 10) / 10;
 
   return (
-    <div className="bg-[#0e0e11] border border-white/10 rounded-sm overflow-hidden shadow-2xl sticky top-24">
-      {/* Poster / Preview thumbnail with trailer play trigger */}
-      <div className="relative aspect-video bg-zinc-950 flex items-center justify-center group overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e11] via-black/40 to-transparent z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0,transparent_100%)]" />
+    <div className="bg-[#0e0e11] border border-white/10 rounded-sm overflow-hidden shadow-2xl sticky top-20">
+      {/* Poster / Preview thumbnail with trailer play trigger & hover autoplay */}
+      <div
+        onMouseEnter={() => setIsHoveredVideo(true)}
+        onMouseLeave={() => setIsHoveredVideo(false)}
+        className="relative aspect-video bg-black flex items-center justify-center group overflow-hidden border-b border-white/5 cursor-pointer"
+        onClick={onPlayTrailer}
+      >
+        {isHoveredVideo ? (
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1"
+            title="Course Video Preview"
+            className="w-full h-full pointer-events-none border-0"
+            allow="autoplay"
+          />
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e11] via-black/40 to-transparent z-10" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0,transparent_100%)]" />
 
-        {/* Video play icon */}
-        <button
-          type="button"
-          onClick={onPlayTrailer}
-          className="relative z-20 w-12 h-12 rounded-full bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 shadow-lg cursor-pointer"
-          aria-label="Смотреть трейлер курса"
-        >
-          <Play className="w-5 h-5 fill-current ml-0.5" />
-        </button>
-
-        <span className="absolute bottom-3 left-4 z-20 text-[10px] font-mono text-zinc-300 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Видео-превью курса
-        </span>
+            {/* Video play icon */}
+            <button
+              type="button"
+              className="relative z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 flex items-center justify-center transition-all duration-300 transform group-hover:scale-110 shadow-lg cursor-pointer"
+              aria-label="Смотреть трейлер курса"
+            >
+              <Play className="w-4 h-4 fill-current ml-0.5" />
+            </button>
+          </>
+        )}
       </div>
 
       {/* Main Action area */}
@@ -91,7 +102,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
               <button
                 type="button"
                 onClick={onOpenCertificate}
-                className="w-full py-3 bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="w-full py-3 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <Award className="w-4 h-4" />
                 <span>Открыть сертификат</span>
@@ -160,8 +171,8 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
           >
             {copied ? (
               <>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Ссылка скопирована!</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                <span className="text-white font-medium">Ссылка скопирована!</span>
               </>
             ) : (
               <>
