@@ -176,15 +176,15 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           {/* Block: What You'll Learn (Learning Outcomes) */}
-          <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
+          <div className="p-4 sm:p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
             <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
               Чему вы научитесь на курсе
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
               {learningOutcomes.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-zinc-300">
-                  <CheckCircle2 className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                <div key={idx} className="flex items-start gap-2 text-[11px] sm:text-xs text-zinc-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 shrink-0 mt-0.5" />
                   <span className="leading-snug">{item}</span>
                 </div>
               ))}
@@ -192,7 +192,7 @@ export const CourseDetailPage: React.FC = () => {
           </div>
 
           {/* Block: Requirements & Target Audience */}
-          <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
+          <div className="p-4 sm:p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
             <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
               Требования и кому подойдёт курс
             </h2>

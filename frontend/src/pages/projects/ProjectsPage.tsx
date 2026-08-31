@@ -69,7 +69,7 @@ export const ProjectsPage: React.FC = () => {
 
       {/* Filter Tabs */}
       <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-white/5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => setFilter('all')}
