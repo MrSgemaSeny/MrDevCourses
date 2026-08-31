@@ -139,6 +139,7 @@ class AdminSuiteE2ETest {
 
     @BeforeEach
     void cleanDatabaseAndSeedPrincipals() {
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
         auditLogRepository.deleteAll();
         outboxEventRepository.deleteAll();
         homeworkSubmissionRepository.deleteAll();
@@ -535,23 +536,27 @@ class AdminSuiteE2ETest {
                             .cookie(adminCookie())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(demoteReq)))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.message", containsString("Cannot demote yourself from admin role")));
         }
 
         @Test
         @DisplayName("Last-Admin Protection: Cannot demote sole remaining admin in the system")
         void testLastAdminProtection() throws Exception {
-            // Delete secondary admin so primaryAdmin is the sole admin
+            // Generate token for secondary admin to act as caller
+            String callerToken = jwtTokenProvider.generateToken(secondaryAdmin);
+
+            // Delete secondary admin from DB so primaryAdmin is the sole admin in the platform
             userRepository.delete(secondaryAdmin);
 
             StudentRoleUpdateRequest demoteReq = StudentRoleUpdateRequest.builder().role(Role.STUDENT).build();
 
-            // Even if requested with another auth mechanism, cannot demote sole admin
             mockMvc.perform(patch("/v1/admin/students/" + primaryAdmin.getId() + "/role")
-                            .cookie(adminCookie())
+                            .cookie(new Cookie("MrDev_token", callerToken))
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(demoteReq)))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message", containsString("Cannot demote the last administrator")));
         }
 
         @Test

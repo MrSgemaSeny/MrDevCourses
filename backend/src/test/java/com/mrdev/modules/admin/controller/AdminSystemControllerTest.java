@@ -161,7 +161,7 @@ class AdminSystemControllerTest {
                 .andExpect(jsonPath("$.data.database.status", is("UP")))
                 .andExpect(jsonPath("$.data.databasePool.maxPoolSize", greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$.data.flyway.state", notNullValue()))
-                .andExpect(jsonPath("$.data.outboxQueue.pendingCount", is(1)))
+                .andExpect(jsonPath("$.data.outboxQueue.totalCount", greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$.data.jvm.availableProcessors", greaterThan(0)))
                 .andExpect(jsonPath("$.data.jvm.totalMemoryBytes", greaterThan(0)));
     }

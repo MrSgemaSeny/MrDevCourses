@@ -24,7 +24,8 @@
   - `b2c-discovery`: Modern B2C course catalog (`/courses`) with hover video preview; 2-column B2C landing (`/courses/:slug`) with Syllabus accordion, Sticky card, author badge, and FAQ.
 
 ## Test Verification & Quality Gates
-- **Backend (JUnit)**: 184/184 tests PASSED (100% Green, `:jacocoTestReport` verified).
+- **Backend (JUnit)**: 188/188 tests PASSED (100% Green, clean `--rerun-tasks` and `:jacocoTestReport` verified).
 - **Frontend (Vitest)**: 64/64 tests PASSED across 27 test suites (100% Green).
 - **Production Build**: `tsc -b && vite build` SUCCESSFUL (1789 modules transformed, 0 errors).
+- **Telegram Bot**: `@MrDevelopersbot` created for HW alerts, SOS signals, and mentor triage.
 

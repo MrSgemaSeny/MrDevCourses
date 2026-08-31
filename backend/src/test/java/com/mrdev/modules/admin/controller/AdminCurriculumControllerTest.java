@@ -162,18 +162,18 @@ class AdminCurriculumControllerTest {
 
         // Update Course
         UpdateCourseRequest updateReq = UpdateCourseRequest.builder()
-                .title("Spring Boot Pro 3.3")
-                .description("Updated description")
-                .slug("spring-boot-pro")
-                .active(true)
-                .build();
+            .title("Java Zero to Hero Updated")
+            .description("Updated description")
+            .slug("java-zero-to-hero-updated")
+            .active(true)
+            .build();
 
         mockMvc.perform(put("/v1/admin/courses/" + testCourse.getId())
                         .cookie(new Cookie("MrDev_token", adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateReq)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title", is("Spring Boot Pro 3.3")));
+                .andExpect(jsonPath("$.data.title", is("Java Zero to Hero Updated")));
 
         // Delete Course
         mockMvc.perform(delete("/v1/admin/courses/" + testCourse.getId())

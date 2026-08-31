@@ -54,6 +54,7 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
         rateLimiterService.reset();
         auditLogRepository.deleteAll();
         lessonProgressRepository.deleteAll();
