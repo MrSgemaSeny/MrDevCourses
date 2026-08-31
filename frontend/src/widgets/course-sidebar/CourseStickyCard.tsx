@@ -18,8 +18,10 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
   onEnroll,
   isEnrolling = false,
   onOpenCertificate,
+  onPlayTrailer,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isHoveredVideo, setIsHoveredVideo] = useState(false);
 
   const completedCount = lessons.filter((l) => l.completed).length;
   const totalCount = lessons.length || (course.modules?.reduce((acc: number, m: CourseModule) => acc + (m.lessonsCount || 0), 0) ?? 0);
@@ -123,7 +125,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
             </li>
             <li className="flex items-center gap-2.5">
               <Video className="w-4 h-4 text-zinc-500 shrink-0" />
-              <span>50 часов видеоматериалов</span>
+              <span>4 часа видеоматериалов</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Users className="w-4 h-4 text-zinc-500 shrink-0" />
