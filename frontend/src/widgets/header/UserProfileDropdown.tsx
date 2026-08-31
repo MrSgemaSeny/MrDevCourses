@@ -68,10 +68,10 @@ export const UserProfileDropdown: React.FC = () => {
             src={user.avatarUrl}
             alt={displayName}
             referrerPolicy="no-referrer"
-            className="w-7 h-7 rounded-full border border-white/5 object-cover shrink-0"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg border border-white/10 object-cover shrink-0"
           />
         ) : (
-          <div className="w-7 h-7 rounded-full bg-zinc-800 border border-white/5 flex items-center justify-center text-xs text-zinc-200 font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-zinc-800 border border-white/10 flex items-center justify-center text-xs text-zinc-200 font-bold shrink-0">
             {displayName.charAt(0).toUpperCase()}
           </div>
         )}

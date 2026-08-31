@@ -138,11 +138,13 @@ export const CourseDetailPage: React.FC = () => {
 
             {/* Author compact plate */}
             <div className="pt-2 flex items-center gap-3.5">
-              <img
-                src="/author-avatar.png"
-                alt="Mr Developer"
-                className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
-              />
+              <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/15 shrink-0 bg-[#0a0a0c] flex items-center justify-center shadow-sm">
+                <img
+                  src="/author-avatar.png"
+                  alt="Mr Developer"
+                  className="w-full h-full object-cover scale-115"
+                />
+              </div>
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-white">Mr Developer</span>
