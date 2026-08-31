@@ -9,7 +9,6 @@ import {
   ArrowRight,
   Layers,
   Search,
-  Play,
   Clock,
   Star,
 } from 'lucide-react';
@@ -18,7 +17,6 @@ export const CoursesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('ALL');
   const [selectedFormat, setSelectedFormat] = useState('ALL');
-  const [hoveredCourseId, setHoveredCourseId] = useState<number | null>(null);
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -89,9 +87,9 @@ export const CoursesPage: React.FC = () => {
                 className="px-3 py-1.5 bg-[#0a0a0c] border border-white/10 focus:border-zinc-500 rounded-sm text-xs text-zinc-300 outline-none transition-colors cursor-pointer appearance-none pr-7 font-mono"
               >
                 <option value="ALL">Уровень: Все</option>
-                <option value="1">★ Уровень 1</option>
-                <option value="2">★★ Уровень 2</option>
-                <option value="3">★★★ Уровень 3</option>
+                <option value="1">Уровень 1</option>
+                <option value="2">Уровень 2</option>
+                <option value="3">Уровень 3</option>
               </select>
               <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 text-[10px]">
                 ▼
@@ -131,46 +129,44 @@ export const CoursesPage: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredCourses.map((course) => {
-              const isHovered = hoveredCourseId === course.id;
-
+            {filteredCourses.map((course: any) => {
               return (
                 <div
                   key={course.id}
-                  onMouseEnter={() => setHoveredCourseId(course.id)}
-                  onMouseLeave={() => setHoveredCourseId(null)}
                   className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 hover:border-zinc-600 transition-all flex flex-col justify-between group relative overflow-hidden"
                 >
                   <div>
                     {/* Card Top Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1">
-                          <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                          {course.level === '2' || course.level?.toLowerCase().includes('middle')
-                            ? '★★ Уровень 2'
-                            : course.level === '3' || course.level?.toLowerCase().includes('senior')
-                            ? '★★★ Уровень 3'
-                            : '★ Уровень 1'}
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
+                          <Star className="w-3 h-3 text-zinc-400" />
+                          <span>
+                            {course.level === '2' || course.level?.toLowerCase().includes('middle')
+                              ? 'Уровень 2'
+                              : course.level === '3' || course.level?.toLowerCase().includes('senior')
+                              ? 'Уровень 3'
+                              : 'Уровень 1'}
+                          </span>
                         </span>
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
                           <Layers className="w-3 h-3 text-zinc-400" />
-                          5 модулей
+                          <span>5 модулей</span>
                         </span>
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#141418] text-zinc-300 border border-white/5 flex items-center gap-1.5">
                           <Calendar className="w-3 h-3 text-zinc-400" />
-                          30 уроков
+                          <span>30 уроков</span>
                         </span>
                       </div>
 
                       {course.enrolled ? (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-white border border-white/20 flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3 h-3 text-white" />
                           Вы записаны
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-white/5">
-                          Бесплатный MVP
+                          Full Course
                         </span>
                       )}
                     </div>
@@ -204,11 +200,6 @@ export const CoursesPage: React.FC = () => {
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" /> ~15 ч.
                       </span>
-                      {isHovered && (
-                        <span className="text-emerald-400 flex items-center gap-1 animate-pulse">
-                          <Play className="w-3 h-3 fill-current" /> Превью доступно
-                        </span>
-                      )}
                     </div>
 
                     <Link

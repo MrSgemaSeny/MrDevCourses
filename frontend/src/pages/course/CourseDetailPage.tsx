@@ -123,11 +123,7 @@ export const CourseDetailPage: React.FC = () => {
                 {modules.length} модулей &bull; {course.totalLessons || 30} уроков
               </span>
               <span className="px-2.5 py-0.5 rounded text-[10px] font-medium bg-[#141418] text-zinc-300 border border-white/5 font-mono flex items-center gap-1.5">
-                <div className="flex items-center gap-0.5 text-amber-400">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  <Star className="w-3 h-3 fill-zinc-700 text-zinc-700" />
-                </div>
+                <Star className="w-3 h-3 text-zinc-400" />
                 <span>Уровень 2 (Middle)</span>
               </span>
             </div>
