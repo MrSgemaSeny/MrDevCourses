@@ -8,6 +8,7 @@ import { LessonContextPanel } from '@/widgets/lesson';
 import { HomeworkSubmissionWidget } from '@/widgets/homework/HomeworkSubmissionWidget';
 import { LessonQuizWidget } from '@/widgets/quiz/LessonQuizWidget';
 import { LessonMaterialsList } from '@/widgets/materials/LessonMaterialsList';
+import { StudentHelpModal } from '@/widgets/help/StudentHelpModal';
 import {
   Play,
   CheckCircle2,
@@ -28,6 +29,7 @@ const LessonPageContent: React.FC = () => {
   const queryClient = useQueryClient();
   const { openQuickNav } = useQuickNav();
   const [activeTab, setActiveTab] = useState<'content' | 'quiz' | 'homework'>('content');
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
   const cId = Number(courseId);
   const lId = Number(lessonId);
@@ -156,18 +158,29 @@ const LessonPageContent: React.FC = () => {
                 <h1 className="text-2xl font-bold text-white tracking-tight">{lesson.title}</h1>
               </div>
 
-              <button
-                onClick={() => completeMutation.mutate()}
-                disabled={lesson.completed || completeMutation.isPending}
-                className={`px-4 py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition-all ${
-                  lesson.completed
-                    ? 'bg-[#141418] border border-white/5 text-emerald-400 cursor-default'
-                    : 'bg-[#fafafa] hover:bg-white text-[#09090b] shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer'
-                }`}
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>{lesson.completed ? 'Урок пройден' : completeMutation.isPending ? 'Сохранение...' : 'Отметить как пройденный'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsHelpModalOpen(true)}
+                  className="px-3 py-2 text-xs font-semibold rounded-md bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/60 text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <HelpCircle className="w-4 h-4 text-amber-400" />
+                  <span>Не получается?</span>
+                </button>
+
+                <button
+                  onClick={() => completeMutation.mutate()}
+                  disabled={lesson.completed || completeMutation.isPending}
+                  className={`px-4 py-2 text-xs font-semibold rounded-md flex items-center justify-center gap-2 transition-all ${
+                    lesson.completed
+                      ? 'bg-[#141418] border border-white/5 text-emerald-400 cursor-default'
+                      : 'bg-[#fafafa] hover:bg-white text-[#09090b] shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer'
+                  }`}
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{lesson.completed ? 'Урок пройден' : completeMutation.isPending ? 'Сохранение...' : 'Отметить как пройденный'}</span>
+                </button>
+              </div>
             </div>
 
             {/* Lesson Tabs */}
@@ -323,6 +336,13 @@ const LessonPageContent: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <StudentHelpModal
+        courseId={cId}
+        lessonId={lId}
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+      />
 
       <QuickNavDrawer />
     </div>

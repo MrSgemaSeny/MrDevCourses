@@ -418,3 +418,39 @@ export interface AdminAnalytics {
   overallCompletionRate: number;
   funnel: LessonFunnelItem[];
 }
+
+export type HelpRequestStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'RESOLVED_WITH_FAQ';
+
+export interface HelpRequest {
+  id: number;
+  userId: number;
+  studentName: string;
+  studentEmail: string;
+  courseId: number;
+  courseTitle: string;
+  lessonId: number;
+  lessonTitle: string;
+  lessonDayNumber?: number;
+  stepIdentifier: string;
+  stepTitle?: string;
+  problemText: string;
+  errorLogs?: string;
+  status: HelpRequestStatus;
+  mentorSolution?: string;
+  resolvedBy?: number;
+  resolvedAt?: string;
+  createdAt: string;
+}
+
+export interface CreateHelpRequestPayload {
+  stepIdentifier: string;
+  stepTitle?: string;
+  problemText: string;
+  errorLogs?: string;
+}
+
+export interface ResolveHelpRequestPayload {
+  status: HelpRequestStatus;
+  mentorSolution?: string;
+}
+
