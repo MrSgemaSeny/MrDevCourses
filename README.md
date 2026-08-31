@@ -147,6 +147,60 @@ npm run dev
 
 ---
 
+## Статус Зрелости Продукта: Level 3 (Strong Educational MVP / Pilot Pre-Release)
+
+> [!IMPORTANT]
+> Проект позиционируется как **Сильный Учебный MVP (Level 3)**, полностью готовый к боевому пилотному запуску на реальную аудиторию студентов.
+> Платформа **НЕ является перегруженным Enterprise-решением**: в ней сознательно исключен избыточный оверинжиниринг (внешние брокеры Kafka, сложные мульти-тенантные схемы, распределённые микросервисы). Все критические функции реализованы надёжно, локально и ресурсоэффективно в рамках модульного монолита.
+
+### Что входит в Strong MVP (Готово к пилоту):
+- [x] **Полный цикл студента**: Авторизация (Google OAuth2 / Email), витрина B2C, запись на курс, drip-открытие уроков, просмотр видео и материалов.
+- [x] **Интерактивная практика**: AI-грейдер кода с защитой AST, движок квизов с anti-cheat маскировкой, контекстный AI-тьютор на гибридном RAG (pgvector + FTS).
+- [x] **Аттестация и геймификация**: Стрики активности, автоматическая генерация PDF-сертификатов с онлайн-верификацией.
+- [x] **Административный контур**: Изолированная консоль `AdminLayout` с Drag-and-Drop редактором программ, управлением студентами и когортной аналитикой.
+- [x] **Отказоустойчивость**: 3-уровневый Rate Limiting (Bucket4j), Transactional Outbox для фоновых событий, 100% зеленые тесты.
+
+---
+
+## Развертывание в Production (Deployment Blueprint)
+
+Платформа спроектирована для экономичного и надежного деплоя в облачной инфраструктуре:
+
+```
+[Пользователь / Браузер]
+         |
+    +----+-----------------------------+
+    |                                  | (HTTPS)
+    v                                  v
+[Vercel / GitHub Pages]          [Fly.io Edge Proxy]
+(React 19 SPA / Static CDN)            |
+                                       v
+                                [Spring Boot 3 App] (Fly.io Machine, 512MB-1GB RAM)
+                                       |
+                                       v
+                                [Fly Postgres 17] (pgvector + pg_trgm)
+```
+
+### Конфигурация Переменных Окружения (Production Secrets)
+
+| Переменная | Назначение | Пример значения |
+| :--- | :--- | :--- |
+| `SPRING_DATASOURCE_URL` | Подключение к PostgreSQL | `jdbc:postgresql://top2.nearest.of.mrdev-db.internal:5432/mrdevcourses` |
+| `SPRING_DATASOURCE_USERNAME` | Пользователь БД | `postgres` |
+| `SPRING_DATASOURCE_PASSWORD` | Пароль к БД | `${POSTGRES_PASSWORD}` |
+| `JWT_SECRET` | 256-битный ключ подписи токенов | `${RANDOM_HEX_64_CHARS}` |
+| `GOOGLE_CLIENT_ID` | OAuth2 Google Client ID | `*.apps.googleusercontent.com` |
+| `GOOGLE_CLIENT_SECRET` | OAuth2 Google Secret | `${GOOGLE_SECRET}` |
+| `GROQ_API_KEY` | API ключ для LLM (Llama 3.3 70B) | `gsk_*` |
+| `APP_CORS_ALLOWED_ORIGINS` | Разрешенные фронтенд-домены | `https://mrdevcourses.vercel.app,http://localhost:5173` |
+
+### Оптимизация памяти JVM для Cloud-контейнеров (512MB RAM)
+```bash
+java -XX:TieredStopAtLevel=1 -Xmx384m -Xss512k -XX:+UseSerialGC -Dfile.encoding=UTF-8 -jar app.jar
+```
+
+---
+
 ## Тестирование и Контроль Качества
 
 ### Запуск тестов Backend (JUnit 5 + E2E Suite):
