@@ -41,14 +41,8 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
     }
   };
 
-  const totalMinutes = (course.modules || []).reduce((acc: number, m: CourseModule) => {
-    const mins = (m.lessons || []).reduce((lAcc: number, l: LessonSummary) => lAcc + (l.durationMinutes || 0), 0);
-    return acc + mins;
-  }, 0);
-  const totalHours = Math.round((totalMinutes / 60) * 10) / 10;
-
   return (
-    <div className="bg-[#0e0e11] border border-white/10 rounded-sm overflow-hidden shadow-2xl sticky top-20">
+    <div className="bg-[#0e0e11] border border-white/10 rounded-sm overflow-hidden shadow-2xl sticky top-20 w-full">
       {/* Poster / Preview thumbnail with trailer play trigger & hover autoplay */}
       <div
         onMouseEnter={() => setIsHoveredVideo(true)}
@@ -151,7 +145,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
             </li>
             <li className="flex items-center gap-2.5">
               <Video className="w-4 h-4 text-zinc-500 shrink-0" />
-              <span>{totalHours > 0 ? `~${totalHours} ч. видеоматериалов` : '--:-- видеоматериалов'}</span>
+              <span>--:-- видеоматериалов</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Users className="w-4 h-4 text-zinc-500 shrink-0" />

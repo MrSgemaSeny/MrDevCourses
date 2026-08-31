@@ -102,7 +102,7 @@ export const CourseDetailPage: React.FC = () => {
   const modules = course.modules || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-xs font-mono text-zinc-500">
         <Link to="/courses" className="hover:text-zinc-300 transition-colors">
@@ -113,9 +113,9 @@ export const CourseDetailPage: React.FC = () => {
       </nav>
 
       {/* Main 2-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column (8 cols) */}
-        <div className="lg:col-span-8 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
+        {/* Left Column (8 cols on lg, 9 cols on xl) */}
+        <div className="lg:col-span-8 xl:col-span-9 space-y-8 min-w-0">
           {/* Hero Section */}
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
@@ -302,16 +302,18 @@ export const CourseDetailPage: React.FC = () => {
           <CourseFaqSection />
         </div>
 
-        {/* Right Column (4 cols) — Compact Sticky Action Sidebar */}
-        <div className="lg:col-span-4">
-          <CourseStickyCard
-            course={course}
-            lessons={lessons}
-            onEnroll={handleEnrollClick}
-            isEnrolling={enrollMutation.isPending}
-            onOpenCertificate={() => setShowCertificate(true)}
-            onPlayTrailer={() => setShowTrailerModal(true)}
-          />
+        {/* Right Column (4 cols on lg, 3 cols on xl) — Compact Sticky Action Sidebar */}
+        <div className="lg:col-span-4 xl:col-span-3 flex justify-end">
+          <div className="w-full max-w-[340px] xl:max-w-[360px] ml-auto">
+            <CourseStickyCard
+              course={course}
+              lessons={lessons}
+              onEnroll={handleEnrollClick}
+              isEnrolling={enrollMutation.isPending}
+              onOpenCertificate={() => setShowCertificate(true)}
+              onPlayTrailer={() => setShowTrailerModal(true)}
+            />
+          </div>
         </div>
       </div>
 
