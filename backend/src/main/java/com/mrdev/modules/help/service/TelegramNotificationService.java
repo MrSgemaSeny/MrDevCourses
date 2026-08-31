@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,10 @@ public class TelegramNotificationService {
             RestTemplateBuilder restTemplateBuilder,
             @Value("${app.telegram.bot-token:}") String botToken,
             @Value("${app.telegram.chat-id:}") String chatId) {
-        this.restTemplate = restTemplateBuilder.build();
+        this.restTemplate = restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(3))
+                .setReadTimeout(Duration.ofSeconds(5))
+                .build();
         this.botToken = botToken != null ? botToken.trim() : "";
         this.chatId = chatId != null ? chatId.trim() : "";
         this.enabled = !this.botToken.isBlank() && !this.chatId.isBlank();
