@@ -198,7 +198,7 @@ export const CoursesPage: React.FC = () => {
                   <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 text-[10px] text-zinc-500 font-mono">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> ~15 ч.
+                        <Clock className="w-3 h-3" /> --:--
                       </span>
                     </div>
 

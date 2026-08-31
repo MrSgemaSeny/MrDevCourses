@@ -149,12 +149,10 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
               <BookOpen className="w-4 h-4 text-zinc-500 shrink-0" />
               <span>{totalCount || 30} практических уроков</span>
             </li>
-            {totalHours > 0 && (
-              <li className="flex items-center gap-2.5">
-                <Video className="w-4 h-4 text-zinc-500 shrink-0" />
-                <span>~{totalHours} ч. видеоматериалов</span>
-              </li>
-            )}
+            <li className="flex items-center gap-2.5">
+              <Video className="w-4 h-4 text-zinc-500 shrink-0" />
+              <span>{totalHours > 0 ? `~${totalHours} ч. видеоматериалов` : '--:-- видеоматериалов'}</span>
+            </li>
             <li className="flex items-center gap-2.5">
               <Users className="w-4 h-4 text-zinc-500 shrink-0" />
               <span>Формат: Онлайн + Discord сообщество</span>

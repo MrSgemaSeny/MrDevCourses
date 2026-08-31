@@ -182,12 +182,10 @@ export const LessonRow: React.FC<LessonRowProps> = ({
 
           {/* Badges */}
           <div className="flex items-center gap-1.5 shrink-0">
-            {lesson.durationMinutes ? (
-              <span className="text-[10px] text-zinc-400 flex items-center gap-1 font-mono">
-                <Clock className="w-3 h-3" />
-                {lesson.durationMinutes}м
-              </span>
-            ) : null}
+            <span className="text-[10px] text-zinc-400 flex items-center gap-1 font-mono">
+              <Clock className="w-3 h-3 text-zinc-500" />
+              {lesson.durationMinutes && lesson.durationMinutes > 0 ? `${lesson.durationMinutes}м` : '--:--'}
+            </span>
 
             {/* Free preview toggle badge */}
             <button

@@ -78,7 +78,7 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
         <div>
           <h2 className="text-base font-bold text-white tracking-tight">Программа курса</h2>
           <p className="text-xs text-zinc-400 mt-0.5">
-            {modules.length} модулей &bull; {totalLessons} уроков {totalHours > 0 ? `• ~${totalHours} ч.` : ''}
+            {modules.length} модулей &bull; {totalLessons} уроков {totalHours > 0 ? `• ~${totalHours} ч.` : '• --:--'}
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
                 <div className="flex items-center gap-4 shrink-0 text-xs text-zinc-500 font-mono">
                   <span>
                     {moduleLessons.length} {moduleLessons.length === 1 ? 'урок' : 'уроков'}
-                    {moduleDuration > 0 ? ` • ${moduleDuration} мин` : ''}
+                    {moduleDuration > 0 ? ` • ${moduleDuration} мин` : ' • --:--'}
                   </span>
                   {isExpanded ? (
                     <ChevronUp className="w-4 h-4 text-zinc-400" />
@@ -173,9 +173,7 @@ export const CourseCurriculumAccordion: React.FC<CourseCurriculumAccordionProps>
                             <div className="font-medium text-white truncate">{displayTitle}</div>
                             <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
                               <span>{lessonItem.lessonType || 'VIDEO'}</span>
-                              {lessonItem.durationMinutes ? (
-                                <span>&bull; {lessonItem.durationMinutes} мин</span>
-                              ) : null}
+                              <span>&bull; {lessonItem.durationMinutes && lessonItem.durationMinutes > 0 ? `${lessonItem.durationMinutes} мин` : '--:--'}</span>
                             </div>
                           </div>
                         </div>
