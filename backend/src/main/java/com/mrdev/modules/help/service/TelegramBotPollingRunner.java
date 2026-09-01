@@ -72,8 +72,8 @@ public class TelegramBotPollingRunner {
                 String chatId = String.valueOf(message.path("chat").path("id").asLong());
                 String text = message.path("text").asText("");
 
-                if (!text.isBlank() && text.startsWith("/")) {
-                    log.info("Received Telegram bot command from chatId={}: {}", chatId, text);
+                if (!text.isBlank()) {
+                    log.info("Received Telegram message from chatId={}: {}", chatId, text);
                     String reply = commandService.processCommand(chatId, text);
                     if (reply != null) {
                         notificationService.sendDirectMessage(chatId, reply);
