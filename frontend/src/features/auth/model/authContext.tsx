@@ -8,8 +8,8 @@ export interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   loginWithGoogle: () => void;
-  loginWithEmail: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
-  register: (email: string, name: string, password: string, rememberMe?: boolean) => Promise<void>;
+  loginWithEmail: (email: string, password: string, rememberMe?: boolean) => Promise<User>;
+  register: (email: string, name: string, password: string, rememberMe?: boolean) => Promise<User>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -67,20 +67,22 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     window.location.href = '/api/oauth2/authorization/google';
   }, []);
 
-  const loginWithEmail = useCallback(async (email: string, password: string, rememberMe: boolean = true) => {
+  const loginWithEmail = useCallback(async (email: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const userData = await userApi.loginWithEmail(email, password, rememberMe);
     setUser(userData);
     if (typeof window !== 'undefined') {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
     }
+    return userData;
   }, []);
 
-  const register = useCallback(async (email: string, name: string, password: string, rememberMe: boolean = true) => {
+  const register = useCallback(async (email: string, name: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const userData = await userApi.register(email, name, password, rememberMe);
     setUser(userData);
     if (typeof window !== 'undefined') {
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
     }
+    return userData;
   }, []);
 
   const logout = useCallback(async () => {

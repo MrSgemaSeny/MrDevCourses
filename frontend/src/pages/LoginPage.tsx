@@ -3,14 +3,14 @@ import { Navigate, useSearchParams, Link } from 'react-router-dom';
 import { EmailAuthForm, useAuth, AuthMode } from '@/features/auth';
 
 export const LoginPage: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [searchParams] = useSearchParams();
   const errorParam = searchParams.get('error');
 
   const [mode, setMode] = useState<AuthMode>('login');
 
   if (!isLoading && isAuthenticated) {
-    return <Navigate to="/courses" replace />;
+    return <Navigate to={user?.role === 'ADMIN' ? '/admin' : '/courses'} replace />;
   }
 
   return (

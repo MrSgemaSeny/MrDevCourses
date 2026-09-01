@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
+import { userApi } from '@/entities/user/api/userApi';
 
 export const AuthCallbackPage: React.FC = () => {
   const { checkAuth } = useAuth();
@@ -10,10 +11,14 @@ export const AuthCallbackPage: React.FC = () => {
     let isMounted = true;
     const restoreSession = async () => {
       try {
+        const user = await userApi.getMe();
         await checkAuth();
-      } finally {
         if (isMounted) {
-          navigate('/courses', { replace: true });
+          navigate(user.role === 'ADMIN' ? '/admin' : '/courses', { replace: true });
+        }
+      } catch {
+        if (isMounted) {
+          navigate('/login', { replace: true });
         }
       }
     };

@@ -60,12 +60,13 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
     setErrors({});
 
     try {
+      let loggedInUser;
       if (mode === 'login') {
-        await loginWithEmail(email, password, rememberMe);
+        loggedInUser = await loginWithEmail(email, password, rememberMe);
       } else {
-        await register(email, name.trim(), password, rememberMe);
+        loggedInUser = await register(email, name.trim(), password, rememberMe);
       }
-      navigate('/courses');
+      navigate(loggedInUser?.role === 'ADMIN' ? '/admin' : '/courses');
     } catch (err: unknown) {
       const message =
         err instanceof Error
