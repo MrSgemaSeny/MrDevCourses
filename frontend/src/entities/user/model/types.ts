@@ -23,6 +23,8 @@ export interface UserProfile extends User {
   enrolledCoursesCount: number;
   completedLessonsCount: number;
   certificatesCount: number;
+  timeSpentMinutes?: number;
+  completedProjectsCount?: number;
 }
 
 export interface UpdateUserProfilePayload {

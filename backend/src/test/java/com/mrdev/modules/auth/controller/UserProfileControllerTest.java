@@ -77,8 +77,8 @@ class UserProfileControllerTest {
                 .andExpect(jsonPath("$.data.telegramUsername", is("dias_dev")))
                 .andExpect(jsonPath("$.data.githubUsername", is("dias-code")))
                 .andExpect(jsonPath("$.data.goal", is("Launch my first AI SaaS")))
-                .andExpect(jsonPath("$.data.currentStreak", is(5)))
-                .andExpect(jsonPath("$.data.longestStreak", is(10)));
+                .andExpect(jsonPath("$.data.timeSpentMinutes", is(0)))
+                .andExpect(jsonPath("$.data.completedProjectsCount", is(0)));
     }
 
     @Test

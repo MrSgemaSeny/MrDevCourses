@@ -8,7 +8,10 @@ import com.mrdev.modules.auth.model.User;
 import com.mrdev.modules.auth.repository.UserRepository;
 import com.mrdev.modules.certificate.repository.CertificateRepository;
 import com.mrdev.modules.course.repository.EnrollmentRepository;
+import com.mrdev.modules.homework.model.SubmissionStatus;
+import com.mrdev.modules.homework.repository.HomeworkSubmissionRepository;
 import com.mrdev.modules.lesson.repository.LessonProgressRepository;
+import com.mrdev.modules.project.repository.ProjectShowcaseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class UserProfileService {
     private final EnrollmentRepository enrollmentRepository;
     private final LessonProgressRepository lessonProgressRepository;
     private final CertificateRepository certificateRepository;
+    private final ProjectShowcaseRepository projectShowcaseRepository;
+    private final HomeworkSubmissionRepository homeworkSubmissionRepository;
     private final AuditService auditService;
 
     @Transactional(readOnly = true)
@@ -33,8 +38,11 @@ public class UserProfileService {
         int enrolledCoursesCount = enrollmentRepository.findAllByUserId(userId).size();
         int completedLessonsCount = lessonProgressRepository.findAllByUserId(userId).size();
         int certificatesCount = (int) certificateRepository.countByUserId(userId);
+        int timeSpentMinutes = lessonProgressRepository.sumCompletedMinutesByUserId(userId);
+        int completedProjectsCount = (int) projectShowcaseRepository.countByUserId(userId)
+                + (int) homeworkSubmissionRepository.countByUserIdAndStatus(userId, SubmissionStatus.PASSED);
 
-        return mapToDto(user, enrolledCoursesCount, completedLessonsCount, certificatesCount);
+        return mapToDto(user, enrolledCoursesCount, completedLessonsCount, certificatesCount, timeSpentMinutes, completedProjectsCount);
     }
 
     @Transactional
@@ -82,11 +90,14 @@ public class UserProfileService {
         int enrolledCoursesCount = enrollmentRepository.findAllByUserId(userId).size();
         int completedLessonsCount = lessonProgressRepository.findAllByUserId(userId).size();
         int certificatesCount = (int) certificateRepository.countByUserId(userId);
+        int timeSpentMinutes = lessonProgressRepository.sumCompletedMinutesByUserId(userId);
+        int completedProjectsCount = (int) projectShowcaseRepository.countByUserId(userId)
+                + (int) homeworkSubmissionRepository.countByUserIdAndStatus(userId, SubmissionStatus.PASSED);
 
-        return mapToDto(user, enrolledCoursesCount, completedLessonsCount, certificatesCount);
+        return mapToDto(user, enrolledCoursesCount, completedLessonsCount, certificatesCount, timeSpentMinutes, completedProjectsCount);
     }
 
-    private UserProfileDto mapToDto(User user, int enrolledCourses, int completedLessons, int certificates) {
+    private UserProfileDto mapToDto(User user, int enrolledCourses, int completedLessons, int certificates, int timeSpentMinutes, int completedProjectsCount) {
         return UserProfileDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -104,6 +115,8 @@ public class UserProfileService {
                 .enrolledCoursesCount(enrolledCourses)
                 .completedLessonsCount(completedLessons)
                 .certificatesCount(certificates)
+                .timeSpentMinutes(timeSpentMinutes)
+                .completedProjectsCount(completedProjectsCount)
                 .build();
     }
 }

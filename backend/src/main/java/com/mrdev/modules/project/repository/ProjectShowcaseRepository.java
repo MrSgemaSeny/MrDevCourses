@@ -16,6 +16,8 @@ public interface ProjectShowcaseRepository extends JpaRepository<ProjectShowcase
 
     List<ProjectShowcase> findByUserIdOrderByCreatedAtDesc(Long userId);
 
+    long countByUserId(Long userId);
+
     @Modifying
     @Query("UPDATE ProjectShowcase p SET p.likesCount = p.likesCount + 1 WHERE p.id = :id")
     void incrementLikes(@Param("id") Long id);

@@ -7,8 +7,8 @@ import {
   User as UserIcon,
   Send,
   Github,
-  Flame,
-  Trophy,
+  Clock,
+  FolderGit2,
   BookOpen,
   CheckCircle2,
   Award,
@@ -31,6 +31,15 @@ const GOAL_PRESETS = [
   'Создать работающий стартап за 5 дней',
   'Автоматизировать свои рабочие процессы',
 ];
+
+const formatStudyTime = (minutes?: number): string => {
+  if (!minutes || minutes <= 0) return '0 мин.';
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  if (hours === 0) return `${remainingMinutes} мин.`;
+  if (remainingMinutes === 0) return `${hours} ч.`;
+  return `${hours} ч. ${remainingMinutes} мин.`;
+};
 
 export const ProfilePage: React.FC = () => {
   const { checkAuth } = useAuth();
@@ -256,21 +265,21 @@ export const ProfilePage: React.FC = () => {
             <div className="grid grid-cols-2 gap-2.5">
               <div className="p-3 rounded bg-[#0a0a0c] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-zinc-400">
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-[10px] font-mono uppercase">Текущий стрик</span>
+                  <Clock className="w-3.5 h-3.5 text-zinc-300" />
+                  <span className="text-[10px] font-mono uppercase">Время обучения</span>
                 </div>
-                <div className="text-lg font-bold font-mono text-white">
-                  {profile.currentStreak || 0} <span className="text-xs text-zinc-500 font-normal">дн.</span>
+                <div className="text-base font-bold font-mono text-white">
+                  {formatStudyTime(profile.timeSpentMinutes)}
                 </div>
               </div>
 
               <div className="p-3 rounded bg-[#0a0a0c] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-zinc-400">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-[10px] font-mono uppercase">Рекорд стрика</span>
+                  <FolderGit2 className="w-3.5 h-3.5 text-zinc-300" />
+                  <span className="text-[10px] font-mono uppercase">Сделано проектов</span>
                 </div>
-                <div className="text-lg font-bold font-mono text-white">
-                  {profile.longestStreak || 0} <span className="text-xs text-zinc-500 font-normal">дн.</span>
+                <div className="text-base font-bold font-mono text-white">
+                  {profile.completedProjectsCount || 0}
                 </div>
               </div>
 
@@ -331,9 +340,6 @@ export const ProfilePage: React.FC = () => {
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
                   1. Основные данные
                 </h2>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Ваше имя и отображение в рейтинге группы и сертификатах.
-                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -373,16 +379,12 @@ export const ProfilePage: React.FC = () => {
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
                   2. Каналы связи и репозитории
                 </h2>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Telegram необходим ментору для связи при разборе ДЗ и помощи по коду.
-                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label htmlFor="telegramUsername" className="text-xs font-medium text-zinc-300 flex items-center justify-between">
                     <span>Telegram Никнейм</span>
-                    <span className="text-[10px] font-mono text-zinc-500">Без символа @</span>
                   </label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-2.5 text-xs text-zinc-500 font-mono">@</span>
@@ -403,7 +405,6 @@ export const ProfilePage: React.FC = () => {
                 <div className="space-y-1.5">
                   <label htmlFor="githubUsername" className="text-xs font-medium text-zinc-300 flex items-center justify-between">
                     <span>GitHub Username</span>
-                    <span className="text-[10px] font-mono text-zinc-500">Для ДЗ и проектов</span>
                   </label>
                   <div className="relative">
                     <span className="absolute left-3.5 top-2.5 text-xs text-zinc-500 font-mono">@</span>
@@ -511,7 +512,7 @@ export const ProfilePage: React.FC = () => {
               <div className="pb-2 border-b border-white/5">
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
                   <FileText className="w-4 h-4 text-zinc-400" />
-                  <span>4. О себе (Bio)</span>
+                  <span>4. О себе</span>
                 </h2>
                 <p className="text-xs text-zinc-400 mt-0.5">
                   Расскажите о текущем опыте, технологиях или пет-проектах.
@@ -530,9 +531,7 @@ export const ProfilePage: React.FC = () => {
 
             {/* Submit Bar */}
             <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-4">
-              <span className="text-xs text-zinc-500">
-                Все изменения сохраняются в защищенную базу платформы.
-              </span>
+              
 
               <button
                 type="submit"

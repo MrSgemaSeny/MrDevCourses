@@ -75,7 +75,8 @@ describe('ProfilePage Component', () => {
 
     expect(await screen.findByText('Профиль и настройки аккаунта')).toBeInTheDocument();
     expect(screen.getByText('student@mrdev.com')).toBeInTheDocument();
-    expect(screen.getByText('Текущий стрик')).toBeInTheDocument();
+    expect(screen.getByText('Время обучения')).toBeInTheDocument();
+    expect(screen.getByText('Сделано проектов')).toBeInTheDocument();
     expect(screen.getByText('Пройдено уроков')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Azamat Student')).toBeInTheDocument();
     expect(screen.getByDisplayValue('azamat_tg')).toBeInTheDocument();

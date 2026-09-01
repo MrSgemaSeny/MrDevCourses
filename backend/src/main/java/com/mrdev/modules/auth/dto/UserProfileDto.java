@@ -32,4 +32,6 @@ public class UserProfileDto {
     private int enrolledCoursesCount;
     private int completedLessonsCount;
     private int certificatesCount;
+    private int timeSpentMinutes;
+    private int completedProjectsCount;
 }
