@@ -23,7 +23,7 @@ public class EmailNotificationService {
     public EmailNotificationService(
             @Autowired(required = false) JavaMailSender mailSender,
             @Value("${app.mail.from-address:no-reply@mrdev.pro}") String fromAddress,
-            @Value("${app.frontend.url:http://localhost:5173}") String frontendUrl,
+            @Value("${app.frontend-url:http://localhost:5173}") String frontendUrl,
             @Value("${app.mail.mentor-email:mentor@mrdev.pro}") String mentorEmail) {
         this.mailSender = mailSender;
         this.fromAddress = fromAddress;
