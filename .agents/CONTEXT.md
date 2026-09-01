@@ -14,6 +14,10 @@
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
+- **Линейка курсов платформы по уровням сложности (`mr-developer-curriculum.md`)**:
+  - **Курсы Уровня 1 (Базовый уровень)**: Инструменты, AI-ассистенты, промпты, Git, FSD архитектура, Лендинг стартапа и Клиентский Маркетплейс.
+  - **Курс Уровня 2 (ОСНОВНОЙ КУРС / Флагман)**: Системная архитектура, Full-Stack разработка (Spring Boot + React + PostgreSQL), RBAC, OAuth 2.0, Three.js 3D (Трекер денег), CRM Kanban + Telegram Bot (вебхуки/алерты) + CI/CD (Render/Vercel).
+  - **Курсы Уровня 3 (Продвинутый AI SaaS)**: Мультимодальный AI Core, LLM Streaming SSE, RAG-система, реактивный WebClient, PII-маскирование данных, Google SMTP / Gmail API (Pensee).
 - **Ключевые принципы Mr Developer**:
   1. **Zero Friction Setup через сайт**: Все ссылки на софт, шаблоны, промпты и пошаговые чеклисты установки — прямо в карточке урока. Студент не ищет ничего в Discord.
   2. **Кнопка «Не получается / Сложно справляться» (Data-First RAG Dataset)**: SOS-сигнал на каждом шаге урока → **100% персист в базу данных (`student_help_requests`)** + мгновенный push ментору в Telegram с именем студента, уроком, шагом и описанием проблемы. Каждое нажатие — это сырые данные и живой датасет реальных затыков новичков для обучения будущего RAG.
