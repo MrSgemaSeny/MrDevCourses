@@ -35,15 +35,15 @@ $currentContent = [System.IO.File]::ReadAllText($profilePath, [System.Text.Encod
 $startMarker = "# >>> AI GUARDS HOOK >>>"
 $endMarker   = "# <<< AI GUARDS HOOK <<<"
 
-$hookPayload = @"
-$startMarker
+$hookPayload = @'
+# >>> AI GUARDS HOOK >>>
 # Injects guardrail directives into stderr on every prompt execution to prevent AI context drift.
 function global:prompt {
     [Console]::Error.WriteLine("[AI GUARD] CRITICAL DIRECTIVES: NO EMOJIS | USE API TOOLS (view_file, grep_search, replace_file_content) NOT CLI (cat, grep, ls) | READ .agents/AGENTS.MD ON UNCERTAINTY")
     "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) "
 }
-$endMarker
-"@
+# <<< AI GUARDS HOOK <<<
+'@
 
 # 5. Inject or update hook without corrupting existing profile settings
 if ($currentContent -match [regex]::Escape($startMarker) -and $currentContent -match [regex]::Escape($endMarker)) {
