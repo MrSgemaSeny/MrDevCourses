@@ -222,7 +222,7 @@ export const ProfilePage: React.FC = () => {
                     className="flex items-center justify-between p-2 rounded bg-[#0a0a0c] border border-white/5 hover:border-white/15 text-zinc-300 hover:text-white transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <Send className="w-3.5 h-3.5 text-sky-400" />
+                      <Send className="w-3.5 h-3.5 text-zinc-400" />
                       <span className="font-mono">@{formData.telegramUsername.replace('@', '')}</span>
                     </div>
                     <ExternalLink className="w-3 h-3 text-zinc-500" />
@@ -285,7 +285,7 @@ export const ProfilePage: React.FC = () => {
 
               <div className="p-3 rounded bg-[#0a0a0c] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-zinc-400">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-400" />
                   <span className="text-[10px] font-mono uppercase">Пройдено уроков</span>
                 </div>
                 <div className="text-lg font-bold font-mono text-white">
@@ -295,7 +295,7 @@ export const ProfilePage: React.FC = () => {
 
               <div className="p-3 rounded bg-[#0a0a0c] border border-white/5 space-y-1">
                 <div className="flex items-center gap-1.5 text-zinc-400">
-                  <BookOpen className="w-3.5 h-3.5 text-zinc-300" />
+                  <BookOpen className="w-3.5 h-3.5 text-zinc-400" />
                   <span className="text-[10px] font-mono uppercase">Курсы</span>
                 </div>
                 <div className="text-lg font-bold font-mono text-white">
@@ -305,7 +305,7 @@ export const ProfilePage: React.FC = () => {
 
               <div className="col-span-2 p-3 rounded bg-[#0a0a0c] border border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-400" />
+                  <Award className="w-4 h-4 text-zinc-400" />
                   <span className="text-xs font-medium text-zinc-300">Сертификаты выпускника</span>
                 </div>
                 <span className="text-sm font-bold font-mono text-white">
@@ -321,15 +321,15 @@ export const ProfilePage: React.FC = () => {
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-8">
             {/* Form Header Alerts */}
             {saveSuccess && (
-              <div className="p-4 rounded bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="p-4 rounded bg-zinc-900 border border-white/10 text-white text-xs flex items-center gap-2">
+                <Check className="w-4 h-4 text-white shrink-0" />
                 <span>Профиль успешно сохранен и обновлен!</span>
               </div>
             )}
 
             {errorMessage && (
-              <div className="p-4 rounded bg-rose-950/40 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <div className="p-4 rounded bg-zinc-900 border border-white/10 text-zinc-300 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-zinc-400 shrink-0" />
                 <span>{errorMessage}</span>
               </div>
             )}
@@ -424,14 +424,14 @@ export const ProfilePage: React.FC = () => {
               <div className="p-4 rounded bg-[#0a0a0c] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <Send className="w-4 h-4 text-sky-400" />
+                    <Send className="w-4 h-4 text-zinc-400" />
                     <span className="text-xs font-bold text-white">Telegram-уведомления</span>
                     {profile.telegramChatId ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-800 text-white border border-white/20">
                         ПОДКЛЮЧЕН
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-white/10">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-900 text-zinc-500 border border-white/5">
                         НЕ ПРИВЯЗАН
                       </span>
                     )}
@@ -445,7 +445,7 @@ export const ProfilePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleUnlinkTelegram}
-                    className="px-3 py-1.5 rounded-sm bg-rose-950/30 hover:bg-rose-950/60 border border-rose-800/40 text-rose-300 text-xs font-mono transition-colors"
+                    className="px-3 py-1.5 rounded-sm bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-400 hover:text-white text-xs font-mono transition-colors cursor-pointer"
                   >
                     Отвязать
                   </button>
@@ -454,7 +454,7 @@ export const ProfilePage: React.FC = () => {
                     type="button"
                     onClick={handleConnectTelegram}
                     disabled={isLinkingTelegram}
-                    className="px-3.5 py-1.5 rounded-sm bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
+                    className="px-3.5 py-1.5 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     <span>{isLinkingTelegram ? 'Генерация...' : 'Подключить бота'}</span>
@@ -470,9 +470,6 @@ export const ProfilePage: React.FC = () => {
                   <Target className="w-4 h-4 text-zinc-400" />
                   <span>3. Главная цель и фокус обучения</span>
                 </h2>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Какого конкретного результата вы хотите достичь по окончании курса.
-                </p>
               </div>
 
               <div className="space-y-2.5">
@@ -486,7 +483,6 @@ export const ProfilePage: React.FC = () => {
                 />
 
                 <div className="space-y-1.5">
-                  <span className="text-[11px] text-zinc-500 font-mono">Быстрые шаблоны целей:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {GOAL_PRESETS.map((preset) => (
                       <button

@@ -39,6 +39,7 @@ app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
   telegram:
     bot-token: ${TELEGRAM_BOT_TOKEN:}
+    bot-username: ${TELEGRAM_BOT_USERNAME:MrDevelopersbot}
     chat-id: ${TELEGRAM_CHAT_ID:}
     polling-enabled: ${TELEGRAM_POLLING_ENABLED:true}
 

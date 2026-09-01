@@ -21,7 +21,7 @@ public class TelegramLinkController {
     private final TelegramLinkTokenService linkTokenService;
     private final UserRepository userRepository;
 
-    @Value("${app.telegram.bot-username:MrDevCoursesBot}")
+    @Value("${app.telegram.bot-username:MrDevelopersbot}")
     private String botUsername;
 
     @Data
