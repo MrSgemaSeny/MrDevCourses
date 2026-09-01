@@ -228,7 +228,7 @@ describe('Admin Suite E2E Workflows (Frontend)', () => {
   });
 
   it('Tier 4: Opens Delete confirmation modal with accessible dialog role and triggers deletion', async () => {
-    const deleteSpy = vi.spyOn(adminApiModule.adminApi, 'deleteCourse').mockResolvedValue();
+    const deleteSpy = vi.spyOn(adminApiModule.adminApi, 'deleteLesson').mockResolvedValue();
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -236,20 +236,23 @@ describe('Admin Suite E2E Workflows (Frontend)', () => {
       </QueryClientProvider>
     );
 
-    await screen.findByText('Вайбкодинг с нуля');
+    // Switch to lessons tab
+    fireEvent.click(screen.getByRole('button', { name: 'Уроки' }));
 
-    const deleteBtn = screen.getByLabelText(/Удалить курс Вайбкодинг с нуля/i);
+    await screen.findByText('Введение и настройка окружения');
+
+    const deleteBtn = screen.getByLabelText(/Удалить урок Введение и настройка окружения/i);
     fireEvent.click(deleteBtn);
 
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
-    expect(within(dialog).getByText(/Вы действительно хотите удалить курс/i)).toBeInTheDocument();
+    expect(within(dialog).getByText(/Вы действительно хотите удалить урок/i)).toBeInTheDocument();
 
     const confirmDeleteBtn = within(dialog).getByRole('button', { name: 'Удалить' });
     fireEvent.click(confirmDeleteBtn);
 
     await waitFor(() => {
-      expect(deleteSpy).toHaveBeenCalledWith(1);
+      expect(deleteSpy).toHaveBeenCalledWith(101);
     });
   });
 });

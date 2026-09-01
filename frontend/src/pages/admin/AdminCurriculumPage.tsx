@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Plus,
   Edit2,
-  Trash2,
   AlertCircle,
 } from 'lucide-react';
 import { Course } from '@/shared/types';
@@ -95,20 +94,6 @@ export const AdminCurriculumPage: React.FC = () => {
     }
   };
 
-  const handleDeleteCourse = async (courseId: number) => {
-    if (!window.confirm('Вы уверены, что хотите полностью удалить этот курс со всей структурой уроков?')) return;
-    try {
-      setIsLoading(true);
-      await adminApi.deleteCourse(courseId);
-      setSelectedCourseId(null);
-      fetchCourses();
-    } catch (err: any) {
-      setError(err?.response?.data?.message || 'Не удалось удалить курс');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="space-y-8">
       {/* Header section */}
@@ -173,16 +158,6 @@ export const AdminCurriculumPage: React.FC = () => {
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
-                    {courses.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteCourse(c.id)}
-                        className="p-1 rounded text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
-                        title="Удалить курс"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
                   </div>
                 </div>
 

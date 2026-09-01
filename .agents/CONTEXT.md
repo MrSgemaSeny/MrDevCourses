@@ -1,16 +1,16 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Security Audit Remediation & Hardening (Completed).
+- **Active Task**: Full Security, Secrets & Quality Gate Audit (Completed).
 - **Recent Accomplishments**: 
+  - Comprehensive scan of all repos, env configs, and git history for leaked tokens and credentials.
   - Fixed Java Deserialization RCE in `CookieUtils` with HMAC-SHA256 constant-time verification.
   - Eliminated OAuth Account Preemption/Takeover in `CustomOAuth2UserService` by neutralizing unverified password hashes on Google account linking.
   - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
-  - Optimized `StuckDetectionService` query to eliminate N+1 latency.
-  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking (`/start LINK_<token>`).
-  - Dual SOS alerting (Telegram + Email) & transactional email notifications layer.
-- **Verification**: Backend 234/234 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking.
+  - Cleaned up curriculum deletion artifacts in Admin UI.
+- **Verification**: Backend 241/241 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors (1802 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
