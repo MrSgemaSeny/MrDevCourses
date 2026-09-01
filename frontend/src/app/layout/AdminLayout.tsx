@@ -103,9 +103,6 @@ export const AdminLayout: React.FC = () => {
             <span className="text-sm font-semibold text-white tracking-tight">
               MrDeveloper
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono uppercase tracking-wider">
-              admin suite
-            </span>
           </div>
         </div>
 

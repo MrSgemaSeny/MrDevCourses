@@ -102,9 +102,6 @@ export const AdminCurriculumPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-white tracking-tight">
             Конструктор учебного плана
           </h1>
-          <p className="text-xs text-zinc-400 mt-1 font-mono">
-            Визуальный редактор курсов, модулей, уроков, шпаргалок и тестов с DnD
-          </p>
         </div>
 
         <button
