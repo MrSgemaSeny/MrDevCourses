@@ -47,16 +47,38 @@ public class OriginValidationFilter extends OncePerRequestFilter {
         }
 
         String origin = request.getHeader("Origin");
+        if (!StringUtils.hasText(origin)) {
+            String referer = request.getHeader("Referer");
+            if (StringUtils.hasText(referer)) {
+                origin = extractOriginFromReferer(referer);
+            }
+        }
+
         if (StringUtils.hasText(origin)) {
             String normalizedOrigin = normalizeOrigin(origin);
             if (!allowedOriginsSet.contains(normalizedOrigin) && !isLocalhostOrDev(normalizedOrigin)) {
-                log.warn("Rejected state-changing request from unauthorized Origin: {}", origin);
+                log.warn("Rejected state-changing request from unauthorized Origin/Referer: {}", origin);
                 writeForbiddenResponse(response, "Cross-Origin request blocked by Origin validation");
                 return;
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String extractOriginFromReferer(String referer) {
+        try {
+            URI uri = URI.create(referer);
+            String scheme = uri.getScheme() != null ? uri.getScheme().toLowerCase() : "http";
+            String host = uri.getHost() != null ? uri.getHost().toLowerCase() : "";
+            int port = uri.getPort();
+            if (port == -1 || (scheme.equals("http") && port == 80) || (scheme.equals("https") && port == 443)) {
+                return scheme + "://" + host;
+            }
+            return scheme + "://" + host + ":" + port;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private String normalizeOrigin(String origin) {
