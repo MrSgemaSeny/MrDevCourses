@@ -26,9 +26,12 @@ public class JwtTokenProvider {
 
     @Autowired
     public JwtTokenProvider(
-            @Value("${app.jwt.secret:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}") String secret,
+            @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-ms:604800000}") long expirationMs,
             @Value("${app.jwt.remember-me-expiration-ms:2592000000}") long rememberMeExpirationMs) {
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("JWT Secret must be configured and cannot be blank");
+        }
         this.expirationMs = expirationMs;
         this.rememberMeExpirationMs = rememberMeExpirationMs;
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);

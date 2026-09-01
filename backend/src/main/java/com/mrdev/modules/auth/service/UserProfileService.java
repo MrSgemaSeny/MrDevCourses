@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -63,7 +65,18 @@ public class UserProfileService {
             if (tg.startsWith("@")) {
                 tg = tg.substring(1);
             }
-            user.setTelegramUsername(tg.isEmpty() ? null : tg);
+            if (!tg.isEmpty()) {
+                Optional<User> existingTg = userRepository.findByTelegramUsernameIgnoreCase(tg);
+                if (existingTg.isPresent() && !existingTg.get().getId().equals(userId)) {
+                    throw new com.mrdev.common.exception.ApiException(
+                            "Telegram никнейм @" + tg + " уже привязан к другому аккаунту",
+                            org.springframework.http.HttpStatus.CONFLICT
+                    );
+                }
+                user.setTelegramUsername(tg);
+            } else {
+                user.setTelegramUsername(null);
+            }
         }
 
         if (request.getGithubUsername() != null) {
