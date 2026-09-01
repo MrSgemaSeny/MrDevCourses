@@ -50,7 +50,7 @@
 
 ### Backend (Spring Boot 3)
 - **Core Platform**: Java 17, Spring Boot 3.3.0, Spring Data JPA, Spring Security 6.
-- **Database & Migrations**: PostgreSQL 17 с расширениями `pgvector` (векторный поиск) и `pg_trgm` (триграммный поиск), Flyway (цепочка миграций `V1..V12`).
+- **Database & Migrations**: PostgreSQL 17 с расширениями `pgvector` (векторный поиск) и `pg_trgm` (триграммный поиск), Flyway (цепочка миграций `V1..V24`).
 - **AI & RAG Subsystem**: Groq API (Llama 3.3 70B), гибридный поиск Dense Vector HNSW + Sparse FTS через алгоритм Reciprocal Rank Fusion (RRF), AST-aware Markdown Chunker.
 - **Security & RBAC**: Stateless JWT сессии в `httpOnly` + `SameSite=Lax` cookies, Row-Level Security через `SecurityUtils.getCurrentUserId()`, метод-левел авторизация `@PreAuthorize("hasRole('ADMIN')")`.
 - **Rate Limiting**: 3-уровневый Token Bucket (Bucket4j + Caffeine Cache):
@@ -58,14 +58,14 @@
   - *AI Tier*: 5 req / min / user (защита лимитов LLM).
   - *General Tier*: 60 req / min / user / IP.
 - **Document & PDF Generation**: Thymeleaf + OpenHTMLtoPDF (векторные сертификаты с кириллицей и шрифтом DejaVu Sans).
-- **Automation**: Transactional Outbox Pattern (`outbox_events` + `@Scheduled` OutboxProcessor).
+- **Automation & Integrations**: Transactional Outbox Pattern (`outbox_events` + `@Scheduled` OutboxProcessor), Telegram Long-Polling Bot с диспетчеризацией команд ментора и dual-alerting (Telegram + Email).
 
 ### Frontend (React 19)
 - **Core Stack**: React 19, TypeScript 5.8+, Vite 6.
 - **Architecture**: Feature-Sliced Design (FSD) (`app` → `pages` → `widgets` → `features` → `entities` → `shared`).
 - **Styling**: Tailwind CSS v4, темная монохромная эстетика (`#0a0a0c` / `#0e0e11`, `border-white/5`), адаптивная сетка.
 - **State & Data Fetching**: TanStack React Query v5 с оптимистичными апдейтами и автоматической инвалидацией кэша.
-- **Routing & Guards**: React Router v6, ленивая загрузка чанков (`React.lazy`), `<ProtectedRoute>` с ролевым гвардом (`adminOnly`).
+- **Routing & Guards**: React Router v6, ленивая загрузка чанков (`React.lazy`), `<ProtectedRoute>` с ролевым гвардом (`adminOnly`). Изолированный корневой шелл `/admin` без наложения публичных Header/Footer.
 
 ---
 
@@ -80,28 +80,42 @@
    - Вычисление доступа по формуле: `(NOW() - enrolled_at) >= ((day_number - 1) * INTERVAL '1 day')`.
    - Интерактивный плеер: YouTube embed, конспект урока (Markdown с подсветкой синтаксиса), материалы (`CHEAT_SHEET`, `SOURCE_CODE`, `PDF`, `REPO_LINK`).
    - Контекстный Quick-Nav Drawer (глоссарий терминов, дорожная карта, прогресс) без сброса состояния видеоплеера.
+   - Аккордеон типичных граблей и частых ошибок новичков (`LessonPitfallsAccordion`) с готовыми решениями.
+   - SOS-кнопка помощи на каждом уроке с мгновенным дублированием ментору (Telegram + Email).
 
-3. **Interactive Quiz Assessment Engine**:
+3. **Homework Review Pipeline & Telegram Mentor Suite**:
+   - Сдача домашних заданий (GitHub репозиторий, ссылка на Live Demo, комментарии).
+   - Очередь триажа ДЗ в админке (`/admin/homeworks`) с 1-клик одобрением (раннее открытие drip-урока) или отклонением на доработку.
+   - Telegram-бот с русскими алиасами (`дз`, `принять 1`, `отклонить 1`), умным извлечением ID, защитой от утечки исключений БД и рассылкой уведомлений студентам.
+
+4. **Student Profile & Real Metrics (`/profile`)**:
+   - Реальные метрики прогресса вместо геймификации стриков: суммарное время обучения (суммирование хронометража пройденных уроков) и количество сданных проектов.
+   - Управление профилем: Telegram никнейм с быстрой привязкой к боту, GitHub, переключаемые пресеты главных целей обучения и Bio.
+
+5. **Graduation Project Showcase Wall (`/projects`)**:
+   - Публичная стена проектов выпускников с интерактивным механизмом 1-User-1-Like и ссылками на Live Demo / GitHub.
+
+6. **Interactive Quiz Assessment Engine**:
    - Анти-чит защита: флаги `isCorrect` и `explanation` вырезаны из публичного API до завершения попытки.
    - Серверная проверка ответов, подсчёт баллов и авто-завершение урока при прохождении порога (`passingScore >= 70%`).
 
-4. **AI Code Grader & Reviewer**:
+7. **AI Code Grader & Reviewer**:
    - Двухуровневый пайплайн: статический AST-сканер безопасности (блокировка `Runtime.exec`, `ProcessBuilder`, `System.exit`, `Unsafe`) + LLM-оценка по рубрикам.
    - Автоматическое завершение урока при оценке `>= 80/100`.
 
-5. **AI RAG Contextual Tutor**:
+8. **AI RAG Contextual Tutor**:
    - Заземление ответов в реальный конспект урока (Grounding).
    - Защита от Prompt Injection через XML-экранирование и системные директивы.
 
-6. **PDF Certificates & Public Verification**:
+9. **PDF Certificates & Public Verification**:
    - Автоматическая векторная генерация сертификата при 100% прохождении курса.
    - Публичная страница верификации по уникальному 12-значному коду (`/certificates/verify/:code`).
 
-7. **Admin Suite & Platform Telemetry**:
-   - Изолированная панель управления `AdminLayout` со своим сайдбаром.
-   - Конструктор учебного плана (Curriculum Tree с Drag-and-Drop, Markdown-редактор, валидатор видео, менеджер квизов).
-   - Консоль студентов (мгновенный поиск, переключение ролей `STUDENT <-> ADMIN`, ручное зачисление, шторка сданных ДЗ).
-   - Аналитический дашборд (воронки по дням, retention когорт, топ запросов к AI, неизменяемый журнал системного аудита).
+10. **Admin Suite & Platform Telemetry**:
+    - Полностью изолированный шелл `AdminLayout` со своим вертикальным сайдбаром (вынесен из клиентского Router Tree).
+    - Конструктор учебного плана (Curriculum Tree с Drag-and-Drop, Markdown-редактор, валидатор видео, менеджер квизов).
+    - Консоль студентов (мгновенный поиск, просмотр текущего урока и даты завершения, ручное зачисление, переключение ролей).
+    - Аналитический дашборд (воронки по урокам, stuck-детекция неактивных студентов, неизменяемый журнал системного аудита `/admin/audit`, метрики состояния `/admin/system`).
 
 ---
 
@@ -111,35 +125,42 @@
 MrDevCourses/
 ├── backend/                          # Spring Boot 3.3.0 приложение
 │   ├── src/main/java/com/mrdev/
-│   │   ├── common/                   # Общие утилиты, RLS SecurityUtils, ошибки
-│   │   ├── config/                   # Spring Security, CORS, RateLimiter, Async
+│   │   ├── common/                   # Общие утилиты, RLS SecurityUtils, GlobalExceptionHandler, RateLimiting
+│   │   ├── config/                   # Spring Security, CORS, Dotenv, Async, DataSeeder
 │   │   └── modules/                  # Доменные модули монолита
-│   │       ├── admin/                # Admin Suite (Curriculum, Students, Telemetry)
+│   │       ├── admin/                # Admin Suite (Curriculum, Students, Telemetry, Analytics)
 │   │       ├── ai/                   # AI Tutor RAG & Groq Client
 │   │       ├── audit/                # Audit Log Repository & Service
-│   │       ├── auth/                 # Google OAuth2, JWT, User Entity
+│   │       ├── auth/                 # Google OAuth2, JWT Provider, Blacklist, User Entity
 │   │       ├── certificate/          # PDF Generator & Public Verification
 │   │       ├── course/               # Course & CourseModule Entities, DTOs
 │   │       ├── grader/               # AI Code Grader & AST Security Scanner
-│   │       ├── lesson/               # Lesson, Materials, Drip Logic
+│   │       ├── help/                 # Student Help Requests (SOS signals)
+│   │       ├── homework/             # Homework Submissions & Admin Triage Queue
+│   │       ├── lesson/               # Lesson, Materials, Pitfalls, Drip Logic
+│   │       ├── notification/         # Email Notifications & Notification Outbox
 │   │       ├── outbox/               # Transactional Outbox Processor
-│   │       ├── progress/             # Student Progress & Streak Calculation
-│   │       └── quiz/                 # Quiz Engine & Submissions
+│   │       ├── progress/             # Student Progress Calculation
+│   │       ├── project/              # Graduation Project Showcase & Likes Wall
+│   │       ├── quiz/                 # Quiz Engine & Anti-Cheat Submissions
+│   │       ├── stuck/                # Automated Stuck Detection Service
+│   │       ├── telegram/             # Telegram Bot Polling Runner, Linking & Command Service
+│   │       └── user/                 # User Profile & Aggregated Metrics
 │   ├── src/main/resources/
-│   │   ├── db/migration/             # Flyway миграции (V1..V12)
-│   │   └── templates/                # Thymeleaf HTML-шаблоны сертификатов
-│   └── src/test/java/com/mrdev/      # JUnit 5 & MockMvc E2E тесты
+│   │   ├── db/migration/             # Flyway миграции (V1..V24)
+│   │   └── templates/                # Thymeleaf HTML-шаблоны сертификатов и писем
+│   └── src/test/java/com/mrdev/      # JUnit 5 & MockMvc E2E тесты (241 тест)
 ├── frontend/                         # React 19 + TypeScript + Vite SPA
 │   ├── src/
-│   │   ├── app/                      # Роутер, провайдеры (React Query, Auth)
-│   │   ├── pages/                    # Маршрутизируемые страницы (Courses, Detail, Admin, Lesson)
-│   │   ├── widgets/                  # Композитные блоки (CurriculumAccordion, StickyCard, Telemetry)
-│   │   ├── features/                 # Фичи с поведением (Auth, Homework, Quiz, QuickNav)
-│   │   ├── entities/                 # Доменные модели и API клиенты
+│   │   ├── app/                      # Роутер (изолированный AdminLayout), провайдеры (React Query, Auth)
+│   │   ├── pages/                    # Страницы (Courses, Detail, Lesson, Profile, Projects, Admin Suite)
+│   │   ├── widgets/                  # Композитные блоки (CurriculumAccordion, StickyCard, HomeworkWidget, Pitfalls)
+│   │   ├── features/                 # Фичи с поведением (Auth, Homework, Quiz, QuickNav, ProjectLikes, HelpModal)
+│   │   ├── entities/                 # Доменные модели и API клиенты (admin, auth, course, lesson, user)
 │   │   └── shared/                   # UI Kit, типы, базовый HTTP клиент
 ├── docs/                             # Архитектурная документация и ADR
-│   └── decisions/                    # Architecture Decision Records (ADR-001..ADR-004)
-└── .agents/                          # Системный контекст и правила агентов
+│   └── decisions/                    # Architecture Decision Records (ADR-001..ADR-005)
+└── .agents/                          # Системный контекст, правила и Guardrails
 ```
 
 ---
@@ -177,11 +198,12 @@ npm run dev
 > Платформа **НЕ является перегруженным Enterprise-решением**: в ней сознательно исключен избыточный оверинжиниринг (внешние брокеры Kafka, сложные мульти-тенантные схемы, распределённые микросервисы). Все критические функции реализованы надёжно, локально и ресурсоэффективно в рамках модульного монолита.
 
 ### Что входит в Strong MVP (Готово к пилоту):
-- [x] **Полный цикл студента**: Авторизация (Google OAuth2 / Email), витрина B2C, запись на курс, drip-открытие уроков, просмотр видео и материалов.
-- [x] **Интерактивная практика**: AI-грейдер кода с защитой AST, движок квизов с anti-cheat маскировкой, контекстный AI-тьютор на гибридном RAG (pgvector + FTS).
-- [x] **Аттестация и геймификация**: Стрики активности, автоматическая генерация PDF-сертификатов с онлайн-верификацией.
-- [x] **Административный контур**: Изолированная консоль `AdminLayout` с Drag-and-Drop редактором программ, управлением студентами и когортной аналитикой.
-- [x] **Отказоустойчивость**: 3-уровневый Rate Limiting (Bucket4j), Transactional Outbox для фоновых событий, 100% зеленые тесты.
+- [x] **Полный цикл студента**: Авторизация (Google OAuth2 / Email с Remember-Me), витрина B2C, запись на курс, drip-открытие уроков, просмотр видео, конспектов и материалов.
+- [x] **Интерактивная практика**: AI-грейдер кода с защитой AST, движок квизов с anti-cheat маскировкой, контекстный AI-тьютор на гибридном RAG (pgvector + FTS), стена выпускных проектов (`/projects`) с лайками.
+- [x] **Реальный прогресс и аттестация**: Реальные метрики студента вместо геймификации стриков (суммарное время обучения и количество завершённых проектов), автоматическая векторная генерация PDF-сертификатов с онлайн-верификацией.
+- [x] **Telegram-ассистент и алертинг**: Telegram-бот с русскими алиасами команд, умным парсингом ID, dual-alerts (Telegram + Email) и защитой от Exception-leak.
+- [x] **Административный контур**: Изолированная консоль `AdminLayout` со своим сайдбаром (вынесена из public-shell), Drag-and-Drop редактор программ, очередь проверки ДЗ, управление студентами и системная телеметрия (`/admin/system`, `/admin/audit`, `/admin/analytics`).
+- [x] **Отказоустойчивость**: 3-уровневый Rate Limiting (Bucket4j), Transactional Outbox для фоновых событий, 100% зеленые тесты (241 JUnit + 73 Vitest).
 
 ---
 

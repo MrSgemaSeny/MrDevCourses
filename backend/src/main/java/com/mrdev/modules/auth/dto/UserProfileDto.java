@@ -23,6 +23,9 @@ public class UserProfileDto {
     private int longestStreak;
     private LocalDate lastActiveDate;
     private String telegramUsername;
+    private Long telegramChatId;
+    private boolean emailNotificationsEnabled;
+    private boolean telegramNotificationsEnabled;
     private String githubUsername;
     private String bio;
     private String goal;
