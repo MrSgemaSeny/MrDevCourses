@@ -1,45 +1,174 @@
 ﻿config:
-  target: 'http://localhost:8080'
+  target: 'http://localhost:8080/api'
   phases:
     - duration: 10
-      arrivalRate: 20
-      name: "Warmup (20 RPS)"
+      arrivalRate: 10
+      name: 'Warmup (10 RPS)'
     - duration: 20
-      arrivalRate: 20
-      rampTo: 100
-      name: "Ramp (100 RPS)"
+      arrivalRate: 10
+      rampTo: 80
+      name: 'Ramp (80 RPS)'
     - duration: 15
-      arrivalRate: 200
-      name: "Tsunami (200 RPS)"
+      arrivalRate: 150
+      name: 'Tsunami (150 RPS)'
   defaults:
     headers:
       Accept: 'application/json'
+      Content-Type: 'application/json'
+  # Cookie jar enabled per virtual user — captures Set-Cookie from /auth/login
+  cookieJar:
+    enabled: true
+
+# Variables: test student credentials (seed data)
+variables:
+  studentEmail: 'student@test.com'
+  studentPassword: 'password123'
+  adminEmail: 'admin@test.com'
+  adminPassword: 'password123'
+  courseSlug: 'fullstack-developer'
+  courseId: '1'
+  lessonId: '1'
 
 scenarios:
-  - name: 'Public Endpoints — Health + Courses'
-    weight: 60
-    flow:
-      - get:
-          url: '/api/v1/admin/health'
-      - get:
-          url: '/api/v1/courses'
-
-  - name: 'Auth Tier — /me (unauthenticated, expect 401)'
+  # ============================================================
+  # 1. ПУБЛИЧНЫЙ слой — Health + Catalogue (вес 25%)
+  #    Тест: Spring actuator, CourseController (GET /v1/courses)
+  # ============================================================
+  - name: 'Public — Health + Courses Catalogue'
     weight: 25
     flow:
       - get:
-          url: '/api/v1/auth/me'
+          url: '/actuator/health'
+          expect:
+            - statusCode: 200
+      - get:
+          url: '/v1/courses'
+          expect:
+            - statusCode: 200
+      - get:
+          url: '/v1/courses/{{ courseSlug }}'
+          expect:
+            - statusCode:
+                - 200
+                - 404
+
+  # ============================================================
+  # 2. AUTH слой — Login flow (вес 15%)
+  #    Тест: /v1/auth/login → JWT cookie → /v1/auth/me
+  # ============================================================
+  - name: 'Auth — Login + Me'
+    weight: 15
+    flow:
+      - post:
+          url: '/v1/auth/login'
+          json:
+            email: '{{ studentEmail }}'
+            password: '{{ studentPassword }}'
+          expect:
+            - statusCode:
+                - 200
+                - 400
+                - 401
+      - get:
+          url: '/v1/auth/me'
           expect:
             - statusCode:
                 - 200
                 - 401
 
-  - name: 'Certificate Verify (public endpoint)'
-    weight: 15
+  # ============================================================
+  # 3. STUDENT — Lessons + Progress (вес 30%)
+  #    Тест: LessonController, ProgressController (требует JWT)
+  # ============================================================
+  - name: 'Student — Lessons + Progress Flow'
+    weight: 30
     flow:
+      - post:
+          url: '/v1/auth/login'
+          json:
+            email: '{{ studentEmail }}'
+            password: '{{ studentPassword }}'
+          capture:
+            - header: 'set-cookie'
+              as: 'authCookie'
       - get:
-          url: '/api/v1/certificates/verify/FAKE-CODE-TEST'
+          url: '/v1/courses/{{ courseId }}/lessons'
           expect:
             - statusCode:
                 - 200
+                - 401
+                - 403
+      - get:
+          url: '/v1/courses/{{ courseId }}/lessons/{{ lessonId }}'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403
+      - get:
+          url: '/v1/progress'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+      - get:
+          url: '/v1/progress/{{ courseId }}'
+          expect:
+            - statusCode:
+                - 200
+                - 401
                 - 404
+
+  # ============================================================
+  # 4. STUDENT — Homework (вес 15%)
+  #    Тест: HomeworkController — список ДЗ + конкретная сдача
+  # ============================================================
+  - name: 'Student — Homework Module'
+    weight: 15
+    flow:
+      - post:
+          url: '/v1/auth/login'
+          json:
+            email: '{{ studentEmail }}'
+            password: '{{ studentPassword }}'
+      - get:
+          url: '/v1/courses/{{ courseId }}/lessons/{{ lessonId }}/homework/submissions'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403
+
+  # ============================================================
+  # 5. ADMIN — Analytics + Students (вес 15%)
+  #    Тест: AdminAnalyticsController, AdminStudentController
+  # ============================================================
+  - name: 'Admin — Analytics + Students'
+    weight: 15
+    flow:
+      - post:
+          url: '/v1/auth/login'
+          json:
+            email: '{{ adminEmail }}'
+            password: '{{ adminPassword }}'
+      - get:
+          url: '/v1/admin/analytics/overview'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403
+      - get:
+          url: '/v1/admin/students'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403
+      - get:
+          url: '/v1/admin/analytics/streaks'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403

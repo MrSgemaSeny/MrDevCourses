@@ -32,16 +32,26 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     private final IpResolver ipResolver;
     private final ObjectMapper objectMapper;
 
+    @org.springframework.beans.factory.annotation.Value("${app.rate-limit.disabled:false}")
+    private boolean rateLimitDisabled;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        // Bypass rate limiting entirely (for local load testing)
+        if (rateLimitDisabled) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // Skip CORS pre-flight OPTIONS requests
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
+
 
         String path = extractNormalizedPath(request);
 
