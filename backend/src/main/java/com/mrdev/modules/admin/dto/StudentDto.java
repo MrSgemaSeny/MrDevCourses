@@ -23,7 +23,8 @@ public class StudentDto {
     private Role role;
     private int currentStreak;
     private int longestStreak;
-    private LocalDate lastActiveDate;
     private Instant createdAt;
     private List<EnrollmentDto> enrollments;
+    private String currentLessonTitle;
+    private Instant estimatedFinishDate;
 }

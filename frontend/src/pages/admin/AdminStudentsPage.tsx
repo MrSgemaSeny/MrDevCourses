@@ -9,7 +9,6 @@ import { adminApi } from '@/entities/admin/api/adminApi';
 import { useAuth } from '@/features/auth';
 import {
   Student,
-  UserRole,
   Course,
   PageResponse,
 } from '@/shared/types';
@@ -27,7 +26,6 @@ export const AdminStudentsPage: React.FC = () => {
 
   // Filter & Pagination state
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRole, setSelectedRole] = useState<UserRole | 'ALL'>('ALL');
   const [selectedCourseId, setSelectedCourseId] = useState<number | 'ALL'>('ALL');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
@@ -55,7 +53,6 @@ export const AdminStudentsPage: React.FC = () => {
 
   const filterParams: StudentFilterParams = {
     q: searchQuery.trim() || undefined,
-    role: selectedRole === 'ALL' ? undefined : selectedRole,
     courseId: selectedCourseId === 'ALL' ? undefined : selectedCourseId,
     page,
     size: pageSize,
@@ -72,19 +69,6 @@ export const AdminStudentsPage: React.FC = () => {
   });
 
   // Mutations
-  const roleMutation = useMutation({
-    mutationFn: ({ userId, role }: { userId: number; role: UserRole }) =>
-      adminStudentApi.updateStudentRole(userId, role),
-    onSuccess: (updatedStudent) => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'students'] });
-      showFeedback('success', `Роль пользователя ${updatedStudent.email} изменена на ${updatedStudent.role}`);
-    },
-    onError: (err: any) => {
-      const msg = err?.response?.data?.message || err?.message || 'Ошибка смены роли';
-      showFeedback('error', msg);
-    },
-  });
-
   const enrollMutation = useMutation({
     mutationFn: ({ userId, courseId }: { userId: number; courseId: number }) =>
       adminStudentApi.enrollStudent(userId, courseId),
@@ -116,10 +100,6 @@ export const AdminStudentsPage: React.FC = () => {
     },
   });
 
-  const handleRoleChange = async (userId: number, role: UserRole) => {
-    await roleMutation.mutateAsync({ userId, role });
-  };
-
   const handleInspectProgress = (student: Student) => {
     setProgressUserId(student.id);
     setIsProgressDrawerOpen(true);
@@ -134,7 +114,6 @@ export const AdminStudentsPage: React.FC = () => {
 
   const handleResetFilters = () => {
     setSearchQuery('');
-    setSelectedRole('ALL');
     setSelectedCourseId('ALL');
     setPage(0);
   };
@@ -172,7 +151,7 @@ export const AdminStudentsPage: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-zinc-400 mt-1">
-            Консоль администрирования студентов, инспекция серий активности, управление ролями RBAC и учебными потоками
+            Консоль администрирования студентов, инспекция учебного прогресса и когорт
           </p>
         </div>
 
@@ -207,11 +186,6 @@ export const AdminStudentsPage: React.FC = () => {
           setSearchQuery(q);
           setPage(0);
         }}
-        selectedRole={selectedRole}
-        onRoleChange={(r) => {
-          setSelectedRole(r);
-          setPage(0);
-        }}
         selectedCourseId={selectedCourseId}
         onCourseChange={(c) => {
           setSelectedCourseId(c);
@@ -235,7 +209,6 @@ export const AdminStudentsPage: React.FC = () => {
           setPage(0);
         }}
         currentUserId={currentUser?.id}
-        onRoleChange={handleRoleChange}
         onInspectProgress={handleInspectProgress}
         onManageEnrollments={handleManageEnrollments}
         isLoading={isStudentsLoading}

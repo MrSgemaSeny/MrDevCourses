@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -68,13 +69,13 @@ public class AdminStudentService {
 
         final Set<Long> finalEnrolledUserIds = enrolledUserIds;
 
-        // 2. Filter in memory by query, role, and courseId
+        // 2. Filter in memory by query and courseId — ONLY STUDENTS allowed in student console
         List<User> filteredUsers = allUsers.stream()
                 .filter(u -> {
-                    if (finalEnrolledUserIds != null && !finalEnrolledUserIds.contains(u.getId())) {
+                    if (u.getRole() != Role.STUDENT) {
                         return false;
                     }
-                    if (role != null && u.getRole() != role) {
+                    if (finalEnrolledUserIds != null && !finalEnrolledUserIds.contains(u.getId())) {
                         return false;
                     }
                     if (query != null && !query.trim().isEmpty()) {
@@ -100,7 +101,7 @@ public class AdminStudentService {
         int toIndex = Math.min(fromIndex + safeSize, (int) totalElements);
         List<User> pageUsers = filteredUsers.subList(fromIndex, toIndex);
 
-        // Batch fetch enrollments for page users
+        // Batch fetch enrollments and lesson progress for page users
         List<Long> pageUserIds = pageUsers.stream().map(User::getId).toList();
         List<Enrollment> enrollments = pageUserIds.isEmpty()
                 ? List.of()
@@ -109,8 +110,19 @@ public class AdminStudentService {
         Map<Long, List<Enrollment>> enrollmentsByUser = enrollments.stream()
                 .collect(Collectors.groupingBy(e -> e.getUser().getId()));
 
+        List<LessonProgress> lessonProgressList = pageUserIds.isEmpty()
+                ? List.of()
+                : lessonProgressRepository.findAllByUserIdsWithLesson(pageUserIds);
+
+        Map<Long, List<LessonProgress>> progressByUser = lessonProgressList.stream()
+                .collect(Collectors.groupingBy(lp -> lp.getUser().getId()));
+
         List<StudentDto> dtoList = pageUsers.stream()
-                .map(user -> toStudentDto(user, enrollmentsByUser.getOrDefault(user.getId(), List.of())))
+                .map(user -> toStudentDto(
+                        user,
+                        enrollmentsByUser.getOrDefault(user.getId(), List.of()),
+                        progressByUser.getOrDefault(user.getId(), List.of())
+                ))
                 .toList();
 
         return PageResponse.of(dtoList, safePage, safeSize, totalElements);
@@ -301,9 +313,34 @@ public class AdminStudentService {
     }
 
     private StudentDto toStudentDto(User user, List<Enrollment> enrollments) {
+        return toStudentDto(user, enrollments, List.of());
+    }
+
+    private StudentDto toStudentDto(User user, List<Enrollment> enrollments, List<LessonProgress> progressList) {
         List<EnrollmentDto> enrollmentDtos = enrollments.stream()
                 .map(this::toEnrollmentDto)
                 .toList();
+
+        String currentLessonTitle = "Не начат";
+        if (!progressList.isEmpty()) {
+            Lesson latestLesson = progressList.get(0).getLesson();
+            if (latestLesson != null) {
+                currentLessonTitle = "Урок " + latestLesson.getDayNumber() + ": " + latestLesson.getTitle();
+            }
+        }
+
+        Instant estimatedFinishDate = null;
+        if (!enrollments.isEmpty()) {
+            Instant earliestEnrollment = enrollments.stream()
+                    .map(Enrollment::getEnrolledAt)
+                    .filter(Objects::nonNull)
+                    .min(Comparator.naturalOrder())
+                    .orElse(user.getCreatedAt());
+
+            if (earliestEnrollment != null) {
+                estimatedFinishDate = earliestEnrollment.plus(14, ChronoUnit.DAYS);
+            }
+        }
 
         return StudentDto.builder()
                 .id(user.getId())
@@ -313,9 +350,10 @@ public class AdminStudentService {
                 .role(user.getRole())
                 .currentStreak(user.getCurrentStreak())
                 .longestStreak(user.getLongestStreak())
-                .lastActiveDate(user.getLastActiveDate())
                 .createdAt(user.getCreatedAt())
                 .enrollments(enrollmentDtos)
+                .currentLessonTitle(currentLessonTitle)
+                .estimatedFinishDate(estimatedFinishDate)
                 .build();
     }
 

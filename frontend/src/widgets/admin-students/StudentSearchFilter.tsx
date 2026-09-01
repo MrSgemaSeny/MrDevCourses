@@ -1,12 +1,10 @@
 import React from 'react';
-import { Search, RotateCcw, Filter } from 'lucide-react';
-import { UserRole, Course } from '@/shared/types';
+import { Search, RotateCcw } from 'lucide-react';
+import { Course } from '@/shared/types';
 
 interface StudentSearchFilterProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  selectedRole: UserRole | 'ALL';
-  onRoleChange: (role: UserRole | 'ALL') => void;
   selectedCourseId: number | 'ALL';
   onCourseChange: (courseId: number | 'ALL') => void;
   courses: Course[];
@@ -17,15 +15,13 @@ interface StudentSearchFilterProps {
 export const StudentSearchFilter: React.FC<StudentSearchFilterProps> = ({
   searchQuery,
   onSearchChange,
-  selectedRole,
-  onRoleChange,
   selectedCourseId,
   onCourseChange,
   courses,
   onReset,
   isLoading,
 }) => {
-  const isFiltered = searchQuery.trim() !== '' || selectedRole !== 'ALL' || selectedCourseId !== 'ALL';
+  const isFiltered = searchQuery.trim() !== '' || selectedCourseId !== 'ALL';
 
   return (
     <div className="bg-[#18181b] border border-white/5 rounded-xl p-4 mb-6 shadow-sm">
@@ -44,25 +40,6 @@ export const StudentSearchFilter: React.FC<StudentSearchFilterProps> = ({
 
         {/* Filters Group */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Role Filter */}
-          <div className="flex items-center gap-1.5 bg-[#0a0a0c] border border-white/10 rounded-lg px-2.5 py-1.5">
-            <Filter className="w-3.5 h-3.5 text-zinc-500" />
-            <select
-              value={selectedRole}
-              onChange={(e) => onRoleChange(e.target.value as UserRole | 'ALL')}
-              className="bg-transparent text-xs text-zinc-300 focus:outline-none cursor-pointer"
-            >
-              <option value="ALL" className="bg-[#18181b] text-zinc-100">
-                Все роли
-              </option>
-              <option value="STUDENT" className="bg-[#18181b] text-zinc-100">
-                Студенты (STUDENT)
-              </option>
-              <option value="ADMIN" className="bg-[#18181b] text-zinc-100">
-                Администраторы (ADMIN)
-              </option>
-            </select>
-          </div>
 
           {/* Course Filter */}
           <div className="flex items-center gap-1.5 bg-[#0a0a0c] border border-white/10 rounded-lg px-2.5 py-1.5">

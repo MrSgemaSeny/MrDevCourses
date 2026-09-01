@@ -6,8 +6,7 @@ import {
   TrendingUp,
   Loader2,
 } from 'lucide-react';
-import { Student, UserRole } from '@/shared/types';
-import { RoleToggle } from './RoleToggle';
+import { Student } from '@/shared/types';
 
 interface StudentTableProps {
   students: Student[];
@@ -18,7 +17,6 @@ interface StudentTableProps {
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
   currentUserId?: number;
-  onRoleChange: (userId: number, role: UserRole) => Promise<void>;
   onInspectProgress: (student: Student) => void;
   onManageEnrollments: (student: Student) => void;
   isLoading?: boolean;
@@ -33,7 +31,6 @@ export const StudentTable: React.FC<StudentTableProps> = ({
   onPageChange,
   onPageSizeChange,
   currentUserId,
-  onRoleChange,
   onInspectProgress,
   onManageEnrollments,
   isLoading,
@@ -69,16 +66,16 @@ export const StudentTable: React.FC<StudentTableProps> = ({
           <thead>
             <tr className="border-b border-white/5 bg-[#121216] text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
               <th className="py-3.5 px-4">Студент</th>
-              <th className="py-3.5 px-4">Роль RBAC</th>
               <th className="py-3.5 px-4">Зачислен на курсы</th>
-              <th className="py-3.5 px-4">Регистрация</th>
+              <th className="py-3.5 px-4">На каком уроке</th>
+              <th className="py-3.5 px-4">Дата регистрации</th>
+              <th className="py-3.5 px-4">Примерное окончание</th>
               <th className="py-3.5 px-4 text-right">Действия</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 text-xs text-zinc-200">
             {students.map((student) => {
               const isSelf = currentUserId !== undefined && currentUserId === student.id;
-              const isAdmin = student.role === 'ADMIN';
               const enrollCount = student.enrollments?.length || 0;
 
               return (
@@ -116,24 +113,9 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                     </div>
                   </td>
 
-                  {/* RBAC Role Toggle */}
-                  <td className="py-3.5 px-4">
-                    <RoleToggle
-                      userId={student.id}
-                      userEmail={student.email}
-                      currentRole={student.role}
-                      isCurrentAdmin={isSelf}
-                      onRoleChange={(newRole) => onRoleChange(student.id, newRole)}
-                    />
-                  </td>
-
                   {/* Enrolled Courses */}
                   <td className="py-3.5 px-4">
-                    {isAdmin ? (
-                      <span className="text-[10px] text-zinc-400 font-mono px-2 py-0.5 rounded bg-zinc-800/80 border border-white/5">
-                        Все курсы (Админ)
-                      </span>
-                    ) : enrollCount > 0 ? (
+                    {enrollCount > 0 ? (
                       <div className="flex flex-wrap gap-1 max-w-xs">
                         {student.enrollments.slice(0, 2).map((e) => (
                           <span
@@ -155,26 +137,38 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                     )}
                   </td>
 
-                  {/* Created At */}
+                  {/* Current Lesson */}
+                  <td className="py-3.5 px-4">
+                    <span className="inline-block px-2 py-0.5 rounded bg-zinc-800/80 border border-white/5 text-[11px] font-mono text-zinc-300 max-w-[180px] truncate" title={student.currentLessonTitle || 'Не начат'}>
+                      {student.currentLessonTitle || 'Не начат'}
+                    </span>
+                  </td>
+
+                  {/* Registration Date */}
                   <td className="py-3.5 px-4 text-[11px] text-zinc-400 font-mono">
                     {student.createdAt
                       ? new Date(student.createdAt).toLocaleDateString('ru-RU')
                       : '—'}
                   </td>
 
+                  {/* Estimated Finish Date */}
+                  <td className="py-3.5 px-4 text-[11px] text-zinc-400 font-mono">
+                    {student.estimatedFinishDate
+                      ? new Date(student.estimatedFinishDate).toLocaleDateString('ru-RU')
+                      : '—'}
+                  </td>
+
                   {/* Actions */}
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5">
-                      {!isAdmin && (
-                        <button
-                          type="button"
-                          onClick={() => onManageEnrollments(student)}
-                          className="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-[11px] font-medium border border-white/5 transition-colors cursor-pointer"
-                          title="Управление зачислениями"
-                        >
-                          Зачисления
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => onManageEnrollments(student)}
+                        className="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-[11px] font-medium border border-white/5 transition-colors cursor-pointer"
+                        title="Управление зачислениями"
+                      >
+                        Зачисления
+                      </button>
 
                       <button
                         type="button"

@@ -136,12 +136,14 @@ class AdminStudentServiceTest {
     void searchStudents_WithFilter_ShouldReturnPage() {
         when(userRepository.findAll()).thenReturn(List.of(adminUser, studentUser));
         when(enrollmentRepository.findAllByUserIdsWithCourse(List.of(2L))).thenReturn(List.of());
+        when(lessonProgressRepository.findAllByUserIdsWithLesson(List.of(2L))).thenReturn(List.of());
 
         PageResponse<StudentDto> page = adminStudentService.searchStudents("student", Role.STUDENT, null, 0, 10);
 
         assertThat(page.getTotalElements()).isEqualTo(1);
         assertThat(page.getContent()).hasSize(1);
         assertThat(page.getContent().get(0).getEmail()).isEqualTo("student@test.com");
+        assertThat(page.getContent().get(0).getCurrentLessonTitle()).isEqualTo("Не начат");
     }
 
     @Test

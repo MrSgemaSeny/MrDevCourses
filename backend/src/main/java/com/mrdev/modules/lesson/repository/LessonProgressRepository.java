@@ -40,4 +40,7 @@ public interface LessonProgressRepository extends JpaRepository<LessonProgress, 
 
     @Query("SELECT COALESCE(SUM(l.durationMinutes), 0) FROM LessonProgress lp JOIN lp.lesson l WHERE lp.user.id = :userId")
     int sumCompletedMinutesByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT lp FROM LessonProgress lp JOIN FETCH lp.lesson l WHERE lp.user.id IN :userIds ORDER BY lp.completedAt DESC")
+    List<LessonProgress> findAllByUserIdsWithLesson(@Param("userIds") List<Long> userIds);
 }

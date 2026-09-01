@@ -356,20 +356,6 @@ export const ProfilePage: React.FC = () => {
                     className="w-full px-3.5 py-2.5 rounded-sm bg-[#0a0a0c] border border-white/10 text-white text-xs placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors"
                   />
                 </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="avatarUrl" className="text-xs font-medium text-zinc-300 block">
-                    URL фотографии аватара
-                  </label>
-                  <input
-                    id="avatarUrl"
-                    type="url"
-                    value={formData.avatarUrl || ''}
-                    onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-                    placeholder="https://avatars.githubusercontent.com/u/..."
-                    className="w-full px-3.5 py-2.5 rounded-sm bg-[#0a0a0c] border border-white/10 text-white text-xs placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors"
-                  />
-                </div>
               </div>
             </div>
 
@@ -397,9 +383,6 @@ export const ProfilePage: React.FC = () => {
                       className="w-full pl-8 pr-3.5 py-2.5 rounded-sm bg-[#0a0a0c] border border-white/10 text-white text-xs placeholder-zinc-600 focus:outline-none focus:border-white/30 font-mono transition-colors"
                     />
                   </div>
-                  <p className="text-[11px] text-zinc-500">
-                    Бот платформы: <span className="font-mono text-zinc-400">@MrDevelopersbot</span>
-                  </p>
                 </div>
 
                 <div className="space-y-1.5">

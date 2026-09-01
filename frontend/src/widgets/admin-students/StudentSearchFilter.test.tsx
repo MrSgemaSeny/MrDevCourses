@@ -9,9 +9,8 @@ const mockCourses: Course[] = [
 ];
 
 describe('StudentSearchFilter', () => {
-  it('triggers search change, role change, and reset filter callbacks', () => {
+  it('triggers search change, course change, and reset filter callbacks', () => {
     const handleSearch = vi.fn();
-    const handleRole = vi.fn();
     const handleCourse = vi.fn();
     const handleReset = vi.fn();
 
@@ -19,8 +18,6 @@ describe('StudentSearchFilter', () => {
       <StudentSearchFilter
         searchQuery=""
         onSearchChange={handleSearch}
-        selectedRole="ALL"
-        onRoleChange={handleRole}
         selectedCourseId="ALL"
         onCourseChange={handleCourse}
         courses={mockCourses}
@@ -33,19 +30,17 @@ describe('StudentSearchFilter', () => {
     fireEvent.change(input, { target: { value: 'john' } });
     expect(handleSearch).toHaveBeenCalledWith('john');
 
-    // Select role
-    const roleSelect = screen.getByDisplayValue('Все роли');
-    fireEvent.change(roleSelect, { target: { value: 'ADMIN' } });
-    expect(handleRole).toHaveBeenCalledWith('ADMIN');
+    // Select course
+    const courseSelect = screen.getByDisplayValue('Все курсы');
+    fireEvent.change(courseSelect, { target: { value: '1' } });
+    expect(handleCourse).toHaveBeenCalledWith(1);
 
     // Rerender with active filter to show Reset button
     rerender(
       <StudentSearchFilter
         searchQuery="john"
         onSearchChange={handleSearch}
-        selectedRole="ADMIN"
-        onRoleChange={handleRole}
-        selectedCourseId="ALL"
+        selectedCourseId={1}
         onCourseChange={handleCourse}
         courses={mockCourses}
         onReset={handleReset}

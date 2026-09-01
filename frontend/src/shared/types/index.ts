@@ -140,6 +140,8 @@ export interface Student {
   lastActiveDate?: string;
   createdAt: string;
   enrollments: Enrollment[];
+  currentLessonTitle?: string;
+  estimatedFinishDate?: string;
 }
 
 export interface PageResponse<T> {
