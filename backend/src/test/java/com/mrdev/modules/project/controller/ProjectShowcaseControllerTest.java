@@ -147,8 +147,8 @@ class ProjectShowcaseControllerTest {
     }
 
     @Test
-    @DisplayName("POST /v1/projects/{id}/like increments like count")
-    void likeProject_Public_Success() throws Exception {
+    @DisplayName("POST /v1/projects/{id}/like unauthenticated returns 401 Unauthorized")
+    void likeProject_Unauthenticated_Returns401() throws Exception {
         ProjectShowcase p = showcaseRepository.save(ProjectShowcase.builder()
                 .user(student)
                 .course(course)
@@ -161,7 +161,49 @@ class ProjectShowcaseControllerTest {
                 .build());
 
         mockMvc.perform(post("/v1/projects/" + p.getId() + "/like"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("POST /v1/projects/{id}/like authenticated toggles like on and off")
+    void likeProject_Authenticated_TogglesLike() throws Exception {
+        ProjectShowcase p = showcaseRepository.save(ProjectShowcase.builder()
+                .user(student)
+                .course(course)
+                .title("Dev Wall")
+                .description("Description")
+                .liveDemoUrl("https://demo.app")
+                .githubRepoUrl("https://github.com/repo")
+                .authorName("Azamat")
+                .likesCount(0)
+                .build());
+
+        // 1. First like -> liked = true
+        mockMvc.perform(post("/v1/projects/" + p.getId() + "/like")
+                        .cookie(new Cookie("MrDev_token", studentToken)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success", is(true)));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", is(true)));
+
+        // Verify in GET /v1/projects with user token
+        mockMvc.perform(get("/v1/projects")
+                        .cookie(new Cookie("MrDev_token", studentToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].likesCount", is(1)))
+                .andExpect(jsonPath("$.data[0].hasLiked", is(true)));
+
+        // 2. Second like (toggle) -> liked = false
+        mockMvc.perform(post("/v1/projects/" + p.getId() + "/like")
+                        .cookie(new Cookie("MrDev_token", studentToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", is(false)));
+
+        // Verify in GET /v1/projects
+        mockMvc.perform(get("/v1/projects")
+                        .cookie(new Cookie("MrDev_token", studentToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].likesCount", is(0)))
+                .andExpect(jsonPath("$.data[0].hasLiked", is(false)));
     }
 }

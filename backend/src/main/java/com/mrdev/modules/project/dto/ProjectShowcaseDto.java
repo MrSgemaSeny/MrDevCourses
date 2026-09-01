@@ -26,5 +26,6 @@ public class ProjectShowcaseDto {
     private String techStack;
     private boolean featured;
     private int likesCount;
+    private boolean hasLiked;
     private Instant createdAt;
 }

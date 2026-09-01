@@ -13,6 +13,7 @@ export interface ProjectShowcase {
   techStack: string;
   featured: boolean;
   likesCount: number;
+  hasLiked?: boolean;
   createdAt: string;
 }
 

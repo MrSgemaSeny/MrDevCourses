@@ -10,12 +10,17 @@ import com.mrdev.modules.project.dto.CreateProjectShowcaseRequest;
 import com.mrdev.modules.project.dto.ProjectShowcaseDto;
 import com.mrdev.modules.project.model.ProjectShowcase;
 import com.mrdev.modules.project.repository.ProjectShowcaseRepository;
+import com.mrdev.modules.project.model.ProjectLike;
+import com.mrdev.modules.project.repository.ProjectLikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -23,16 +28,21 @@ import java.util.List;
 public class ProjectShowcaseService {
 
     private final ProjectShowcaseRepository showcaseRepository;
+    private final ProjectLikeRepository projectLikeRepository;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final AuditService auditService;
     private final com.mrdev.modules.help.service.TelegramNotificationService telegramNotificationService;
 
     @Transactional(readOnly = true)
-    public List<ProjectShowcaseDto> getAllShowcases() {
+    public List<ProjectShowcaseDto> getAllShowcases(Long currentUserId) {
+        Set<Long> likedIds = (currentUserId != null)
+                ? projectLikeRepository.findProjectIdsLikedByUser(currentUserId)
+                : Collections.emptySet();
+
         return showcaseRepository.findAllByOrderByFeaturedDescCreatedAtDesc()
                 .stream()
-                .map(this::mapToDto)
+                .map(p -> mapToDto(p, likedIds.contains(p.getId())))
                 .toList();
     }
 
@@ -77,7 +87,33 @@ public class ProjectShowcaseService {
         auditService.logAction(userId, "PROJECT_SHOWCASE_CREATED", "ProjectShowcase", showcase.getId(),
                 "Published project: " + showcase.getTitle(), null);
 
-        return mapToDto(showcase);
+        return mapToDto(showcase, false);
+    }
+
+    @Transactional
+    public boolean toggleLike(Long userId, Long projectId) {
+        ProjectShowcase project = showcaseRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("ProjectShowcase", "id", projectId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        Optional<ProjectLike> existingLike = projectLikeRepository.findByProjectIdAndUserId(projectId, userId);
+        if (existingLike.isPresent()) {
+            projectLikeRepository.delete(existingLike.get());
+            showcaseRepository.decrementLikes(projectId);
+            log.info("User {} unliked project {}", userId, projectId);
+            return false;
+        } else {
+            ProjectLike like = ProjectLike.builder()
+                    .project(project)
+                    .user(user)
+                    .build();
+            projectLikeRepository.save(like);
+            showcaseRepository.incrementLikes(projectId);
+            log.info("User {} liked project {}", userId, projectId);
+            return true;
+        }
     }
 
     @Transactional
@@ -88,7 +124,7 @@ public class ProjectShowcaseService {
         showcaseRepository.incrementLikes(projectId);
     }
 
-    private ProjectShowcaseDto mapToDto(ProjectShowcase p) {
+    private ProjectShowcaseDto mapToDto(ProjectShowcase p, boolean hasLiked) {
         return ProjectShowcaseDto.builder()
                 .id(p.getId())
                 .userId(p.getUser().getId())
@@ -104,6 +140,7 @@ public class ProjectShowcaseService {
                 .techStack(p.getTechStack())
                 .featured(p.isFeatured())
                 .likesCount(p.getLikesCount())
+                .hasLiked(hasLiked)
                 .createdAt(p.getCreatedAt())
                 .build();
     }

@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
         path: 'courses',
         element: (
           <ProtectedRoute>
-            <CoursesPage />
+            {wrap(<CoursesPage />)}
           </ProtectedRoute>
         ),
       },
@@ -58,7 +58,7 @@ export const router = createBrowserRouter([
         path: 'courses/:slug',
         element: (
           <ProtectedRoute>
-            <CourseDetailPage />
+            {wrap(<CourseDetailPage />)}
           </ProtectedRoute>
         ),
       },
@@ -66,7 +66,7 @@ export const router = createBrowserRouter([
         path: 'courses/:courseId/lessons/:lessonId',
         element: (
           <ProtectedRoute>
-            <LessonPage />
+            {wrap(<LessonPage />)}
           </ProtectedRoute>
         ),
       },
@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: (
           <ProtectedRoute>
-            <DashboardPage />
+            {wrap(<DashboardPage />)}
           </ProtectedRoute>
         ),
       },

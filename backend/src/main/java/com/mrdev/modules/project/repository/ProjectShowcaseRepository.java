@@ -19,4 +19,8 @@ public interface ProjectShowcaseRepository extends JpaRepository<ProjectShowcase
     @Modifying
     @Query("UPDATE ProjectShowcase p SET p.likesCount = p.likesCount + 1 WHERE p.id = :id")
     void incrementLikes(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE ProjectShowcase p SET p.likesCount = CASE WHEN p.likesCount > 0 THEN p.likesCount - 1 ELSE 0 END WHERE p.id = :id")
+    void decrementLikes(@Param("id") Long id);
 }

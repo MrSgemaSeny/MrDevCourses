@@ -12,7 +12,8 @@ export const projectApi = {
     return res.data.data;
   },
 
-  likeProject: async (projectId: number): Promise<void> => {
-    await apiClient.post(`/v1/projects/${projectId}/like`);
+  likeProject: async (projectId: number): Promise<boolean> => {
+    const res = await apiClient.post<{ success: boolean; data: boolean }>(`/v1/projects/${projectId}/like`);
+    return res.data.data;
   },
 };

@@ -22,7 +22,8 @@ public class ProjectShowcaseController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProjectShowcaseDto>>> getAllProjects() {
-        List<ProjectShowcaseDto> list = showcaseService.getAllShowcases();
+        Long currentUserId = SecurityUtils.getCurrentUserIdOptional().orElse(null);
+        List<ProjectShowcaseDto> list = showcaseService.getAllShowcases(currentUserId);
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
@@ -36,8 +37,10 @@ public class ProjectShowcaseController {
     }
 
     @PostMapping("/{id}/like")
-    public ResponseEntity<ApiResponse<Void>> likeProject(@PathVariable Long id) {
-        showcaseService.likeProject(id);
-        return ResponseEntity.ok(ApiResponse.success(null));
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<Boolean>> toggleLike(@PathVariable Long id) {
+        Long userId = SecurityUtils.getCurrentUserId();
+        boolean liked = showcaseService.toggleLike(userId, id);
+        return ResponseEntity.ok(ApiResponse.success(liked));
     }
 }

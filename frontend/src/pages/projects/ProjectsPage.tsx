@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectApi } from '@/entities/project/api/projectApi';
+import { useAuth } from '@/features/auth';
+import { ROUTES } from '@/shared/config/routes';
 import { AddProjectModal } from '@/features/project-showcase/ui/AddProjectModal';
 import {
   ExternalLink,
@@ -14,6 +17,8 @@ import {
 } from 'lucide-react';
 
 export const ProjectsPage: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<'all' | 'featured' | 'popular'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -24,7 +29,7 @@ export const ProjectsPage: React.FC = () => {
   });
 
   const likeMutation = useMutation({
-    mutationFn: projectApi.likeProject,
+    mutationFn: (projectId: number) => projectApi.likeProject(projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
@@ -206,10 +211,21 @@ export const ProjectsPage: React.FC = () => {
                 {/* Like Button */}
                 <button
                   type="button"
-                  onClick={() => likeMutation.mutate(project.id)}
-                  className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-rose-400 transition-colors px-2 py-1 rounded bg-white/5 hover:bg-white/10 cursor-pointer"
+                  onClick={() => {
+                    if (!user) {
+                      navigate(ROUTES.LOGIN);
+                      return;
+                    }
+                    likeMutation.mutate(project.id);
+                  }}
+                  className={`flex items-center gap-1.5 text-xs transition-colors px-2 py-1 rounded cursor-pointer ${
+                    project.hasLiked
+                      ? 'text-rose-400 bg-rose-950/40 border border-rose-800/60 shadow-[0_0_12px_rgba(244,63,94,0.15)]'
+                      : 'text-zinc-400 hover:text-rose-400 bg-white/5 hover:bg-white/10'
+                  }`}
+                  aria-label={project.hasLiked ? 'Убрать лайк' : 'Поставить лайк'}
                 >
-                  <Heart className="w-3.5 h-3.5 fill-rose-500/20 text-rose-400" />
+                  <Heart className={`w-3.5 h-3.5 ${project.hasLiked ? 'fill-rose-400 text-rose-400' : 'fill-none text-zinc-400'}`} />
                   <span className="font-mono">{project.likesCount}</span>
                 </button>
               </div>
