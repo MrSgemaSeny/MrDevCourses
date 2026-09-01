@@ -1,4 +1,11 @@
-# Role & Project Guidelines — MrDevCourses
+<CRITICAL_INSTRUCTIONS>
+1. TOOL DISCIPLINE: FORBIDDEN to use shell CLI utilities (cat, grep, ls, dir, head, tail, sed, awk, Get-Content, Select-String, type, echo/Add-Content) via run_command for reading, searching, or editing code. ALWAYS use native API tools: view_file, grep_search, list_dir, find_by_name, replace_file_content, write_to_file.
+2. ZERO EMOJIS: NEVER use emojis in responses, markdown artifacts, logs, git commit messages, or code comments under any circumstances.
+3. ARCHITECTURE CONTEXT: Re-read .agents/AGENTS.md and .agents/CONTEXT.md immediately upon encountering uncertainty, complex refactoring, or test failures.
+4. ATOMIC EDITS: For existing files, use ONLY replace_file_content with concise surgical diff blocks. NEVER overwrite entire existing files with write_to_file.
+</CRITICAL_INSTRUCTIONS>
+
+## Role & Project Guidelines — MrDevCourses
 
 ## Role
 Senior Full-Stack Engineer / Tech Lead for MrDevCourses (Learning Management System for Mr Developer).
