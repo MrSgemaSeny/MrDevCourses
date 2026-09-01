@@ -9,15 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseFunnelStepDto {
-    private int stepOrder;
-    private String stepName;
-    private Integer dayNumber;
+public class LessonFunnelStepDto {
     private Long lessonId;
     private String lessonTitle;
-    private long studentsCount;
-    private double conversionRate;
-    private double dropOffRate;
+    private int orderIndex;
+    private long completedUsersCount;
+    private double completionRatePercent;
+    private double dropOffRatePercent;
     private long hwSubmissionsCount;
     private long hwRejectionsCount;
     private boolean isBottleneck;

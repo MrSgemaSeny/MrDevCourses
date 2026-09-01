@@ -25,6 +25,16 @@ export interface LessonMaterial {
   sortOrder: number;
 }
 
+export interface LessonPitfall {
+  id: number;
+  lessonId: number;
+  title: string;
+  errorSymptom?: string;
+  solutionMarkdown: string;
+  orderIndex: number;
+  createdAt: string;
+}
+
 export interface LessonSummary {
   id: number;
   courseId: number;
@@ -407,6 +417,23 @@ export interface LessonFunnelItem {
   completedCount: number;
   conversionRate: number;
   dropOffRate: number;
+  hwSubmissionsCount?: number;
+  hwRejectionsCount?: number;
+  isBottleneck?: boolean;
+}
+
+export interface CourseFunnelStep {
+  stepOrder: number;
+  stepName: string;
+  dayNumber?: number;
+  lessonId?: number;
+  lessonTitle?: string;
+  studentsCount: number;
+  conversionRate: number;
+  dropOffRate: number;
+  hwSubmissionsCount?: number;
+  hwRejectionsCount?: number;
+  isBottleneck?: boolean;
 }
 
 export interface AdminAnalytics {

@@ -24,6 +24,8 @@ import com.mrdev.modules.quiz.model.QuizSubmission;
 import com.mrdev.modules.quiz.repository.QuizQuestionRepository;
 import com.mrdev.modules.quiz.repository.QuizRepository;
 import com.mrdev.modules.quiz.repository.QuizSubmissionRepository;
+import com.mrdev.modules.homework.model.SubmissionStatus;
+import com.mrdev.modules.homework.repository.HomeworkSubmissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,7 @@ public class AdminAnalyticsService {
     private final LessonRepository lessonRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final LessonProgressRepository lessonProgressRepository;
+    private final HomeworkSubmissionRepository homeworkSubmissionRepository;
     private final AuditLogRepository auditLogRepository;
     private final QuizRepository quizRepository;
     private final QuizSubmissionRepository quizSubmissionRepository;
@@ -161,6 +164,11 @@ public class AdminAnalyticsService {
                     ? Math.round(((double) (prevCount - completed) / prevCount) * 100.0 * 10.0) / 10.0
                     : 0.0;
 
+            long hwSubmissions = homeworkSubmissionRepository.countByLessonId(lesson.getId());
+            long hwRejections = homeworkSubmissionRepository.countByLessonIdAndStatus(lesson.getId(), SubmissionStatus.NEEDS_IMPROVEMENT)
+                    + homeworkSubmissionRepository.countByLessonIdAndStatus(lesson.getId(), SubmissionStatus.FAILED);
+            boolean isBottleneck = dropOffRate >= 20.0 || (hwSubmissions > 0 && ((double) hwRejections / hwSubmissions) >= 0.3);
+
             funnel.add(CourseFunnelStepDto.builder()
                     .stepOrder(i + 1)
                     .stepName("День " + lesson.getDayNumber() + ": " + lesson.getTitle())
@@ -170,6 +178,9 @@ public class AdminAnalyticsService {
                     .studentsCount(completed)
                     .conversionRate(conversionRate)
                     .dropOffRate(dropOffRate)
+                    .hwSubmissionsCount(hwSubmissions)
+                    .hwRejectionsCount(hwRejections)
+                    .isBottleneck(isBottleneck)
                     .build());
 
             prevCount = completed;

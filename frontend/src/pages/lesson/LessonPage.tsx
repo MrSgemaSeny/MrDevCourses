@@ -10,6 +10,7 @@ import { LessonQuizWidget } from '@/widgets/quiz/LessonQuizWidget';
 import { LessonMaterialsList } from '@/widgets/materials/LessonMaterialsList';
 import { StudentHelpModal } from '@/widgets/help/StudentHelpModal';
 import { LessonActionCard } from '@/widgets/lesson-action-card/LessonActionCard';
+import { LessonPitfallsAccordion } from '@/widgets/lesson-pitfalls/ui/LessonPitfallsAccordion';
 import {
   Play,
   CheckCircle2,
@@ -236,6 +237,7 @@ const LessonPageContent: React.FC = () => {
                     dayNumber={lesson.dayNumber}
                     onOpenHelp={() => setIsHelpModalOpen(true)}
                   />
+                  <LessonPitfallsAccordion courseId={cId} lessonId={lId} />
                   <MarkdownViewer content={lesson.content} />
                   <LessonMaterialsList materials={lesson.materials} />
                   <div className="pt-6 border-t border-white/5">

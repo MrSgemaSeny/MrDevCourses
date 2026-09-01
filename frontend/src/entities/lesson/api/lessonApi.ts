@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/base';
-import { ApiResponse, LessonDetail, LessonSummary } from '@/shared/types';
+import { ApiResponse, LessonDetail, LessonSummary, LessonPitfall } from '@/shared/types';
 
 export const lessonApi = {
   getLessons: async (courseId: number): Promise<LessonSummary[]> => {
@@ -9,6 +9,11 @@ export const lessonApi = {
 
   getLessonDetail: async (courseId: number, lessonId: number): Promise<LessonDetail> => {
     const res = await apiClient.get<ApiResponse<LessonDetail>>(`/v1/courses/${courseId}/lessons/${lessonId}`);
+    return res.data.data;
+  },
+
+  getPitfalls: async (courseId: number, lessonId: number): Promise<LessonPitfall[]> => {
+    const res = await apiClient.get<ApiResponse<LessonPitfall[]>>(`/v1/courses/${courseId}/lessons/${lessonId}/pitfalls`);
     return res.data.data;
   },
 

@@ -26,4 +26,8 @@ public interface HomeworkSubmissionRepository extends JpaRepository<HomeworkSubm
     long countByCourseIdAndStatus(Long courseId, SubmissionStatus status);
 
     long countByStatus(SubmissionStatus status);
+
+    long countByLessonId(Long lessonId);
+
+    long countByLessonIdAndStatus(Long lessonId, SubmissionStatus status);
 }
