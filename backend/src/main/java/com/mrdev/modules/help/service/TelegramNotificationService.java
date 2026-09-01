@@ -38,15 +38,15 @@ public class TelegramNotificationService {
     public void sendHelpAlert(String studentName, String studentEmail, String courseTitle, String lessonTitle,
                               Integer dayNumber, String stepTitle, String problemText, String errorLogs) {
         StringBuilder sb = new StringBuilder();
-        sb.append("🚨 *SOS Сигнал со страницы урока*\n\n");
-        sb.append("👤 *Студент:* ").append(escapeMarkdown(studentName)).append(" (").append(escapeMarkdown(studentEmail)).append(")\n");
-        sb.append("📚 *Курс:* ").append(escapeMarkdown(courseTitle)).append("\n");
-        sb.append("📖 *Урок:* День ").append(dayNumber != null ? dayNumber : 1).append(" — ").append(escapeMarkdown(lessonTitle)).append("\n");
-        sb.append("📍 *Шаг / Этап:* ").append(escapeMarkdown(stepTitle != null ? stepTitle : "Не указан")).append("\n\n");
-        sb.append("❓ *Суть проблемы:*\n").append(escapeMarkdown(problemText)).append("\n");
+        sb.append("[SOS] Сигнал со страницы урока\n\n");
+        sb.append("Студент: ").append(escapeMarkdown(studentName)).append(" (").append(escapeMarkdown(studentEmail)).append(")\n");
+        sb.append("Курс: ").append(escapeMarkdown(courseTitle)).append("\n");
+        sb.append("Урок: День ").append(dayNumber != null ? dayNumber : 1).append(" — ").append(escapeMarkdown(lessonTitle)).append("\n");
+        sb.append("Шаг / Этап: ").append(escapeMarkdown(stepTitle != null ? stepTitle : "Не указан")).append("\n\n");
+        sb.append("Суть проблемы:\n").append(escapeMarkdown(problemText)).append("\n");
 
         if (errorLogs != null && !errorLogs.isBlank()) {
-            sb.append("\n⚠️ *Логи ошибки:*\n```\n").append(errorLogs.length() > 500 ? errorLogs.substring(0, 500) + "..." : errorLogs).append("\n```\n");
+            sb.append("\n[Логи ошибки]:\n```\n").append(errorLogs.length() > 500 ? errorLogs.substring(0, 500) + "..." : errorLogs).append("\n```\n");
         }
 
         sendMessage(sb.toString());
@@ -55,15 +55,15 @@ public class TelegramNotificationService {
     public void sendHomeworkAlert(String studentName, String studentEmail, String courseTitle, String lessonTitle,
                                   String repoUrl, String liveDemoUrl, String notes) {
         StringBuilder sb = new StringBuilder();
-        sb.append("🚀 *Новая сдача ДЗ на проверку*\n\n");
-        sb.append("👤 *Студент:* ").append(escapeMarkdown(studentName)).append(" (").append(escapeMarkdown(studentEmail)).append(")\n");
-        sb.append("📚 *Курс:* ").append(escapeMarkdown(courseTitle)).append("\n");
-        sb.append("📖 *Урок:* ").append(escapeMarkdown(lessonTitle)).append("\n\n");
-        sb.append("🔗 *Репозиторий:* ").append(repoUrl != null ? repoUrl : "Не указан").append("\n");
-        sb.append("🌐 *Live Demo:* ").append(liveDemoUrl != null ? liveDemoUrl : "Не указан").append("\n");
+        sb.append("[HOMEWORK] Новая сдача ДЗ на проверку\n\n");
+        sb.append("Студент: ").append(escapeMarkdown(studentName)).append(" (").append(escapeMarkdown(studentEmail)).append(")\n");
+        sb.append("Курс: ").append(escapeMarkdown(courseTitle)).append("\n");
+        sb.append("Урок: ").append(escapeMarkdown(lessonTitle)).append("\n\n");
+        sb.append("Репозиторий: ").append(repoUrl != null ? repoUrl : "Не указан").append("\n");
+        sb.append("Live Demo: ").append(liveDemoUrl != null ? liveDemoUrl : "Не указан").append("\n");
 
         if (notes != null && !notes.isBlank()) {
-            sb.append("\n💬 *Комментарий:* ").append(escapeMarkdown(notes)).append("\n");
+            sb.append("\nКомментарий: ").append(escapeMarkdown(notes)).append("\n");
         }
 
         sendMessage(sb.toString());
@@ -75,26 +75,36 @@ public class TelegramNotificationService {
             return;
         }
 
+        String url = "https://api.telegram.org/bot" + botToken + "/sendMessage";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
         try {
-            String url = "https://api.telegram.org/bot" + botToken + "/sendMessage";
             Map<String, Object> body = new HashMap<>();
             body.put("chat_id", chatId);
             body.put("text", markdownText);
             body.put("parse_mode", "Markdown");
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
             restTemplate.postForEntity(url, request, String.class);
             log.info("Telegram notification successfully dispatched to chatId={}", chatId);
         } catch (Exception e) {
-            log.error("Failed to dispatch Telegram notification: {}", e.getMessage());
+            log.warn("Failed to dispatch Telegram notification with Markdown, retrying plain text: {}", e.getMessage());
+            try {
+                Map<String, Object> fallbackBody = new HashMap<>();
+                fallbackBody.put("chat_id", chatId);
+                fallbackBody.put("text", markdownText);
+
+                HttpEntity<Map<String, Object>> fallbackRequest = new HttpEntity<>(fallbackBody, headers);
+                restTemplate.postForEntity(url, fallbackRequest, String.class);
+            } catch (Exception ex) {
+                log.error("Failed to dispatch Telegram notification in fallback mode: {}", ex.getMessage());
+            }
         }
     }
 
     public void sendMentorAlert(String title, String details) {
-        String msg = "⚠️ *" + escapeMarkdown(title) + "*\n\n" + details;
+        String msg = "[ALERT] *" + escapeMarkdown(title) + "*\n\n" + details;
         sendDirectMessage(chatId, msg);
     }
 
@@ -104,21 +114,30 @@ public class TelegramNotificationService {
             return;
         }
 
-        try {
-            String url = "https://api.telegram.org/bot" + botToken + "/sendMessage";
+        String url = "https://api.telegram.org/bot" + botToken + "/sendMessage";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
+        try {
             Map<String, Object> body = new HashMap<>();
             body.put("chat_id", targetChatId);
             body.put("text", text);
             body.put("parse_mode", "Markdown");
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
             restTemplate.postForEntity(url, request, String.class);
         } catch (Exception e) {
-            log.error("Failed to send direct Telegram message: {}", e.getMessage());
+            log.warn("Failed to send direct Telegram message with Markdown, retrying plain text: {}", e.getMessage());
+            try {
+                Map<String, Object> fallbackBody = new HashMap<>();
+                fallbackBody.put("chat_id", targetChatId);
+                fallbackBody.put("text", text);
+
+                HttpEntity<Map<String, Object>> fallbackRequest = new HttpEntity<>(fallbackBody, headers);
+                restTemplate.postForEntity(url, fallbackRequest, String.class);
+            } catch (Exception ex) {
+                log.error("Failed to send direct Telegram message in fallback mode: {}", ex.getMessage());
+            }
         }
     }
 

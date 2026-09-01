@@ -66,7 +66,7 @@ public class StuckDetectionService {
 
                 // Send Telegram alert to mentor
                 String details = String.format(
-                        "👤 *Студент:* %s (`%s`)\n📖 *Курс:* %s\n⏳ *Неактивен:* %d дн.\n💡 *Рекомендация:* Напишите студенту в Discord для поддержки!",
+                        "👤 *Студент:* %s (`%s`)\n*Курс:* %s\n*Неактивен:* %d дн.\n*Рекомендация:* Напишите студенту в Discord для поддержки!",
                         dto.getStudentName(),
                         dto.getStudentEmail(),
                         dto.getCourseTitle(),

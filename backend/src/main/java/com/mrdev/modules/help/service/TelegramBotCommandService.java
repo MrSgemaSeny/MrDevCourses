@@ -274,7 +274,7 @@ public class TelegramBotCommandService {
 
     private String handleMentorHelp() {
         return """
-                ⚡ *MrDevCourses — Пульт Ментора*
+                [MrDevCourses — Пульт Ментора]
 
                 Быстрые команды:
                 • `/hw` (или `дз`) — Очередь сданных работ
