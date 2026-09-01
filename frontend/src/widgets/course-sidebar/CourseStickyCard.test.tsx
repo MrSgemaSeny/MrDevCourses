@@ -54,11 +54,11 @@ describe('CourseStickyCard Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Записаться на курс')).toBeInTheDocument();
+    expect(screen.getByText('Посмотреть полное видео')).toBeInTheDocument();
     expect(screen.getByTitle('Course Video Preview')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Записаться на курс'));
-    expect(onEnroll).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByText('Посмотреть полное видео'));
+    expect(onPlayTrailer).toHaveBeenCalledTimes(1);
   });
 
   it('renders progress bar and continue button when enrolled', () => {

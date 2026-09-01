@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Course, LessonSummary, CourseModule } from '@/shared/types';
-import { Play, ArrowRight, Award, CheckCircle2, Share2, Video, BookOpen, Layers, Users } from 'lucide-react';
+import { Play, Award, CheckCircle2, Share2, Video, BookOpen, Layers, Users } from 'lucide-react';
 
 interface CourseStickyCardProps {
   course: Course;
@@ -18,6 +18,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
   onEnroll,
   isEnrolling = false,
   onOpenCertificate,
+  onPlayTrailer,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -93,12 +94,12 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
           <div className="space-y-3">
             <button
               type="button"
-              onClick={onEnroll}
+              onClick={onPlayTrailer || onEnroll}
               disabled={isEnrolling}
               className="w-full py-3 bg-white hover:bg-zinc-200 disabled:opacity-50 text-black text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(255,255,255,0.15)] cursor-pointer"
             >
-              <span>{isEnrolling ? 'Запись...' : 'Записаться на курс'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <Play className="w-3.5 h-3.5 fill-current" />
+              <span>Посмотреть полное видео</span>
             </button>
             <p className="text-[10px] text-center text-zinc-500 font-mono">
               Бесплатный доступ к материалам курса
