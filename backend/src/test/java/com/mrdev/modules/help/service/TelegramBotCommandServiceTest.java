@@ -110,4 +110,20 @@ class TelegramBotCommandServiceTest {
         String response = botCommandService.processCommand("987654321", "/start LINK_abc123token");
         assertThat(response).contains("Telegram-аккаунт успешно привязан");
     }
+
+    @Test
+    @DisplayName("Mentor /status returns cohort summary")
+    void mentorStatus_Success() {
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of());
+        String response = botCommandService.processCommand(mentorChatId, "/status");
+        assertThat(response).contains("На платформе пока нет зачисленных студентов");
+    }
+
+    @Test
+    @DisplayName("Mentor /stuck returns empty message when no students are stuck")
+    void mentorStuck_Success() {
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of());
+        String response = botCommandService.processCommand(mentorChatId, "/stuck");
+        assertThat(response).contains("Все студенты активны");
+    }
 }

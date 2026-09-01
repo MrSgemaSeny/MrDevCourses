@@ -23,8 +23,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class TelegramBotCommandService {
 
     private final HomeworkService homeworkService;
@@ -336,7 +339,7 @@ public class TelegramBotCommandService {
     }
 
     private String handleStatus() {
-        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        List<Enrollment> enrollments = enrollmentRepository.findAllWithCourseAndUser();
         if (enrollments.isEmpty()) {
             return "На платформе пока нет зачисленных студентов.";
         }
@@ -364,7 +367,7 @@ public class TelegramBotCommandService {
     }
 
     private String handleStuck() {
-        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        List<Enrollment> enrollments = enrollmentRepository.findAllWithCourseAndUser();
         LocalDate now = LocalDate.now();
 
         List<Enrollment> stuck = enrollments.stream().filter(e -> {
