@@ -1,8 +1,12 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Observability First & Distributed Tracing (Completed).
+- **Current Operational Focus**: Frontend CI/CD Pipeline & GitHub Pages Deployment.
 - **Recent Accomplishments**: 
+  - Configured GitHub Actions Pages workflow (`.github/workflows/deploy-pages.yml`) with automated Vitest suites and production build.
+  - Implemented dynamic Vite base path (`base: process.env.VITE_BASE_PATH || '/'`) and React Router `basename` integration for seamless GitHub Pages subpath routing.
+  - Added SPA 404 fallback mechanism (`dist/404.html`) ensuring direct URL navigation without 404 errors.
+  - Added `frontend/src/vite-env.d.ts` for strict client TypeScript environment variable resolution.
   - Implemented OpenTelemetry & Micrometer Tracing integration with W3C/B3 propagation and `1.0` sampling probability.
   - Implemented `CorrelationIdFilter` with highest precedence, populating MDC with `requestId`, `traceId`, `spanId`, and `clientIp`, and returning `X-Request-ID` in HTTP response headers.
   - Configured `logback-spring.xml` with colorized developer console output and structured single-line Logstash/Grafana Loki JSON logging.
