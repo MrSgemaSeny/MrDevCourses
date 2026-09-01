@@ -1,0 +1,45 @@
+﻿config:
+  target: 'http://localhost:8080'
+  phases:
+    - duration: 10
+      arrivalRate: 20
+      name: "Warmup (20 RPS)"
+    - duration: 20
+      arrivalRate: 20
+      rampTo: 100
+      name: "Ramp (100 RPS)"
+    - duration: 15
+      arrivalRate: 200
+      name: "Tsunami (200 RPS)"
+  defaults:
+    headers:
+      Accept: 'application/json'
+
+scenarios:
+  - name: 'Public Endpoints — Health + Courses'
+    weight: 60
+    flow:
+      - get:
+          url: '/api/v1/admin/health'
+      - get:
+          url: '/api/v1/courses'
+
+  - name: 'Auth Tier — /me (unauthenticated, expect 401)'
+    weight: 25
+    flow:
+      - get:
+          url: '/api/v1/auth/me'
+          expect:
+            - statusCode:
+                - 200
+                - 401
+
+  - name: 'Certificate Verify (public endpoint)'
+    weight: 15
+    flow:
+      - get:
+          url: '/api/v1/certificates/verify/FAKE-CODE-TEST'
+          expect:
+            - statusCode:
+                - 200
+                - 404
