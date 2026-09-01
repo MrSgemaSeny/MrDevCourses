@@ -256,9 +256,7 @@ export const CourseDetailPage: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <span className="text-[11px] text-zinc-500 font-mono sm:ml-2">
-                Бесплатный доступ ко всем материалам
-              </span>
+              
             </div>
           )}
         </div>
@@ -311,7 +309,7 @@ export const CourseDetailPage: React.FC = () => {
         {/* Share Action */}
         <div className="pt-3 border-t border-white/5 flex items-center justify-between">
           <span className="text-xs text-zinc-400 font-mono">
-            Поделиться ссылкой с коллегами:
+            Ссылка на видео:
           </span>
           <button
             type="button"
