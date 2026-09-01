@@ -48,14 +48,6 @@ ORIGINAL_REQUEST.md
 .agents/BRIEFING.md
 .agents/*/
 !.agents/scripts/
-!.agents/cc-skills/
-!.agents/deslop-agent-sh/
-!.agents/deslop-ai-that-works/
-!.agents/deslop-dabit3/
-!.agents/deslop-fayerman/
-!.agents/avoid-ai-design/
-!.agents/interface-design/
-!.agents/tastecheck/
 
 
 
