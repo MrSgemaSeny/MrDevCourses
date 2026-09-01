@@ -321,7 +321,7 @@ public class TelegramBotCommandService {
 
         Optional<Long> idOpt = extractNumericId(parts[1]);
         if (idOpt.isEmpty()) {
-            return "Укажите корректный номер сдачи ДЗ (число). Например: `/approve 1` или `принять 1`\nСписок непроверенных ДЗ: `/hw`";
+            return "Укажите номер сдачи ДЗ (число). Например: `/approve 1` или `принять 1`\nСписок непроверенных ДЗ: `/hw`";
         }
 
         Long submissionId = idOpt.get();
@@ -351,7 +351,7 @@ public class TelegramBotCommandService {
 
         Optional<Long> idOpt = extractNumericId(parts[1]);
         if (idOpt.isEmpty()) {
-            return "Укажите корректный номер сдачи ДЗ (число). Например: `/reject 1 поправь верстку`\nСписок непроверенных ДЗ: `/hw`";
+            return "Укажите номер сдачи ДЗ (число). Например: `/reject 1 поправь верстку`\nСписок непроверенных ДЗ: `/hw`";
         }
 
         Long submissionId = idOpt.get();

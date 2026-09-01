@@ -121,7 +121,10 @@ export const ProfilePage: React.FC = () => {
   };
 
   const handleGoalPresetClick = (preset: string) => {
-    setFormData((prev) => ({ ...prev, goal: preset }));
+    setFormData((prev) => ({
+      ...prev,
+      goal: prev.goal === preset ? '' : preset,
+    }));
   };
 
   if (isLoading) {
