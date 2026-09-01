@@ -52,8 +52,8 @@ describe('UserProfileDropdown Component', () => {
     fireEvent.click(triggerBtn);
 
     expect(screen.getByText('murat@example.com')).toBeInTheDocument();
-    expect(screen.getByText('5 дн.')).toBeInTheDocument();
-    expect(screen.getByText('12 дн.')).toBeInTheDocument();
+    expect(screen.getAllByText('Murat Senior')).toHaveLength(2);
+    expect(screen.getByText('Профиль и настройки')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Выйти из аккаунта/i })).toBeInTheDocument();
 
     // Click logout

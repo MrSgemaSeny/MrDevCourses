@@ -8,8 +8,6 @@ import {
   BookOpen,
   Shield,
   LogOut,
-  Flame,
-  Trophy,
   User as UserProfileIcon,
 } from 'lucide-react';
 
@@ -81,9 +79,11 @@ export const UserProfileDropdown: React.FC = () => {
           <span className="text-xs font-medium text-white max-w-[120px] truncate leading-tight">
             {displayName}
           </span>
-          <span className="text-[10px] text-zinc-500 font-mono leading-tight">
-            {user.role}
-          </span>
+          {user.role === 'ADMIN' && (
+            <span className="text-[10px] text-zinc-400 font-mono leading-tight">
+              ADMIN
+            </span>
+          )}
         </div>
 
         <ChevronDown
@@ -115,30 +115,13 @@ export const UserProfileDropdown: React.FC = () => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-1">
                   <p className="text-xs font-semibold text-white truncate">{displayName}</p>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 border border-white/5 text-zinc-300">
-                    {user.role}
-                  </span>
+                  {user.role === 'ADMIN' && (
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 border border-white/5 text-zinc-300">
+                      ADMIN
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-zinc-400 truncate mt-0.5">{user.email}</p>
-              </div>
-            </div>
-
-            {/* Streak & Record Stats */}
-            <div className="mt-3 grid grid-cols-2 gap-2 pt-2 border-t border-white/5/80">
-              <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
-                <Flame className="w-3.5 h-3.5 text-white shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-[10px] text-zinc-500 uppercase font-mono">Стрик</div>
-                  <div className="text-xs font-bold text-white font-mono">{user.currentStreak || 0} дн.</div>
-                </div>
-              </div>
-
-              <div className="p-2 rounded bg-zinc-900 border border-white/5 flex items-center gap-2">
-                <Trophy className="w-3.5 h-3.5 text-white shrink-0" />
-                <div className="min-w-0">
-                  <div className="text-[10px] text-zinc-500 uppercase font-mono">Рекорд</div>
-                  <div className="text-xs font-bold text-white font-mono">{user.longestStreak || 0} дн.</div>
-                </div>
               </div>
             </div>
           </div>

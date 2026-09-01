@@ -112,7 +112,6 @@ describe('CurriculumTree', () => {
       expect(adminApi.createModule).toHaveBeenCalledWith(1, {
         title: 'Модуль 2: Продвинутый',
         description: undefined,
-        isFreePreview: false,
         sortOrder: 2,
       });
     });

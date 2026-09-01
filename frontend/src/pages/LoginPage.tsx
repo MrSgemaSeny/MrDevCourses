@@ -18,7 +18,7 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-[340px] sm:max-w-[360px] space-y-4">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-3 mb-2">
-          <Link to="/" className="w-12 h-12 rounded-full border border-white/15 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-md hover:border-white/30 transition-colors">
+          <Link to="/" className="w-20 h-20 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-xl hover:border-white/40 transition-colors">
             <img
               src="/author-avatar.png"
               alt="MrDeveloper"
