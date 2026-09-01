@@ -25,7 +25,6 @@ import {
   BookOpen,
   Video,
   Users,
-  Share2,
 } from 'lucide-react';
 import type { CourseModule } from '@/shared/types';
 
@@ -53,7 +52,6 @@ export const CourseDetailPage: React.FC = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const [showEnrollConfirm, setShowEnrollConfirm] = useState(false);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -83,18 +81,6 @@ export const CourseDetailPage: React.FC = () => {
       return;
     }
     setShowEnrollConfirm(true);
-  };
-
-  const handleShare = async () => {
-    try {
-      if (navigator.clipboard) {
-        await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      }
-    } catch {
-      // ignore
-    }
   };
 
   if (courseLoading) {
@@ -304,30 +290,6 @@ export const CourseDetailPage: React.FC = () => {
               <span className="text-white font-medium">Онлайн + Discord</span>
             </div>
           </div>
-        </div>
-
-        {/* Share Action */}
-        <div className="pt-3 border-t border-white/5 flex items-center justify-between">
-          <span className="text-xs text-zinc-400 font-mono">
-            Ссылка на видео:
-          </span>
-          <button
-            type="button"
-            onClick={handleShare}
-            className="px-3.5 py-1.5 bg-[#141418] hover:bg-[#1c1c24] border border-white/10 text-zinc-300 hover:text-white text-xs rounded-sm flex items-center gap-2 transition-colors cursor-pointer font-mono"
-          >
-            {copied ? (
-              <>
-                <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                <span className="text-white font-medium">Ссылка скопирована!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Поделиться курсом</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
