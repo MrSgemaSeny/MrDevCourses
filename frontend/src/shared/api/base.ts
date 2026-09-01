@@ -1,9 +1,10 @@
 export class ApiError<T = unknown> extends Error {
   public status: number;
   public data: T;
-  public response: { status: number; data: T };
+  public requestId?: string;
+  public response: { status: number; data: T; requestId?: string };
 
-  constructor(status: number, data: T, message?: string) {
+  constructor(status: number, data: T, message?: string, requestId?: string) {
     const errorMsg =
       message ||
       (typeof data === 'object' && data !== null && 'message' in (data as Record<string, unknown>)
@@ -13,7 +14,8 @@ export class ApiError<T = unknown> extends Error {
     this.name = 'ApiError';
     this.status = status;
     this.data = data;
-    this.response = { status, data };
+    this.requestId = requestId;
+    this.response = { status, data, requestId };
   }
 }
 
@@ -27,9 +29,17 @@ export interface ApiResponseContainer<T> {
   data: T;
   status: number;
   headers: Headers;
+  requestId?: string;
 }
 
 const BASE_URL = '/api';
+
+function generateRequestId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return 'req-' + Math.random().toString(36).substring(2, 11) + '-' + Date.now();
+}
 
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponseContainer<T>> {
   const { params, body, responseType = 'json', headers: customHeaders, ...customConfig } = options;
@@ -55,6 +65,11 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
 
   const headers = new Headers(customHeaders);
 
+  // End-to-end Correlation ID (X-Request-ID)
+  if (!headers.has('X-Request-ID')) {
+    headers.set('X-Request-ID', generateRequestId());
+  }
+
   let formattedBody: BodyInit | null = null;
   if (body !== undefined && body !== null) {
     if (body instanceof FormData || body instanceof Blob || typeof body === 'string') {
@@ -75,6 +90,7 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
   };
 
   const response = await fetch(url, config);
+  const responseRequestId = response.headers.get('X-Request-ID') || headers.get('X-Request-ID') || undefined;
 
   if (!response.ok) {
     let errorData: unknown = null;
@@ -94,11 +110,11 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
       }
     }
 
-    throw new ApiError(response.status, errorData);
+    throw new ApiError(response.status, errorData, undefined, responseRequestId);
   }
 
   if (response.status === 204) {
-    return { data: null as unknown as T, status: response.status, headers: response.headers };
+    return { data: null as unknown as T, status: response.status, headers: response.headers, requestId: responseRequestId };
   }
 
   let data: T;

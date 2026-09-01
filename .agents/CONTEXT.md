@@ -1,8 +1,12 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Student Full-Lifecycle E2E Suite (Completed).
+- **Active Task**: Observability First & Distributed Tracing (Completed).
 - **Recent Accomplishments**: 
+  - Implemented OpenTelemetry & Micrometer Tracing integration with W3C/B3 propagation and `1.0` sampling probability.
+  - Implemented `CorrelationIdFilter` with highest precedence, populating MDC with `requestId`, `traceId`, `spanId`, and `clientIp`, and returning `X-Request-ID` in HTTP response headers.
+  - Configured `logback-spring.xml` with colorized developer console output and structured single-line Logstash/Grafana Loki JSON logging.
+  - Updated frontend `base.ts` to automatically generate `X-Request-ID` and bind `requestId` to `ApiError`.
   - Implemented comprehensive `StudentSuiteE2ETest.java` covering 5 tiers: Registration, Catalog, Drip intervals, Homework review triage loop, Anti-Cheat quiz grading, SOS help tickets, and Public certificate verification.
   - Implemented `StudentSuiteE2E.test.tsx` on frontend validating complete user navigation and API integrations.
   - Migrated Frontend from Axios to Native Fetch Interceptor (`ADR-005`, `knowledge/frontend-native-fetch-interceptor.md`) with 100% backward compatibility for all 17 API clients.
@@ -12,7 +16,7 @@
   - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
   - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking.
-- **Verification**: Backend 248/248 JUnit Green | Frontend 78/78 Vitest Green (32 suites) | Build 0 errors (1749 modules).
+- **Verification**: Backend 250/250 JUnit Green | Frontend 78/78 Vitest Green (32 suites) | Build 0 errors (1749 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).

@@ -43,6 +43,8 @@ dependencies {
 
     // Actuator & Observability
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 
     // PDF & Templates Generation
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

@@ -31,6 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final com.mrdev.common.observability.CorrelationIdFilter correlationIdFilter;
     private final SecurityHeadersFilter securityHeadersFilter;
     private final com.mrdev.common.security.OriginValidationFilter originValidationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -60,7 +61,7 @@ public class SecurityConfig {
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/oauth2/**", "/error", "/actuator/health").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/oauth2/**", "/error", "/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/projects", "/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/certificates/verify/**", "/v1/certificates/*/pdf").permitAll()
@@ -76,6 +77,7 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
+                .addFilterBefore(correlationIdFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(securityHeadersFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(originValidationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
