@@ -2,6 +2,7 @@ package com.mrdev.modules.automation.service;
 
 import com.mrdev.modules.audit.service.AuditService;
 import com.mrdev.modules.auth.model.User;
+import com.mrdev.modules.auth.repository.UserRepository;
 import com.mrdev.modules.automation.dto.StuckStudentAlertDto;
 import com.mrdev.modules.course.model.Course;
 import com.mrdev.modules.course.model.Enrollment;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -24,7 +27,9 @@ import java.util.List;
 public class StuckDetectionService {
 
     private final EnrollmentRepository enrollmentRepository;
+    private final UserRepository userRepository;
     private final TelegramNotificationService telegramNotificationService;
+    private final EmailNotificationService emailNotificationService;
     private final AuditService auditService;
 
     @Scheduled(cron = "0 0 9 * * *") // Every day at 09:00 UTC
@@ -34,6 +39,7 @@ public class StuckDetectionService {
         List<Enrollment> enrollments = enrollmentRepository.findAll();
         LocalDate now = LocalDate.now();
         List<StuckStudentAlertDto> stuckList = new ArrayList<>();
+        Instant sevenDaysAgo = Instant.now().minus(7, ChronoUnit.DAYS);
 
         for (Enrollment enrollment : enrollments) {
             User student = enrollment.getUser();
@@ -67,6 +73,14 @@ public class StuckDetectionService {
                         daysInactive
                 );
                 telegramNotificationService.sendMentorAlert("[Stuck Alert] Студент застрял!", details);
+
+                // Send friendly Inactivity Nudge Email with 7-day anti-spam throttling
+                if (student.getLastInactivityEmailSentAt() == null || student.getLastInactivityEmailSentAt().isBefore(sevenDaysAgo)) {
+                    emailNotificationService.sendInactivityNudgeEmail(student, (int) daysInactive, "Продолжить урок курса " + course.getTitle());
+                    student.setLastInactivityEmailSentAt(Instant.now());
+                    userRepository.save(student);
+                    log.info("Dispatched inactivity nudge email to student: {}", student.getEmail());
+                }
 
                 // Audit log
                 auditService.logAction(

@@ -52,6 +52,9 @@ class StudentHelpServiceTest {
     private TelegramNotificationService telegramNotificationService;
 
     @Mock
+    private com.mrdev.modules.automation.service.EmailNotificationService emailNotificationService;
+
+    @Mock
     private AuditService auditService;
 
     @InjectMocks

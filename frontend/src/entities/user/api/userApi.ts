@@ -40,4 +40,13 @@ export const userApi = {
     });
     return response.data.data;
   },
+
+  getTelegramLinkToken: async (): Promise<{ token: string; botUsername: string; linkUrl: string }> => {
+    const response = await apiClient.post<ApiResponse<{ token: string; botUsername: string; linkUrl: string }>>('/v1/telegram/link-token');
+    return response.data.data;
+  },
+
+  unlinkTelegram: async (): Promise<void> => {
+    await apiClient.delete<ApiResponse<void>>('/v1/telegram/unlink');
+  },
 };

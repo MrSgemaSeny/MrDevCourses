@@ -31,7 +31,13 @@ class StuckDetectionServiceTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Mock
+    private com.mrdev.modules.auth.repository.UserRepository userRepository;
+
+    @Mock
     private TelegramNotificationService telegramNotificationService;
+
+    @Mock
+    private EmailNotificationService emailNotificationService;
 
     @Mock
     private AuditService auditService;
@@ -42,7 +48,9 @@ class StuckDetectionServiceTest {
     void setUp() {
         stuckDetectionService = new StuckDetectionService(
                 enrollmentRepository,
+                userRepository,
                 telegramNotificationService,
+                emailNotificationService,
                 auditService
         );
     }

@@ -65,6 +65,23 @@ public class User {
     @Column(name = "telegram_username", length = 100)
     private String telegramUsername;
 
+    @Column(name = "telegram_chat_id", unique = true)
+    private Long telegramChatId;
+
+    @Column(name = "telegram_linked_at")
+    private Instant telegramLinkedAt;
+
+    @Column(name = "email_notifications_enabled", nullable = false)
+    @Builder.Default
+    private boolean emailNotificationsEnabled = true;
+
+    @Column(name = "telegram_notifications_enabled", nullable = false)
+    @Builder.Default
+    private boolean telegramNotificationsEnabled = true;
+
+    @Column(name = "last_inactivity_email_sent_at")
+    private Instant lastInactivityEmailSentAt;
+
     @Column(name = "github_username", length = 100)
     private String githubUsername;
 

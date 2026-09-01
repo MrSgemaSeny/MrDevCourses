@@ -41,6 +41,9 @@ class OAuth2AuthenticationSuccessHandlerTest {
     @Mock
     private JwtCookieHelper jwtCookieHelper;
 
+    @Mock
+    private com.mrdev.modules.automation.service.EmailNotificationService emailNotificationService;
+
     @InjectMocks
     private OAuth2AuthenticationSuccessHandler successHandler;
 

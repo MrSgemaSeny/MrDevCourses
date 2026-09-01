@@ -15,6 +15,7 @@ import com.mrdev.modules.help.dto.ResolveHelpRequest;
 import com.mrdev.modules.help.model.HelpRequestStatus;
 import com.mrdev.modules.help.model.StudentHelpRequest;
 import com.mrdev.modules.help.repository.StudentHelpRequestRepository;
+import com.mrdev.modules.automation.service.EmailNotificationService;
 import com.mrdev.modules.lesson.model.Lesson;
 import com.mrdev.modules.lesson.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class StudentHelpService {
     private final UserRepository userRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final TelegramNotificationService telegramNotificationService;
+    private final EmailNotificationService emailNotificationService;
     private final AuditService auditService;
 
     @Transactional
@@ -69,7 +71,7 @@ public class StudentHelpService {
 
         helpRequest = helpRequestRepository.save(helpRequest);
 
-        // Instant notification to Telegram
+        // Dual notification: Telegram and Email to mentor
         telegramNotificationService.sendHelpAlert(
                 user.getName(),
                 user.getEmail(),
@@ -77,6 +79,15 @@ public class StudentHelpService {
                 lesson.getTitle(),
                 lesson.getDayNumber(),
                 helpRequest.getStepTitle(),
+                helpRequest.getProblemText(),
+                helpRequest.getErrorLogs()
+        );
+
+        emailNotificationService.sendSosMentorAlertEmail(
+                user.getName(),
+                user.getEmail(),
+                course.getTitle(),
+                lesson.getTitle(),
                 helpRequest.getProblemText(),
                 helpRequest.getErrorLogs()
         );

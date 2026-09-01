@@ -10,6 +10,9 @@ export interface User {
   longestStreak?: number;
   lastActiveDate?: string;
   telegramUsername?: string;
+  telegramChatId?: number;
+  emailNotificationsEnabled?: boolean;
+  telegramNotificationsEnabled?: boolean;
   githubUsername?: string;
   bio?: string;
   goal?: string;

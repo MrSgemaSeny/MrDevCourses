@@ -16,6 +16,7 @@ import com.mrdev.modules.lesson.model.Lesson;
 import com.mrdev.modules.lesson.model.LessonProgress;
 import com.mrdev.modules.lesson.repository.LessonProgressRepository;
 import com.mrdev.modules.lesson.repository.LessonRepository;
+import com.mrdev.modules.homework.repository.HomeworkSubmissionRepository;
 import com.mrdev.modules.quiz.model.Quiz;
 import com.mrdev.modules.quiz.model.QuizQuestion;
 import com.mrdev.modules.quiz.model.QuizQuestionOption;
@@ -75,6 +76,9 @@ class AdminAnalyticsServiceTest {
 
     @Mock
     private QuizQuestionRepository quizQuestionRepository;
+
+    @Mock
+    private HomeworkSubmissionRepository homeworkSubmissionRepository;
 
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();

@@ -26,6 +26,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;
     private final JwtCookieHelper jwtCookieHelper;
+    private final com.mrdev.modules.automation.service.EmailNotificationService emailNotificationService;
 
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
@@ -48,6 +49,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
+        boolean isNew = userRepository.findByGoogleId(googleId).isEmpty() && userRepository.findByEmail(email).isEmpty();
+
         User user = userRepository.findByGoogleId(googleId)
                 .or(() -> userRepository.findByEmail(email))
                 .map(existing -> {
@@ -65,10 +68,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .createdAt(Instant.now())
                         .build()));
 
+        if (isNew) {
+            emailNotificationService.sendWelcomeEmail(user);
+        }
+
         String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole(), true);
         jwtCookieHelper.addJwtCookie(response, token, true);
 
-        log.info("OAuth2 login successful for user: id={}, email={}", user.getId(), user.getEmail());
+        log.info("OAuth2 login successful for user: id={}, email={}, isNew={}", user.getId(), user.getEmail(), isNew);
         getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/auth/callback");
     }
 }

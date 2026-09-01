@@ -42,6 +42,7 @@ public class HomeworkService {
     private final LessonService lessonService;
     private final AuditService auditService;
     private final com.mrdev.modules.help.service.TelegramNotificationService telegramNotificationService;
+    private final com.mrdev.modules.automation.service.EmailNotificationService emailNotificationService;
 
     @Transactional
     public HomeworkSubmissionDto submitHomework(Long courseId, Long lessonId, Long userId, Role role, HomeworkSubmitRequest request) {
@@ -116,6 +117,29 @@ public class HomeworkService {
                 log.warn("Could not auto-complete lesson after mentor approval: {}", e.getMessage());
             }
         }
+
+        // Dispatch student notifications
+        final Long studentUserId = submission.getUserId();
+        final Long courseId = submission.getCourseId();
+        final Long lessonId = submission.getLessonId();
+        userRepository.findById(studentUserId).ifPresent(student -> {
+            String courseTitle = courseRepository.findById(courseId).map(Course::getTitle).orElse("Курс");
+            String lessonTitle = lessonRepository.findById(lessonId).map(Lesson::getTitle).orElse("Урок");
+            boolean passed = request.getStatus() == SubmissionStatus.PASSED;
+
+            // Email
+            emailNotificationService.sendHomeworkReviewedEmail(student, courseTitle, lessonTitle, passed, request.getMentorFeedback());
+
+            // Telegram if connected
+            if (student.getTelegramChatId() != null && student.isTelegramNotificationsEnabled()) {
+                String verdict = passed ? "Принято! Открыт следующий день." : "Требуется доработка.";
+                String msg = "*Проверка домашнего задания: " + lessonTitle + "*\n\n"
+                        + "Вердикт: *" + verdict + "*\n"
+                        + (request.getMentorFeedback() != null && !request.getMentorFeedback().isBlank()
+                        ? "Комментарий ментора: " + request.getMentorFeedback() : "");
+                telegramNotificationService.sendDirectMessage(String.valueOf(student.getTelegramChatId()), msg);
+            }
+        });
 
         auditService.logAction(adminId, "HOMEWORK_REVIEWED", "HomeworkSubmission", submissionId,
                 "Mentor review: status=" + request.getStatus() + ", feedback=" + request.getMentorFeedback(), null);

@@ -80,6 +80,31 @@ export const ProfilePage: React.FC = () => {
     },
   });
 
+  const [isLinkingTelegram, setIsLinkingTelegram] = useState(false);
+
+  const handleConnectTelegram = async () => {
+    try {
+      setIsLinkingTelegram(true);
+      const { linkUrl } = await userApi.getTelegramLinkToken();
+      window.open(linkUrl, '_blank');
+    } catch (err: any) {
+      setErrorMessage(err?.response?.data?.message || 'Не удалось сгенерировать ссылку привязки Telegram');
+    } finally {
+      setIsLinkingTelegram(false);
+    }
+  };
+
+  const handleUnlinkTelegram = async () => {
+    try {
+      await userApi.unlinkTelegram();
+      queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err: any) {
+      setErrorMessage(err?.response?.data?.message || 'Не удалось отвязать Telegram');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -392,6 +417,48 @@ export const ProfilePage: React.FC = () => {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Telegram Bot Live Link Box */}
+              <div className="p-4 rounded bg-[#0a0a0c] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Send className="w-4 h-4 text-sky-400" />
+                    <span className="text-xs font-bold text-white">Telegram-уведомления</span>
+                    {profile.telegramChatId ? (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+                        ПОДКЛЮЧЕН
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-900 text-zinc-400 border border-white/10">
+                        НЕ ПРИВЯЗАН
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-zinc-400">
+                    Мгновенные алерты о проверке ДЗ, открытии новых уроков и сообщения от ментора.
+                  </p>
+                </div>
+
+                {profile.telegramChatId ? (
+                  <button
+                    type="button"
+                    onClick={handleUnlinkTelegram}
+                    className="px-3 py-1.5 rounded-sm bg-rose-950/30 hover:bg-rose-950/60 border border-rose-800/40 text-rose-300 text-xs font-mono transition-colors"
+                  >
+                    Отвязать
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleConnectTelegram}
+                    disabled={isLinkingTelegram}
+                    className="px-3.5 py-1.5 rounded-sm bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>{isLinkingTelegram ? 'Генерация...' : 'Подключить бота'}</span>
+                  </button>
+                )}
               </div>
             </div>
 

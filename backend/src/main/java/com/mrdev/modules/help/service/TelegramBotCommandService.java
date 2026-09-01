@@ -17,9 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,6 +34,7 @@ public class TelegramBotCommandService {
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
     private final TelegramNotificationService telegramNotificationService;
+    private final TelegramLinkTokenService linkTokenService;
     private final String authorizedChatId;
 
     public TelegramBotCommandService(
@@ -42,6 +45,7 @@ public class TelegramBotCommandService {
             LessonRepository lessonRepository,
             CourseRepository courseRepository,
             TelegramNotificationService telegramNotificationService,
+            TelegramLinkTokenService linkTokenService,
             @Value("${app.telegram.chat-id:}") String authorizedChatId) {
         this.homeworkService = homeworkService;
         this.userRepository = userRepository;
@@ -50,56 +54,223 @@ public class TelegramBotCommandService {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
         this.telegramNotificationService = telegramNotificationService;
+        this.linkTokenService = linkTokenService;
         this.authorizedChatId = authorizedChatId != null ? authorizedChatId.trim() : "";
     }
 
     public String processCommand(String senderChatId, String text) {
-        if (senderChatId == null || !senderChatId.trim().equals(authorizedChatId)) {
-            log.warn("Ignored Telegram command from unauthorized chatId: {}", senderChatId);
-            return null;
-        }
-
-        if (text == null || text.isBlank()) {
+        if (senderChatId == null || text == null || text.isBlank()) {
             return null;
         }
 
         String trimmed = text.trim();
         String command = trimmed.split("\\s+")[0].toLowerCase();
+        boolean isMentor = !authorizedChatId.isBlank() && senderChatId.trim().equals(authorizedChatId);
 
         try {
-            return switch (command) {
-                case "/hw" -> handleHwQueue();
-                case "/approve" -> handleApprove(trimmed);
-                case "/reject" -> handleReject(trimmed);
-                case "/status" -> handleStatus();
-                case "/stuck" -> handleStuck();
-                case "/start", "/help" -> handleHelp();
-                default -> "Неизвестная команда. Введите /help для списка команд ментора.";
-            };
+            // Check student link command: /start LINK_<token>
+            if (command.equals("/start") && trimmed.contains("LINK_")) {
+                return handleStudentLink(senderChatId, trimmed);
+            }
+
+            if (isMentor) {
+                return switch (command) {
+                    case "/hw" -> handleHwQueue();
+                    case "/approve" -> handleApprove(trimmed);
+                    case "/reject" -> handleReject(trimmed);
+                    case "/status" -> handleStatus();
+                    case "/stuck" -> handleStuck();
+                    case "/progress" -> handleProgress(trimmed);
+                    case "/broadcast" -> handleBroadcast(trimmed);
+                    case "/start", "/help" -> handleMentorHelp();
+                    default -> "Неизвестная команда ментора. Введите /help для списка доступных команд.";
+                };
+            } else {
+                return switch (command) {
+                    case "/status" -> handleStudentStatus(senderChatId);
+                    case "/unlink" -> handleStudentUnlink(senderChatId);
+                    case "/start", "/help" -> handleStudentHelp(senderChatId);
+                    default -> "Команда не распознана. Введите /help для справки.";
+                };
+            }
         } catch (Exception e) {
             log.error("Error processing Telegram command '{}': {}", trimmed, e.getMessage(), e);
-            return "❌ Ошибка выполнения команды: " + e.getMessage();
+            return "Ошибка выполнения команды: " + e.getMessage();
         }
     }
 
-    private String handleHelp() {
+    private String handleStudentLink(String senderChatId, String fullText) {
+        int linkIndex = fullText.indexOf("LINK_");
+        if (linkIndex == -1) {
+            return "Некорректный токен привязки.";
+        }
+
+        String token = fullText.substring(linkIndex + 5).trim();
+        Long userId = linkTokenService.validateAndConsumeToken(token);
+
+        if (userId == null) {
+            return "Срок действия ссылки привязки истек или токен недействителен. Пожалуйста, сгенерируйте новую ссылку в профиле на сайте.";
+        }
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return "Пользователь не найден.";
+        }
+
+        User user = userOpt.get();
+        user.setTelegramChatId(Long.parseLong(senderChatId));
+        user.setTelegramLinkedAt(Instant.now());
+        userRepository.save(user);
+
+        return "Telegram-аккаунт успешно привязан к профилю " + user.getEmail() + "!\nТеперь вы будете получать уведомления о проверке ДЗ и открытии новых уроков.";
+    }
+
+    private String handleStudentStatus(String senderChatId) {
+        Long chatId = Long.parseLong(senderChatId);
+        Optional<User> userOpt = userRepository.findByTelegramChatId(chatId);
+        if (userOpt.isEmpty()) {
+            return "Ваш Telegram-аккаунт не привязан к профилю на сайте. Перейдите в настройки профиля на платформе и нажмите 'Подключить Telegram'.";
+        }
+
+        User user = userOpt.get();
+        List<Enrollment> enrollments = enrollmentRepository.findAllByUserId(user.getId());
+        if (enrollments.isEmpty()) {
+            return "У вас пока нет активных курсов.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("*Ваш учебный прогресс (").append(user.getEmail()).append("):*\n\n");
+
+        for (Enrollment e : enrollments) {
+            Course c = e.getCourse();
+            if (c == null) continue;
+
+            long totalLessons = lessonRepository.countByCourseId(c.getId());
+            long completed = lessonProgressRepository.countCompletedLessonsByUserIdAndCourseId(user.getId(), c.getId());
+            long pct = totalLessons > 0 ? (completed * 100 / totalLessons) : 0;
+
+            sb.append("• *").append(c.getTitle()).append("*\n")
+              .append("  Пройдено: ").append(completed).append("/").append(totalLessons).append(" уроков (").append(pct).append("%)\n")
+              .append("  Текущий стрик: ").append(user.getCurrentStreak()).append(" дн.\n\n");
+        }
+
+        return sb.toString();
+    }
+
+    private String handleStudentUnlink(String senderChatId) {
+        Long chatId = Long.parseLong(senderChatId);
+        Optional<User> userOpt = userRepository.findByTelegramChatId(chatId);
+        if (userOpt.isEmpty()) {
+            return "Telegram-аккаунт не был привязан.";
+        }
+
+        User user = userOpt.get();
+        user.setTelegramChatId(null);
+        user.setTelegramUsername(null);
+        user.setTelegramLinkedAt(null);
+        userRepository.save(user);
+
+        return "Telegram-аккаунт успешно отвязан от профиля на платформе.";
+    }
+
+    private String handleStudentHelp(String senderChatId) {
         return """
-                ⚡ *MrDevCourses — Пульт Ментора*
+                *MrDevCourses — Бот студента*
+
+                Доступные команды:
+                • `/status` — Мой прогресс обучения и текущий стрик
+                • `/unlink` — Отвязать Telegram-аккаунт
+                • `/help` — Справка по боту
+                """;
+    }
+
+    private String handleMentorHelp() {
+        return """
+                *MrDevCourses — Пульт Ментора*
 
                 Доступные команды:
                 • `/hw` — Очередь сданных ДЗ на проверку
                 • `/approve <id>` — Принять ДЗ и открыть следующий день
                 • `/reject <id> <комментарий>` — Вернуть ДЗ на доработку
+                • `/progress <@username|email>` — Прогресс конкретного студента
+                • `/broadcast <текст>` — Рассылка анонса всем студентам
                 • `/status` — Сводка прогресса всех студентов
                 • `/stuck` — Список студентов без активности (3+ дня)
                 • `/help` — Справка по командам
                 """;
     }
 
+    private String handleProgress(String fullText) {
+        String[] parts = fullText.split("\\s+", 2);
+        if (parts.length < 2) {
+            return "Формат: `/progress <email|@username>` (например: `/progress alex@test.com`)";
+        }
+
+        String rawQuery = parts[1].trim();
+        String query = rawQuery.startsWith("@") ? rawQuery.substring(1) : rawQuery;
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(query)
+                .or(() -> userRepository.findByTelegramUsernameIgnoreCase(query));
+
+        if (userOpt.isEmpty()) {
+            return "Студент '" + query + "' не найден в системе.";
+        }
+
+        User u = userOpt.get();
+        List<Enrollment> enrollments = enrollmentRepository.findAllByUserId(u.getId());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("📋 *Карточка студента: ").append(u.getName() != null ? u.getName() : "Студент").append("*\n")
+          .append("Email: `").append(u.getEmail()).append("`\n")
+          .append("Telegram: ").append(u.getTelegramUsername() != null ? "@" + u.getTelegramUsername() : "Не привязан").append("\n")
+          .append("Стрик: ").append(u.getCurrentStreak()).append(" дн. (рекорд: ").append(u.getLongestStreak()).append(")\n")
+          .append("Последняя активность: ").append(u.getLastActiveDate() != null ? u.getLastActiveDate() : "Не зафиксирована").append("\n\n");
+
+        if (enrollments.isEmpty()) {
+            sb.append("Студент пока не записан ни на один курс.");
+        } else {
+            sb.append("*Курсы:*\n");
+            for (Enrollment e : enrollments) {
+                Course c = e.getCourse();
+                if (c == null) continue;
+                long total = lessonRepository.countByCourseId(c.getId());
+                long done = lessonProgressRepository.countCompletedLessonsByUserIdAndCourseId(u.getId(), c.getId());
+                long pct = total > 0 ? (done * 100 / total) : 0;
+                sb.append("• ").append(c.getTitle()).append(": ").append(done).append("/").append(total).append(" уроков (").append(pct).append("%)\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private String handleBroadcast(String fullText) {
+        String[] parts = fullText.split("\\s+", 2);
+        if (parts.length < 2) {
+            return "Формат: `/broadcast <текст объявления>`";
+        }
+
+        String announcement = parts[1].trim();
+        List<User> students = userRepository.findAllByRole(Role.STUDENT);
+        int sentCount = 0;
+
+        for (User student : students) {
+            if (student.getTelegramChatId() != null && student.isTelegramNotificationsEnabled()) {
+                try {
+                    String msg = "📢 *Объявление от ментора:*\n\n" + announcement;
+                    telegramNotificationService.sendDirectMessage(String.valueOf(student.getTelegramChatId()), msg);
+                    sentCount++;
+                } catch (Exception e) {
+                    log.warn("Failed to broadcast message to student {}: {}", student.getId(), e.getMessage());
+                }
+            }
+        }
+
+        return "📢 Анонс успешно разослан " + sentCount + " студентам с подключенным Telegram.";
+    }
+
     private String handleHwQueue() {
         List<HomeworkSubmissionDto> pending = homeworkService.getAllSubmissions(SubmissionStatus.PENDING);
         if (pending.isEmpty()) {
-            return "🎉 Очередь ДЗ пуста! Все работы проверены.";
+            return "Очередь ДЗ пуста! Все работы проверены.";
         }
 
         StringBuilder sb = new StringBuilder();
@@ -141,7 +312,7 @@ public class TelegramBotCommandService {
 
         homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
 
-        return "✅ ДЗ #" + submissionId + " успешно принято! Урок засчитан, студенту открыт следующий день.";
+        return "ДЗ #" + submissionId + " успешно принято! Урок засчитан, студенту открыт следующий день.";
     }
 
     private String handleReject(String fullText) {
@@ -161,7 +332,7 @@ public class TelegramBotCommandService {
 
         homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
 
-        return "⚠️ ДЗ #" + submissionId + " отправлено на доработку с комментарием:\n\"" + feedback + "\"";
+        return "ДЗ #" + submissionId + " отправлено на доработку с комментарием:\n\"" + feedback + "\"";
     }
 
     private String handleStatus() {
@@ -205,7 +376,7 @@ public class TelegramBotCommandService {
         }).toList();
 
         if (stuck.isEmpty()) {
-            return "🚀 Все студенты активны! Никто не застрял 3+ дней.";
+            return "Все студенты активны! Никто не застрял 3+ дней.";
         }
 
         StringBuilder sb = new StringBuilder();

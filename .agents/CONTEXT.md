@@ -1,14 +1,15 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Phase 3 Common Pitfalls FAQ & Drop-off Funnel Telemetry (Completed).
+- **Active Task**: Telegram Bot, Dual SOS Alerts & Transactional Email Notification Layer (Completed).
 - **Recent Accomplishments**: 
-  - Phase 3: Lesson Common Pitfalls accordion (`LessonPitfallsAccordion.tsx`, Flyway V22 `lesson_pitfalls`).
-  - Phase 3: Course Drop-off Funnel & Bottleneck Telemetry in Admin Analytics (`AdminAnalyticsService.getCourseFunnel`).
-  - Persistent auth session hydration & Remember-Me (7-Day / 30-Day tokens).
-  - Student Profile & Settings page (`/profile`, Flyway V21).
-  - Clean 1-column 75% left-aligned layout unified across all student and course pages.
-- **Verification**: Backend 220+ JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`).
+  - Student Telegram account deep linking (`/start LINK_<token>`) & Profile Page integration.
+  - Dual SOS dispatch: instant Telegram + Email alert to mentor with problem and error logs.
+  - Transactional Email Notification service with Google OAuth2 welcome, HW review verdicts, and 7-day inactivity throttling.
+  - Flyway V23 migration (`notification_outbox`, Telegram fields on `users`).
+  - Phase 3: Lesson Common Pitfalls accordion (`LessonPitfallsAccordion.tsx`, Flyway V22) & Drop-off Funnel Telemetry.
+- **Verification**: Backend 228/228 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
