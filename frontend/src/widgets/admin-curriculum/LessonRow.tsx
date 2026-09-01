@@ -134,13 +134,13 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   const getTypeIcon = (type?: LessonType) => {
     switch (type) {
       case 'ARTICLE':
-        return <FileText className="w-3.5 h-3.5 text-blue-400" />;
+        return <FileText className="w-3.5 h-3.5 text-zinc-400" />;
       case 'PRACTICE':
-        return <Code className="w-3.5 h-3.5 text-emerald-400" />;
+        return <Code className="w-3.5 h-3.5 text-zinc-400" />;
       case 'QUIZ':
-        return <HelpCircle className="w-3.5 h-3.5 text-amber-400" />;
+        return <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />;
       default:
-        return <Video className="w-3.5 h-3.5 text-zinc-300" />;
+        return <Video className="w-3.5 h-3.5 text-zinc-400" />;
     }
   };
 
@@ -193,7 +193,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
               onClick={handleTogglePreview}
               className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
                 isFreePreview
-                  ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/40 hover:bg-emerald-900/60'
+                  ? 'bg-zinc-700 text-white border border-white/20 hover:bg-zinc-600'
                   : 'bg-zinc-900 text-zinc-500 border border-white/5 hover:text-zinc-400'
               }`}
               title="Переключить бесплатный предпросмотр"
@@ -208,7 +208,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
               className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
                 isPublished
                   ? 'bg-zinc-800 text-white border border-white/10 hover:bg-zinc-700'
-                  : 'bg-amber-950/40 text-amber-400 border border-amber-800/40 hover:bg-amber-900/40'
+                  : 'bg-zinc-900 text-zinc-500 border border-white/5 hover:text-zinc-400'
               }`}
               title="Переключить статус публикации"
             >
@@ -258,7 +258,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
           <button
             type="button"
             onClick={() => onDelete(lesson.id)}
-            className="p-1.5 rounded text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
             title="Удалить урок"
           >
             <Trash2 className="w-3.5 h-3.5" />
