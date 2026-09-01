@@ -4,6 +4,8 @@ import { App } from '../App';
 import { ProtectedRoute } from './ProtectedRoute';
 import { AdminLayout } from '../layout/AdminLayout';
 
+import { AuthLayout } from '../layout/AuthLayout';
+
 const PageLoader: React.FC = () => (
   <div className="flex items-center justify-center min-h-[60vh]" data-testid="page-loader">
     <div className="flex flex-col items-center gap-3">
@@ -33,15 +35,21 @@ const wrap = (element: React.ReactNode) => (
 );
 
 export const router = createBrowserRouter([
+  // ── Auth Pages (Isolated Minimal Layout, No Header/Footer) ─────
+  {
+    element: <AuthLayout />,
+    children: [
+      { path: 'auth', element: wrap(<LoginPage />) },
+      { path: 'login', element: wrap(<LoginPage />) },
+      { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
+    ],
+  },
   {
     path: '/',
     element: <App />,
     children: [
       // ── Public Pages ───────────────────────────────────────────────
       { index: true, element: wrap(<LandingPage />) },
-      { path: 'auth', element: wrap(<LoginPage />) },
-      { path: 'login', element: wrap(<LoginPage />) },
-      { path: 'auth/callback', element: wrap(<AuthCallbackPage />) },
       { path: 'projects', element: wrap(<ProjectsPage />) },
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
 
