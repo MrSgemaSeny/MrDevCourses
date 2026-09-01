@@ -510,9 +510,6 @@ export const ProfilePage: React.FC = () => {
                   <FileText className="w-4 h-4 text-zinc-400" />
                   <span>4. О себе</span>
                 </h2>
-                <p className="text-xs text-zinc-400 mt-0.5">
-                  Расскажите о текущем опыте, технологиях или пет-проектах.
-                </p>
               </div>
 
               <textarea
