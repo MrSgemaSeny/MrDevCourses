@@ -23,11 +23,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.transaction.annotation.Transactional;
-
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 public class TelegramBotCommandService {
 
     private final HomeworkService homeworkService;
@@ -62,6 +59,10 @@ public class TelegramBotCommandService {
     }
 
     public String processCommand(String senderChatId, String text) {
+        return processCommand(senderChatId, text, null);
+    }
+
+    public String processCommand(String senderChatId, String text, String fromUsername) {
         if (senderChatId == null || text == null || text.isBlank()) {
             return null;
         }
@@ -71,8 +72,15 @@ public class TelegramBotCommandService {
         boolean isMentor = !authorizedChatId.isBlank() && senderChatId.trim().equals(authorizedChatId);
 
         try {
-            // Check student link command: /start LINK_<token>
-            if (command.equals("/start") && trimmed.contains("LINK_")) {
+            Long chatIdNumeric;
+            try {
+                chatIdNumeric = Long.parseLong(senderChatId);
+            } catch (NumberFormatException e) {
+                chatIdNumeric = null;
+            }
+
+            // 1. Check direct token link: /start LINK_<token> or LINK_<token>
+            if (trimmed.contains("LINK_")) {
                 return handleStudentLink(senderChatId, trimmed);
             }
 
@@ -88,18 +96,90 @@ public class TelegramBotCommandService {
                     case "/start", "/help", "help", "помощь", "команды", "меню", "start" -> handleMentorHelp();
                     default -> "Команда не распознана. Введите /help или 'помощь' для списка доступных команд.";
                 };
-            } else {
-                return switch (command) {
-                    case "/status", "status", "статус", "прогресс" -> handleStudentStatus(senderChatId);
-                    case "/unlink", "unlink", "отвязать" -> handleStudentUnlink(senderChatId);
-                    case "/start", "/help", "help", "помощь", "команды" -> handleStudentHelp(senderChatId);
-                    default -> "Команда не распознана. Введите /help для справки.";
-                };
             }
+
+            // 2. Check explicit email or /link <email> / /start <email>
+            String potentialEmail = extractEmailFromText(trimmed);
+            if (potentialEmail != null && (command.equals("/link") || command.equals("link") || command.equals("/start") || !command.startsWith("/"))) {
+                return handleEmailLink(senderChatId, potentialEmail, fromUsername);
+            }
+
+            // 3. Check automatic linking by Telegram username if user is not linked yet
+            if (chatIdNumeric != null) {
+                Optional<User> alreadyLinked = userRepository.findByTelegramChatId(chatIdNumeric);
+                if (alreadyLinked.isEmpty() && fromUsername != null && !fromUsername.isBlank()) {
+                    String cleanUsername = fromUsername.replace("@", "").trim();
+                    Optional<User> userByUsername = userRepository.findByTelegramUsernameIgnoreCase(cleanUsername);
+                    if (userByUsername.isPresent()) {
+                        User user = userByUsername.get();
+                        user.setTelegramChatId(chatIdNumeric);
+                        user.setTelegramLinkedAt(Instant.now());
+                        userRepository.save(user);
+                        return "Привет, " + (user.getName() != null ? user.getName() : "студент") + "! Мы нашли ваш аккаунт по никнейму @" + cleanUsername + ".\nTelegram успешно привязан к профилю " + user.getEmail() + "!\nТеперь вы будете получать уведомления о проверке ДЗ и новых уроках.";
+                    }
+                }
+            }
+
+            // 4. Student commands
+            if (chatIdNumeric != null) {
+                Optional<User> studentOpt = userRepository.findByTelegramChatId(chatIdNumeric);
+                if (studentOpt.isEmpty() && !command.equals("/unlink")) {
+                    if (command.equals("/link") || command.equals("/start") || command.equals("start") || command.equals("/help") || command.equals("help")) {
+                        return getUnlinkedHelpMessage(fromUsername);
+                    }
+                }
+            }
+
+            return switch (command) {
+                case "/status", "status", "статус", "прогресс" -> handleStudentStatus(senderChatId);
+                case "/unlink", "unlink", "отвязать" -> handleStudentUnlink(senderChatId);
+                case "/link", "link", "привязать", "подключить" -> getUnlinkedHelpMessage(fromUsername);
+                case "/start", "/help", "help", "помощь", "команды" -> handleStudentHelp(senderChatId);
+                default -> "Команда не распознана. Введите /help для справки.";
+            };
         } catch (Exception e) {
             log.error("Error processing Telegram command '{}': {}", trimmed, e.getMessage(), e);
             return "Ошибка выполнения команды. Проверьте формат через /help.";
         }
+    }
+
+    private String extractEmailFromText(String text) {
+        // Match standard email pattern
+        java.util.regex.Pattern emailPattern = java.util.regex.Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+        java.util.regex.Matcher matcher = emailPattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return null;
+    }
+
+    private String handleEmailLink(String senderChatId, String email, String fromUsername) {
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
+        if (userOpt.isEmpty()) {
+            return "Аккаунт с email '" + email + "' не найден на платформе. Проверьте правильность написания email, с которым вы регистрировались на платформе.";
+        }
+
+        User user = userOpt.get();
+        user.setTelegramChatId(Long.parseLong(senderChatId));
+        if (fromUsername != null && !fromUsername.isBlank()) {
+            user.setTelegramUsername(fromUsername.replace("@", "").trim());
+        }
+        user.setTelegramLinkedAt(Instant.now());
+        userRepository.save(user);
+
+        return "Telegram-аккаунт успешно привязан к профилю " + user.getEmail() + "!\nТеперь вы будете получать мгновенные уведомления о проверке домашних заданий и открытии новых уроков.";
+    }
+
+    private String getUnlinkedHelpMessage(String fromUsername) {
+        String usernameInfo = fromUsername != null && !fromUsername.isBlank()
+                ? " (ваш Telegram: @" + fromUsername.replace("@", "") + ")"
+                : "";
+
+        return "*MrDevCourses — Привязка Telegram-аккаунта*\n\n" +
+                "Чтобы привязать ваш аккаунт к боту, выполните любое действие:\n\n" +
+                "1. Отправьте сюда ваш email с сайта (например: `my@email.com` или `/link my@email.com`)\n" +
+                "ИЛИ\n" +
+                "2. Укажите ваш никнейм" + usernameInfo + " в поле 'Telegram Никнейм' в профиле на сайте и нажмите 'Сохранить изменения'.";
     }
 
     private String handleStudentLink(String senderChatId, String fullText) {
@@ -112,7 +192,7 @@ public class TelegramBotCommandService {
         Long userId = linkTokenService.validateAndConsumeToken(token);
 
         if (userId == null) {
-            return "Срок действия ссылки привязки истек или токен недействителен. Пожалуйста, сгенерируйте новую ссылку в профиле на сайте.";
+            return "Срок действия ссылки привязки истек или токен недействителен. Пожалуйста, сгенерируйте новую ссылку в профиле на сайте или отправьте ваш email боту (например: `/link my@email.com`).";
         }
 
         Optional<User> userOpt = userRepository.findById(userId);
@@ -169,6 +249,7 @@ public class TelegramBotCommandService {
 
         User user = userOpt.get();
         user.setTelegramChatId(null);
+        user.setTelegramUsername(null);
         user.setTelegramLinkedAt(null);
         userRepository.save(user);
 

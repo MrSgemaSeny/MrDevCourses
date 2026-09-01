@@ -160,7 +160,7 @@ export const AdminHomeworksPage: React.FC = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-semibold text-white">
-                          {sub.studentName || 'Студент'}
+                          {sub.studentName || (sub.studentEmail ? sub.studentEmail.split('@')[0] : 'Пользователь')}
                         </span>
                         <span className="text-[10px] text-zinc-500 font-mono">
                           {sub.studentEmail}

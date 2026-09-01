@@ -70,11 +70,12 @@ public class TelegramBotPollingRunner {
                 if (message.isMissingNode() || message.isNull()) continue;
 
                 String chatId = String.valueOf(message.path("chat").path("id").asLong());
+                String fromUsername = message.path("from").hasNonNull("username") ? message.path("from").path("username").asText() : null;
                 String text = message.path("text").asText("");
 
                 if (!text.isBlank()) {
-                    log.info("Received Telegram message from chatId={}: {}", chatId, text);
-                    String reply = commandService.processCommand(chatId, text);
+                    log.info("Received Telegram message from chatId={} (username={}): {}", chatId, fromUsername, text);
+                    String reply = commandService.processCommand(chatId, text, fromUsername);
                     if (reply != null) {
                         notificationService.sendDirectMessage(chatId, reply);
                     }

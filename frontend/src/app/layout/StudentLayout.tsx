@@ -64,7 +64,7 @@ export const StudentLayout: React.FC = () => {
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-xs font-medium text-white truncate">{user?.name ?? 'Студент'}</p>
+              <p className="text-xs font-medium text-white truncate">{user?.name ?? (user?.email ? user.email.split('@')[0] : 'Пользователь')}</p>
               <p className="text-xs text-zinc-500 truncate">{user?.email}</p>
             </div>
           </div>
