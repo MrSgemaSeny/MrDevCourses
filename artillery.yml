@@ -1,4 +1,4 @@
-﻿config:
+config:
   target: 'http://localhost:8080/api'
   phases:
     - duration: 10
@@ -88,9 +88,6 @@ scenarios:
           json:
             email: '{{ studentEmail }}'
             password: '{{ studentPassword }}'
-          capture:
-            - header: 'set-cookie'
-              as: 'authCookie'
       - get:
           url: '/v1/courses/{{ courseId }}/lessons'
           expect:
