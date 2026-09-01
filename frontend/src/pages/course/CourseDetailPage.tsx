@@ -113,7 +113,7 @@ export const CourseDetailPage: React.FC = () => {
   const firstAccessible = lessons.find((l) => l.accessible && !l.completed) || lessons[0];
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-xs font-mono text-zinc-500">
         <Link to="/courses" className="hover:text-zinc-300 transition-colors">
