@@ -18,7 +18,7 @@ export const LandingPage: React.FC = () => {
     <div className="min-h-full bg-[#0a0a0c] text-zinc-100 font-sans">
       {/* Hero Section */}
       <section className="py-16 md:py-24 border-b border-white/5 bg-[#0a0a0c] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
             <div className="max-w-2xl flex-1">
               <h1 className="text-2xl font-bold tracking-tight text-white mb-8 leading-tight">
@@ -71,7 +71,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Functional List Highlights */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
           <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
             <Code2 className="w-5 h-5 text-white shrink-0" />
@@ -107,7 +107,7 @@ export const LandingPage: React.FC = () => {
 
       {/* Featured Courses */}
       <section className="py-16 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-sm font-bold text-white tracking-tight">Доступные программы</h2>

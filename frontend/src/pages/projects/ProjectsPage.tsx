@@ -44,22 +44,24 @@ export const ProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans text-zinc-100">
-      {/* Header Banner */}
-      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs text-zinc-400 font-mono uppercase tracking-wider font-bold">
-              <Rocket className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Стена проектов выпускников</span>
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* 75% Main Column aligned to left */}
+      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
+        {/* Header Banner */}
+        <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-xs text-zinc-400 font-mono uppercase tracking-wider font-bold">
+                <Rocket className="w-3.5 h-3.5 text-zinc-400" />
+                <span>Стена проектов выпускников</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Работающие веб-сервисы студентов
+              </h1>
+              <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
+                Каждый проект в этой галерее написан с нуля и задеплоен онлайн студентами MrDevCourses за 5 дней обучения вайбкодингу.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Работающие веб-сервисы студентов
-            </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
-              Каждый проект в этой галерее написан с нуля и задеплоен онлайн студентами MrDevCourses за 5 дней обучения вайбкодингу.
-            </p>
-          </div>
 
           <button
             type="button"
@@ -239,6 +241,7 @@ export const ProjectsPage: React.FC = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
+      </div>
     </div>
   );
 };

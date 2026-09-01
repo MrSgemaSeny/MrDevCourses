@@ -45,24 +45,19 @@ export const CoursesPage: React.FC = () => {
   }, [courses, searchQuery, selectedLevel, selectedFormat]);
 
   return (
-    <div className="bg-[#0a0a0c] text-white">
-      {/* Header Banner */}
-      <div className="border-b border-white/5 bg-[#0a0a0c]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6">
-          <div className="max-w-3xl space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
-              Каталог курсов и программ
-            </h1>
-
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-2xl font-normal">
-              Пошаговые программы с практикой, AI-тьютором и автоматической проверкой кода. Осваивайте монолитную и распределённую архитектуру на реальных задачах.
-            </p>
-          </div>
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* 75% Main Column aligned to left */}
+      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
+        {/* Header Section */}
+        <div className="space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
+            Каталог курсов и программ
+          </h1>
+          <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-2xl font-normal">
+            Пошаговые программы с практикой, AI-тьютором и автоматической проверкой кода. Осваивайте монолитную и распределённую архитектуру на реальных задачах.
+          </p>
         </div>
-      </div>
 
-      {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Minimalist Filter Bar: [Поиск] [Уровень] [Формат] */}
         <div className="p-3 bg-[#0e0e11] border border-white/5 rounded-sm flex flex-wrap items-center justify-between gap-3">
           {/* Search Input */}

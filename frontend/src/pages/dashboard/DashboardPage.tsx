@@ -19,21 +19,23 @@ export const DashboardPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-sans text-zinc-100">
-      {/* User Welcome Banner */}
-      <div className="p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] mb-8">
-        <div>
-          <div className="text-xs text-zinc-500 mb-2 font-mono uppercase tracking-wider">
-            Личный кабинет
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* 75% Main Column aligned to left */}
+      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
+        {/* User Welcome Banner */}
+        <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div>
+            <div className="text-xs text-zinc-500 mb-2 font-mono uppercase tracking-wider">
+              Личный кабинет
+            </div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              Привет, {user?.name || user?.email}!
+            </h1>
+            <p className="text-xs text-zinc-400 mt-2">
+              Дисциплина и регулярность: проходите по одному уроку в день.
+            </p>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Привет, {user?.name || user?.email}!
-          </h1>
-          <p className="text-xs text-zinc-400 mt-2">
-            Дисциплина и регулярность: проходите по одному уроку в день.
-          </p>
         </div>
-      </div>
 
       {/* Enrolled Courses Progress */}
       <div>
@@ -129,6 +131,7 @@ export const DashboardPage: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );
