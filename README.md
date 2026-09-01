@@ -3,12 +3,13 @@
 [![Backend](https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F?logo=springboot&logoColor=white)](backend)
 [![Frontend](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](frontend)
 [![Database](https://img.shields.io/badge/PostgreSQL-17_%2B_pgvector-4169E1?logo=postgresql&logoColor=white)](backend)
-[![Architecture](https://img.shields.io/badge/Architecture-Modular_Monolith_%2B_FSD-orange)](docs/decisions)
-[![Tests](https://img.shields.io/badge/Tests-100%25_Green_(63_Vitest_%2B_21_JUnit)-brightgreen)](frontend)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)](.github/workflows)
+[![Hosting](https://img.shields.io/badge/Deploy-Render_%2B_Vercel-black?logo=vercel&logoColor=white)](README.md#развертывание-в-production-render--vercel)
+[![Tests](https://img.shields.io/badge/Tests-100%25_Green_(73_Vitest_%2B_241_JUnit)-brightgreen)](README.md#-тестирование-и-контроль-качества)
 
 **MrDevCourses** — современная учебная LMS-платформа (Educational MVP, Level 3) для обучения промышленной backend- и fullstack-разработке, архитектурным паттернам и вайбкодингу.
 
-Платформа сочетает строгую монолитную модульность на Spring Boot 3, клиентский интерфейс по методологии Feature-Sliced Design (FSD), контекстного AI-тьютора на базе гибридного RAG (pgvector + FTS), автоматического AI-грейдера кода, защиту от списывания в квизах, расчёт drip-контента на уровне СУБД и изолированную административную консоль управления.
+Платформа сочетает строгую монолитную модульность на Spring Boot 3, клиентский интерфейс по методологии Feature-Sliced Design (FSD), систему проверки домашних заданий с Telegram-пультом ментора, контекстного AI-тьютора на базе гибридного RAG (pgvector + FTS), автоматического AI-грейдера кода, защиту от списывания в квизах, расчёт drip-контента на уровне СУБД и изолированную административную консоль управления.
 
 ---
 
@@ -41,6 +42,7 @@
 * **[ADR-002: Разделение лейаутов и двухуровневая изоляция ролей (RBAC)](docs/decisions/ADR-002-dual-layout-and-rbac-isolation.md)**: Изолированный `AdminLayout` (`#0a0a0c`) против клиентской витрины курсов.
 * **[ADR-003: Stateless аутентификация через Google OAuth2 + JWT в httpOnly Cookies](docs/decisions/ADR-003-stateless-jwt-and-cookie-security.md)**: Защита от XSS/CSRF, Token Bucket Rate Limiting (Bucket4j + Caffeine).
 * **[ADR-004: Расчёт Drip-контента на уровне базы данных без фоновых планировщиков](docs/decisions/ADR-004-drip-content-database-time-calculation.md)**: Мгновенное вычисление доступности уроков в UTC.
+* **[ADR-005: Telegram Bot Polling Runner и диспетчеризация команд ментора/студента](docs/decisions/ADR-005-telegram-bot-and-mentor-dispatching.md)**: Полнофункциональный мобильный пульт проверки ДЗ, SOS-алерты и отвязка от входящих вебхуков.
 
 ---
 
@@ -183,9 +185,9 @@ npm run dev
 
 ---
 
-## Развертывание в Production (Deployment Blueprint)
+## Развертывание в Production (Render + Vercel)
 
-Платформа спроектирована для экономичного и надежного деплоя в облачной инфраструктуре:
+Платформа спроектирована для надежного и экономичного деплоя в связке **Render (Backend & PostgreSQL)** + **Vercel (Frontend SPA)** после прохождения CI/CD проверок в GitHub Actions:
 
 ```
 [Пользователь / Браузер]
@@ -193,64 +195,65 @@ npm run dev
     +----+-----------------------------+
     |                                  | (HTTPS)
     v                                  v
-[Vercel / GitHub Pages]          [Fly.io Edge Proxy]
-(React 19 SPA / Static CDN)            |
-                                       v
-                                [Spring Boot 3 App] (Fly.io Machine, 512MB-1GB RAM)
+[Vercel Edge Network]           [Render Web Service]
+(React 19 SPA / Static CDN)     (Spring Boot 3 App)
                                        |
                                        v
-                                [Fly Postgres 17] (pgvector + pg_trgm)
+                                [Render PostgreSQL 17] (pgvector + pg_trgm)
 ```
+
+### GitHub Actions CI/CD Pipeline
+Пайплайн в `.github/workflows/ci.yml` автоматически запускается на каждый push/PR в ветку `main`:
+1. **Backend Job**: запуск JUnit 5 тестов (`./gradlew test`), валидация схемы БД, проверка сборки JAR.
+2. **Frontend Job**: проверка типов (`tsc -b`), запуск Vitest тестов (`npm run test`), сборка production бандла (`npm run build`).
+3. **Deploy Trigger**: автоматический триггер деплоя в Vercel и Render только при 100% прохождении тестов.
 
 ### Конфигурация Переменных Окружения (Production Secrets)
 
 | Переменная | Назначение | Пример значения |
 | :--- | :--- | :--- |
-| `SPRING_DATASOURCE_URL` | Подключение к PostgreSQL | `jdbc:postgresql://top2.nearest.of.mrdev-db.internal:5432/mrdevcourses` |
-| `SPRING_DATASOURCE_USERNAME` | Пользователь БД | `postgres` |
-| `SPRING_DATASOURCE_PASSWORD` | Пароль к БД | `${POSTGRES_PASSWORD}` |
+| `SPRING_DATASOURCE_URL` | Подключение к Render PostgreSQL | `jdbc:postgresql://dpg-xxx.render.com/mrdevcourses_db` |
+| `SPRING_DATASOURCE_USERNAME` | Пользователь БД | `mrdev_user` |
+| `SPRING_DATASOURCE_PASSWORD` | Пароль к БД | `${DATABASE_PASSWORD}` |
 | `JWT_SECRET` | 256-битный ключ подписи токенов | `${RANDOM_HEX_64_CHARS}` |
 | `GOOGLE_CLIENT_ID` | OAuth2 Google Client ID | `*.apps.googleusercontent.com` |
-| `GOOGLE_CLIENT_SECRET` | OAuth2 Google Secret | `${GOOGLE_SECRET}` |
-| `GROQ_API_KEY` | API ключ для LLM (Llama 3.3 70B) | `gsk_*` |
-| `APP_CORS_ALLOWED_ORIGINS` | Разрешенные фронтенд-домены | `https://mrdevcourses.vercel.app,http://localhost:5173` |
-
-### Оптимизация памяти JVM для Cloud-контейнеров (512MB RAM)
-```bash
-java -XX:TieredStopAtLevel=1 -Xmx384m -Xss512k -XX:+UseSerialGC -Dfile.encoding=UTF-8 -jar app.jar
-```
+| `GOOGLE_CLIENT_SECRET` | OAuth2 Google Secret | `${GOOGLE_CLIENT_SECRET}` |
+| `TELEGRAM_BOT_TOKEN` | Токен Telegram-бота платформы | `${TELEGRAM_BOT_TOKEN}` |
+| `TELEGRAM_CHAT_ID` | Chat ID ментора для алертов и пульта | `${TELEGRAM_CHAT_ID}` |
+| `CORS_ALLOWED_ORIGINS` | Разрешенные фронтенд-домены | `https://mrdevcourses.vercel.app` |
+| `FRONTEND_URL` | URL фронтенда для редиректов OAuth2 | `https://mrdevcourses.vercel.app` |
 
 ---
 
 ## Тестирование и Контроль Качества
 
-### Запуск тестов Backend (JUnit 5 + E2E Suite):
+### Запуск тестов Backend (JUnit 5 Suite):
 ```bash
 cd backend
 ./gradlew test
 ```
-*Результат: **21/21 E2E-тестов успешно пройдены** (`AdminSuiteE2ETest`).*
+*Результат: **241/241 тестов успешно пройдены (100% Green)**.*
 
 ### Запуск тестов Frontend (Vitest):
 ```bash
 cd frontend
 npm test -- --run
 ```
-*Результат: **26/26 сьютов успешно пройдены (63/63 теста green)**.*
+*Результат: **31/31 сьютов успешно пройдены (73/73 теста green)**.*
 
 ### Проверка сборки Frontend (TypeScript + Vite):
 ```bash
 cd frontend
 npm run build
 ```
-*Результат: **1790 модулей собрано без единой ошибки и предупреждения**.*
+*Результат: **1802 модуля собрано без единой ошибки (0 warnings, 0 errors)**.*
 
 ---
 
 ## Стандарты Безопасности и Производительности
 
-* **Zero N+1 Queries**: Все запросы к связанным сущностям (`Course -> Modules -> Lessons`, `User -> Enrollments`) выполняются пакетами с использованием `@EntityGraph` и `IN (...)` предикатов.
+* **Zero N+1 Queries**: Все запросы к связанным сущностям (`Course -> Modules -> Lessons`, `User -> Enrollments`, `LessonProgress`) выполняются пакетами с использованием `@EntityGraph`, JOIN FETCH и `IN (...)` предикатов.
 * **Row-Level Security**: IDOR-защита на уровне сервисов через `SecurityUtils.getCurrentUserId()`.
-* **Stateless Cookies**: Токены хранятся исключительно в защищённых `httpOnly`, `SameSite=Lax` cookies.
-* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V12`), ручное редактирование применённых скриптов строго запрещено.
+* **Stateless Cookies**: Токены хранятся исключительно в защищённых `httpOnly`, `SameSite=Lax` cookies с поддержкой Remember-Me и черного списка отозванных токенов (`JwtBlacklistService`).
+* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V24`), ручное редактирование применённых скриптов строго запрещено.
 * **UTC Time Standard**: Строгое хранение всех меток времени в UTC для детерминированного расчёта drip-контента.

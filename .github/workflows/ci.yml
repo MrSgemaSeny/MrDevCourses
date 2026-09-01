@@ -1,0 +1,64 @@
+name: MrDevCourses CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-test-and-build:
+    name: Backend Tests & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x backend/gradlew
+
+      - name: Run Backend JUnit Tests
+        run: |
+          cd backend
+          ./gradlew test --no-daemon
+
+      - name: Build Backend Executable JAR
+        run: |
+          cd backend
+          ./gradlew bootJar -x test --no-daemon
+
+  frontend-test-and-build:
+    name: Frontend Tests & Production Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run Frontend Vitest Suites
+        run: |
+          cd frontend
+          npm test -- --run
+
+      - name: Typecheck and Build Frontend
+        run: |
+          cd frontend
+          npm run build
