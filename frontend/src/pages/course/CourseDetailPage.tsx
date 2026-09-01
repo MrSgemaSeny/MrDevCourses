@@ -114,8 +114,8 @@ export const CourseDetailPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* 65% Main Column aligned to left */}
-      <div className="w-full lg:w-[65%] max-w-[960px] space-y-8">
+      {/* 75% Main Column aligned to left */}
+      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-xs font-mono text-zinc-500">
           <Link to="/courses" className="hover:text-zinc-300 transition-colors">
@@ -248,9 +248,9 @@ export const CourseDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Compact Video Preview & Key Course Parameters Card */}
-        <div className="p-4 sm:p-5 rounded-sm bg-[#0e0e11] border border-white/10 shadow-xl space-y-4 max-w-2xl">
-          <div className="aspect-video w-full rounded-sm overflow-hidden bg-black border border-white/5 max-h-[360px]">
+        {/* Video Preview & Key Course Parameters Card */}
+        <div className="p-4 sm:p-5 rounded-sm bg-[#0e0e11] border border-white/10 shadow-xl space-y-4 w-full">
+          <div className="aspect-video w-full rounded-sm overflow-hidden bg-black border border-white/5">
             <iframe
               src="https://www.youtube-nocookie.com/embed/qnYl2ibf-rQ?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&playsinline=1"
               title="Course Video Preview"
