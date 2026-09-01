@@ -98,7 +98,7 @@ public class TelegramBotCommandService {
             }
         } catch (Exception e) {
             log.error("Error processing Telegram command '{}': {}", trimmed, e.getMessage(), e);
-            return "Не удалось выполнить команду: " + e.getMessage();
+            return "Ошибка выполнения команды. Проверьте формат через /help.";
         }
     }
 
@@ -164,26 +164,25 @@ public class TelegramBotCommandService {
         Long chatId = Long.parseLong(senderChatId);
         Optional<User> userOpt = userRepository.findByTelegramChatId(chatId);
         if (userOpt.isEmpty()) {
-            return "Telegram-аккаунт не был привязан.";
+            return "Ваш Telegram-аккаунт не был привязан.";
         }
 
         User user = userOpt.get();
         user.setTelegramChatId(null);
-        user.setTelegramUsername(null);
         user.setTelegramLinkedAt(null);
         userRepository.save(user);
 
-        return "Telegram-аккаунт успешно отвязан от профиля на платформе.";
+        return "Telegram-аккаунт успешно отвязан от профиля " + user.getEmail() + ". Уведомления отключены.";
     }
 
     private String handleStudentHelp(String senderChatId) {
         return """
-                *MrDevCourses — Бот студента*
+                *MrDevCourses — Студенческий бот*
 
                 Доступные команды:
-                • `/status` — Мой прогресс обучения и текущий стрик
-                • `/unlink` — Отвязать Telegram-аккаунт
-                • `/help` — Справка по боту
+                • `/status` — Ваш учебный прогресс и текущий стрик
+                • `/unlink` — Отвязать Telegram-аккаунт от профиля
+                • `/help` — Справка по командам
                 """;
     }
 
@@ -315,9 +314,14 @@ public class TelegramBotCommandService {
     }
 
     private String handleApprove(String fullText) {
-        Optional<Long> idOpt = extractNumericId(fullText);
-        if (idOpt.isEmpty()) {
+        String[] parts = fullText.trim().split("\\s+", 2);
+        if (parts.length < 2) {
             return "Укажите номер сдачи ДЗ. Например: `/approve 1` или `принять 1`\nСписок непроверенных ДЗ: `/hw`";
+        }
+
+        Optional<Long> idOpt = extractNumericId(parts[1]);
+        if (idOpt.isEmpty()) {
+            return "Укажите корректный номер сдачи ДЗ (число). Например: `/approve 1` или `принять 1`\nСписок непроверенных ДЗ: `/hw`";
         }
 
         Long submissionId = idOpt.get();
@@ -335,24 +339,24 @@ public class TelegramBotCommandService {
             return "Сдача ДЗ #" + submissionId + " не найдена. Возможно, она уже проверена. Проверьте очередь через /hw.";
         } catch (Exception e) {
             log.error("Error approving submission #{}: {}", submissionId, e.getMessage(), e);
-            return "Не удалось одобрить ДЗ #" + submissionId + ": " + e.getMessage();
+            return "Не удалось обновить статус ДЗ #" + submissionId + ". Пожалуйста, попробуйте позже.";
         }
     }
 
     private String handleReject(String fullText) {
-        Optional<Long> idOpt = extractNumericId(fullText);
-        if (idOpt.isEmpty()) {
+        String[] parts = fullText.trim().split("\\s+", 3);
+        if (parts.length < 2) {
             return "Укажите номер сдачи ДЗ. Например: `/reject 1 поправь верстку` или `доработать 1 поправь верстку`\nСписок непроверенных ДЗ: `/hw`";
         }
 
+        Optional<Long> idOpt = extractNumericId(parts[1]);
+        if (idOpt.isEmpty()) {
+            return "Укажите корректный номер сдачи ДЗ (число). Например: `/reject 1 поправь верстку`\nСписок непроверенных ДЗ: `/hw`";
+        }
+
         Long submissionId = idOpt.get();
-        
-        // Remove command name and ID to extract the custom feedback message
-        String cleaned = fullText.replaceFirst("(?i)^(/reject|reject|отклонить|доработать|-)\\s*", "");
-        cleaned = cleaned.replaceFirst("(?i)(<" + submissionId + ">|#" + submissionId + "|\\[" + submissionId + "\\]|" + submissionId + ")\\s*", "").trim();
-        
-        String feedback = !cleaned.isBlank()
-                ? cleaned
+        String feedback = parts.length >= 3 && !parts[2].isBlank()
+                ? parts[2].trim()
                 : "Требуются доработки по критериям урока. Пожалуйста, проверьте требования к заданию и отправьте обновленную версию.";
 
         Long mentorAdminId = getFirstAdminId();
@@ -369,7 +373,7 @@ public class TelegramBotCommandService {
             return "Сдача ДЗ #" + submissionId + " не найдена. Возможно, она уже проверена. Проверьте очередь через /hw.";
         } catch (Exception e) {
             log.error("Error rejecting submission #{}: {}", submissionId, e.getMessage(), e);
-            return "Не удалось отправить ДЗ #" + submissionId + " на доработку: " + e.getMessage();
+            return "Не удалось отправить ДЗ #" + submissionId + " на доработку. Пожалуйста, попробуйте позже.";
         }
     }
 
