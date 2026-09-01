@@ -41,6 +41,12 @@ public class TelegramBotPollingRunner {
                 .setConnectTimeout(Duration.ofSeconds(3))
                 .setReadTimeout(Duration.ofSeconds(10))
                 .build();
+
+        if (!this.botToken.isBlank()) {
+            log.info("Telegram Bot Polling Runner ACTIVE for mentor chatId={} (polling every 3s)", this.authorizedChatId);
+        } else {
+            log.warn("Telegram Bot Token is blank. Polling is disabled.");
+        }
     }
 
     @Scheduled(fixedDelay = 3000, initialDelay = 5000)
