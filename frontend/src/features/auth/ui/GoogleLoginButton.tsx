@@ -17,7 +17,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     <button
       type="button"
       onClick={handleLogin}
-      className={`flex items-center justify-center gap-3 w-full py-2.5 px-4 rounded-sm font-medium text-xs transition-all duration-200 cursor-pointer bg-[#fafafa] text-[#09090b] hover:bg-white hover:shadow-[0_0_15px_rgba(255,255,255,0.15)] active:scale-[0.99] ${className}`}
+      className={`flex items-center justify-center gap-2.5 w-full py-2.5 px-4 rounded-sm font-medium text-xs transition-colors cursor-pointer bg-[#141418] hover:bg-[#1c1c24] border border-white/10 text-zinc-200 hover:text-white shadow-sm active:scale-[0.99] ${className}`}
     >
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
         <path

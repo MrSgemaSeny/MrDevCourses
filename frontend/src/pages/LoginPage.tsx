@@ -1,64 +1,76 @@
-import React from 'react';
-import { Navigate, useSearchParams } from 'react-router-dom';
-import { GoogleLoginButton, EmailAuthForm, useAuth } from '@/features/auth';
+import React, { useState } from 'react';
+import { Navigate, useSearchParams, Link } from 'react-router-dom';
+import { EmailAuthForm, useAuth, AuthMode } from '@/features/auth';
 
 export const LoginPage: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const errorParam = searchParams.get('error');
 
+  const [mode, setMode] = useState<AuthMode>('login');
+
   if (!isLoading && isAuthenticated) {
     return <Navigate to="/courses" replace />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-white tracking-tight mb-2">
-            Вход в MrDeveloper
+    <div className="flex flex-col items-center justify-center min-h-[75vh] px-4 py-12">
+      <div className="w-full max-w-[340px] sm:max-w-[360px] space-y-4">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center text-center space-y-3 mb-2">
+          <Link to="/" className="w-12 h-12 rounded-full border border-white/15 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-md hover:border-white/30 transition-colors">
+            <img
+              src="/author-avatar.png"
+              alt="MrDeveloper"
+              className="w-full h-full object-cover scale-[1.35]"
+            />
+          </Link>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            {mode === 'login' ? 'Вход в MrDeveloper' : 'Регистрация в MrDeveloper'}
           </h1>
-          <p className="text-sm text-[#a1a1aa]">
-            Доступ к материалам курсов и синхронизация прогресса
-          </p>
         </div>
 
+        {/* URL Error notification */}
         {errorParam && (
-          <div className="mb-6 p-3 rounded-sm bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
+          <div className="p-3 rounded-sm bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center">
             {errorParam}
           </div>
         )}
 
-        {/* Google — primary action */}
-        <div className="space-y-3">
-          <GoogleLoginButton text="Войти через Google" />
+        {/* Main Form Box */}
+        <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/10 shadow-xl">
+          <EmailAuthForm mode={mode} />
+        </div>
 
-          {/* Recommendation banner */}
-          <div className="flex items-start gap-2.5 p-3 rounded-sm bg-[#0a0a0c] border border-white/5">
-            <span className="text-[#71717a] mt-0.5 shrink-0">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 16v-4M12 8h.01" />
-              </svg>
+        {/* Toggle Mode Box */}
+        <div className="p-3.5 rounded-sm border border-white/10 bg-[#0e0e11] text-center text-xs text-zinc-400">
+          {mode === 'login' ? (
+            <span>
+              Впервые в MrDeveloper?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('register')}
+                className="text-white hover:underline font-medium transition-colors cursor-pointer"
+              >
+                Создать аккаунт
+              </button>
             </span>
-            <p className="text-xs text-[#71717a] leading-relaxed">
-              Настоятельно рекомендуем войти через Google — быстрее, безопаснее,
-              и прогресс автоматически привязывается к аккаунту.
-            </p>
-          </div>
+          ) : (
+            <span>
+              Уже есть аккаунт?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('login')}
+                className="text-white hover:underline font-medium transition-colors cursor-pointer"
+              >
+                Войти
+              </button>
+            </span>
+          )}
         </div>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 border-t border-white/5" />
-          <span className="text-xs text-[#52525b]">или через email</span>
-          <div className="flex-1 border-t border-white/5" />
-        </div>
-
-        {/* Email/password — secondary */}
-        <EmailAuthForm />
-
-        <div className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-[#71717a]">
+        {/* Footer info */}
+        <div className="text-center text-[11px] text-zinc-500 pt-2">
           Авторизуясь, вы соглашаетесь с правилами платформы
         </div>
       </div>

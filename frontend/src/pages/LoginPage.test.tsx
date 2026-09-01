@@ -7,7 +7,11 @@ import * as authFeature from '@/features/auth';
 vi.mock('@/features/auth', () => ({
   useAuth: vi.fn(),
   GoogleLoginButton: ({ text }: { text?: string }) => <button>{text || 'Google Button'}</button>,
-  EmailAuthForm: () => <div data-testid="email-auth-form" />,
+  EmailAuthForm: ({ mode }: { mode?: string }) => (
+    <div data-testid="email-auth-form">
+      <span>{mode === 'register' ? 'Форма регистрации' : 'Форма входа'}</span>
+    </div>
+  ),
 }));
 
 const mockAuth = (overrides = {}) => ({
@@ -34,8 +38,8 @@ describe('LoginPage', () => {
     );
 
     expect(screen.getByText(/Вход в MrDeveloper/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Войти через Google/i })).toBeInTheDocument();
     expect(screen.getByTestId('email-auth-form')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Создать аккаунт/i })).toBeInTheDocument();
   });
 
   it('displays error message from search params if present', () => {

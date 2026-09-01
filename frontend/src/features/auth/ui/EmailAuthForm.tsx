@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../model/authContext';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
-type Mode = 'login' | 'register';
+export type AuthMode = 'login' | 'register';
+
+interface EmailAuthFormProps {
+  mode?: AuthMode;
+  onToggleMode?: () => void;
+}
 
 interface FormErrors {
   email?: string;
@@ -11,11 +17,15 @@ interface FormErrors {
   general?: string;
 }
 
-export const EmailAuthForm: React.FC = () => {
+export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
+  mode: controlledMode,
+}) => {
   const { loginWithEmail, register } = useAuth();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState<Mode>('login');
+  const [internalMode] = useState<AuthMode>('login');
+  const mode = controlledMode || internalMode;
+
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -68,11 +78,6 @@ export const EmailAuthForm: React.FC = () => {
     }
   };
 
-  const toggleMode = () => {
-    setMode((m) => (m === 'login' ? 'register' : 'login'));
-    setErrors({});
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {errors.general && (
@@ -81,78 +86,81 @@ export const EmailAuthForm: React.FC = () => {
         </div>
       )}
 
-      <div>
-        <label className="block text-xs text-[#a1a1aa] mb-1.5">Email</label>
+      <div className="space-y-1.5">
+        <label className="block text-xs text-zinc-300 font-medium">
+          {mode === 'login' ? 'Email или имя пользователя' : 'Email'}
+        </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
           autoComplete="email"
-          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-[#52525b]
+          className={`w-full px-3 py-2 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-zinc-600
             outline-none transition-colors
-            ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
+            ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-zinc-500'}`}
         />
-        {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
+        {errors.email && <p className="mt-1 text-[11px] text-red-400">{errors.email}</p>}
       </div>
 
       {mode === 'register' && (
-        <div>
-          <label className="block text-xs text-[#a1a1aa] mb-1.5">Имя</label>
+        <div className="space-y-1.5">
+          <label className="block text-xs text-zinc-300 font-medium">Ваше имя</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Иван Петров"
             autoComplete="name"
-            className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-[#52525b]
+            className={`w-full px-3 py-2 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-zinc-600
               outline-none transition-colors
-              ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
+              ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-zinc-500'}`}
           />
-          {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
+          {errors.name && <p className="mt-1 text-[11px] text-red-400">{errors.name}</p>}
         </div>
       )}
 
-      <div>
-        <label className="block text-xs text-[#a1a1aa] mb-1.5">Пароль</label>
+      <div className="space-y-1.5">
+        <label className="block text-xs text-zinc-300 font-medium">Пароль</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={mode === 'register' ? 'Минимум 8 символов' : '••••••••'}
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-          className={`w-full px-3 py-2.5 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-[#52525b]
+          className={`w-full px-3 py-2 rounded-sm bg-[#0a0a0c] border text-xs text-white placeholder-zinc-600
             outline-none transition-colors
-            ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/5 focus:border-[#52525b]'}`}
+            ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-zinc-500'}`}
         />
-        {errors.password && <p className="mt-1 text-xs text-red-400">{errors.password}</p>}
+        {errors.password && <p className="mt-1 text-[11px] text-red-400">{errors.password}</p>}
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-2.5 rounded-sm bg-[#27272a] hover:bg-[#3f3f46] border border-[#3f3f46]
-          text-xs text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-2.5 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-sm transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting
           ? mode === 'login'
             ? 'Входим...'
-            : 'Регистрируемся...'
+            : 'Создание аккаунта...'
           : mode === 'login'
           ? 'Войти'
           : 'Создать аккаунт'}
       </button>
 
-      <p className="text-center text-xs text-[#71717a]">
-        {mode === 'login' ? 'Нет аккаунта?' : 'Уже есть аккаунт?'}{' '}
-        <button
-          type="button"
-          onClick={toggleMode}
-          className="text-[#a1a1aa] hover:text-white underline-offset-2 hover:underline transition-colors"
-        >
-          {mode === 'login' ? 'Зарегистрироваться' : 'Войти'}
-        </button>
-      </p>
+      {/* Divider */}
+      <div className="relative flex items-center justify-center my-4 pt-1">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-white/10" />
+        </div>
+        <span className="relative px-3 bg-[#0e0e11] text-[11px] text-zinc-500 font-mono">
+          или
+        </span>
+      </div>
+
+      {/* Google Login Button */}
+      <GoogleLoginButton text="Войти через Google" />
     </form>
   );
 };
