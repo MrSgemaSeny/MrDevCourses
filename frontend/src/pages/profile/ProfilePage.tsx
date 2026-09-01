@@ -335,8 +335,8 @@ export const ProfilePage: React.FC = () => {
             )}
 
             {/* Section 1: Basic Identity */}
-            <div className="space-y-4">
-              <div className="pb-2 border-b border-white/5">
+            <div className="space-y-4 pb-6 border-b border-white/10">
+              <div>
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
                   1. Основные данные
                 </h2>
@@ -360,8 +360,8 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Section 2: Contact Channels & Integrations */}
-            <div className="space-y-4">
-              <div className="pb-2 border-b border-white/5">
+            <div className="space-y-4 pb-6 border-b border-white/10">
+              <div>
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider">
                   2. Каналы связи и репозитории
                 </h2>
@@ -447,8 +447,8 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Section 3: Goal & Motivation */}
-            <div className="space-y-4">
-              <div className="pb-2 border-b border-white/5">
+            <div className="space-y-4 pb-6 border-b border-white/10">
+              <div>
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
                   <Target className="w-4 h-4 text-zinc-400" />
                   <span>3. Главная цель и фокус обучения</span>
@@ -487,8 +487,8 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Section 4: Bio / About */}
-            <div className="space-y-4">
-              <div className="pb-2 border-b border-white/5">
+            <div className="space-y-4 pb-6 border-b border-white/10">
+              <div>
                 <h2 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
                   <FileText className="w-4 h-4 text-zinc-400" />
                   <span>4. О себе</span>
@@ -506,7 +506,7 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             {/* Submit Bar */}
-            <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-4">
+            <div className="pt-2 flex items-center justify-end gap-4">
               
 
               <button
