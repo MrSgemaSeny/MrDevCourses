@@ -263,7 +263,6 @@ export const ProfilePage: React.FC = () => {
           {/* Learning Progress Metrics Grid */}
           <div className="p-5 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] space-y-4">
             <h3 className="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
               <span>Статистика обучения</span>
             </h3>
 

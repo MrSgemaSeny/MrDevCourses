@@ -84,20 +84,6 @@ public class TelegramBotCommandService {
                 return handleStudentLink(senderChatId, trimmed);
             }
 
-            if (isMentor) {
-                return switch (command) {
-                    case "/hw", "hw", "дз", "домашки", "проверка" -> handleHwQueue();
-                    case "/approve", "approve", "принять", "одобрить", "+", "/ok", "ok" -> handleApprove(trimmed);
-                    case "/reject", "reject", "отклонить", "доработать", "-" -> handleReject(trimmed);
-                    case "/status", "status", "статус", "стата", "поток" -> handleStatus();
-                    case "/stuck", "stuck", "застряли", "должники", "долги" -> handleStuck();
-                    case "/progress", "progress", "прогресс", "студент" -> handleProgress(trimmed);
-                    case "/broadcast", "broadcast", "анонс", "рассылка" -> handleBroadcast(trimmed);
-                    case "/start", "/help", "help", "помощь", "команды", "меню", "start" -> handleMentorHelp();
-                    default -> "Команда не распознана. Введите /help или 'помощь' для списка доступных команд.";
-                };
-            }
-
             // 2. Check explicit email or /link <email> / /start <email>
             String potentialEmail = extractEmailFromText(trimmed);
             if (potentialEmail != null && (command.equals("/link") || command.equals("link") || command.equals("/start") || !command.startsWith("/"))) {
@@ -115,12 +101,31 @@ public class TelegramBotCommandService {
                         user.setTelegramChatId(chatIdNumeric);
                         user.setTelegramLinkedAt(Instant.now());
                         userRepository.save(user);
-                        return "Привет, " + (user.getName() != null ? user.getName() : "студент") + "! Мы нашли ваш аккаунт по никнейму @" + cleanUsername + ".\nTelegram успешно привязан к профилю " + user.getEmail() + "!\nТеперь вы будете получать уведомления о проверке ДЗ и новых уроках.";
+                        String greeting = "Привет, " + (user.getName() != null ? user.getName() : user.getEmail()) + "! Мы нашли ваш аккаунт по никнейму @" + cleanUsername + ".\nTelegram успешно привязан к профилю " + user.getEmail() + "!\nТеперь вы будете получать уведомления о проверке ДЗ и новых уроках.";
+                        if (isMentor) {
+                            return greeting + "\n\n" + handleMentorHelp();
+                        }
+                        return greeting;
                     }
                 }
             }
 
-            // 4. Student commands
+            // 4. Mentor commands
+            if (isMentor) {
+                return switch (command) {
+                    case "/hw", "hw", "дз", "домашки", "проверка" -> handleHwQueue();
+                    case "/approve", "approve", "принять", "одобрить", "+", "/ok", "ok" -> handleApprove(trimmed);
+                    case "/reject", "reject", "отклонить", "доработать", "-" -> handleReject(trimmed);
+                    case "/status", "status", "статус", "стата", "поток" -> handleStatus();
+                    case "/stuck", "stuck", "застряли", "должники", "долги" -> handleStuck();
+                    case "/progress", "progress", "прогресс", "студент" -> handleProgress(trimmed);
+                    case "/broadcast", "broadcast", "анонс", "рассылка" -> handleBroadcast(trimmed);
+                    case "/start", "/help", "help", "помощь", "команды", "меню", "start" -> handleMentorHelp();
+                    default -> "Команда не распознана. Введите /help или 'помощь' для списка доступных команд.";
+                };
+            }
+
+            // 5. Student commands
             if (chatIdNumeric != null) {
                 Optional<User> studentOpt = userRepository.findByTelegramChatId(chatIdNumeric);
                 if (studentOpt.isEmpty() && !command.equals("/unlink")) {
