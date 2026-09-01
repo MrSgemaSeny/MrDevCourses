@@ -143,6 +143,8 @@ export const ProjectsPage: React.FC = () => {
                       <img
                         src={project.authorAvatarUrl}
                         alt={project.authorName}
+                        referrerPolicy="no-referrer"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         className="w-6 h-6 rounded-full border border-white/10"
                       />
                     ) : (

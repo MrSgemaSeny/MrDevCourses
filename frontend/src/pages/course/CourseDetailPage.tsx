@@ -52,6 +52,7 @@ export const CourseDetailPage: React.FC = () => {
   const [showCertificate, setShowCertificate] = useState(false);
   const [showEnrollConfirm, setShowEnrollConfirm] = useState(false);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [authorAvatarError, setAuthorAvatarError] = useState(false);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', slug],
@@ -153,12 +154,17 @@ export const CourseDetailPage: React.FC = () => {
 
           {/* Author compact plate */}
           <div className="pt-1 flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-full border border-white/15 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-sm">
-              <img
-                src="/author-avatar.png"
-                alt="Mr Developer"
-                className="w-full h-full object-cover scale-[1.35]"
-              />
+            <div className="w-11 h-11 rounded-full border border-white/15 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-sm flex items-center justify-center">
+              {!authorAvatarError ? (
+                <img
+                  src={`${import.meta.env.BASE_URL}author-avatar.png`}
+                  alt="Mr Developer"
+                  onError={() => setAuthorAvatarError(true)}
+                  className="w-full h-full object-cover scale-[1.35]"
+                />
+              ) : (
+                <span className="text-xs font-bold font-mono text-zinc-300">MD</span>
+              )}
             </div>
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">

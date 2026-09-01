@@ -181,6 +181,7 @@ export const ProfilePage: React.FC = () => {
                     src={formData.avatarUrl}
                     alt={displayName}
                     referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     className="w-24 h-24 rounded-full border-2 border-white/10 object-cover shadow-lg shadow-black/60"
                   />
                 ) : (

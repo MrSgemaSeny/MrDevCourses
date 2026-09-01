@@ -13,17 +13,24 @@ export const LoginPage: React.FC = () => {
     return <Navigate to={user?.role === 'ADMIN' ? '/admin' : '/courses'} replace />;
   }
 
+  const [avatarError, setAvatarError] = React.useState(false);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[75vh] px-4 py-12">
       <div className="w-full max-w-[340px] sm:max-w-[360px] space-y-4">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-3 mb-2">
-          <Link to="/" className="w-20 h-20 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-xl hover:border-white/40 transition-colors">
-            <img
-              src="/author-avatar.png"
-              alt="MrDeveloper"
-              className="w-full h-full object-cover scale-[1.35]"
-            />
+          <Link to="/" className="w-20 h-20 rounded-full border border-white/20 overflow-hidden shrink-0 bg-[#0a0a0c] shadow-xl hover:border-white/40 transition-colors flex items-center justify-center">
+            {!avatarError ? (
+              <img
+                src={`${import.meta.env.BASE_URL}author-avatar.png`}
+                alt="MrDeveloper"
+                onError={() => setAvatarError(true)}
+                className="w-full h-full object-cover scale-[1.35]"
+              />
+            ) : (
+              <span className="text-sm font-bold font-mono text-zinc-300">MD</span>
+            )}
           </Link>
           <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             {mode === 'login' ? 'Вход в MrDeveloper' : 'Регистрация в MrDeveloper'}

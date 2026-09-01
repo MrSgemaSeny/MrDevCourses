@@ -113,6 +113,8 @@ export const AdminLayout: React.FC = () => {
               <img
                 src={user.avatarUrl}
                 alt={user.name ?? 'Admin'}
+                referrerPolicy="no-referrer"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 className="w-8 h-8 rounded-full object-cover border border-white/5"
               />
             ) : (

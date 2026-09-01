@@ -14,6 +14,7 @@ import {
 export const UserProfileDropdown: React.FC = () => {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -49,7 +50,7 @@ export const UserProfileDropdown: React.FC = () => {
     navigate(ROUTES.HOME);
   };
 
-  const displayName = user.name || user.email.split('@')[0];
+  const displayName = user.name || user.email || 'Пользователь';
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -62,11 +63,12 @@ export const UserProfileDropdown: React.FC = () => {
         aria-label="Профиль пользователя"
         className="flex items-center gap-2 py-1 px-2 rounded-sm hover:bg-zinc-800 transition-colors cursor-pointer border border-transparent hover:border-white/5 focus:outline-none"
       >
-        {user.avatarUrl ? (
+        {!avatarError && user.avatarUrl ? (
           <img
             src={user.avatarUrl}
             alt={displayName}
             referrerPolicy="no-referrer"
+            onError={() => setAvatarError(true)}
             className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/10 object-cover shrink-0"
           />
         ) : (
@@ -99,11 +101,12 @@ export const UserProfileDropdown: React.FC = () => {
           {/* Header Info */}
           <div className="p-4 border-b border-white/5 bg-[#161618]">
             <div className="flex items-center gap-3">
-              {user.avatarUrl ? (
+              {!avatarError && user.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
                   alt={displayName}
                   referrerPolicy="no-referrer"
+                  onError={() => setAvatarError(true)}
                   className="w-10 h-10 rounded-full border border-white/5 object-cover"
                 />
               ) : (

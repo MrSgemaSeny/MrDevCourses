@@ -7,6 +7,7 @@ import { ArrowRight, Code2, Layers, Cpu, Award } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { isAuthenticated } = useAuth();
+  const [heroImageError, setHeroImageError] = React.useState(false);
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
     queryFn: courseApi.getCourses,
@@ -57,15 +58,18 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="hidden md:flex flex-shrink-0 justify-center items-center">
-              <div className="w-[440px] lg:w-[540px] rounded-sm overflow-hidden border border-white/5 shadow-[0_0_80px_rgba(255,255,255,0.02)] bg-[#18181b]">
-                <img 
-                  src="/hero-image.png" 
-                  alt="Вайбкодинг" 
-                  className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" 
-                />
+            {!heroImageError && (
+              <div className="hidden md:flex flex-shrink-0 justify-center items-center">
+                <div className="w-[440px] lg:w-[540px] rounded-sm overflow-hidden border border-white/5 shadow-[0_0_80px_rgba(255,255,255,0.02)] bg-[#18181b]">
+                  <img 
+                    src={`${import.meta.env.BASE_URL}hero-image.png`}
+                    alt="Вайбкодинг" 
+                    onError={() => setHeroImageError(true)}
+                    className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" 
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

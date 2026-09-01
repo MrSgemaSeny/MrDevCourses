@@ -56,6 +56,7 @@ export const StudentLayout: React.FC = () => {
                 src={user.avatarUrl}
                 alt={user.name ?? 'User'}
                 referrerPolicy="no-referrer"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 className="w-8 h-8 rounded-full object-cover border border-white/5"
               />
             ) : (
