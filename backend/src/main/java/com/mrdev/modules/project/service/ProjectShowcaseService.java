@@ -75,14 +75,14 @@ public class ProjectShowcaseService {
 
         // Telegram Notification for mentor
         String details = String.format(
-                "🚀 *Новый проект выпускника!*\n👤 *Автор:* %s (`%s`)\n📌 *Проект:* %s\n🔗 *GitHub:* %s\n🌐 *Live Demo:* %s",
+                "[Новый проект выпускника]\nАвтор: %s (`%s`)\nПроект: %s\nGitHub: %s\nLive Demo: %s",
                 showcase.getAuthorName(),
                 user.getEmail(),
                 showcase.getTitle(),
                 showcase.getGithubRepoUrl(),
                 showcase.getLiveDemoUrl()
         );
-        telegramNotificationService.sendMentorAlert("Стена Проектов: Новый Релиз!", details);
+        telegramNotificationService.sendMentorAlert("Стена Проектов: Новый Релиз", details);
 
         auditService.logAction(userId, "PROJECT_SHOWCASE_CREATED", "ProjectShowcase", showcase.getId(),
                 "Published project: " + showcase.getTitle(), null);

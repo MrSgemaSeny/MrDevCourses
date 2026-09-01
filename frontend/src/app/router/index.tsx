@@ -102,26 +102,26 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+    ],
+  },
 
-      // ── Protected Admin Pages ──────────────────────────────────────
-      {
-        path: 'admin',
-        element: (
-          <ProtectedRoute adminOnly>
-            <AdminLayout />
-          </ProtectedRoute>
-        ),
-        children: [
-          { index: true, element: wrap(<AdminPage />) },
-          { path: 'curriculum', element: wrap(<AdminCurriculumPage />) },
-          { path: 'courses', element: wrap(<AdminCurriculumPage />) },
-          { path: 'students', element: wrap(<AdminStudentsPage />) },
-          { path: 'homeworks', element: wrap(<AdminHomeworksPage />) },
-          { path: 'analytics', element: wrap(<AdminAnalyticsPage />) },
-          { path: 'audit', element: wrap(<AdminAuditPage />) },
-          { path: 'system', element: wrap(<AdminSystemPage />) },
-        ],
-      },
+  // ── Protected Admin Suite (Dedicated Admin Shell with Sidebar) ────
+  {
+    path: 'admin',
+    element: (
+      <ProtectedRoute adminOnly>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: wrap(<AdminPage />) },
+      { path: 'curriculum', element: wrap(<AdminCurriculumPage />) },
+      { path: 'courses', element: wrap(<AdminCurriculumPage />) },
+      { path: 'students', element: wrap(<AdminStudentsPage />) },
+      { path: 'homeworks', element: wrap(<AdminHomeworksPage />) },
+      { path: 'analytics', element: wrap(<AdminAnalyticsPage />) },
+      { path: 'audit', element: wrap(<AdminAuditPage />) },
+      { path: 'system', element: wrap(<AdminSystemPage />) },
     ],
   },
 
