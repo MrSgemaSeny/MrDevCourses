@@ -8,8 +8,8 @@ export interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   loginWithGoogle: () => void;
-  loginWithEmail: (email: string, password: string) => Promise<void>;
-  register: (email: string, name: string, password: string) => Promise<void>;
+  loginWithEmail: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  register: (email: string, name: string, password: string, rememberMe?: boolean) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -26,17 +26,34 @@ export const useAuth = (): AuthContextType => {
 
 export const useAuthContext = useAuth;
 
+const SESSION_STORAGE_KEY = 'mrdev_user_session';
+
+const getInitialUser = (): User | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as User) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(getInitialUser);
+  const [isLoading, setIsLoading] = useState<boolean>(() => !getInitialUser());
 
   const checkAuth = useCallback(async () => {
-    setIsLoading(true);
     try {
       const currentUser = await userApi.getMe();
       setUser(currentUser);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(currentUser));
+      }
     } catch {
       setUser(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -50,14 +67,20 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     window.location.href = '/api/oauth2/authorization/google';
   }, []);
 
-  const loginWithEmail = useCallback(async (email: string, password: string) => {
-    const userData = await userApi.loginWithEmail(email, password);
+  const loginWithEmail = useCallback(async (email: string, password: string, rememberMe: boolean = true) => {
+    const userData = await userApi.loginWithEmail(email, password, rememberMe);
     setUser(userData);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
+    }
   }, []);
 
-  const register = useCallback(async (email: string, name: string, password: string) => {
-    const userData = await userApi.register(email, name, password);
+  const register = useCallback(async (email: string, name: string, password: string, rememberMe: boolean = true) => {
+    const userData = await userApi.register(email, name, password, rememberMe);
     setUser(userData);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
+    }
   }, []);
 
   const logout = useCallback(async () => {
@@ -65,6 +88,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
       await userApi.logout();
     } finally {
       setUser(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+      }
     }
   }, []);
 

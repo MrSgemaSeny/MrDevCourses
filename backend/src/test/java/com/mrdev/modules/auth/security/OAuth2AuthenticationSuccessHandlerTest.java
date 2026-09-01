@@ -78,7 +78,7 @@ class OAuth2AuthenticationSuccessHandlerTest {
         when(userRepository.findByGoogleId("google-sub-123")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("student@example.com")).thenReturn(Optional.empty());
         when(userRepository.save(any(User.class))).thenReturn(testUser);
-        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT))
+        when(jwtTokenProvider.generateToken(1L, "student@example.com", Role.STUDENT, true))
                 .thenReturn("mocked-jwt-token");
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -86,7 +86,7 @@ class OAuth2AuthenticationSuccessHandlerTest {
 
         successHandler.onAuthenticationSuccess(request, response, auth);
 
-        verify(jwtCookieHelper).addJwtCookie(any(), eq("mocked-jwt-token"));
+        verify(jwtCookieHelper).addJwtCookie(any(), eq("mocked-jwt-token"), eq(true));
         assertThat(response.getRedirectedUrl()).isEqualTo("http://localhost:5173/auth/callback");
     }
 }

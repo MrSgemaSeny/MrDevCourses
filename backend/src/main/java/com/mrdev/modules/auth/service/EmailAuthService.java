@@ -49,8 +49,9 @@ public class EmailAuthService {
         auditService.logAction(user.getId(), "AUTH_REGISTER", "User", user.getId(),
                 "Registered via email: " + email, null);
 
-        String token = jwtTokenProvider.generateToken(user);
-        jwtCookieHelper.addJwtCookie(response, token);
+        boolean rememberMe = Boolean.TRUE.equals(request.getRememberMe());
+        String token = jwtTokenProvider.generateToken(user, rememberMe);
+        jwtCookieHelper.addJwtCookie(response, token, rememberMe);
     }
 
     @Transactional(readOnly = true)
@@ -73,7 +74,8 @@ public class EmailAuthService {
         auditService.logAction(user.getId(), "AUTH_LOGIN", "User", user.getId(),
                 "Login via email: " + email, null);
 
-        String token = jwtTokenProvider.generateToken(user);
-        jwtCookieHelper.addJwtCookie(response, token);
+        boolean rememberMe = Boolean.TRUE.equals(request.getRememberMe());
+        String token = jwtTokenProvider.generateToken(user, rememberMe);
+        jwtCookieHelper.addJwtCookie(response, token, rememberMe);
     }
 }

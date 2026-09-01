@@ -68,6 +68,27 @@ class JwtTokenProviderTest {
     }
 
     @Test
+    @DisplayName("Should generate valid token with rememberMe flag and extended expiry")
+    void testGenerateRememberMeToken() {
+        long normalExp = 604800000L;
+        long rememberMeExp = 2592000000L;
+        JwtTokenProvider provider = new JwtTokenProvider(SECRET, normalExp, rememberMeExp);
+
+        User user = User.builder()
+                .id(456L)
+                .email("remember@example.com")
+                .role(Role.STUDENT)
+                .build();
+
+        String token = provider.generateToken(user, true);
+
+        assertThat(token).isNotBlank();
+        assertThat(provider.validateToken(token)).isTrue();
+        assertThat(provider.getUserIdFromToken(token)).isEqualTo(456L);
+        assertThat(provider.getEmailFromToken(token)).isEqualTo("remember@example.com");
+    }
+
+    @Test
     @DisplayName("Should reject null or malformed tokens")
     void testValidateMalformedToken() {
         assertThat(jwtTokenProvider.validateToken(null)).isFalse();

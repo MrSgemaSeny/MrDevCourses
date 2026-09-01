@@ -24,15 +24,23 @@ public class JwtCookieHelper {
     @Value("${app.jwt.cookie-same-site:Lax}")
     private String cookieSameSite;
 
-    @Value("${app.jwt.expiration-ms:86400000}")
+    @Value("${app.jwt.expiration-ms:604800000}")
     private long expirationMs;
 
+    @Value("${app.jwt.remember-me-expiration-ms:2592000000}")
+    private long rememberMeExpirationMs;
+
     public void addJwtCookie(HttpServletResponse response, String token) {
+        addJwtCookie(response, token, false);
+    }
+
+    public void addJwtCookie(HttpServletResponse response, String token, boolean rememberMe) {
+        long ttlMs = rememberMe ? rememberMeExpirationMs : expirationMs;
         ResponseCookie cookie = ResponseCookie.from(cookieName, token)
                 .httpOnly(true)
                 .secure(cookieSecure)
                 .path("/")
-                .maxAge(expirationMs / 1000)
+                .maxAge(ttlMs / 1000)
                 .sameSite(cookieSameSite)
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

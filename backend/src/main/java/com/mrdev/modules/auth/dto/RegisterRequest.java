@@ -19,4 +19,6 @@ public class RegisterRequest {
     @NotBlank(message = "Пароль обязателен")
     @Size(min = 8, message = "Пароль должен содержать минимум 8 символов")
     private String password;
+
+    private Boolean rememberMe = false;
 }

@@ -22,19 +22,21 @@ export const userApi = {
     await apiClient.post<ApiResponse<void>>('/v1/auth/logout');
   },
 
-  register: async (email: string, name: string, password: string): Promise<User> => {
+  register: async (email: string, name: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const response = await apiClient.post<ApiResponse<User>>('/v1/auth/register', {
       email,
       name,
       password,
+      rememberMe,
     });
     return response.data.data;
   },
 
-  loginWithEmail: async (email: string, password: string): Promise<User> => {
+  loginWithEmail: async (email: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const response = await apiClient.post<ApiResponse<User>>('/v1/auth/login', {
       email,
       password,
+      rememberMe,
     });
     return response.data.data;
   },

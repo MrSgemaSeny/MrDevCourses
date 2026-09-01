@@ -29,6 +29,7 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -60,9 +61,9 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
 
     try {
       if (mode === 'login') {
-        await loginWithEmail(email, password);
+        await loginWithEmail(email, password, rememberMe);
       } else {
-        await register(email, name.trim(), password);
+        await register(email, name.trim(), password, rememberMe);
       }
       navigate('/courses');
     } catch (err: unknown) {
@@ -133,6 +134,20 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
             ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-zinc-500'}`}
         />
         {errors.password && <p className="mt-1 text-[11px] text-red-400">{errors.password}</p>}
+      </div>
+
+      <div className="flex items-center justify-between py-1">
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="w-3.5 h-3.5 rounded-xs bg-[#0a0a0c] border border-white/20 text-white accent-white focus:ring-0 cursor-pointer"
+          />
+          <span className="text-[11px] text-zinc-400 hover:text-zinc-300 transition-colors">
+            Запомнить меня на 30 дней
+          </span>
+        </label>
       </div>
 
       <button

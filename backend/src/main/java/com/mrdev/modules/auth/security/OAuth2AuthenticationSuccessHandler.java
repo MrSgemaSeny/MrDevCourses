@@ -65,8 +65,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .createdAt(Instant.now())
                         .build()));
 
-        String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole());
-        jwtCookieHelper.addJwtCookie(response, token);
+        String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole(), true);
+        jwtCookieHelper.addJwtCookie(response, token, true);
 
         log.info("OAuth2 login successful for user: id={}, email={}", user.getId(), user.getEmail());
         getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/auth/callback");

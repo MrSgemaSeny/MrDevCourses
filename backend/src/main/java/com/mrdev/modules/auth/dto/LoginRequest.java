@@ -13,4 +13,6 @@ public class LoginRequest {
 
     @NotBlank(message = "Пароль обязателен")
     private String password;
+
+    private Boolean rememberMe = false;
 }

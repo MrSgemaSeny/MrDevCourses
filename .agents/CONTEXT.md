@@ -1,13 +1,14 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: AI Context Guards & Lifecycle Hooks hardening (.agents/ infrastructure).
+- **Active Task**: Persistent Auth Sessions & Remember-Me (7-Day default, 30-Day extended, No F5 drop).
 - **Recent Accomplishments**: 
-  - Student Profile & Settings page (`/profile`, Flyway V21, JUnit 220/220).
+  - Persistent auth session hydration from localStorage, eliminating F5 redirect glitches.
+  - JWT & cookie lifespan: 7 days default, 30 days for Remember-Me & OAuth2.
+  - Email auth form Remember-Me toggle with clean Design System styling.
+  - Student Profile & Settings page (`/profile`, Flyway V21).
   - Clean 1-column 75% left-aligned layout unified across all public & student pages.
-  - Privacy (`/privacy`) and Terms (`/terms`) legal pages.
-  - PowerShell prompt guard and lifecycle hooks with dynamic paths and size validation.
-- **Verification**: Backend 220/220 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+- **Verification**: Backend 221/221 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
