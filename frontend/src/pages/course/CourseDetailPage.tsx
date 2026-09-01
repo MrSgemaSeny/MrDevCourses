@@ -225,24 +225,22 @@ export const CourseDetailPage: React.FC = () => {
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <button
                 type="button"
-                onClick={() => setShowTrailerModal(true)}
-                className="px-6 py-3 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(255,255,255,0.15)] cursor-pointer"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Посмотреть полное видео</span>
-              </button>
-
-              <button
-                type="button"
                 onClick={handleEnrollClick}
                 disabled={enrollMutation.isPending}
-                className="px-6 py-3 bg-[#141418] hover:bg-[#1c1c24] border border-white/15 text-white text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="px-6 py-3 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(255,255,255,0.15)] cursor-pointer disabled:opacity-50"
               >
                 <span>{enrollMutation.isPending ? 'Запись...' : 'Записаться на курс'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              
+              <button
+                type="button"
+                onClick={() => setShowTrailerModal(true)}
+                className="px-6 py-3 bg-[#141418] hover:bg-[#1c1c24] border border-white/15 text-zinc-200 hover:text-white text-xs font-medium rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Посмотреть видео</span>
+              </button>
             </div>
           )}
         </div>
