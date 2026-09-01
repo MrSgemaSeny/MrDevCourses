@@ -105,9 +105,9 @@ export const AdminAnalyticsDashboard: React.FC = () => {
 
           <button
             onClick={() => setIsExportModalOpen(true)}
-            className="px-3.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/5 text-xs text-white font-medium rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-xs text-white font-medium rounded-md flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <Download className="w-3.5 h-3.5 text-zinc-300" />
             <span>Экспорт отчета</span>
           </button>
         </div>
@@ -119,7 +119,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Студентов</span>
-            <Users className="w-4 h-4 text-zinc-100" />
+            <Users className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalStudents ?? 0}
@@ -133,7 +133,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Записей</span>
-            <BookOpen className="w-4 h-4 text-zinc-100" />
+            <BookOpen className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalEnrollments ?? 0}
@@ -145,7 +145,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Уроков пройдено</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalLessonsCompleted ?? 0}
@@ -157,7 +157,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Завершений</span>
-            <Award className="w-4 h-4 text-amber-400" />
+            <Award className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.totalCompletions ?? 0}
@@ -169,7 +169,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Конверсия</span>
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <TrendingUp className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.completionRate ?? 0}%
@@ -181,7 +181,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-xs">Ср. Streak</span>
-            <Flame className="w-4 h-4 text-amber-500" />
+            <Flame className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
             {overview?.averageStreak ?? 0} <span className="text-xs font-normal text-zinc-400 font-sans">дн.</span>
@@ -196,7 +196,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         <div className="lg:col-span-2 p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-white/5">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-zinc-300 mb-0.5">
+              <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
                 <BarChart3 className="w-3.5 h-3.5" />
                 <span>Воронка курса (Drop-off Rate)</span>
               </div>
@@ -219,7 +219,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
         {/* Right 1 Col: Streak Distribution */}
         <div className="p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
           <div className="pb-3 border-b border-white/5">
-            <div className="flex items-center gap-2 text-xs font-mono text-amber-400 mb-0.5">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
               <Flame className="w-3.5 h-3.5" />
               <span>Ударный режим</span>
             </div>
@@ -251,7 +251,7 @@ export const AdminAnalyticsDashboard: React.FC = () => {
           </div>
           {retention && (
             <div className="text-xs font-mono text-zinc-400 bg-zinc-900/60 px-3 py-1 rounded border border-white/5 self-start sm:self-auto">
-              Записано: <span className="text-white font-semibold">{retention.totalEnrolled}</span> • Завершили: <span className="text-emerald-400 font-semibold">{retention.completedCount} ({retention.overallCompletionRate}%)</span>
+              Записано: <span className="text-white font-semibold">{retention.totalEnrolled}</span> • Завершили: <span className="text-zinc-200 font-semibold">{retention.completedCount} ({retention.overallCompletionRate}%)</span>
             </div>
           )}
         </div>

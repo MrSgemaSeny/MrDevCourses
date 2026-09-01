@@ -8,7 +8,7 @@ export const AdminAnalyticsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
             <BarChart3 className="w-3.5 h-3.5" />
             <span>Platform Telemetry & Analytics</span>
           </div>

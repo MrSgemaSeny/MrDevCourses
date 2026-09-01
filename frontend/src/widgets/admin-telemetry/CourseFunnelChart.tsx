@@ -32,12 +32,12 @@ export const CourseFunnelChart: React.FC<CourseFunnelChartProps> = ({ steps }) =
       >
         <defs>
           <linearGradient id="funnelBarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3f3f46" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#71717a" stopOpacity="1" />
+            <stop offset="0%" stopColor="#27272a" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#52525b" stopOpacity="1" />
           </linearGradient>
           <linearGradient id="funnelCompleteGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#065f46" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="1" />
+            <stop offset="0%" stopColor="#52525b" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#a1a1aa" stopOpacity="1" />
           </linearGradient>
         </defs>
 
@@ -105,15 +105,15 @@ export const CourseFunnelChart: React.FC<CourseFunnelChartProps> = ({ steps }) =
                     width={68}
                     height={20}
                     rx={3}
-                    fill="rgba(239, 68, 68, 0.12)"
-                    stroke="rgba(239, 68, 68, 0.3)"
+                    fill="rgba(255, 255, 255, 0.04)"
+                    stroke="rgba(255, 255, 255, 0.1)"
                     strokeWidth={1}
                   />
                   <text
                     x={barStartX + maxBarWidth + 46}
                     y={y + 22}
                     textAnchor="middle"
-                    fill="#f87171"
+                    fill="#a1a1aa"
                     fontSize="10"
                     fontWeight="500"
                     className="font-mono"

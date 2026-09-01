@@ -26,7 +26,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
     >
       <div className="flex items-center justify-between pb-3 border-b border-white/5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-0.5">
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
             <Bot className="w-3.5 h-3.5" />
             <span>Телеметрия AI Tutor</span>
           </div>
@@ -42,7 +42,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
         <div className="p-3 rounded bg-zinc-900/80 border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-1">
             <span className="text-[10px]">Всего вопросов</span>
-            <MessageSquare className="w-3 h-3 text-zinc-300" />
+            <MessageSquare className="w-3 h-3 text-zinc-400" />
           </div>
           <div className="text-lg font-bold text-white font-mono">
             {telemetry?.totalQuestions ?? 0}
@@ -52,7 +52,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
         <div className="p-3 rounded bg-zinc-900/80 border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-1">
             <span className="text-[10px]">Токены (расчёт)</span>
-            <Zap className="w-3 h-3 text-amber-400" />
+            <Zap className="w-3 h-3 text-zinc-400" />
           </div>
           <div className="text-lg font-bold text-white font-mono">
             {telemetry?.estimatedTokensUsed ? telemetry.estimatedTokensUsed.toLocaleString() : 0}
@@ -62,7 +62,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
         <div className="p-3 rounded bg-zinc-900/80 border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-1">
             <span className="text-[10px]">Троттлинг (лимит)</span>
-            <ShieldAlert className="w-3 h-3 text-red-400" />
+            <ShieldAlert className="w-3 h-3 text-zinc-400" />
           </div>
           <div className="text-lg font-bold text-white font-mono">
             {telemetry?.throttledCount ?? 0}
@@ -72,7 +72,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
         <div className="p-3 rounded bg-zinc-900/80 border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-1">
             <span className="text-[10px]">Студентов / ср.</span>
-            <Users className="w-3 h-3 text-zinc-300" />
+            <Users className="w-3 h-3 text-zinc-400" />
           </div>
           <div className="text-lg font-bold text-white font-mono">
             {telemetry?.activeUsersCount ?? 0} <span className="text-xs font-normal text-zinc-400 font-sans">({telemetry?.avgQuestionsPerUser ?? 0})</span>
@@ -106,7 +106,7 @@ export const AiTutorTelemetryWidget: React.FC<AiTutorTelemetryWidgetProps> = ({
                   </div>
                   <div className="w-full bg-zinc-800 rounded-full h-1 mt-1.5 overflow-hidden">
                     <div
-                      className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+                      className="bg-zinc-300 h-full rounded-full transition-all duration-300"
                       style={{ width: `${Math.min(100, Math.max(0, topic.percentage))}%` }}
                     />
                   </div>

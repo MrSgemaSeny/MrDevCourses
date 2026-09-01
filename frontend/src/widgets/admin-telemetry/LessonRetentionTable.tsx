@@ -59,7 +59,7 @@ export const LessonRetentionTable: React.FC<LessonRetentionTableProps> = ({ rete
 
                 <td className="p-3.5 font-mono">
                   {lesson.dropOffRate > 0 ? (
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-red-950/60 text-red-400 border border-red-800/60">
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-300 border border-white/10">
                       -{lesson.dropOffRate}%
                     </span>
                   ) : (

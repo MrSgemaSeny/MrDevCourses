@@ -26,7 +26,7 @@ export const QuizHotspotsWidget: React.FC<QuizHotspotsWidgetProps> = ({
     >
       <div className="flex items-center justify-between pb-3 border-b border-white/5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-amber-400 mb-0.5">
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
             <AlertTriangle className="w-3.5 h-3.5" />
             <span>Quiz Failure Hotspots</span>
           </div>
@@ -39,7 +39,7 @@ export const QuizHotspotsWidget: React.FC<QuizHotspotsWidgetProps> = ({
 
       {hotspots.length === 0 ? (
         <div className="p-8 text-center bg-zinc-900/40 border border-white/5 rounded text-zinc-400 text-xs flex flex-col items-center gap-2">
-          <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+          <CheckCircle2 className="w-6 h-6 text-zinc-300" />
           <span>Все студенты успешно сдают вопросы квизов без выраженных точек отсева.</span>
         </div>
       ) : (
@@ -61,7 +61,7 @@ export const QuizHotspotsWidget: React.FC<QuizHotspotsWidgetProps> = ({
                 </div>
 
                 <div className="shrink-0 text-right font-mono">
-                  <span className="px-2 py-0.5 rounded text-[10px] bg-red-950/70 text-red-400 border border-red-800/60 font-semibold">
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-200 border border-white/10 font-semibold">
                     {h.failureRate}% ошибок
                   </span>
                 </div>
@@ -73,16 +73,16 @@ export const QuizHotspotsWidget: React.FC<QuizHotspotsWidgetProps> = ({
                     Попыток: <strong className="text-white font-mono">{h.totalAttempts}</strong>
                   </span>
                   <span>
-                    Не сдано: <strong className="text-red-400 font-mono">{h.failureCount}</strong>
+                    Не сдано: <strong className="text-zinc-200 font-mono">{h.failureCount}</strong>
                   </span>
                   <span>
-                    Pass Rate: <strong className="text-emerald-400 font-mono">{h.passRate}%</strong>
+                    Pass Rate: <strong className="text-zinc-200 font-mono">{h.passRate}%</strong>
                   </span>
                 </div>
 
                 {h.mostCommonWrongOption && h.mostCommonWrongOption !== '—' && (
                   <div className="text-zinc-400 truncate max-w-sm">
-                    Частый неверный ответ: <span className="text-amber-300/90 font-mono">«{h.mostCommonWrongOption}»</span>
+                    Частый неверный ответ: <span className="text-zinc-200 font-mono">«{h.mostCommonWrongOption}»</span>
                   </div>
                 )}
               </div>

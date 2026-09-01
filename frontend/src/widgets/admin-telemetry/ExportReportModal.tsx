@@ -77,7 +77,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
       <div className="w-full max-w-md p-6 bg-[#0a0a0c] border border-white/5 rounded-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] relative">
         <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/5">
           <div className="flex items-center gap-2">
-            <Download className="w-4 h-4 text-emerald-400" />
+            <Download className="w-4 h-4 text-zinc-300" />
             <h3 id="export-modal-title" className="text-sm font-bold text-white">
               Экспорт аналитики платформы
             </h3>
@@ -105,7 +105,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
                     : 'bg-zinc-950/60 border-white/5 text-zinc-400 hover:border-white/10'
                 }`}
               >
-                <FileSpreadsheet className="w-5 h-5 text-emerald-400 shrink-0" />
+                <FileSpreadsheet className="w-5 h-5 text-zinc-300 shrink-0" />
                 <div>
                   <div className="font-semibold text-white">CSV-таблица</div>
                   <div className="text-[10px] text-zinc-500">Excel, Numbers, Sheets</div>
@@ -121,7 +121,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
                     : 'bg-zinc-950/60 border-white/5 text-zinc-400 hover:border-white/10'
                 }`}
               >
-                <FileJson className="w-5 h-5 text-amber-400 shrink-0" />
+                <FileJson className="w-5 h-5 text-zinc-300 shrink-0" />
                 <div>
                   <div className="font-semibold text-white">JSON-данные</div>
                   <div className="text-[10px] text-zinc-500">Аналитика, сырые данные</div>
@@ -165,15 +165,15 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
 
           {/* Status feedback */}
           {successMessage && (
-            <div className="p-2.5 rounded bg-emerald-950/60 border border-emerald-800/60 text-emerald-400 text-xs flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <div className="p-2.5 rounded bg-zinc-900 border border-white/10 text-zinc-200 text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-zinc-300 shrink-0" />
               <span>{successMessage}</span>
             </div>
           )}
 
           {errorMessage && (
-            <div className="p-2.5 rounded bg-red-950/60 border border-red-800/60 text-red-400 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="p-2.5 rounded bg-zinc-900 border border-white/10 text-zinc-300 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-zinc-400 shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}

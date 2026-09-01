@@ -33,8 +33,8 @@ export const StreakDistributionChart: React.FC<StreakDistributionChartProps> = (
       >
         <defs>
           <linearGradient id="streakBarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#b45309" stopOpacity="0.7" />
+            <stop offset="0%" stopColor="#71717a" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#3f3f46" stopOpacity="0.7" />
           </linearGradient>
         </defs>
 
