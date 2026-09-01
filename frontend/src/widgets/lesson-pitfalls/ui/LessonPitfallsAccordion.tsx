@@ -10,9 +10,7 @@ import {
   Check,
   Search,
   Wrench,
-  HelpCircle,
 } from 'lucide-react';
-import type { LessonPitfall } from '@/shared/types';
 
 interface LessonPitfallsAccordionProps {
   courseId: number;

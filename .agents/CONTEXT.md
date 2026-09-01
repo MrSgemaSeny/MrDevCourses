@@ -1,14 +1,14 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Persistent Auth Sessions & Remember-Me (7-Day default, 30-Day extended, No F5 drop).
+- **Active Task**: Phase 3 Common Pitfalls FAQ & Drop-off Funnel Telemetry (Completed).
 - **Recent Accomplishments**: 
-  - Persistent auth session hydration from localStorage, eliminating F5 redirect glitches.
-  - JWT & cookie lifespan: 7 days default, 30 days for Remember-Me & OAuth2.
-  - Email auth form Remember-Me toggle with clean Design System styling.
+  - Phase 3: Lesson Common Pitfalls accordion (`LessonPitfallsAccordion.tsx`, Flyway V22 `lesson_pitfalls`).
+  - Phase 3: Course Drop-off Funnel & Bottleneck Telemetry in Admin Analytics (`AdminAnalyticsService.getCourseFunnel`).
+  - Persistent auth session hydration & Remember-Me (7-Day / 30-Day tokens).
   - Student Profile & Settings page (`/profile`, Flyway V21).
-  - Clean 1-column 75% left-aligned layout unified across all public & student pages.
-- **Verification**: Backend 221/221 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+  - Clean 1-column 75% left-aligned layout unified across all student and course pages.
+- **Verification**: Backend 220+ JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
