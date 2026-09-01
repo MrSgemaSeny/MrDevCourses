@@ -12,7 +12,6 @@ import {
   BookOpen,
   CheckCircle2,
   Award,
-  Sparkles,
   Save,
   Check,
   Calendar,
