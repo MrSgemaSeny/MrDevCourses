@@ -91,40 +91,40 @@ public class DataSeeder {
         // 3. Course Modules (5 modules / 5 weeks)
         CourseModule module1 = CourseModule.builder()
                 .course(savedCourse)
-                .title("Неделя 1: Введение в Вайбкодинг и Быстрый Старт")
-                .description("Мягкий вход: что такое вайбкодинг, работа с ИИ, лендинг, GitHub с нуля, MVP-фронтенд и бизнес-планирование.")
+                .title("Неделя 1 — Введение и инструментарий")
+                .description("Вайбкодинг как методология, настройка окружения, Git и GitHub с нуля, структура проекта и MVP-мышление, бизнес-идея и первый лендинг.")
                 .sortOrder(1)
                 .isFreePreview(true)
                 .build();
 
         CourseModule module2 = CourseModule.builder()
                 .course(savedCourse)
-                .title("Неделя 2: Фронтенд, FSD и Пет-проект «Маркетплейс»")
-                .description("Что такое фронтенд, архитектура FSD, дизайн и разработка полноценного пет-проекта маркетплейса.")
+                .title("Неделя 2 — Frontend-разработка (Маркетплейс)")
+                .description("Feature-Sliced Design, старт проекта, ролевая модель покупатель/продавец, деплой на GitHub Pages, code review через Claude и финал маркетплейса.")
                 .sortOrder(2)
                 .isFreePreview(false)
                 .build();
 
         CourseModule module3 = CourseModule.builder()
                 .course(savedCourse)
-                .title("Неделя 3: Фулстек, Three.js и Пет-проект «Трекер денег»")
-                .description("Архитектура Бэкенд + Фронтенд + БД, 3D визуал на Three.js, реализация логики и тестирование.")
+                .title("Неделя 3 — Full-Stack + 3D (Трекер денег)")
+                .description("Системная архитектура, инициализация full-stack, RBAC и JWT, Google OAuth 2.0, Three.js 3D-сцена и Second Brain разработчика, code review и деплой.")
                 .sortOrder(3)
                 .isFreePreview(false)
                 .build();
 
         CourseModule module4 = CourseModule.builder()
                 .course(savedCourse)
-                .title("Неделя 4: Сложные интерфейсы: Trello + Second Brain")
-                .description("Интерактивные канбан-доски, стейт-менеджмент, протоколы Second Brain и системное мышление.")
+                .title("Неделя 4 — CRM: Kanban + Trackers")
+                .description("Полное планирование продукта, технический foundation, самостоятельная реализация, Telegram Bot интеграция, CI/CD pipeline и production-режим.")
                 .sortOrder(4)
                 .isFreePreview(false)
                 .build();
 
         CourseModule module5 = CourseModule.builder()
                 .course(savedCourse)
-                .title("Неделя 5: Финальный Проект: Pensee (Всё в одном) & Релиз")
-                .description("Разработка супераппа Pensee, CI/CD, облачный деплой, финальная защита и получение сертификата.")
+                .title("Неделя 5 — Pensee (всё в одном)")
+                .description("Архитектура финального продукта, LLM API, AI-ассистент со стримингом, RAG-система и AI Core, Google SMTP и финальный релиз Pensee.")
                 .sortOrder(5)
                 .isFreePreview(false)
                 .build();
@@ -145,74 +145,74 @@ public class DataSeeder {
         List<Lesson> lessonsToSave = new ArrayList<>();
 
         // Module 1 / Неделя 1 (Lessons 1-6)
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Что такое Вайбкодинг", 1, LessonType.VIDEO, 20, true,
-                "### Урок 1: Что такое Вайбкодинг\nМягкий старт: концепция вайбкодинга, как эффективно думать и кодить в связке с ИИ."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Внедрение в ИИ, лендинг, промпт инжиниринг", 2, LessonType.VIDEO, 25, true,
-                "### Урок 2: Внедрение в ИИ\nБыстрое создание первого лендинга, основы промпт-инжиниринга и структурирования запросов к LLM."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "GitHub с нуля. Pages. Коммиты.", 3, LessonType.ARTICLE, 20, true,
-                "### Урок 3: GitHub с нуля\nБазовый Git: создание репозитория, первые коммиты, публикация лендинга на GitHub Pages."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Структура проекта. MVP-фронтенд.", 4, LessonType.VIDEO, 30, false,
-                "### Урок 4: Структура проекта\nОрганизация файлов простого веб-приложения, быстрый сбор первого интерактивного MVP."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Бизнес идея, полный разбор. Планирование.", 5, LessonType.PRACTICE, 45, false,
-                "### Урок 5: Сложный практикум\nГлубокий разбор бизнес-идеи, составление спецификации проекта и сдача первого плана на AI-ревью."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Инженерный дайджест: Лайфхаки вайбкодинга и квиз", 6, LessonType.QUIZ, 15, false,
-                "### Урок 6: Итоги 1-й недели\nИнформационный обзор частых ошибок новичков, полезные инструменты и легкий проверочный квиз."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Вайбкодинг как методология: сравнение с классической разработкой, место AI-ассистентов в современном IT-рынке", 1, LessonType.VIDEO, 25, true,
+                "### Урок 1: Вайбкодинг как методология\nСравнение с классической разработкой, роль и место AI-ассистентов в современном IT-рынке."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Настройка рабочего окружения: VS Code, Cursor, Antigravity, Claude, ChatGPT, Gemini — установка и верификация", 2, LessonType.VIDEO, 25, true,
+                "### Урок 2: Настройка рабочего окружения\nПошаговая установка, верификация и тестирование тулинга: VS Code, Cursor, Antigravity, Claude, ChatGPT, Gemini."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Git и GitHub с нуля: инициализация репозитория, первый коммит, GitHub Pages — деплой статики", 3, LessonType.ARTICLE, 20, true,
+                "### Урок 3: Git и GitHub с нуля\nИнициализация локального репозитория, первый коммит, ветвление и публикация статического сайта на GitHub Pages."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Структура проекта и MVP-мышление: файловая архитектура, README, agents.md", 4, LessonType.VIDEO, 30, false,
+                "### Урок 4: Структура проекта и MVP-мышление\nФайловая архитектура проекта, составление README по инженерному стандарту, настройка правил `.agents/` и контекста для AI."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Бизнес-идея: Customer Problem Statement, целевая аудитория, feature scope", 5, LessonType.PRACTICE, 45, false,
+                "### Урок 5: Бизнес-идея и скоупинг\nФормулирование Customer Problem Statement, определение целевой аудитории, декомпозиция минимального feature scope."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(0), "Лендинг бизнес-идеи: вёрстка через AI-ассистента, публикация на GitHub Pages", 6, LessonType.QUIZ, 20, false,
+                "### Урок 6: Лендинг бизнес-идеи\nВёрстка продающего лендинга через AI-ассистента, адаптивность, анимации и публикация онлайн на GitHub Pages."));
 
         // Module 2 / Неделя 2 (Lessons 7-12)
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Что такое фронтенд. FSD. Теория.", 7, LessonType.VIDEO, 30, false,
-                "### Урок 7: Что такое фронтенд\nПонятие интерфейса, основы современной FSD (Feature-Sliced Design) методологии."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Пет проект на фронте — Маркетплейс.", 8, LessonType.VIDEO, 35, false,
-                "### Урок 8: Маркетплейс\nПостановка задачи для пет-проекта, каталог товаров, корзина и карточки."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Полное планирование. Гений архитектуры.", 9, LessonType.ARTICLE, 25, false,
-                "### Урок 9: Гений архитектуры\nДекомпозиция слоев FSD: entities (продукт), features (добавление в корзину), widgets (каталог)."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Реализация идеи. Дизайн.", 10, LessonType.VIDEO, 40, false,
-                "### Урок 10: Реализация и дизайн\nСборка интерфейса маркетплейса, адаптивная верстка, анимации и стили."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Доведение до конца пет-проекта.", 11, LessonType.PRACTICE, 55, false,
-                "### Урок 11: Сложный практикум\nЗавершение всей функциональности маркетплейса, полировка деталей и сдача отчета."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Инженерный дайджест: Разбор маркетплейса, UI-мемы и квиз", 12, LessonType.QUIZ, 15, false,
-                "### Урок 12: Итоги 2-й недели\nРазбор типовых ошибок при верстке интернет-магазинов, юмор в IT и квиз."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Feature-Sliced Design: слои, сегменты, публичное API модуля — планировка маркетплейса", 7, LessonType.VIDEO, 30, false,
+                "### Урок 7: Feature-Sliced Design\nМетодология FSD: слои, сегменты, публичное API модуля. Архитектурная планировка маркетплейса."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Старт проекта: роутинг, страницы, базовая бизнес-логика", 8, LessonType.VIDEO, 35, false,
+                "### Урок 8: Старт проекта Маркетплейс\nНастройка клиентского роутинга, создание страниц, каталога товаров и базовой бизнес-логики."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Углубление логики: ролевая модель (покупатель / продавец), условный рендеринг по роли", 9, LessonType.ARTICLE, 30, false,
+                "### Урок 9: Ролевая модель Маркетплейса\nРеализация ролевой модели (покупатель / продавец), условный рендеринг компонентов по активной роли."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Деплой на GitHub Pages: конфигурация base path, сборка и публикация", 10, LessonType.VIDEO, 40, false,
+                "### Урок 10: Деплой Маркетплейса\nКонфигурация base path в Vite, настройка SPA-редиректов, сборка и публикация на GitHub Pages."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Code review через Claude: рефакторинг, исправление архитектурных нарушений, финальный дизайн-аудит", 11, LessonType.PRACTICE, 50, false,
+                "### Урок 11: Code review через Claude\nГлубокий рефакторинг кода, исправление архитектурных нарушений слоев FSD, финальный дизайн-аудит."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(1), "Финал маркетплейса: приёмочное тестирование, ретроспектива", 12, LessonType.QUIZ, 20, false,
+                "### Урок 12: Финал Маркетплейса\nПриёмочное тестирование всех пользовательских сценариев, ретроспектива и упаковка проекта в портфолио."));
 
         // Module 3 / Неделя 3 (Lessons 13-18)
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Архитектура проекта. Бэкенд + фронт + БД", 13, LessonType.VIDEO, 35, false,
-                "### Урок 13: Фулстек архитектура\nКак соединяются интерфейс, серверное API и база данных PostgreSQL."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Трекер денег. Планирование.", 14, LessonType.VIDEO, 30, false,
-                "### Урок 14: Трекер денег\nСпецификация пет-проекта учета финансов: транзакции, категории, баланс и аналитика."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Реализация. Лендинг. Three.js.", 15, LessonType.VIDEO, 45, false,
-                "### Урок 15: Three.js визуал\nСоздание промо-лендинга для Трекера денег с 3D-элементами на Three.js."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "До конца.", 16, LessonType.VIDEO, 40, false,
-                "### Урок 16: Доведение логики до конца\nСвязка бэкенда с фронтендом, сохранение транзакций в БД и обновление баланса."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Тесты.", 17, LessonType.PRACTICE, 50, false,
-                "### Урок 17: Сложный практикум\nПокрытие ключевой логики подсчета денег тестами, сдача отчета по надежности."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Инженерный дайджест: Ошибки в финансовых системах и квиз", 18, LessonType.QUIZ, 15, false,
-                "### Урок 18: Итоги 3-й недели\nИнформационный обзор багов округления и транзакций, проверочный квиз."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Системная архитектура: монолит vs микросервисы, выбор стека, ERD базы данных — планировка трекера", 13, LessonType.VIDEO, 35, false,
+                "### Урок 13: Системная архитектура\nСравнение монолита и микросервисов, обоснование стека, проектирование ERD схемы базы данных для трекера денег."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Инициализация full-stack: настройка фронтенда, бэкенда и БД, связка окружений", 14, LessonType.VIDEO, 35, false,
+                "### Урок 14: Инициализация Full-Stack\nНастройка бэкенда, фронтенда и базы данных PostgreSQL, конфигурация CORS и связка окружений."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Закладка архитектуры: RBAC, JWT-аутентификация, защищённые роуты, миграции схемы", 15, LessonType.ARTICLE, 30, false,
+                "### Урок 15: Закладка архитектуры безопасности\nРолевая модель RBAC, stateless JWT аутентификация в httpOnly cookies, защита эндпоинтов и миграции схемы через Flyway."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "OAuth 2.0 через Google: интеграция провайдера, мультиаккаунтность, проверка ролей в админ-панели", 16, LessonType.VIDEO, 40, false,
+                "### Урок 16: Google OAuth 2.0\nИнтеграция Google OAuth 2.0, обработка мультиаккаунтности, проверка ролей и разграничение доступа в админ-панели."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Three.js: 3D-сцена, анимации, интерактив — Second Brain разработчика: Notion/Obsidian система", 17, LessonType.PRACTICE, 50, false,
+                "### Урок 17: Three.js 3D и Second Brain\nСоздание интерактивной 3D-сцены на Three.js для визуализации финансовых потоков. Внедрение Second Brain системы."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(2), "Code review: масштабируемость архитектуры, рефакторинг, финальный деплой Render + Vercel", 18, LessonType.QUIZ, 20, false,
+                "### Урок 18: Code review и Деплой Трекера денег\nАнализ масштабируемости архитектуры, рефакторинг сервисного слоя, деплой бэкенда на Render и фронтенда на Vercel."));
 
         // Module 4 / Неделя 4 (Lessons 19-24)
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Trello. Испытание.", 19, LessonType.VIDEO, 35, false,
-                "### Урок 19: Trello. Испытание\nСтарт пет-проекта канбан-доски: постановка требований к интерактивному drag-and-drop."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Канбан-архитектура, dnd-kit и стейт-менеджмент", 20, LessonType.VIDEO, 40, false,
-                "### Урок 20: dnd-kit на практике\nРеализация перемещения карточек между колонками с мгновенным оптимистичным обновлением."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Second Brain.", 21, LessonType.ARTICLE, 30, false,
-                "### Урок 21: Second Brain\nКонцепция личной базы знаний, организация markdown заметок и zettelkasten связей."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Интеграция базы знаний и протоколы", 22, LessonType.VIDEO, 40, false,
-                "### Урок 22: Интеграция базы знаний\nСвязывание канбан-задач со страницами базы знаний и правилами проекта."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Урок 5! (Сложный практикум: Защита Trello + Second Brain)", 23, LessonType.PRACTICE, 60, false,
-                "### Урок 23: Сложный практикум\nФинальная полировка проекта Trello + Second Brain и сдача отчета на AI-ревью."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Инженерный дайджест: Инструменты продуктивности и квиз", 24, LessonType.QUIZ, 15, false,
-                "### Урок 24: Итоги 4-й недели\nОбзор инструментов разработчика (Obsidian, Notion, Trello) и квиз 4-й недели."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Полное планирование продукта: user stories, архитектурное решение, выбор стека с обоснованием", 19, LessonType.VIDEO, 35, false,
+                "### Урок 19: Планирование CRM продукта\nСоставление User Stories, проектирование API контрактов, выбор библиотек для Drag & Drop и стейт-менеджмента."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Технический foundation: README по стандарту, углублённый Second Brain, финализация tech stack", 20, LessonType.VIDEO, 35, false,
+                "### Урок 20: Технический foundation\nОформление репозитория по стандарту, углубленный Second Brain, настройка базовых сущностей и репозиториев."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Самостоятельная работа студента: декомпозиция на фазы, написание промптов, старт реализации", 21, LessonType.ARTICLE, 30, false,
+                "### Урок 21: Самостоятельная реализация CRM\nДекомпозиция на этапы, составление промптов для генерации колонок, карточек и фильтрации задач."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Telegram Bot: webhook-интеграция, алерты, уведомления о событиях CRM", 22, LessonType.VIDEO, 40, false,
+                "### Урок 22: Telegram Bot для CRM\nИнтеграция Telegram-бота, настройка вебхуков, оперативные алерты и уведомления о смене статусов задач."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Code review + CI/CD pipeline: GitHub Actions, деплой на Vercel (фронт) и Render (бэк)", 23, LessonType.PRACTICE, 60, false,
+                "### Урок 23: CI/CD Pipeline\nПостроение CI/CD пайплайна на GitHub Actions: автоматический запуск тестов, деплой фронтенда на Vercel и бэкенда на Render."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(3), "Production-режим: smoke testing, мониторинг, работа с живыми данными", 24, LessonType.QUIZ, 20, false,
+                "### Урок 24: Production-режим CRM\nПроведение smoke testing, настройка логирования и мониторинга, валидация работы CRM с живыми данными."));
 
         // Module 5 / Неделя 5 (Lessons 25-30)
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Pensee. Всё в одном.", 25, LessonType.VIDEO, 40, false,
-                "### Урок 25: Pensee. Всё в одном\nАрхитектура выпускного супераппа Pensee: объединение задач, финансов, заметок и AI."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Реализация супераппа и подключение AI", 26, LessonType.VIDEO, 45, false,
-                "### Урок 26: Pensee Core\nСборка интерфейса, подключение AI-наставника и интеграция базы данных."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Полировка UI, UX и Three.js анимаций", 27, LessonType.ARTICLE, 30, false,
-                "### Урок 27: UI & UX полировка\nСведение всех компонентов в единую темную дизайн-систему, адаптивность и плавность."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "CI/CD и облачный деплой (Fly.io + Vercel)", 28, LessonType.VIDEO, 45, false,
-                "### Урок 28: Деплой в облако\nАвтоматическая сборка, GitHub Actions, деплой бэкенда на Fly.io и фронтенда на Vercel."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Выпускной практикум: Защита проекта и сводный отчет", 29, LessonType.PRACTICE, 60, false,
-                "### Урок 29: Сложный выпускной практикум\nФинальная сдача проекта Pensee, прохождение полного чек-листа и защита отчета."));
-        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Финишная прямая: Торжественное завершение и сертификат", 30, LessonType.QUIZ, 20, false,
-                "### Урок 30: Выпускной\nПодведение итогов 5 недель, генерация именного диплома и дальнейшие шаги разработчика."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Архитектура финального продукта: scope, интеграционная карта всех компонентов — старт", 25, LessonType.VIDEO, 40, false,
+                "### Урок 25: Архитектура Pensee\nАрхитектура финального продукта, составление интеграционной карты компонентов, проектирование сквозных потоков данных."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Подключение LLM API: Claude / OpenAI, prompt engineering, обработка ошибок и стоимость токенов", 26, LessonType.VIDEO, 45, false,
+                "### Урок 26: Подключение LLM API\nИнтеграция Claude / OpenAI API, structured outputs, prompt engineering, обработка rate limits и оптимизация расходов токенов."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "AI-ассистент: chat-интерфейс, контекстное окно, streaming-ответы", 27, LessonType.ARTICLE, 30, false,
+                "### Урок 27: AI-ассистент и Streaming\nРазработка чат-интерфейса, управление контекстным окном, стриминг ответов в реальном времени."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "RAG-система и AI Core: Groq API, реактивный WebClient, Server-Sent Events (SSE), детерминированное закрытие подписок, PII-маскирование персональных данных", 28, LessonType.VIDEO, 45, false,
+                "### Урок 28: RAG Core и Безопасность\nПостроение RAG-системы на Groq API, реактивный WebClient, Server-Sent Events (SSE), безопасное закрытие подписок и PII-маскирование данных."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Google SMTP / Gmail API: отправка транзакционных писем из приложения — подготовка к релизу", 29, LessonType.PRACTICE, 60, false,
+                "### Урок 29: Транзакционная почта\nИнтеграция Google SMTP / Gmail API, отправка транзакционных уведомлений, отчетов и подготовка к релизу."));
+        lessonsToSave.add(buildLesson(savedCourse, savedModules.get(4), "Финал Pensee: полный деплой, нагрузочное тестирование, презентация продукта", 30, LessonType.QUIZ, 25, false,
+                "### Урок 30: Финал Pensee и Выпускной\nПолный деплой приложения Pensee, нагрузочное тестирование, публичная презентация продукта и получение сертификата."));
 
 
 
