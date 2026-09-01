@@ -199,22 +199,6 @@ export const AdminPage: React.FC = () => {
 
                   <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs">
                     <span className="text-zinc-500 font-mono">{course.totalLessons || 0} уроков</span>
-
-                    <button
-                      onClick={() => {
-                        setDeleteConfirm({
-                          isOpen: true,
-                          type: 'course',
-                          id: course.id,
-                          title: course.title,
-                        });
-                      }}
-                      className="p-1.5 text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
-                      title="Удалить"
-                      aria-label={`Удалить курс ${course.title}`}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
               ))}
