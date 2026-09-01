@@ -29,6 +29,7 @@ const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ de
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/CertificateVerifyPage').then((m) => ({ default: m.CertificateVerifyPage })));
 const ProjectsPage = React.lazy(() => import('@/pages/projects/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
+const ProfilePage = React.lazy(() => import('@/pages/profile/ProfilePage').then((m) => ({ default: m.ProfilePage })));
 const PrivacyPage = React.lazy(() => import('@/pages/legal/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
 const TermsPage = React.lazy(() => import('@/pages/legal/TermsPage').then((m) => ({ default: m.TermsPage })));
 
@@ -87,6 +88,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             {wrap(<DashboardPage />)}
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            {wrap(<ProfilePage />)}
           </ProtectedRoute>
         ),
       },

@@ -10,6 +10,7 @@ import {
   LogOut,
   Flame,
   Trophy,
+  User as UserProfileIcon,
 } from 'lucide-react';
 
 export const UserProfileDropdown: React.FC = () => {
@@ -144,6 +145,15 @@ export const UserProfileDropdown: React.FC = () => {
 
           {/* Navigation Links */}
           <div className="p-1.5 space-y-0.5">
+            <Link
+              to={ROUTES.PROFILE}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-sm transition-colors"
+            >
+              <UserProfileIcon className="w-4 h-4 text-zinc-400" />
+              <span>Профиль и настройки</span>
+            </Link>
+
             <Link
               to={ROUTES.DASHBOARD}
               onClick={() => setIsOpen(false)}

@@ -1,10 +1,20 @@
 import { apiClient } from '@/shared/api/base';
 import type { ApiResponse } from '@/shared/types';
-import type { User } from '../model/types';
+import type { User, UserProfile, UpdateUserProfilePayload } from '../model/types';
 
 export const userApi = {
   getMe: async (): Promise<User> => {
     const response = await apiClient.get<ApiResponse<User>>('/v1/auth/me');
+    return response.data.data;
+  },
+
+  getProfile: async (): Promise<UserProfile> => {
+    const response = await apiClient.get<ApiResponse<UserProfile>>('/v1/users/profile');
+    return response.data.data;
+  },
+
+  updateProfile: async (payload: UpdateUserProfilePayload): Promise<UserProfile> => {
+    const response = await apiClient.put<ApiResponse<UserProfile>>('/v1/users/profile', payload);
     return response.data.data;
   },
 

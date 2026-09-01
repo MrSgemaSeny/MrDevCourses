@@ -62,6 +62,18 @@ public class User {
     @Column(name = "last_active_date")
     private LocalDate lastActiveDate;
 
+    @Column(name = "telegram_username", length = 100)
+    private String telegramUsername;
+
+    @Column(name = "github_username", length = 100)
+    private String githubUsername;
+
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String bio;
+
+    @Column(name = "goal", length = 255)
+    private String goal;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 

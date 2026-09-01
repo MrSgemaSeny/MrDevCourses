@@ -9,5 +9,24 @@ export interface User {
   currentStreak?: number;
   longestStreak?: number;
   lastActiveDate?: string;
+  telegramUsername?: string;
+  githubUsername?: string;
+  bio?: string;
+  goal?: string;
   createdAt: string;
+}
+
+export interface UserProfile extends User {
+  enrolledCoursesCount: number;
+  completedLessonsCount: number;
+  certificatesCount: number;
+}
+
+export interface UpdateUserProfilePayload {
+  name?: string;
+  avatarUrl?: string;
+  telegramUsername?: string;
+  githubUsername?: string;
+  bio?: string;
+  goal?: string;
 }
