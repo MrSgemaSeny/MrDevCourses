@@ -307,7 +307,7 @@ public class TelegramBotCommandService {
         List<Enrollment> enrollments = enrollmentRepository.findAllByUserId(u.getId());
 
         StringBuilder sb = new StringBuilder();
-        sb.append("📋 *Карточка студента: ").append(u.getName() != null ? u.getName() : "Студент").append("*\n")
+        sb.append("[Карточка студента: ").append(u.getName() != null ? u.getName() : "Студент").append("]\n")
           .append("Email: `").append(u.getEmail()).append("`\n")
           .append("Telegram: ").append(u.getTelegramUsername() != null ? "@" + u.getTelegramUsername() : "Не привязан").append("\n")
           .append("Стрик: ").append(u.getCurrentStreak()).append(" дн. (рекорд: ").append(u.getLongestStreak()).append(")\n")
@@ -343,7 +343,7 @@ public class TelegramBotCommandService {
         for (User student : students) {
             if (student.getTelegramChatId() != null && student.isTelegramNotificationsEnabled()) {
                 try {
-                    String msg = "📢 *Объявление от ментора:*\n\n" + announcement;
+                    String msg = "[Объявление от ментора]:\n\n" + announcement;
                     telegramNotificationService.sendDirectMessage(String.valueOf(student.getTelegramChatId()), msg);
                     sentCount++;
                 } catch (Exception e) {
@@ -352,28 +352,28 @@ public class TelegramBotCommandService {
             }
         }
 
-        return "📢 Анонс успешно разослан " + sentCount + " студентам с подключенным Telegram.";
+        return "Анонс успешно разослан " + sentCount + " студентам с подключенным Telegram.";
     }
 
     private String handleHwQueue() {
         List<HomeworkSubmissionDto> pending = homeworkService.getAllSubmissions(SubmissionStatus.PENDING);
         if (pending.isEmpty()) {
-            return "Очередь ДЗ пуста! Все работы проверены.";
+            return "Очередь ДЗ пуста. Все работы проверены.";
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("📝 *Очередь ДЗ на проверку (").append(pending.size()).append(")*:\n\n");
+        sb.append("[Очередь ДЗ на проверку (").append(pending.size()).append(")]:\n\n");
 
         for (HomeworkSubmissionDto sub : pending) {
-            sb.append("🔹 *ДЗ #").append(sub.getId()).append("*\n")
-              .append("👤 Студент: ").append(sub.getStudentName() != null ? sub.getStudentName() : "Студент").append("\n")
-              .append("📖 Урок: ").append(sub.getLessonTitle() != null ? sub.getLessonTitle() : "Урок").append("\n");
+            sb.append("*ДЗ #").append(sub.getId()).append("*\n")
+              .append("Студент: ").append(sub.getStudentName() != null ? sub.getStudentName() : "Студент").append("\n")
+              .append("Урок: ").append(sub.getLessonTitle() != null ? sub.getLessonTitle() : "Урок").append("\n");
 
             if (sub.getRepositoryUrl() != null && !sub.getRepositoryUrl().isBlank()) {
-                sb.append("🔗 GitHub: ").append(sub.getRepositoryUrl()).append("\n");
+                sb.append("GitHub: ").append(sub.getRepositoryUrl()).append("\n");
             }
             if (sub.getLiveDemoUrl() != null && !sub.getLiveDemoUrl().isBlank()) {
-                sb.append("🌐 Live Demo: ").append(sub.getLiveDemoUrl()).append("\n");
+                sb.append("Live Demo: ").append(sub.getLiveDemoUrl()).append("\n");
             }
 
             sb.append("Действия:\n")
@@ -420,7 +420,7 @@ public class TelegramBotCommandService {
 
         try {
             homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
-            return "ДЗ #" + submissionId + " успешно принято! Студенту отправлено уведомление и открыт следующий урок.";
+            return "ДЗ #" + submissionId + " успешно принято. Студенту отправлено уведомление и открыт следующий урок.";
         } catch (com.mrdev.common.exception.ResourceNotFoundException e) {
             return "Сдача ДЗ #" + submissionId + " не найдена. Возможно, она уже проверена. Проверьте очередь через /hw.";
         } catch (Exception e) {
@@ -470,7 +470,7 @@ public class TelegramBotCommandService {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("📊 *Сводка студентов потока:*\n\n");
+        sb.append("[Сводка студентов потока]:\n\n");
 
         for (Enrollment e : enrollments) {
             User u = e.getUser();
@@ -504,11 +504,11 @@ public class TelegramBotCommandService {
         }).toList();
 
         if (stuck.isEmpty()) {
-            return "Все студенты активны! Никто не застрял 3+ дней.";
+            return "Все студенты активны. Никто не застрял 3+ дней.";
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("⚠️ *Застрявшие студенты (3+ дня без активности):*\n\n");
+        sb.append("[Застрявшие студенты (3+ дня без активности)]:\n\n");
 
         for (Enrollment e : stuck) {
             User u = e.getUser();
