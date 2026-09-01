@@ -211,6 +211,6 @@ class RateLimitingIntegrationTest {
         mockMvc.perform(get("/v1/auth/me")
                         .cookie(new Cookie("MrDev_token", userToken)))
                 .andExpect(status().isOk())
-                .andExpect(header().string("X-RateLimit-Remaining", "9"));
+                .andExpect(header().string("X-RateLimit-Remaining", "59"));
     }
 }

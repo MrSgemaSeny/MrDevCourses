@@ -42,7 +42,7 @@ class RateLimitingFilterTest {
     @Test
     @DisplayName("Should allow requests within limit and add X-RateLimit-Remaining header")
     void testAllowedRequestAddsRemainingHeader() throws ServletException, IOException {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/v1/auth/me");
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/v1/auth/login");
         request.setRemoteAddr("198.51.100.10");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
@@ -51,6 +51,20 @@ class RateLimitingFilterTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getHeader(RateLimitingFilter.HEADER_RATE_LIMIT_REMAINING)).isEqualTo("9");
+    }
+
+    @Test
+    @DisplayName("Should handle /v1/auth/me under GENERAL tier (60 requests limit)")
+    void testAuthMeUnderGeneralTier() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/v1/auth/me");
+        request.setRemoteAddr("198.51.100.15");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain filterChain = new MockFilterChain();
+
+        rateLimitingFilter.doFilter(request, response, filterChain);
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getHeader(RateLimitingFilter.HEADER_RATE_LIMIT_REMAINING)).isEqualTo("59");
     }
 
     @Test
