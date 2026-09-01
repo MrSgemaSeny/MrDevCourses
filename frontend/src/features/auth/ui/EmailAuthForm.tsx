@@ -165,7 +165,7 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
       </button>
 
       {/* Divider */}
-      <div className="relative flex items-center justify-center my-4 pt-1">
+      <div className="relative flex items-center justify-center my-2">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/10" />
         </div>

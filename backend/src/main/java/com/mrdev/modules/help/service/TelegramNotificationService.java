@@ -99,7 +99,7 @@ public class TelegramNotificationService {
     }
 
     public void sendDirectMessage(String targetChatId, String text) {
-        if (!enabled || targetChatId == null || targetChatId.isBlank()) {
+        if (botToken.isBlank() || targetChatId == null || targetChatId.isBlank()) {
             log.info("[Telegram Disabled] Direct message to {}: {}", targetChatId, text);
             return;
         }

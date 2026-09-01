@@ -37,6 +37,10 @@ app:
     allowed-headers: "*"
     allow-credentials: true
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  telegram:
+    bot-token: ${TELEGRAM_BOT_TOKEN:}
+    chat-id: ${TELEGRAM_CHAT_ID:}
+    polling-enabled: ${TELEGRAM_POLLING_ENABLED:true}
 
 management:
   endpoints:

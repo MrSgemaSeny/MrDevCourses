@@ -14,7 +14,7 @@ import java.time.Duration;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(name = "app.telegram.polling-enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "app.telegram.polling-enabled", havingValue = "true", matchIfMissing = true)
 public class TelegramBotPollingRunner {
 
     private final TelegramBotCommandService commandService;
@@ -45,7 +45,7 @@ public class TelegramBotPollingRunner {
 
     @Scheduled(fixedDelay = 3000, initialDelay = 5000)
     public void pollTelegramUpdates() {
-        if (botToken.isBlank() || authorizedChatId.isBlank()) {
+        if (botToken.isBlank()) {
             return;
         }
 
