@@ -48,7 +48,6 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   const [sortOrder] = useState(lesson.sortOrder);
   const [lessonType, setLessonType] = useState<LessonType>(lesson.lessonType || 'VIDEO');
   const [durationMinutes, setDurationMinutes] = useState(lesson.durationMinutes || 0);
-  const [isFreePreview, setIsFreePreview] = useState(Boolean(lesson.isFreePreview));
   const [isPublished, setIsPublished] = useState(lesson.isPublished !== false);
   const [youtubeUrl, setYoutubeUrl] = useState((lesson as LessonDetail).youtubeUrl || '');
   const [content, setContent] = useState((lesson as LessonDetail).content || '');
@@ -72,23 +71,6 @@ export const LessonRow: React.FC<LessonRowProps> = ({
     }
   };
 
-  const handleTogglePreview = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      const nextPreview = !isFreePreview;
-      setIsFreePreview(nextPreview);
-      await adminApi.updateLesson(lesson.id, {
-        title: lesson.title,
-        dayNumber: lesson.dayNumber,
-        sortOrder: lesson.sortOrder,
-        isFreePreview: nextPreview,
-      });
-      onUpdated();
-    } catch {
-      setIsFreePreview(isFreePreview);
-    }
-  };
-
   const handleSaveLesson = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -100,7 +82,6 @@ export const LessonRow: React.FC<LessonRowProps> = ({
         sortOrder,
         lessonType,
         durationMinutes,
-        isFreePreview,
         isPublished,
         youtubeUrl: youtubeUrl.trim() || undefined,
         content,
@@ -186,20 +167,6 @@ export const LessonRow: React.FC<LessonRowProps> = ({
               <Clock className="w-3 h-3 text-zinc-500" />
               {lesson.durationMinutes && lesson.durationMinutes > 0 ? `${lesson.durationMinutes}м` : '--:--'}
             </span>
-
-            {/* Free preview toggle badge */}
-            <button
-              type="button"
-              onClick={handleTogglePreview}
-              className={`text-[10px] font-mono px-1.5 py-0.5 rounded transition-colors ${
-                isFreePreview
-                  ? 'bg-zinc-700 text-white border border-white/20 hover:bg-zinc-600'
-                  : 'bg-zinc-900 text-zinc-500 border border-white/5 hover:text-zinc-400'
-              }`}
-              title="Переключить бесплатный предпросмотр"
-            >
-              {isFreePreview ? 'PREVIEW' : 'LOCKED'}
-            </button>
 
             {/* Publish / Draft status toggle badge */}
             <button
@@ -373,17 +340,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
                   />
                 </div>
 
-                <div className="flex items-center gap-4 pt-6">
-                  <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isFreePreview}
-                      onChange={(e) => setIsFreePreview(e.target.checked)}
-                      className="w-4 h-4 rounded bg-zinc-900 border-white/20 text-white"
-                    />
-                    <span>Бесплатный предпросмотр</span>
-                  </label>
-
+                <div className="flex items-center pt-6">
                   <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
                     <input
                       type="checkbox"

@@ -205,4 +205,62 @@ export const adminApi = {
     const res = await apiClient.post<ApiResponse<Enrollment>>(`/v1/admin/students/${userId}/enroll/${courseId}`);
     return res.data.data;
   },
+
+  // Audit Endpoints
+  getAuditLogs: async (params?: { page?: number; size?: number; userId?: number; action?: string }): Promise<PageResponse<AuditLog>> => {
+    const res = await apiClient.get<ApiResponse<PageResponse<AuditLog>>>('/v1/admin/audit-logs', { params });
+    return res.data.data;
+  },
+
+  // System Health & Monitoring Endpoints
+  getSystemHealth: async (): Promise<SystemHealth> => {
+    const res = await apiClient.get<ApiResponse<SystemHealth>>('/v1/admin/system/health');
+    return res.data.data;
+  },
+
+  getRateLimits: async (): Promise<RateLimitTelemetry> => {
+    const res = await apiClient.get<ApiResponse<RateLimitTelemetry>>('/v1/admin/system/rate-limits');
+    return res.data.data;
+  },
 };
+
+export interface AuditLog {
+  id: number;
+  userId?: number;
+  userEmail?: string;
+  userName?: string;
+  action: string;
+  entityType?: string;
+  entityName?: string;
+  entityId?: number;
+  details?: string;
+  ipAddress?: string;
+  createdAt: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+}
+
+export interface SystemHealth {
+  status: string;
+  dbStatus: string;
+  uptimeSeconds: number;
+  jvmFreeMemoryMb: number;
+  jvmTotalMemoryMb: number;
+  jvmMaxMemoryMb: number;
+  activeThreads: number;
+}
+
+export interface RateLimitTelemetry {
+  authLimitRemaining: number;
+  aiLimitRemaining: number;
+  generalLimitRemaining: number;
+  totalRejectedRequests: number;
+}

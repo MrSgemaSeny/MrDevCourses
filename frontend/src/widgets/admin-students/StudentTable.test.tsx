@@ -12,9 +12,7 @@ const mockStudents: Student[] = [
     currentStreak: 12,
     longestStreak: 20,
     createdAt: '2026-01-15T10:00:00Z',
-    enrollments: [
-      { id: 101, userId: 1, userEmail: 'admin@mrdev.com', courseId: 10, courseTitle: 'Spring Boot Mastery', courseSlug: 'spring-mastery', enrolledAt: '2026-01-15T10:00:00Z' },
-    ],
+    enrollments: [],
   },
   {
     id: 2,
@@ -24,7 +22,9 @@ const mockStudents: Student[] = [
     currentStreak: 3,
     longestStreak: 5,
     createdAt: '2026-02-01T12:00:00Z',
-    enrollments: [],
+    enrollments: [
+      { id: 101, userId: 2, userEmail: 'student@mrdev.com', courseId: 10, courseTitle: 'Spring Boot Mastery', courseSlug: 'spring-mastery', enrolledAt: '2026-01-15T10:00:00Z' },
+    ],
   },
 ];
 
@@ -54,17 +54,18 @@ describe('StudentTable', () => {
 
     expect(screen.getByText('admin@mrdev.com')).toBeInTheDocument();
     expect(screen.getByText('student@mrdev.com')).toBeInTheDocument();
+    expect(screen.getByText('Все курсы (Админ)')).toBeInTheDocument();
     expect(screen.getByText('Spring Boot Mastery')).toBeInTheDocument();
-    expect(screen.getByText('Не зачислен')).toBeInTheDocument();
 
     // Inspect Progress
     const progressButtons = screen.getAllByRole('button', { name: /прогресс/i });
     fireEvent.click(progressButtons[0]);
     expect(handleInspect).toHaveBeenCalledWith(mockStudents[0]);
 
-    // Manage Enrollments
+    // Manage Enrollments (only on student row)
     const enrollButtons = screen.getAllByRole('button', { name: /зачисления/i });
-    fireEvent.click(enrollButtons[1]);
+    expect(enrollButtons).toHaveLength(1);
+    fireEvent.click(enrollButtons[0]);
     expect(handleManageEnroll).toHaveBeenCalledWith(mockStudents[1]);
   });
 

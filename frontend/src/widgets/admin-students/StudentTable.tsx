@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  Flame,
-  Trophy,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -42,9 +40,9 @@ export const StudentTable: React.FC<StudentTableProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="bg-[#18181b] border border-white/5 rounded-2xl p-12 flex flex-col items-center justify-center text-zinc-500 gap-3">
-        <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
-        <span className="text-xs font-mono">Загрузка данных студентов...</span>
+      <div className="bg-[#18181b] border border-white/5 rounded-2xl p-12 text-center">
+        <Loader2 className="w-6 h-6 animate-spin text-zinc-400 mx-auto mb-2" />
+        <span className="text-xs text-zinc-500 font-mono">Загрузка списка студентов...</span>
       </div>
     );
   }
@@ -72,7 +70,6 @@ export const StudentTable: React.FC<StudentTableProps> = ({
             <tr className="border-b border-white/5 bg-[#121216] text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
               <th className="py-3.5 px-4">Студент</th>
               <th className="py-3.5 px-4">Роль RBAC</th>
-              <th className="py-3.5 px-4">Серия (Streak)</th>
               <th className="py-3.5 px-4">Зачислен на курсы</th>
               <th className="py-3.5 px-4">Регистрация</th>
               <th className="py-3.5 px-4 text-right">Действия</th>
@@ -81,6 +78,7 @@ export const StudentTable: React.FC<StudentTableProps> = ({
           <tbody className="divide-y divide-white/5 text-xs text-zinc-200">
             {students.map((student) => {
               const isSelf = currentUserId !== undefined && currentUserId === student.id;
+              const isAdmin = student.role === 'ADMIN';
               const enrollCount = student.enrollments?.length || 0;
 
               return (
@@ -129,29 +127,13 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                     />
                   </td>
 
-                  {/* Streak metrics */}
-                  <td className="py-3.5 px-4">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-medium"
-                        title="Текущая серия"
-                      >
-                        <Flame className="w-3.5 h-3.5" />
-                        <span>{student.currentStreak ?? 0}</span>
-                      </div>
-                      <div
-                        className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-mono"
-                        title="Рекордная серия"
-                      >
-                        <Trophy className="w-3 h-3 text-zinc-500" />
-                        <span>{student.longestStreak ?? 0}</span>
-                      </div>
-                    </div>
-                  </td>
-
                   {/* Enrolled Courses */}
                   <td className="py-3.5 px-4">
-                    {enrollCount > 0 ? (
+                    {isAdmin ? (
+                      <span className="text-[10px] text-zinc-400 font-mono px-2 py-0.5 rounded bg-zinc-800/80 border border-white/5">
+                        Все курсы (Админ)
+                      </span>
+                    ) : enrollCount > 0 ? (
                       <div className="flex flex-wrap gap-1 max-w-xs">
                         {student.enrollments.slice(0, 2).map((e) => (
                           <span
@@ -183,14 +165,16 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                   {/* Actions */}
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => onManageEnrollments(student)}
-                        className="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-[11px] font-medium border border-white/5 transition-colors cursor-pointer"
-                        title="Управление зачислениями"
-                      >
-                        Зачисления
-                      </button>
+                      {!isAdmin && (
+                        <button
+                          type="button"
+                          onClick={() => onManageEnrollments(student)}
+                          className="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-[11px] font-medium border border-white/5 transition-colors cursor-pointer"
+                          title="Управление зачислениями"
+                        >
+                          Зачисления
+                        </button>
+                      )}
 
                       <button
                         type="button"

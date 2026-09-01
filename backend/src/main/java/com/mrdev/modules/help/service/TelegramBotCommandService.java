@@ -78,27 +78,27 @@ public class TelegramBotCommandService {
 
             if (isMentor) {
                 return switch (command) {
-                    case "/hw" -> handleHwQueue();
-                    case "/approve" -> handleApprove(trimmed);
-                    case "/reject" -> handleReject(trimmed);
-                    case "/status" -> handleStatus();
-                    case "/stuck" -> handleStuck();
-                    case "/progress" -> handleProgress(trimmed);
-                    case "/broadcast" -> handleBroadcast(trimmed);
-                    case "/start", "/help" -> handleMentorHelp();
-                    default -> "Неизвестная команда ментора. Введите /help для списка доступных команд.";
+                    case "/hw", "hw", "дз", "домашки", "проверка" -> handleHwQueue();
+                    case "/approve", "approve", "принять", "одобрить", "+", "/ok", "ok" -> handleApprove(trimmed);
+                    case "/reject", "reject", "отклонить", "доработать", "-" -> handleReject(trimmed);
+                    case "/status", "status", "статус", "стата", "поток" -> handleStatus();
+                    case "/stuck", "stuck", "застряли", "должники", "долги" -> handleStuck();
+                    case "/progress", "progress", "прогресс", "студент" -> handleProgress(trimmed);
+                    case "/broadcast", "broadcast", "анонс", "рассылка" -> handleBroadcast(trimmed);
+                    case "/start", "/help", "help", "помощь", "команды", "меню", "start" -> handleMentorHelp();
+                    default -> "Команда не распознана. Введите /help или 'помощь' для списка доступных команд.";
                 };
             } else {
                 return switch (command) {
-                    case "/status" -> handleStudentStatus(senderChatId);
-                    case "/unlink" -> handleStudentUnlink(senderChatId);
-                    case "/start", "/help" -> handleStudentHelp(senderChatId);
+                    case "/status", "status", "статус", "прогресс" -> handleStudentStatus(senderChatId);
+                    case "/unlink", "unlink", "отвязать" -> handleStudentUnlink(senderChatId);
+                    case "/start", "/help", "help", "помощь", "команды" -> handleStudentHelp(senderChatId);
                     default -> "Команда не распознана. Введите /help для справки.";
                 };
             }
         } catch (Exception e) {
             log.error("Error processing Telegram command '{}': {}", trimmed, e.getMessage(), e);
-            return "Ошибка выполнения команды: " + e.getMessage();
+            return "Не удалось выполнить команду: " + e.getMessage();
         }
     }
 
@@ -189,24 +189,24 @@ public class TelegramBotCommandService {
 
     private String handleMentorHelp() {
         return """
-                *MrDevCourses — Пульт Ментора*
+                ⚡ *MrDevCourses — Пульт Ментора*
 
-                Доступные команды:
-                • `/hw` — Очередь сданных ДЗ на проверку
-                • `/approve <id>` — Принять ДЗ и открыть следующий день
-                • `/reject <id> <комментарий>` — Вернуть ДЗ на доработку
-                • `/progress <@username|email>` — Прогресс конкретного студента
-                • `/broadcast <текст>` — Рассылка анонса всем студентам
-                • `/status` — Сводка прогресса всех студентов
-                • `/stuck` — Список студентов без активности (3+ дня)
-                • `/help` — Справка по командам
+                Быстрые команды:
+                • `/hw` (или `дз`) — Очередь сданных работ
+                • `/approve 1` (или `принять 1`, `+ 1`) — Принять ДЗ #1
+                • `/reject 1 правка` (или `доработать 1 правка`, `- 1`) — Вернуть ДЗ #1
+                • `/progress orka@gmail.com` — Карточка и стрик студента
+                • `/broadcast текст` — Рассылка анонса всем студентам
+                • `/status` (или `стата`) — Сводка по всему потоку
+                • `/stuck` (или `застряли`) — Студенты без активности (3+ дня)
+                • `/help` — Эта справка
                 """;
     }
 
     private String handleProgress(String fullText) {
         String[] parts = fullText.split("\\s+", 2);
         if (parts.length < 2) {
-            return "Формат: `/progress <email|@username>` (например: `/progress alex@test.com`)";
+            return "Формат: `/progress orka@gmail.com` или `/progress @username`";
         }
 
         String rawQuery = parts[1].trim();
@@ -280,7 +280,7 @@ public class TelegramBotCommandService {
         sb.append("📝 *Очередь ДЗ на проверку (").append(pending.size()).append(")*:\n\n");
 
         for (HomeworkSubmissionDto sub : pending) {
-            sb.append("🔹 *ID: #").append(sub.getId()).append("*\n")
+            sb.append("🔹 *ДЗ #").append(sub.getId()).append("*\n")
               .append("👤 Студент: ").append(sub.getStudentName() != null ? sub.getStudentName() : "Студент").append("\n")
               .append("📖 Урок: ").append(sub.getLessonTitle() != null ? sub.getLessonTitle() : "Урок").append("\n");
 
@@ -291,21 +291,36 @@ public class TelegramBotCommandService {
                 sb.append("🌐 Live Demo: ").append(sub.getLiveDemoUrl()).append("\n");
             }
 
-            sb.append("Команды:\n")
-              .append("`/approve ").append(sub.getId()).append("`\n")
-              .append("`/reject ").append(sub.getId()).append(" <комментарий>`\n\n");
+            sb.append("Действия:\n")
+              .append("• Принять: `/approve ").append(sub.getId()).append("`\n")
+              .append("• Отклонить: `/reject ").append(sub.getId()).append(" комментарий`\n\n");
         }
 
         return sb.toString();
     }
 
+    private Optional<Long> extractNumericId(String input) {
+        if (input == null || input.isBlank()) {
+            return Optional.empty();
+        }
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("\\b(\\d+)\\b").matcher(input);
+        if (matcher.find()) {
+            try {
+                return Optional.of(Long.parseLong(matcher.group(1)));
+            } catch (NumberFormatException e) {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
+    }
+
     private String handleApprove(String fullText) {
-        String[] parts = fullText.split("\\s+", 2);
-        if (parts.length < 2) {
-            return "Формат: `/approve <id>` (например: `/approve 101`)";
+        Optional<Long> idOpt = extractNumericId(fullText);
+        if (idOpt.isEmpty()) {
+            return "Укажите номер сдачи ДЗ. Например: `/approve 1` или `принять 1`\nСписок непроверенных ДЗ: `/hw`";
         }
 
-        Long submissionId = Long.parseLong(parts[1].trim());
+        Long submissionId = idOpt.get();
         Long mentorAdminId = getFirstAdminId();
 
         AdminReviewHomeworkRequest req = AdminReviewHomeworkRequest.builder()
@@ -313,19 +328,33 @@ public class TelegramBotCommandService {
                 .mentorFeedback("Отличная работа! Домашнее задание принято.")
                 .build();
 
-        homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
-
-        return "ДЗ #" + submissionId + " успешно принято! Урок засчитан, студенту открыт следующий день.";
+        try {
+            homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
+            return "ДЗ #" + submissionId + " успешно принято! Студенту отправлено уведомление и открыт следующий урок.";
+        } catch (com.mrdev.common.exception.ResourceNotFoundException e) {
+            return "Сдача ДЗ #" + submissionId + " не найдена. Возможно, она уже проверена. Проверьте очередь через /hw.";
+        } catch (Exception e) {
+            log.error("Error approving submission #{}: {}", submissionId, e.getMessage(), e);
+            return "Не удалось одобрить ДЗ #" + submissionId + ": " + e.getMessage();
+        }
     }
 
     private String handleReject(String fullText) {
-        String[] parts = fullText.split("\\s+", 3);
-        if (parts.length < 3) {
-            return "Формат: `/reject <id> <комментарий>`\nПример: `/reject 101 Поправь адаптивную верстку`";
+        Optional<Long> idOpt = extractNumericId(fullText);
+        if (idOpt.isEmpty()) {
+            return "Укажите номер сдачи ДЗ. Например: `/reject 1 поправь верстку` или `доработать 1 поправь верстку`\nСписок непроверенных ДЗ: `/hw`";
         }
 
-        Long submissionId = Long.parseLong(parts[1].trim());
-        String feedback = parts[2].trim();
+        Long submissionId = idOpt.get();
+        
+        // Remove command name and ID to extract the custom feedback message
+        String cleaned = fullText.replaceFirst("(?i)^(/reject|reject|отклонить|доработать|-)\\s*", "");
+        cleaned = cleaned.replaceFirst("(?i)(<" + submissionId + ">|#" + submissionId + "|\\[" + submissionId + "\\]|" + submissionId + ")\\s*", "").trim();
+        
+        String feedback = !cleaned.isBlank()
+                ? cleaned
+                : "Требуются доработки по критериям урока. Пожалуйста, проверьте требования к заданию и отправьте обновленную версию.";
+
         Long mentorAdminId = getFirstAdminId();
 
         AdminReviewHomeworkRequest req = AdminReviewHomeworkRequest.builder()
@@ -333,9 +362,15 @@ public class TelegramBotCommandService {
                 .mentorFeedback(feedback)
                 .build();
 
-        homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
-
-        return "ДЗ #" + submissionId + " отправлено на доработку с комментарием:\n\"" + feedback + "\"";
+        try {
+            homeworkService.reviewSubmission(submissionId, mentorAdminId, req);
+            return "ДЗ #" + submissionId + " отправлено на доработку.\nКомментарий студенту: \"" + feedback + "\"";
+        } catch (com.mrdev.common.exception.ResourceNotFoundException e) {
+            return "Сдача ДЗ #" + submissionId + " не найдена. Возможно, она уже проверена. Проверьте очередь через /hw.";
+        } catch (Exception e) {
+            log.error("Error rejecting submission #{}: {}", submissionId, e.getMessage(), e);
+            return "Не удалось отправить ДЗ #" + submissionId + " на доработку: " + e.getMessage();
+        }
     }
 
     private String handleStatus() {

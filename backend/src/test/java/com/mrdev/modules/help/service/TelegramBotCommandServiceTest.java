@@ -126,4 +126,43 @@ class TelegramBotCommandServiceTest {
         String response = botCommandService.processCommand(mentorChatId, "/stuck");
         assertThat(response).contains("Все студенты активны");
     }
+
+    @Test
+    @DisplayName("Mentor /approve <1> with angle brackets parses ID correctly")
+    void mentorApprove_WithAngleBrackets() {
+        when(userRepository.findAllByRole(Role.ADMIN)).thenReturn(List.of(User.builder().id(1L).build()));
+        String response = botCommandService.processCommand(mentorChatId, "/approve <1>");
+        assertThat(response).contains("ДЗ #1 успешно принято");
+    }
+
+    @Test
+    @DisplayName("Mentor Russian alias 'принять 1' works identically to /approve 1")
+    void mentorApprove_RussianAlias() {
+        when(userRepository.findAllByRole(Role.ADMIN)).thenReturn(List.of(User.builder().id(1L).build()));
+        String response = botCommandService.processCommand(mentorChatId, "принять 1");
+        assertThat(response).contains("ДЗ #1 успешно принято");
+    }
+
+    @Test
+    @DisplayName("Mentor /reject <1> Поправь верстку parses ID and comment")
+    void mentorReject_WithAngleBracketsAndComment() {
+        when(userRepository.findAllByRole(Role.ADMIN)).thenReturn(List.of(User.builder().id(1L).build()));
+        String response = botCommandService.processCommand(mentorChatId, "/reject <1> Поправь верстку");
+        assertThat(response).contains("ДЗ #1 отправлено на доработку").contains("Поправь верстку");
+    }
+
+    @Test
+    @DisplayName("Mentor /reject 1 without comment uses default polite feedback")
+    void mentorReject_WithoutCommentDefaultsFeedback() {
+        when(userRepository.findAllByRole(Role.ADMIN)).thenReturn(List.of(User.builder().id(1L).build()));
+        String response = botCommandService.processCommand(mentorChatId, "/reject 1");
+        assertThat(response).contains("ДЗ #1 отправлено на доработку").contains("Требуются доработки");
+    }
+
+    @Test
+    @DisplayName("Mentor /approve without ID prompts friendly guide instead of crashing")
+    void mentorApprove_MissingId_ReturnsFriendlyPrompt() {
+        String response = botCommandService.processCommand(mentorChatId, "/approve <id>");
+        assertThat(response).contains("Укажите номер сдачи ДЗ");
+    }
 }

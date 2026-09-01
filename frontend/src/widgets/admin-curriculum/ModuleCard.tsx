@@ -45,7 +45,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   // Edit module state
   const [title, setTitle] = useState(module.title);
   const [description, setDescription] = useState(module.description || '');
-  const [isFreePreview, setIsFreePreview] = useState(Boolean(module.isFreePreview));
 
   // Add lesson state
   const [newLessonTitle, setNewLessonTitle] = useState('');
@@ -56,7 +55,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   );
   const [newLessonType, setNewLessonType] = useState<'VIDEO' | 'ARTICLE' | 'PRACTICE' | 'QUIZ'>('VIDEO');
   const [newLessonDuration, setNewLessonDuration] = useState(15);
-  const [newLessonPreview, setNewLessonPreview] = useState(false);
   const [newLessonYoutubeUrl, setNewLessonYoutubeUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +67,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
       const payload: UpdateModulePayload = {
         title: title.trim(),
         description: description.trim() || undefined,
-        isFreePreview,
       };
       await adminApi.updateModule(module.id, payload);
       setIsEditModalOpen(false);
@@ -92,7 +89,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
         moduleId: module.id,
         lessonType: newLessonType,
         durationMinutes: newLessonDuration,
-        isFreePreview: newLessonPreview,
         youtubeUrl: newLessonYoutubeUrl.trim() || undefined,
       };
 
@@ -282,16 +278,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
                 />
               </div>
 
-              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer pt-1">
-                <input
-                  type="checkbox"
-                  checked={isFreePreview}
-                  onChange={(e) => setIsFreePreview(e.target.checked)}
-                  className="w-4 h-4 rounded bg-zinc-900 border-white/20 text-white"
-                />
-                <span>Бесплатный предпросмотр для всех гостей</span>
-              </label>
-
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
                 <button
                   type="button"
@@ -385,18 +371,6 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
                     onChange={(e) => setNewLessonDuration(parseInt(e.target.value, 10))}
                     className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-white/20 font-mono"
                   />
-                </div>
-
-                <div className="flex items-center pt-6">
-                  <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={newLessonPreview}
-                      onChange={(e) => setNewLessonPreview(e.target.checked)}
-                      className="w-4 h-4 rounded bg-zinc-900 border-white/20 text-white"
-                    />
-                    <span>Бесплатный предпросмотр</span>
-                  </label>
                 </div>
               </div>
 

@@ -22,7 +22,6 @@ export const CurriculumTree: React.FC<CurriculumTreeProps> = ({ course, onCourse
   const [isAddModuleOpen, setIsAddModuleOpen] = useState(false);
   const [newModuleTitle, setNewModuleTitle] = useState('');
   const [newModuleDesc, setNewModuleDesc] = useState('');
-  const [newModulePreview, setNewModulePreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -56,14 +55,12 @@ export const CurriculumTree: React.FC<CurriculumTreeProps> = ({ course, onCourse
       const payload: CreateModulePayload = {
         title: newModuleTitle.trim(),
         description: newModuleDesc.trim() || undefined,
-        isFreePreview: newModulePreview,
         sortOrder: modules.length + 1,
       };
 
       await adminApi.createModule(course.id, payload);
       setNewModuleTitle('');
       setNewModuleDesc('');
-      setNewModulePreview(false);
       setIsAddModuleOpen(false);
       fetchModules();
       onCourseUpdated();
@@ -341,16 +338,6 @@ export const CurriculumTree: React.FC<CurriculumTreeProps> = ({ course, onCourse
                   className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-white/20"
                 />
               </div>
-
-              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer pt-1">
-                <input
-                  type="checkbox"
-                  checked={newModulePreview}
-                  onChange={(e) => setNewModulePreview(e.target.checked)}
-                  className="w-4 h-4 rounded bg-zinc-900 border-white/20 text-white"
-                />
-                <span>Бесплатный предпросмотр модуля для всех гостей</span>
-              </label>
 
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
                 <button
