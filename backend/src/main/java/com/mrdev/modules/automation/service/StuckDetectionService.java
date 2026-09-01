@@ -36,7 +36,7 @@ public class StuckDetectionService {
     @Transactional
     public List<StuckStudentAlertDto> runStuckCheck() {
         log.info("Executing scheduled Stuck Student Detection scan...");
-        List<Enrollment> enrollments = enrollmentRepository.findAll();
+        List<Enrollment> enrollments = enrollmentRepository.findAllWithCourseAndUser();
         LocalDate now = LocalDate.now();
         List<StuckStudentAlertDto> stuckList = new ArrayList<>();
         Instant sevenDaysAgo = Instant.now().minus(7, ChronoUnit.DAYS);

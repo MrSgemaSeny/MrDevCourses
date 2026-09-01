@@ -63,6 +63,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + ttl);
 
         return Jwts.builder()
+                .id(java.util.UUID.randomUUID().toString())
                 .subject(String.valueOf(userId))
                 .claim("userId", userId)
                 .claim("email", email)
@@ -85,6 +86,16 @@ public class JwtTokenProvider {
             log.warn("Invalid JWT token: {}", e.getMessage());
             return false;
         }
+    }
+
+    public String getJtiFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.getId();
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.getExpiration();
     }
 
     public Long getUserIdFromToken(String token) {

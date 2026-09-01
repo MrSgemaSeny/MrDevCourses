@@ -1,6 +1,7 @@
 package com.mrdev.modules.auth.security;
 
 import com.mrdev.modules.auth.model.Role;
+import com.mrdev.modules.auth.service.JwtBlacklistService;
 import com.mrdev.modules.auth.service.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,6 +28,7 @@ import java.util.Collections;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
+    private final JwtBlacklistService jwtBlacklistService;
 
     @Value("${app.jwt.cookie-name:MrDev_token}")
     private String cookieName;
@@ -38,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = extractJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt) && !jwtBlacklistService.isTokenRevoked(jwt)) {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
                 String email = tokenProvider.getEmailFromToken(jwt);
                 Role role = tokenProvider.getRoleFromToken(jwt);

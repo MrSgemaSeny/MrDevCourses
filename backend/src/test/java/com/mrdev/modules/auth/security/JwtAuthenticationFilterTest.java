@@ -1,6 +1,7 @@
 package com.mrdev.modules.auth.security;
 
 import com.mrdev.modules.auth.model.Role;
+import com.mrdev.modules.auth.service.JwtBlacklistService;
 import com.mrdev.modules.auth.service.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +30,9 @@ class JwtAuthenticationFilterTest {
 
     @Mock
     private JwtTokenProvider jwtTokenProvider;
+
+    @Mock
+    private JwtBlacklistService jwtBlacklistService;
 
     @Mock
     private FilterChain filterChain;

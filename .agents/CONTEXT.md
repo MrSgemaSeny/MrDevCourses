@@ -1,15 +1,16 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Active Task**: Telegram Bot, Dual SOS Alerts & Transactional Email Notification Layer (Completed).
+- **Active Task**: Security Audit Remediation & Hardening (Completed).
 - **Recent Accomplishments**: 
-  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`).
-  - Student Telegram account deep linking (`/start LINK_<token>`) & Profile Page integration.
-  - Dual SOS dispatch: instant Telegram + Email alert to mentor with problem and error logs.
-  - Transactional Email Notification service with Google OAuth2 welcome, HW review verdicts, and 7-day inactivity throttling.
-  - Flyway V23 migration (`notification_outbox`, Telegram fields on `users`).
-  - Phase 3: Lesson Common Pitfalls accordion (`LessonPitfallsAccordion.tsx`, Flyway V22) & Drop-off Funnel Telemetry.
-- **Verification**: Backend 228/228 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+  - Fixed Java Deserialization RCE in `CookieUtils` with HMAC-SHA256 constant-time verification.
+  - Eliminated OAuth Account Preemption/Takeover in `CustomOAuth2UserService` by neutralizing unverified password hashes on Google account linking.
+  - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
+  - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
+  - Optimized `StuckDetectionService` query to eliminate N+1 latency.
+  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking (`/start LINK_<token>`).
+  - Dual SOS alerting (Telegram + Email) & transactional email notifications layer.
+- **Verification**: Backend 234/234 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).

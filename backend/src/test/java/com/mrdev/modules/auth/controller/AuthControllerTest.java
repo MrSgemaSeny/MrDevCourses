@@ -105,11 +105,18 @@ class AuthControllerTest {
     @Test
     @DisplayName("POST /v1/auth/logout should clear the httpOnly cookie and return 200")
     void testLogout() throws Exception {
-        mockMvc.perform(post("/v1/auth/logout"))
+        mockMvc.perform(post("/v1/auth/logout")
+                        .cookie(new Cookie("MrDev_token", validToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(header().exists("Set-Cookie"))
                 .andExpect(header().string("Set-Cookie", containsString("MrDev_token=")))
                 .andExpect(header().string("Set-Cookie", containsString("Max-Age=0")));
+
+        // Subsequent request with the revoked token must be rejected (401)
+        mockMvc.perform(get("/v1/auth/me")
+                        .cookie(new Cookie("MrDev_token", validToken)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status", is(401)));
     }
 }

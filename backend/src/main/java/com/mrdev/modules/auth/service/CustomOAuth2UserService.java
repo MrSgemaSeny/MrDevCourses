@@ -60,6 +60,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             Optional<User> userByEmail = userRepository.findByEmail(email);
             if (userByEmail.isPresent()) {
                 user = userByEmail.get();
+                // SECURITY: If account had an unverified password hash and is now authenticated
+                // via verified Google OAuth2, wipe passwordHash to neutralize pre-registration takeover attacks.
+                if (user.getGoogleId() == null && user.getPasswordHash() != null) {
+                    log.info("[OAuth2 Security] Neutralized unverified passwordHash for user {} upon Google OAuth2 linking", email);
+                    user.setPasswordHash(null);
+                }
                 user.setGoogleId(googleId);
                 if (name != null) {
                     user.setName(name);

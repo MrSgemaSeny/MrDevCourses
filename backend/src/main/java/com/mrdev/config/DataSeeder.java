@@ -32,11 +32,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import org.springframework.context.annotation.Profile;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Component
+@Profile("!prod")
 @RequiredArgsConstructor
 public class DataSeeder {
 

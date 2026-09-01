@@ -116,6 +116,7 @@ class CustomOAuth2UserServiceTest {
                 .id(75L)
                 .email("user@example.com")
                 .googleId(null)
+                .passwordHash("$2a$10$unverifiedFakeAttackerHash")
                 .name("Old Name")
                 .role(Role.ADMIN)
                 .build();
@@ -131,6 +132,7 @@ class CustomOAuth2UserServiceTest {
         assertThat(principal.getId()).isEqualTo(75L);
         assertThat(principal.getRole()).isEqualTo(Role.ADMIN);
         assertThat(existingUser.getGoogleId()).isEqualTo("new-google-sub");
+        assertThat(existingUser.getPasswordHash()).isNull();
     }
 
     @Test

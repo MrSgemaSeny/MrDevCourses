@@ -79,7 +79,7 @@ class StuckDetectionServiceTest {
         Enrollment e1 = Enrollment.builder().user(activeStudent).course(course).enrolledAt(Instant.now()).build();
         Enrollment e2 = Enrollment.builder().user(stuckStudent).course(course).enrolledAt(Instant.now().minusSeconds(86400 * 5)).build();
 
-        when(enrollmentRepository.findAll()).thenReturn(List.of(e1, e2));
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of(e1, e2));
 
         List<StuckStudentAlertDto> result = stuckDetectionService.runStuckCheck();
 
@@ -105,7 +105,7 @@ class StuckDetectionServiceTest {
         Course course = Course.builder().id(10L).title("Вайбкодинг").build();
         Enrollment e = Enrollment.builder().user(activeStudent).course(course).build();
 
-        when(enrollmentRepository.findAll()).thenReturn(List.of(e));
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of(e));
 
         List<StuckStudentAlertDto> result = stuckDetectionService.runStuckCheck();
 
