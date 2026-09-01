@@ -29,6 +29,8 @@ const LoginPage = React.lazy(() => import('@/pages/LoginPage').then((m) => ({ de
 const AuthCallbackPage = React.lazy(() => import('@/pages/AuthCallbackPage').then((m) => ({ default: m.AuthCallbackPage })));
 const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/CertificateVerifyPage').then((m) => ({ default: m.CertificateVerifyPage })));
 const ProjectsPage = React.lazy(() => import('@/pages/projects/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
+const PrivacyPage = React.lazy(() => import('@/pages/legal/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
+const TermsPage = React.lazy(() => import('@/pages/legal/TermsPage').then((m) => ({ default: m.TermsPage })));
 
 const wrap = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
@@ -52,6 +54,8 @@ export const router = createBrowserRouter([
       { index: true, element: wrap(<LandingPage />) },
       { path: 'projects', element: wrap(<ProjectsPage />) },
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
+      { path: 'privacy', element: wrap(<PrivacyPage />) },
+      { path: 'terms', element: wrap(<TermsPage />) },
 
       // ── Protected Student/Core App Pages (Auth Required) ───────────
       {

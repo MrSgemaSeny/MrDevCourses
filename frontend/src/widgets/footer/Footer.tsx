@@ -71,19 +71,21 @@ export const Footer: React.FC = () => {
 
         {/* Нижний бар: Ссылки на условия и конфиденциальность */}
         {legal.links.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
+          <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
             <div className="flex items-center gap-4">
               {legal.links.map((item) => (
-                <a
+                <Link
                   key={item.label}
-                  href={item.to}
-                  className="hover:text-zinc-400 transition-colors"
+                  to={item.to}
+                  className="hover:text-zinc-300 transition-colors"
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
             </div>
-            <span>v1.0 MVP</span>
+            <span className="text-[10px] text-zinc-600 font-sans">
+              &copy; {legal.copyrightYear} {legal.copyrightHolder}
+            </span>
           </div>
         )}
       </div>

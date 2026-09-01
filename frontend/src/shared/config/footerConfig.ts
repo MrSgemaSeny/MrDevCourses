@@ -69,8 +69,8 @@ export const FOOTER_CONFIG: FooterConfig = {
     copyrightYear: new Date().getFullYear(),
     copyrightHolder: 'MrDeveloper',
     links: [
-      { label: 'Конфиденциальность', to: '#' },
-      { label: 'Условия', to: '#' },
+      { label: 'Конфиденциальность', to: ROUTES.PRIVACY },
+      { label: 'Условия', to: ROUTES.TERMS },
     ],
   },
 };

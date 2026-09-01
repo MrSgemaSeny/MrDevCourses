@@ -9,4 +9,6 @@ export const ROUTES = {
   ADMIN: '/admin',
   CERTIFICATES_VERIFY: '/certificates/verify',
   AUTH_CALLBACK: '/auth/callback',
+  PRIVACY: '/privacy',
+  TERMS: '/terms',
 } as const;
