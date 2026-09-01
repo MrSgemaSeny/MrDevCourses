@@ -23,10 +23,16 @@ if ([string]::IsNullOrWhiteSpace($commandArgs)) {
 if ($commandArgs -match "(?i)\bgit\s+push\b") {
     $today = Get-Date -Format "yyyy-MM-dd"
     $yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
-    $journalBase = "C:\Users\murat\IdeaProjects\new_world\Brain's protocol - second brain\journal"
     
-    $todayFile = Join-Path (Join-Path $journalBase $today) "mrdevcourses.md"
-    $yesterdayFile = Join-Path (Join-Path $journalBase $yesterday) "mrdevcourses.md"
+    $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+    $brainCandidate = Join-Path (Split-Path -Parent $projectRoot) "Brain's protocol - second brain\journal"
+    if (-not (Test-Path $brainCandidate)) {
+        $brainCandidate = Join-Path $env:USERPROFILE "IdeaProjects\new_world\Brain's protocol - second brain\journal"
+    }
+    $journalBase = if (Test-Path $brainCandidate) { (Resolve-Path $brainCandidate).Path } else { $null }
+    
+    $todayFile = if ($journalBase) { Join-Path (Join-Path $journalBase $today) "mrdevcourses.md" } else { $null }
+    $yesterdayFile = if ($journalBase) { Join-Path (Join-Path $journalBase $yesterday) "mrdevcourses.md" } else { $null }
     
     $hasValidJournal = $false
     foreach ($f in @($todayFile, $yesterdayFile)) {

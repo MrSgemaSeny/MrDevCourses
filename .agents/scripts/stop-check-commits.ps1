@@ -4,15 +4,29 @@ if ([Console]::IsInputRedirected) {
     $rawInput = [Console]::In.ReadToEnd()
 }
 
+# Динамическое определение путей проекта и Second Brain
+$projectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$brainCandidate = Join-Path (Split-Path -Parent $projectRoot) "Brain's protocol - second brain"
+if (-not (Test-Path $brainCandidate)) {
+    $brainCandidate = Join-Path $env:USERPROFILE "IdeaProjects\new_world\Brain's protocol - second brain"
+}
+$brainRoot = if (Test-Path $brainCandidate) { (Resolve-Path $brainCandidate).Path } else { $null }
+
 # Проверяем git статус проекта MrDevCourses
-Push-Location "C:\Users\murat\IdeaProjects\new_world\MrDevCourses"
-$projectStatus = git status --porcelain 2>$null
-Pop-Location
+$projectStatus = ""
+if (Test-Path $projectRoot) {
+    Push-Location $projectRoot
+    $projectStatus = git status --porcelain 2>$null
+    Pop-Location
+}
 
 # Проверяем git статус Second Brain
-Push-Location "C:\Users\murat\IdeaProjects\new_world\Brain's protocol - second brain"
-$brainStatus = git status --porcelain 2>$null
-Pop-Location
+$brainStatus = ""
+if ($brainRoot -and (Test-Path $brainRoot)) {
+    Push-Location $brainRoot
+    $brainStatus = git status --porcelain 2>$null
+    Pop-Location
+}
 
 if ($projectStatus -or $brainStatus) {
     $out = @{

@@ -21,14 +21,18 @@ if ([string]::IsNullOrWhiteSpace($cmd)) {
 }
 
 # 1. Запрещаем использование shell команд вместо нативных инструментов (экономия токенов и надежность)
-$forbiddenTerminalReaders = "(?i)^\s*(cat|grep|sed|ls|head|tail)\b"
-if ($cmd -match $forbiddenTerminalReaders) {
-    $response = @{
-        decision = "deny"
-        reason = "[SAFETY BARRIER] Запрещено использовать shell-утилиты (cat, grep, sed, ls, head, tail) через терминал. Используйте нативные инструменты Antigravity: view_file, list_dir, grep_search, replace_file_content."
+# Разрешаем 'git grep', 'git status', 'git log', но блокируем прямые вызовы утилит чтения/поиска
+$isGitCommand = $cmd -match "(?i)^\s*git\s+"
+if (-not $isGitCommand) {
+    $forbiddenTerminalReaders = "(?i)^\s*(cat|grep|sed|ls|head|tail|Get-Content|gc|type|Select-String|sls|Get-ChildItem|gci|dir)\b"
+    if ($cmd -match $forbiddenTerminalReaders) {
+        $response = @{
+            decision = "deny"
+            reason = "[SAFETY BARRIER] Запрещено использовать shell-утилиты (cat, grep, sed, ls, head, tail, Get-Content, Select-String, dir) через терминал. Используйте нативные инструменты Antigravity: view_file, list_dir, grep_search, replace_file_content."
+        }
+        $response | ConvertTo-Json -Compress | Write-Output
+        exit 0
     }
-    $response | ConvertTo-Json -Compress | Write-Output
-    exit 0
 }
 
 # 2. Запрещаем опасные деструктивные Git команды (проверка в рамках одной строки команды)

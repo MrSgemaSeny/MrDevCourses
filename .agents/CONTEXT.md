@@ -1,5 +1,14 @@
 # Current Project Context — MrDevCourses
 
+## Current Operational Focus
+- **Active Task**: AI Context Guards & Lifecycle Hooks hardening (.agents/ infrastructure).
+- **Recent Accomplishments**: 
+  - Student Profile & Settings page (`/profile`, Flyway V21, JUnit 220/220).
+  - Clean 1-column 75% left-aligned layout unified across all public & student pages.
+  - Privacy (`/privacy`) and Terms (`/terms`) legal pages.
+  - PowerShell prompt guard and lifecycle hooks with dynamic paths and size validation.
+- **Verification**: Backend 220/220 JUnit Green | Frontend 73/73 Vitest Green | Build 0 errors.
+
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
 - **Ключевые принципы Mr Developer**:
