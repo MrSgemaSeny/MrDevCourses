@@ -141,15 +141,6 @@ export const AdminCurriculumPage: React.FC = () => {
 
       {/* Courses Selector Tabs */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500">
-            Доступные программы обучения
-          </span>
-          <span className="text-[10px] font-mono text-zinc-500">
-            {courses.length} {courses.length === 1 ? 'курс' : 'курсов'}
-          </span>
-        </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {courses.map((c) => {
             const isSelected = c.id === selectedCourseId;
@@ -169,15 +160,6 @@ export const AdminCurriculumPage: React.FC = () => {
                       <h3 className="text-xs font-semibold text-white truncate">
                         {c.title}
                       </h3>
-                      {c.active ? (
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/30">
-                          ACTIVE
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400">
-                          DRAFT
-                        </span>
-                      )}
                     </div>
                     <p className="text-[10px] text-zinc-400 font-mono mt-1">/{c.slug}</p>
                   </div>

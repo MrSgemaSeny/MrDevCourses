@@ -339,18 +339,6 @@ export const LessonRow: React.FC<LessonRowProps> = ({
                     className="w-full bg-zinc-900 border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-white/20 font-mono"
                   />
                 </div>
-
-                <div className="flex items-center pt-6">
-                  <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isPublished}
-                      onChange={(e) => setIsPublished(e.target.checked)}
-                      className="w-4 h-4 rounded bg-zinc-900 border-white/20 text-white"
-                    />
-                    <span>Опубликован</span>
-                  </label>
-                </div>
               </div>
 
               <YouTubeValidator url={youtubeUrl} onChange={setYoutubeUrl} />
