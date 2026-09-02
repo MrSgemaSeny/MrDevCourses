@@ -156,7 +156,7 @@ export const ExportReportModal: React.FC<ExportReportModalProps> = ({
           <div className="p-3 rounded bg-zinc-900/60 border border-white/5 text-[10px] text-zinc-400 space-y-1">
             <p>Экспорт включает:</p>
             <ul className="list-disc list-inside space-y-0.5 text-zinc-300">
-              <li>KPI метрики конверсии и ударного режима (Streak)</li>
+              <li>KPI метрики конверсии и активности платформы</li>
               <li>Пошаговую воронку прохождения (Funnel drop-off)</li>
               <li>Когортную таблицу удержания по урокам</li>
               <li>Телеметрию AI Tutor и проблемные точки квизов</li>

@@ -5,6 +5,6 @@ describe('admin-analytics feature exports', () => {
   it('exports AdminAnalyticsDashboard and chart components', () => {
     expect(featureExports.AdminAnalyticsDashboard).toBeDefined();
     expect(featureExports.CourseFunnelChart).toBeDefined();
-    expect(featureExports.StreakDistributionChart).toBeDefined();
+    expect(featureExports.LessonRetentionTable).toBeDefined();
   });
 });

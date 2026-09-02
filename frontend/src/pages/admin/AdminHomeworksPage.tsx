@@ -90,7 +90,7 @@ export const AdminHomeworksPage: React.FC = () => {
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            <Clock className="w-3 h-3 text-amber-400" />
+            <Clock className="w-3 h-3 text-white" />
             <span>На проверке</span>
           </button>
           <button

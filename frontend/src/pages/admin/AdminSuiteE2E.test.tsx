@@ -151,7 +151,7 @@ describe('Admin Suite E2E Workflows (Frontend)', () => {
     const analyticsTabBtn = screen.getByRole('button', { name: 'Аналитика' });
     fireEvent.click(analyticsTabBtn);
     expect(await screen.findByText('Платформенная аналитика и когорты')).toBeInTheDocument();
-    expect(await screen.findByText('7.5')).toBeInTheDocument();
+    expect(await screen.findByText('100%')).toBeInTheDocument();
   });
 
   it('Tier 2: Handles Course creation modal submission and Escape key dismissal', async () => {

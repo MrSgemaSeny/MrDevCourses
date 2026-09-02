@@ -143,10 +143,10 @@ describe('AdminAnalyticsDashboard Component', () => {
     expect(elements42.length).toBeGreaterThan(0);
     expect(screen.getByText('320')).toBeInTheDocument(); // totalLessonsCompleted
     expect(screen.getByText('30%')).toBeInTheDocument(); // completionRate
-    expect(screen.getByText(/4.8/)).toBeInTheDocument(); // averageStreak
+    expect(screen.getByText('28 активных за 7 дн.')).toBeInTheDocument(); // activeStudents
   });
 
-  it('renders Course Funnel and Streak Distribution charts', async () => {
+  it('renders Course Funnel chart', async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <AdminAnalyticsDashboard />
@@ -154,9 +154,6 @@ describe('AdminAnalyticsDashboard Component', () => {
     );
 
     expect(await screen.findByText(/Пошаговое прохождение курса/i)).toBeInTheDocument();
-    expect(screen.getByText(/Распределение Streak/i)).toBeInTheDocument();
-    expect(screen.getByText('4-7 дней')).toBeInTheDocument();
-    expect(screen.getByText('15+ дней')).toBeInTheDocument();
   });
 
   it('renders AI Tutor telemetry widget with metrics and topics', async () => {

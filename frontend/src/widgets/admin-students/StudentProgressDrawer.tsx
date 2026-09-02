@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   X,
-  Flame,
-  Trophy,
   Calendar,
   CheckCircle2,
   HelpCircle,
@@ -92,30 +90,12 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
                 <p className="text-xs text-zinc-400 font-mono mb-2">{progress?.email}</p>
 
                 {/* Telemetry Metrics */}
-                {progress && (
+                {progress && progress.lastActiveDate && (
                   <div className="flex items-center gap-3 text-xs">
-                    <div
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-medium"
-                      title="Текущая серия активности"
-                    >
-                      <Flame className="w-3.5 h-3.5" />
-                      <span>{progress.currentStreak} дн.</span>
+                    <div className="inline-flex items-center gap-1 text-zinc-500 text-[10px] font-mono">
+                      <Calendar className="w-3 h-3" />
+                      <span>Последняя активность: {progress.lastActiveDate}</span>
                     </div>
-
-                    <div
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-800/80 border border-white/5 text-zinc-300 text-[11px]"
-                      title="Рекордная серия активности"
-                    >
-                      <Trophy className="w-3.5 h-3.5 text-zinc-400" />
-                      <span>Макс: {progress.longestStreak} дн.</span>
-                    </div>
-
-                    {progress.lastActiveDate && (
-                      <div className="inline-flex items-center gap-1 text-zinc-500 text-[10px]">
-                        <Calendar className="w-3 h-3" />
-                        <span>Активность: {progress.lastActiveDate}</span>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

@@ -299,8 +299,7 @@ public class TelegramBotCommandService {
             long pct = totalLessons > 0 ? (completed * 100 / totalLessons) : 0;
 
             sb.append("• *").append(c.getTitle()).append("*\n")
-              .append("  Пройдено: ").append(completed).append("/").append(totalLessons).append(" уроков (").append(pct).append("%)\n")
-              .append("  Текущий стрик: ").append(user.getCurrentStreak()).append(" дн.\n\n");
+              .append("  Пройдено: ").append(completed).append("/").append(totalLessons).append(" уроков (").append(pct).append("%)\n\n");
         }
 
         return sb.toString();
@@ -371,7 +370,6 @@ public class TelegramBotCommandService {
         sb.append("[Карточка студента: ").append(u.getName() != null ? u.getName() : "Студент").append("]\n")
           .append("Email: `").append(u.getEmail()).append("`\n")
           .append("Telegram: ").append(u.getTelegramUsername() != null ? "@" + u.getTelegramUsername() : "Не привязан").append("\n")
-          .append("Стрик: ").append(u.getCurrentStreak()).append(" дн. (рекорд: ").append(u.getLongestStreak()).append(")\n")
           .append("Последняя активность: ").append(u.getLastActiveDate() != null ? u.getLastActiveDate() : "Не зафиксирована").append("\n\n");
 
         if (enrollments.isEmpty()) {
@@ -545,8 +543,7 @@ public class TelegramBotCommandService {
             sb.append("• *").append(u.getName() != null ? u.getName() : u.getEmail()).append("*\n")
               .append("  Курс: ").append(c.getTitle()).append("\n")
               .append("  Прогресс: ").append(completedLessons).append("/").append(totalLessons)
-              .append(" уроков (").append(pct).append("%)\n")
-              .append("  Стрик: ").append(u.getCurrentStreak()).append(" дн.\n\n");
+              .append(" уроков (").append(pct).append("%)\n\n");
         }
 
         return sb.toString();

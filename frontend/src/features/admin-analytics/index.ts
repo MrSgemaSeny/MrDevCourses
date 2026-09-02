@@ -1,7 +1,6 @@
 export {
   AdminAnalyticsDashboard,
   CourseFunnelChart,
-  StreakDistributionChart,
   LessonRetentionTable,
   AiTutorTelemetryWidget,
   QuizHotspotsWidget,

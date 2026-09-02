@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { adminAnalyticsApi } from '@/entities/adminAnalyticsApi';
 import { adminApi } from '@/entities/admin/api/adminApi';
 import { CourseFunnelChart } from './CourseFunnelChart';
-import { StreakDistributionChart } from './StreakDistributionChart';
 import { LessonRetentionTable } from './LessonRetentionTable';
 import { AiTutorTelemetryWidget } from './AiTutorTelemetryWidget';
 import { QuizHotspotsWidget } from './QuizHotspotsWidget';
@@ -11,12 +10,12 @@ import { ExportReportModal } from './ExportReportModal';
 import {
   Users,
   CheckCircle2,
-  Flame,
   TrendingUp,
   BookOpen,
   Award,
   BarChart3,
   Download,
+  Activity,
 } from 'lucide-react';
 
 export const AdminAnalyticsDashboard: React.FC = () => {
@@ -40,11 +39,6 @@ export const AdminAnalyticsDashboard: React.FC = () => {
     queryKey: ['admin', 'analytics', 'funnel', effectiveCourseId],
     queryFn: () => adminAnalyticsApi.getCourseFunnel(effectiveCourseId!),
     enabled: !!effectiveCourseId,
-  });
-
-  const { data: streaks = [], isLoading: streaksLoading } = useQuery({
-    queryKey: ['admin', 'analytics', 'streaks'],
-    queryFn: adminAnalyticsApi.getStreakDistribution,
   });
 
   const { data: retention, isLoading: retentionLoading } = useQuery({
@@ -177,61 +171,41 @@ export const AdminAnalyticsDashboard: React.FC = () => {
           <p className="text-[10px] text-zinc-500 mt-1">Доля завершивших</p>
         </div>
 
-        {/* Average Streak */}
+        {/* Active Students */}
         <div className="p-4 rounded-sm bg-[#18181b] border border-white/5">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-xs">Ср. Streak</span>
-            <Flame className="w-4 h-4 text-zinc-400" />
+            <span className="text-xs">Активность</span>
+            <Activity className="w-4 h-4 text-zinc-400" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
-            {overview?.averageStreak ?? 0} <span className="text-xs font-normal text-zinc-400 font-sans">дн.</span>
+            {overview?.activeStudents ?? 0}
           </div>
-          <p className="text-[10px] text-zinc-500 mt-1">Ударный темп</p>
+          <p className="text-[10px] text-zinc-500 mt-1">За последние 7 дней</p>
         </div>
       </div>
 
-      {/* Main Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Course Funnel */}
-        <div className="lg:col-span-2 p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/5">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
-                <BarChart3 className="w-3.5 h-3.5" />
-                <span>Воронка курса (Drop-off Rate)</span>
-              </div>
-              <h3 className="text-sm font-bold text-white">Пошаговое прохождение курса</h3>
-            </div>
-            {effectiveCourseId && (
-              <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-white/5">
-                {courses.find((c) => c.id === effectiveCourseId)?.title || 'Курс'}
-              </span>
-            )}
-          </div>
-
-          {funnelLoading ? (
-            <div className="text-center py-12 text-zinc-500 text-xs font-mono">Загрузка воронки...</div>
-          ) : (
-            <CourseFunnelChart steps={funnel} />
-          )}
-        </div>
-
-        {/* Right 1 Col: Streak Distribution */}
-        <div className="p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
-          <div className="pb-3 border-b border-white/5">
+      {/* Main Charts: Course Funnel */}
+      <div className="w-full p-6 rounded-sm bg-[#18181b] border border-white/5 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+          <div>
             <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-0.5">
-              <Flame className="w-3.5 h-3.5" />
-              <span>Ударный режим</span>
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Воронка курса (Drop-off Rate)</span>
             </div>
-            <h3 className="text-sm font-bold text-white">Распределение Streak</h3>
+            <h3 className="text-sm font-bold text-white">Пошаговое прохождение курса</h3>
           </div>
-
-          {streaksLoading ? (
-            <div className="text-center py-12 text-zinc-500 text-xs font-mono">Загрузка распределения...</div>
-          ) : (
-            <StreakDistributionChart distributions={streaks} />
+          {effectiveCourseId && (
+            <span className="text-[10px] font-mono text-zinc-400 bg-zinc-900 px-2 py-0.5 rounded border border-white/5">
+              {courses.find((c) => c.id === effectiveCourseId)?.title || 'Курс'}
+            </span>
           )}
         </div>
+
+        {funnelLoading ? (
+          <div className="text-center py-12 text-zinc-500 text-xs font-mono">Загрузка воронки...</div>
+        ) : (
+          <CourseFunnelChart steps={funnel} />
+        )}
       </div>
 
       {/* Row 2: AI Tutor Telemetry + Quiz Hotspots */}

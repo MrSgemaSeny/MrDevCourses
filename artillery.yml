@@ -163,7 +163,7 @@ scenarios:
                 - 401
                 - 403
       - get:
-          url: '/v1/admin/analytics/streaks'
+          url: '/v1/admin/analytics/overview'
           expect:
             - statusCode:
                 - 200
