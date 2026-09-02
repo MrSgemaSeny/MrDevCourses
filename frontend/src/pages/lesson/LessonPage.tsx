@@ -185,9 +185,9 @@ const LessonPageContent: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsHelpModalOpen(true)}
-                className="px-3 py-2 text-xs font-semibold rounded-sm bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/60 text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-3 py-2 text-xs font-semibold rounded-sm bg-[#18181b] hover:bg-zinc-800 border border-white/10 hover:border-white/30 text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer font-mono"
               >
-                <HelpCircle className="w-4 h-4 text-amber-400" />
+                <HelpCircle className="w-4 h-4 text-zinc-400" />
                 <span>Не получается?</span>
               </button>
 

@@ -1,8 +1,10 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Current Operational Focus**: Lesson Page Layout Alignment & Video Integration.
+- **Current Operational Focus**: Strict Black & White Monochrome Design & Lesson UX.
 - **Recent Accomplishments**: 
+  - Enforced strict `BLACK & WHITE ONLY` design rule in `AGENTS.md` and refactored `LessonActionCard`, `StudentHelpModal`, and `LessonPage` removing all green, yellow, and amber accents.
+  - Replaced text button «Застрял?» with a clean monochrome `?` action button.
   - Aligned `LessonPage.tsx` layout to exact 75% left-aligned column matching `CourseDetailPage.tsx` with clean right breathing room.
   - Replaced YouTube video URL across frontend, DataSeeder, and created Flyway migration `V26__update_default_youtube_url.sql` for `https://youtu.be/qnYl2ibf-rQ?si=_3UjIZihZ-z_MC6_`.
   - Configured GitHub Actions Pages workflow (`.github/workflows/deploy-pages.yml`) with automated Vitest suites and production build.

@@ -91,13 +91,13 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
         {/* Header */}
         <div className="space-y-1.5 pr-6">
           <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-            <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/60" />
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">
               прямая связь с ментором
             </span>
           </div>
           <h2 className="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-amber-400" />
+            <HelpCircle className="w-5 h-5 text-zinc-300" />
             <span>Не получается? Нужна помощь</span>
           </h2>
           <p className="text-xs text-zinc-400 leading-relaxed">
@@ -106,11 +106,11 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
         </div>
 
         {isSuccess ? (
-          <div className="p-4 bg-emerald-950/60 border border-emerald-800/60 rounded-sm flex items-center gap-3 text-emerald-300 animate-in zoom-in-95">
-            <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+          <div className="p-4 bg-[#141418] border border-white/20 rounded-sm flex items-center gap-3 text-zinc-200 animate-in zoom-in-95">
+            <CheckCircle2 className="w-5 h-5 shrink-0 text-white" />
             <div>
-              <h4 className="text-xs font-bold text-white">Сигнал отправлен!</h4>
-              <p className="text-[11px] text-emerald-400/90 mt-0.5">
+              <h4 className="text-xs font-bold text-white font-mono">Сигнал отправлен!</h4>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
                 Ментор уже видит твой вопрос в Telegram и скоро ответит.
               </p>
             </div>
@@ -126,7 +126,7 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
               <select
                 value={selectedStep}
                 onChange={(e) => setSelectedStep(e.target.value)}
-                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm px-3 py-2 text-xs text-white focus:outline-none focus:border-zinc-500 transition-colors"
+                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm px-3 py-2 text-xs text-white focus:outline-none focus:border-white/30 transition-colors"
               >
                 {PRESET_STEPS.map((step) => (
                   <option key={step.id} value={step.id} className="bg-[#0e0e11] text-white">
@@ -139,7 +139,7 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
             {/* Problem Textarea */}
             <div>
               <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                Что пошло не так? <span className="text-amber-400">*</span>
+                Что пошло не так? <span className="text-zinc-400">*</span>
               </label>
               <textarea
                 value={problemText}
@@ -147,7 +147,7 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
                 required
                 rows={3}
                 placeholder="Например: ввел команду ssh-keygen, но в терминале пишет command not found..."
-                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm p-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-y"
+                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm p-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors resize-y"
               />
             </div>
 
@@ -162,21 +162,21 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
                 onChange={(e) => setErrorLogs(e.target.value)}
                 rows={2}
                 placeholder="Вставьте лог ошибки (Ctrl+V)..."
-                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm p-2.5 text-xs font-mono text-zinc-300 placeholder-zinc-700 focus:outline-none focus:border-zinc-500 transition-colors resize-y"
+                className="w-full bg-[#0a0a0c] border border-white/10 rounded-sm p-2.5 text-xs font-mono text-zinc-300 placeholder-zinc-700 focus:outline-none focus:border-white/30 transition-colors resize-y"
               />
             </div>
 
             {/* Submit Action */}
             <div className="pt-2 flex items-center justify-between">
-              <span className="text-[11px] text-zinc-500">
+              <span className="text-[11px] font-mono text-zinc-500">
                 Отправка push-уведомления ментору в Telegram
               </span>
               <button
                 type="submit"
                 disabled={mutation.isPending || !problemText.trim()}
-                className="py-2 px-4 rounded-sm bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer shadow-lg shadow-amber-950/40"
+                className="py-2 px-4 rounded-sm bg-white hover:bg-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed text-black text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer shadow-sm"
               >
-                <Send className="w-3.5 h-3.5" />
+                <Send className="w-3.5 h-3.5 text-black" />
                 <span>{mutation.isPending ? 'Отправка...' : 'Отправить сигнал'}</span>
               </button>
             </div>
@@ -186,7 +186,7 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
         {/* Existing Requests History */}
         {!isLoading && existingRequests.length > 0 && (
           <div className="pt-3 border-t border-white/5 space-y-2">
-            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 font-mono">
               Твои недавние запросы по этому уроку ({existingRequests.length})
             </h4>
             <div className="max-h-36 overflow-y-auto space-y-2 pr-1">
@@ -200,19 +200,19 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
                       {req.stepTitle || req.stepIdentifier}
                     </span>
                     {req.status === 'RESOLVED' || req.status === 'RESOLVED_WITH_FAQ' ? (
-                      <span className="text-emerald-400 flex items-center gap-1 font-semibold">
-                        <CheckCircle2 className="w-3 h-3" /> Решено
+                      <span className="text-white flex items-center gap-1 font-mono">
+                        <CheckCircle2 className="w-3 h-3 text-white" /> Решено
                       </span>
                     ) : (
-                      <span className="text-amber-400 flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> У ментора
+                      <span className="text-zinc-400 flex items-center gap-1 font-mono">
+                        <Clock className="w-3 h-3 text-zinc-500" /> У ментора
                       </span>
                     )}
                   </div>
                   <p className="text-zinc-300 text-[11px] line-clamp-2">{req.problemText}</p>
                   {req.mentorSolution && (
-                    <div className="mt-1.5 p-2 bg-[#121217] border border-emerald-900/50 rounded-sm text-[11px] text-emerald-300">
-                      <span className="font-semibold text-emerald-400">Ответ ментора: </span>
+                    <div className="mt-1.5 p-2 bg-[#141418] border border-white/10 rounded-sm text-[11px] text-zinc-300">
+                      <span className="font-semibold text-white">Ответ ментора: </span>
                       {req.mentorSolution}
                     </div>
                   )}

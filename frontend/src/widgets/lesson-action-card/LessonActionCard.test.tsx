@@ -57,7 +57,7 @@ describe('LessonActionCard Component', () => {
       />
     );
 
-    const stuckButtons = screen.getAllByTitle(/Застряли на этом шаге/i);
+    const stuckButtons = screen.getAllByTitle(/Помощь по этому шагу/i);
     expect(stuckButtons.length).toBeGreaterThan(0);
 
     fireEvent.click(stuckButtons[0]);

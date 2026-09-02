@@ -3,6 +3,7 @@
 2. ZERO EMOJIS: NEVER use emojis in responses, markdown artifacts, logs, git commit messages, or code comments under any circumstances.
 3. ARCHITECTURE CONTEXT: Re-read .agents/AGENTS.md and .agents/CONTEXT.md immediately upon encountering uncertainty, complex refactoring, or test failures.
 4. ATOMIC EDITS: For existing files, use ONLY replace_file_content with concise surgical diff blocks. NEVER overwrite entire existing files with write_to_file.
+5. STRICT DESIGN: ТОЛЬКО ЧЕРНЫЙ И БЕЛЫЙ ЦВЕТ (BLACK & WHITE ONLY). Строго запрещены любые цвета (зеленый/emerald, желтый/amber, синий, оранжевый и т.д.). Вся UI-палитра — только градации черного, серого и белого (#0a0a0c, #0e0e11, #141418, #18181b, text-white, text-zinc-300..500, border-white/5..20, bg-white/10, bg-white).
 </CRITICAL_INSTRUCTIONS>
 
 ## Role & Project Guidelines — MrDevCourses
