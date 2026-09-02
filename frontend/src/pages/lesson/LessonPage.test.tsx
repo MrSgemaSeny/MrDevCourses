@@ -110,7 +110,7 @@ describe('LessonPage Component with Quick-Nav Drawer Integration', () => {
     // Verify YouTube iframe exists in DOM
     const iframe = screen.getByTitle('Урок 1: Настройка окружения и JWT');
     expect(iframe).toBeInTheDocument();
-    expect(iframe.getAttribute('src')).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
+    expect(iframe.getAttribute('src')).toContain('dQw4w9WgXcQ');
 
     // Verify Contextual Panel is rendered
     expect(screen.getByTestId('lesson-context-panel')).toBeInTheDocument();

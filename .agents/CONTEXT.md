@@ -1,8 +1,10 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Current Operational Focus**: Frontend CI/CD Pipeline & GitHub Pages Deployment.
+- **Current Operational Focus**: Lesson Page Layout Alignment & Video Integration.
 - **Recent Accomplishments**: 
+  - Aligned `LessonPage.tsx` layout to exact 75% left-aligned column matching `CourseDetailPage.tsx` with clean right breathing room.
+  - Replaced YouTube video URL across frontend, DataSeeder, and created Flyway migration `V26__update_default_youtube_url.sql` for `https://youtu.be/qnYl2ibf-rQ?si=_3UjIZihZ-z_MC6_`.
   - Configured GitHub Actions Pages workflow (`.github/workflows/deploy-pages.yml`) with automated Vitest suites and production build.
   - Implemented dynamic Vite base path (`base: process.env.VITE_BASE_PATH || '/'`) and React Router `basename` integration for seamless GitHub Pages subpath routing.
   - Added SPA 404 fallback mechanism (`dist/404.html`) ensuring direct URL navigation without 404 errors.
