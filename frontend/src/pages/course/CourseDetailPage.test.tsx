@@ -30,6 +30,30 @@ describe('CourseDetailPage Component', () => {
       createdAt: '2026-08-25T10:00:00Z',
       enrolled: true,
       totalLessons: 2,
+      modules: [
+        {
+          id: 1,
+          courseId: 1,
+          title: 'Модуль 1',
+          sortOrder: 1,
+          isFreePreview: false,
+          lessonsCount: 1,
+          completedLessonsCount: 0,
+          lessons: [
+            {
+              id: 101,
+              courseId: 1,
+              moduleId: 1,
+              title: 'Урок 1: Настройка окружения',
+              dayNumber: 1,
+              sortOrder: 1,
+              accessible: true,
+              opensAt: '2026-08-25T10:00:00Z',
+              completed: false,
+            },
+          ],
+        },
+      ],
     });
 
     vi.spyOn(lessonApiModule.lessonApi, 'getLessons').mockResolvedValue([

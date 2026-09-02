@@ -2,7 +2,9 @@ package com.mrdev.modules.course.service;
 
 import com.mrdev.common.exception.ApiException;
 import com.mrdev.common.exception.ResourceNotFoundException;
+import com.mrdev.common.util.SecurityUtils;
 import com.mrdev.modules.audit.service.AuditService;
+import com.mrdev.modules.auth.model.Role;
 import com.mrdev.modules.auth.model.User;
 import com.mrdev.modules.auth.repository.UserRepository;
 import com.mrdev.modules.course.dto.CourseDetailDto;
@@ -110,6 +112,10 @@ public class CourseService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
+        if (user.getRole() == Role.ADMIN) {
+            throw new ApiException("Администратор уже имеет полный доступ ко всем курсам и не должен регистрироваться как студент", HttpStatus.BAD_REQUEST);
+        }
+
         Optional<Enrollment> existing = enrollmentRepository.findByUserIdAndCourseId(userId, courseId);
         if (existing.isPresent()) {
             return toEnrollmentDto(existing.get());
@@ -130,8 +136,9 @@ public class CourseService {
     }
 
     private CourseDetailDto toDetailDto(Course course, Optional<Long> currentUserId) {
-        boolean enrolled = false;
-        Instant enrolledAt = null;
+        boolean isAdmin = SecurityUtils.isAdmin();
+        boolean enrolled = isAdmin;
+        Instant enrolledAt = isAdmin ? Instant.now().minus(Duration.ofDays(365)) : null;
         Map<Long, LessonProgress> progressMap = Map.of();
 
         if (currentUserId.isPresent()) {
@@ -152,7 +159,7 @@ public class CourseService {
         List<CourseModuleDto> moduleDtos = modules.stream().map(module -> {
             List<LessonSummaryDto> lessonDtos = module.getLessons().stream().map(lesson -> {
                 Instant opensAt = finalEnrolledAt != null ? calculateUnlockTime(finalEnrolledAt, lesson.getDayNumber()) : Instant.now();
-                boolean isAccessible = lesson.getIsFreePreview() || (finalEnrolledAt != null && !now.isBefore(opensAt));
+                boolean isAccessible = isAdmin || lesson.getIsFreePreview() || (finalEnrolledAt != null && !now.isBefore(opensAt));
                 LessonProgress progress = finalProgressMap.get(lesson.getId());
                 boolean isCompleted = progress != null;
                 Instant completedAt = isCompleted ? progress.getCompletedAt() : null;
