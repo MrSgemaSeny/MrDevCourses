@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { GLOSSARY_TERMS, GlossaryCategory, GlossaryTerm } from '@/entities/glossary';
+import { useQuickNav } from '../model/QuickNavContext';
 import { Search, X, Copy, Check, BookOpen, Code, Tag, Calendar } from 'lucide-react';
-
 
 interface GlossaryViewProps {
   initialSearch?: string | null;
+  dayNumber?: number | null;
   onSelectTerm?: (term: GlossaryTerm) => void;
 }
 
@@ -18,9 +19,20 @@ const CATEGORIES: { key: GlossaryCategory | 'all'; label: string }[] = [
   { key: 'core', label: 'Core' },
 ];
 
-export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSelectTerm }) => {
+export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, dayNumber: propDayNumber, onSelectTerm }) => {
+  let contextDayNumber: number | null = null;
+  try {
+    const quickNav = useQuickNav();
+    contextDayNumber = quickNav.dayNumber;
+  } catch {
+    // optional outside provider
+  }
+
+  const currentDay = propDayNumber !== undefined ? propDayNumber : contextDayNumber;
+
   const [search, setSearch] = useState<string>(initialSearch || '');
   const [selectedCategory, setSelectedCategory] = useState<GlossaryCategory | 'all'>('all');
+  const [scopeFilter, setScopeFilter] = useState<'lesson' | 'all'>(currentDay ? 'lesson' : 'all');
   const [expandedTermId, setExpandedTermId] = useState<string | null>(null);
   const [copiedTermId, setCopiedTermId] = useState<string | null>(null);
 
@@ -28,6 +40,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
   useEffect(() => {
     if (initialSearch) {
       setSearch(initialSearch);
+      setScopeFilter('all');
       // Try to auto-expand matching term
       const match = GLOSSARY_TERMS.find(
         (t) =>
@@ -41,13 +54,33 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
     }
   }, [initialSearch]);
 
+  // Sync scope when lesson changes
+  useEffect(() => {
+    if (currentDay && !initialSearch) {
+      setScopeFilter('lesson');
+    }
+  }, [currentDay, initialSearch]);
+
+  const lessonTermsCount = useMemo(() => {
+    if (!currentDay) return 0;
+    return GLOSSARY_TERMS.filter((t) => t.relatedDayNumbers?.includes(currentDay)).length;
+  }, [currentDay]);
+
   const filteredTerms = useMemo(() => {
     const q = search.trim().toLowerCase();
     return GLOSSARY_TERMS.filter((term) => {
+      // If scoped to current lesson and user is not searching freeform text
+      if (scopeFilter === 'lesson' && currentDay && !q) {
+        if (!term.relatedDayNumbers || !term.relatedDayNumbers.includes(currentDay)) {
+          return false;
+        }
+      }
+
       // Category filter
       if (selectedCategory !== 'all' && term.category !== selectedCategory) {
         return false;
       }
+
       // Text search
       if (q) {
         const matchTerm = term.term.toLowerCase().includes(q);
@@ -59,7 +92,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
       }
       return true;
     });
-  }, [search, selectedCategory]);
+  }, [search, selectedCategory, scopeFilter, currentDay]);
 
   const handleCopyCode = (termId: string, code: string) => {
     navigator.clipboard.writeText(code);
@@ -75,13 +108,49 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
 
   return (
     <div className="flex flex-col h-full space-y-4">
+      {/* Lesson vs All Scope Filter Toggle */}
+      {currentDay && (
+        <div className="flex items-center gap-1.5 p-1 bg-[#0e0e11] border border-white/5 rounded-sm">
+          <button
+            type="button"
+            onClick={() => {
+              setScopeFilter('lesson');
+              setSelectedCategory('all');
+            }}
+            className={`flex-1 py-1 px-2 rounded text-[11px] font-mono transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 ${
+              scopeFilter === 'lesson' && !search
+                ? 'bg-white text-black font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            <span>Урок {currentDay} ({lessonTermsCount})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setScopeFilter('all')}
+            className={`flex-1 py-1 px-2 rounded text-[11px] font-mono transition-all cursor-pointer text-center ${
+              scopeFilter === 'all' || search
+                ? 'bg-white text-black font-semibold shadow-sm'
+                : 'text-zinc-400 hover:text-white'
+            }`}
+          >
+            Все термины ({GLOSSARY_TERMS.length})
+          </button>
+        </div>
+      )}
+
       {/* Search Bar */}
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            if (e.target.value.trim()) {
+              setScopeFilter('all');
+            }
+          }}
           placeholder="Поиск терминов, концепций, тегов..."
           className="w-full pl-9 pr-8 py-2 text-xs bg-[#0e0e11] border border-white/10 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 transition-colors font-mono"
           aria-label="Поиск по глоссарию"
@@ -119,16 +188,27 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
 
       {/* Term Counter & Docs Page Link */}
       <div className="flex items-center justify-between text-xs font-mono text-zinc-400 px-0.5">
-        <span>Найдено терминов: {filteredTerms.length}</span>
-        {(search || selectedCategory !== 'all') ? (
+        <span>
+          Найдено терминов: {filteredTerms.length}
+          {scopeFilter === 'lesson' && currentDay && !search ? ` (Урок ${currentDay})` : ''}
+        </span>
+        {scopeFilter === 'lesson' && currentDay && !search ? (
+          <button
+            onClick={() => setScopeFilter('all')}
+            className="text-zinc-400 hover:text-white underline cursor-pointer"
+          >
+            Все термины &rarr;
+          </button>
+        ) : (search || selectedCategory !== 'all' || (scopeFilter === 'all' && currentDay)) ? (
           <button
             onClick={() => {
               setSearch('');
               setSelectedCategory('all');
+              if (currentDay) setScopeFilter('lesson');
             }}
             className="text-zinc-400 hover:text-white underline cursor-pointer"
           >
-            Сбросить фильтры
+            {currentDay ? `К Уроку ${currentDay}` : 'Сбросить фильтры'}
           </button>
         ) : (
           <a

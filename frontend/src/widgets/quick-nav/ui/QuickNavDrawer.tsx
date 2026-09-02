@@ -12,6 +12,7 @@ interface QuickNavDrawerProps {
   selectedTerm?: string | null;
   courseId?: number | null;
   lessonId?: number | null;
+  dayNumber?: number | null;
   onClose?: () => void;
   onTabChange?: (tab: QuickNavTab) => void;
 }
@@ -25,6 +26,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
   const selectedTerm = props.selectedTerm !== undefined ? props.selectedTerm : context.selectedTerm;
   const courseId = props.courseId !== undefined ? props.courseId : context.courseId;
   const lessonId = props.lessonId !== undefined ? props.lessonId : context.lessonId;
+  const dayNumber = props.dayNumber !== undefined ? props.dayNumber : context.dayNumber;
   const onClose = props.onClose || context.closeQuickNav;
   const setActiveTab = props.onTabChange || context.setActiveTab;
 
@@ -118,7 +120,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
         {/* Drawer Body */}
         <div className="flex-1 overflow-y-auto p-5 bg-[#0a0a0c]">
           {activeTab === 'glossary' && (
-            <GlossaryView initialSearch={selectedTerm} />
+            <GlossaryView initialSearch={selectedTerm} dayNumber={dayNumber} />
           )}
           {activeTab === 'progress' && (
             <ProgressView courseId={courseId} />

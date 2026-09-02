@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuickNav } from '@/widgets/quick-nav';
 import { GLOSSARY_TERMS } from '@/entities/glossary';
-import { Tag, HelpCircle, Map, ArrowRight, FileCode2 } from 'lucide-react';
+import { Tag, HelpCircle, ArrowRight } from 'lucide-react';
 
 
 interface LessonContextPanelProps {
@@ -99,31 +99,6 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
               <span>{termName}</span>
             </button>
           ))}
-        </div>
-      </div>
-
-      {/* Fast Navigation Shortcuts */}
-      <div className="pt-3 border-t border-white/5 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <span className="text-zinc-500 text-xs font-mono">
-          Быстрый просмотр без перезагрузки видео:
-        </span>
-
-        <div className="flex items-center gap-2">
-          <Link
-            to="/docs"
-            className="px-2.5 py-1 rounded-sm bg-[#141418] hover:bg-zinc-800 border border-white/5 text-zinc-300 hover:text-white text-xs flex items-center gap-1.5 transition-colors font-mono"
-          >
-            <FileCode2 className="w-3.5 h-3.5 text-zinc-400" />
-            <span>База знаний</span>
-          </Link>
-
-          <button
-            onClick={() => openQuickNav('roadmap')}
-            className="px-2.5 py-1 rounded-sm bg-[#141418] hover:bg-zinc-800 border border-white/5 text-zinc-300 hover:text-white text-xs flex items-center gap-1.5 transition-colors cursor-pointer font-mono"
-          >
-            <Map className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Roadmap курса</span>
-          </button>
         </div>
       </div>
     </div>

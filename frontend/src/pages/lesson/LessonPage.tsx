@@ -26,7 +26,7 @@ const LessonPageContent: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { openQuickNav } = useQuickNav();
+  const { openQuickNav, setContextData } = useQuickNav();
   const [activeTab, setActiveTab] = useState<'content' | 'quiz' | 'homework'>('content');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
@@ -40,6 +40,12 @@ const LessonPageContent: React.FC = () => {
     retry: false,
     staleTime: 5 * 60 * 1000,
   });
+
+  React.useEffect(() => {
+    if (lesson?.dayNumber) {
+      setContextData({ courseId: cId, lessonId: lId, dayNumber: lesson.dayNumber });
+    }
+  }, [lesson?.dayNumber, cId, lId, setContextData]);
 
   const completeMutation = useMutation({
     mutationFn: () => lessonApi.completeLesson(cId, lId),
@@ -368,7 +374,11 @@ export const LessonPage: React.FC = () => {
   const lId = Number(lessonId);
 
   return (
-    <QuickNavProvider initialCourseId={!isNaN(cId) ? cId : undefined} initialLessonId={!isNaN(lId) ? lId : undefined}>
+    <QuickNavProvider
+      initialCourseId={!isNaN(cId) ? cId : undefined}
+      initialLessonId={!isNaN(lId) ? lId : undefined}
+      initialDayNumber={!isNaN(lId) ? lId : undefined}
+    >
       <LessonPageContent />
     </QuickNavProvider>
   );
