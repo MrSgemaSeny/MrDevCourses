@@ -17,8 +17,14 @@ export const LiveMarkdownPreviewModal: React.FC<LiveMarkdownPreviewModalProps> =
   onSave,
   onClose,
 }) => {
-  const [content, setContent] = useState(initialContent);
+  const [content, setContent] = useState(initialContent || '');
   const [mode, setMode] = useState<'split' | 'edit' | 'preview'>('split');
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setContent(initialContent || '');
+    }
+  }, [isOpen, initialContent]);
 
   if (!isOpen) return null;
 

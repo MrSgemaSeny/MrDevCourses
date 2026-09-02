@@ -36,11 +36,12 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
   };
 
   const renderedElements = useMemo(() => {
-    if (!content) {
+    if (!content || !content.trim()) {
       return [<div key="empty" className="text-zinc-500 text-xs italic font-mono">Конспект к уроку отсутствует.</div>];
     }
 
-    const lines = content.split('\n');
+    const normalizedContent = content.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n').replace(/\r\n/g, '\n');
+    const lines = normalizedContent.split('\n');
     const elements: React.ReactNode[] = [];
     let inCodeBlock = false;
     let codeBuffer: string[] = [];

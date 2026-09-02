@@ -517,6 +517,8 @@ public class AdminCurriculumService {
                 .durationMinutes(lesson.getDurationMinutes())
                 .isFreePreview(lesson.getIsFreePreview())
                 .isPublished(lesson.getIsPublished() != null ? lesson.getIsPublished() : true)
+                .content(lesson.getContent())
+                .youtubeUrl(lesson.getYoutubeUrl())
                 .dayNumber(lesson.getDayNumber())
                 .sortOrder(lesson.getSortOrder())
                 .accessible(true)

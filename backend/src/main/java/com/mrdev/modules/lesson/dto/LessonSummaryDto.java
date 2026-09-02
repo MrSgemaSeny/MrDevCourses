@@ -22,6 +22,8 @@ public class LessonSummaryDto {
     private boolean isFreePreview;
     @Builder.Default
     private boolean isPublished = true;
+    private String content;
+    private String youtubeUrl;
     private int dayNumber;
     private int sortOrder;
     private boolean accessible;

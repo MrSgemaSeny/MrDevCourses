@@ -49,10 +49,20 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   const [lessonType, setLessonType] = useState<LessonType>(lesson.lessonType || 'VIDEO');
   const [durationMinutes, setDurationMinutes] = useState(lesson.durationMinutes || 0);
   const [isPublished, setIsPublished] = useState(lesson.isPublished !== false);
-  const [youtubeUrl, setYoutubeUrl] = useState((lesson as LessonDetail).youtubeUrl || '');
-  const [content, setContent] = useState((lesson as LessonDetail).content || '');
+  const [youtubeUrl, setYoutubeUrl] = useState(lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl || '');
+  const [content, setContent] = useState(lesson.content || (lesson as LessonDetail).content || '');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    setTitle(lesson.title);
+    setDayNumber(lesson.dayNumber);
+    setLessonType(lesson.lessonType || 'VIDEO');
+    setDurationMinutes(lesson.durationMinutes || 0);
+    setIsPublished(lesson.isPublished !== false);
+    setYoutubeUrl(lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl || '');
+    setContent(lesson.content || (lesson as LessonDetail).content || '');
+  }, [lesson]);
 
   const handleTogglePublish = async (e: React.MouseEvent) => {
     e.stopPropagation();

@@ -44,6 +44,8 @@ export interface LessonSummary {
   durationMinutes?: number;
   isFreePreview?: boolean;
   isPublished?: boolean;
+  content?: string;
+  youtubeUrl?: string;
   dayNumber: number;
   sortOrder: number;
   accessible: boolean;

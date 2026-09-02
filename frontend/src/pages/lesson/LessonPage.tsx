@@ -12,25 +12,15 @@ import { StudentHelpModal } from '@/widgets/help/StudentHelpModal';
 import { LessonActionCard } from '@/widgets/lesson-action-card/LessonActionCard';
 import { LessonPitfallsAccordion } from '@/widgets/lesson-pitfalls/ui/LessonPitfallsAccordion';
 import {
-  Play,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Lock,
   BookOpen,
-  Layers,
   Code2,
   HelpCircle,
+  Lock,
+  Layers,
 } from 'lucide-react';
-
-const MODULE_NAMES: Record<number, string> = {
-  1: 'Введение и инструментарий',
-  2: 'Frontend-разработка (Маркетплейс)',
-  3: 'Full-Stack + 3D (Трекер денег)',
-  4: 'CRM: Kanban + Trackers',
-  5: 'Pensee (всё в одном)',
-};
-
 
 const LessonPageContent: React.FC = () => {
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
@@ -49,12 +39,6 @@ const LessonPageContent: React.FC = () => {
     enabled: !isNaN(cId) && !isNaN(lId),
     retry: false,
     staleTime: 5 * 60 * 1000,
-  });
-
-  const { data: lessons = [], isLoading: lessonsLoading } = useQuery({
-    queryKey: ['lessons', cId],
-    queryFn: () => lessonApi.getLessons(cId),
-    enabled: !isNaN(cId),
   });
 
   const completeMutation = useMutation({
@@ -315,81 +299,6 @@ const LessonPageContent: React.FC = () => {
               <div />
             )}
           </div>
-        </div>
-
-        {/* Curriculum Navigation Section (Grouped by Module/Week) */}
-        <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-zinc-400" />
-              <span>Программа курса: {lesson.courseTitle}</span>
-            </h3>
-            <span className="text-xs font-mono text-zinc-500">
-              {lessons.filter((l) => l.completed).length} / {lessons.length} пройдено
-            </span>
-          </div>
-
-          {lessonsLoading ? (
-            <div className="text-center py-6 text-zinc-500 text-xs font-mono">Загрузка уроков...</div>
-          ) : (
-            <div className="space-y-4">
-              {/* Group lessons into chunks or modules */}
-              {Array.from(new Set(lessons.map((l) => l.moduleId || Math.ceil(l.dayNumber / 6)))).map((modId) => {
-                const moduleLessons = lessons.filter((l) => (l.moduleId || Math.ceil(l.dayNumber / 6)) === modId);
-                const weekNumber = Number(modId);
-                const moduleLabel = MODULE_NAMES[weekNumber] || `Модуль ${weekNumber}`;
-
-                return (
-                  <div key={modId} className="space-y-2">
-                    <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-2 px-1">
-                      <span className="text-zinc-500">Неделя {weekNumber}</span>
-                      <span className="text-zinc-700">&bull;</span>
-                      <span className="text-zinc-300 font-medium">{moduleLabel}</span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      {moduleLessons.map((item) => {
-                        const isActive = item.id === lId;
-                        return (
-                          <div
-                            key={item.id}
-                            onClick={() => {
-                              if (item.accessible) {
-                                navigate(`/courses/${cId}/lessons/${item.id}`);
-                              }
-                            }}
-                            className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
-                              isActive
-                                ? 'bg-[#141418] border-white/40 text-white font-medium shadow-sm'
-                                : item.accessible
-                                ? 'bg-[#0a0a0c] border-white/5 hover:border-zinc-600 text-zinc-300 cursor-pointer'
-                                : 'bg-[#0a0a0c] border-white/5 opacity-50 text-zinc-600 cursor-not-allowed'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              {item.completed ? (
-                                <CheckCircle2 className="w-4 h-4 text-zinc-300 shrink-0" />
-                              ) : item.accessible ? (
-                                <Play className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
-                              ) : (
-                                <Lock className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                              )}
-                              <span className="truncate">Урок {item.dayNumber}: {item.title}</span>
-                            </div>
-
-                            <div className="flex items-center gap-2 shrink-0 text-[10px] font-mono text-zinc-500">
-                              {item.durationMinutes && <span>{item.durationMinutes} мин</span>}
-                              {isActive && <span className="px-1.5 py-0.5 rounded bg-white/10 text-white font-semibold">ТЕКУЩИЙ</span>}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
 
