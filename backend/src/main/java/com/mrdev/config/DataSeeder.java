@@ -220,21 +220,81 @@ public class DataSeeder {
         log.info("Seeded 1 course, 5 modules and {} lessons successfully.", savedLessons.size());
 
         // 6. Seed Materials
-        LessonMaterial mat1 = LessonMaterial.builder()
-                .lesson(savedLessons.get(0))
-                .title("Шпаргалка: Архитектура FSD и правила именования")
-                .materialType(MaterialType.CHEAT_SHEET)
-                .url("https://feature-sliced.design/docs/get-started/overview")
-                .sortOrder(1)
-                .build();
-        LessonMaterial mat2 = LessonMaterial.builder()
-                .lesson(savedLessons.get(0))
-                .title("Исходный код: Шаблон репозитория MrDeveloper")
-                .materialType(MaterialType.REPO_LINK)
-                .url("https://github.com/MrSgemaSeny/MrDeveloper")
-                .sortOrder(2)
-                .build();
-        lessonMaterialRepository.saveAll(List.of(mat1, mat2));
+        List<LessonMaterial> materialsToSeed = List.of(
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(1)) // Неделя 1 Урок 2
+                        .title("Неделя 1 Урок 2 — Сравнение промптов Spotify (Basic vs Pro Prompting)")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=Prompt")
+                        .fileSizeBytes(6144L)
+                        .sortOrder(1)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(1)) // Неделя 1 Урок 2
+                        .title("Неделя 1 Урок 2 — Системный ролевой промпт ментора Claude (Senior Architect)")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=AI")
+                        .fileSizeBytes(4915L)
+                        .sortOrder(2)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(2)) // Неделя 1 Урок 3
+                        .title("Неделя 1 Урок 3 — Словарь Git и рабочий процесс (ветвление, коммиты, PR, деплой)")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=DevOps")
+                        .fileSizeBytes(13400L)
+                        .sortOrder(1)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(3)) // Неделя 1 Урок 4
+                        .title("Неделя 1 Урок 4 — Эталонный промпт лендинга Global Coffee (Glassmorphism & Mobile-first)")
+                        .materialType(MaterialType.SOURCE_CODE)
+                        .url("/docs?tag=Frontend")
+                        .fileSizeBytes(8800L)
+                        .sortOrder(1)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(6)) // Неделя 2 Урок 1
+                        .title("Неделя 2 Урок 1 — Онбординг во фронтенд и Feature-Sliced Design архитектура")
+                        .materialType(MaterialType.DOCUMENTATION)
+                        .url("/docs?tag=FSD")
+                        .fileSizeBytes(13200L)
+                        .sortOrder(1)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(6)) // Неделя 2 Урок 1
+                        .title("Неделя 2 Урок 1 — Полный словарь фронтенд-разработчика (React 19, TS, Vite, Query, Zustand)")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=Frontend")
+                        .fileSizeBytes(23200L)
+                        .sortOrder(2)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(12)) // Неделя 3 Урок 1
+                        .title("Неделя 3 Урок 1 — Справочник сетевого взаимодействия: HTTP-методы, статус-коды и REST API")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=Auth")
+                        .fileSizeBytes(13100L)
+                        .sortOrder(1)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(12)) // Неделя 3 Урок 1
+                        .title("Неделя 3 Урок 1 — Справочник бэкенда: Java 17, Spring Boot 3, JPA/Hibernate, Flyway, Redis")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=Backend")
+                        .fileSizeBytes(20500L)
+                        .sortOrder(2)
+                        .build(),
+                LessonMaterial.builder()
+                        .lesson(savedLessons.get(16)) // Неделя 3 Урок 5
+                        .title("Неделя 3 Урок 5 — Справочник по тестированию (Unit, Integration, E2E) и CI/CD пайплайнам")
+                        .materialType(MaterialType.CHEAT_SHEET)
+                        .url("/docs?tag=DevOps")
+                        .fileSizeBytes(17050L)
+                        .sortOrder(1)
+                        .build()
+        );
+        lessonMaterialRepository.saveAll(materialsToSeed);
 
         // 7. Seed Quizzes for quiz lessons (Lesson 5, 11, 17, 23, 29)
         Quiz quiz23 = Quiz.builder()
