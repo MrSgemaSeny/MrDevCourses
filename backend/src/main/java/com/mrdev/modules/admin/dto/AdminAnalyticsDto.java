@@ -16,7 +16,6 @@ public class AdminAnalyticsDto {
     private long totalEnrollments;
     private long totalCompletions;
     private long totalCertificates;
-    private double averageStreak;
     private double overallCompletionRate;
     private List<LessonFunnelItemDto> funnel;
 

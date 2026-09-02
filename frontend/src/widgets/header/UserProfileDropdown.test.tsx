@@ -32,8 +32,6 @@ describe('UserProfileDropdown Component', () => {
         email: 'murat@example.com',
         name: 'Murat Senior',
         role: 'STUDENT',
-        currentStreak: 5,
-        longestStreak: 12,
         createdAt: '2026-08-25T10:00:00Z',
       },
       logout: mockLogout,

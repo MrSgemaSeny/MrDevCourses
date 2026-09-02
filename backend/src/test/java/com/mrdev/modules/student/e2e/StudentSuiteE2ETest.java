@@ -166,7 +166,6 @@ class StudentSuiteE2ETest {
                 .name("Senior Mentor")
                 .passwordHash(passwordEncoder.encode("SecurePass123!"))
                 .role(Role.ADMIN)
-                .currentStreak(10)
                 .lastActiveDate(LocalDate.now())
                 .build());
         adminToken = jwtTokenProvider.generateToken(mentorAdmin);
@@ -177,7 +176,6 @@ class StudentSuiteE2ETest {
                 .name("Alex Student")
                 .passwordHash(passwordEncoder.encode("StudentPass123!"))
                 .role(Role.STUDENT)
-                .currentStreak(1)
                 .lastActiveDate(LocalDate.now())
                 .build());
         studentToken = jwtTokenProvider.generateToken(student);

@@ -21,7 +21,6 @@ describe('AdminAnalyticsDashboard Component', () => {
       totalEnrollments: 50,
       totalCompletions: 15,
       totalLessonsCompleted: 320,
-      averageStreak: 4.8,
       activeStudents: 28,
       completionRate: 30.0,
     });
@@ -68,14 +67,6 @@ describe('AdminAnalyticsDashboard Component', () => {
         conversionRate: 30,
         dropOffRate: 66.7,
       },
-    ]);
-
-    vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getStreakDistribution').mockResolvedValue([
-      { range: '0 дней', count: 14, percentage: 33.3 },
-      { range: '1-3 дня', count: 12, percentage: 28.6 },
-      { range: '4-7 дней', count: 8, percentage: 19.0 },
-      { range: '8-14 дней', count: 5, percentage: 11.9 },
-      { range: '15+ дней', count: 3, percentage: 7.1 },
     ]);
 
     vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getCourseRetention').mockResolvedValue({

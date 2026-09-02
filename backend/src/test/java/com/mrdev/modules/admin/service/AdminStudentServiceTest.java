@@ -93,8 +93,6 @@ class AdminStudentServiceTest {
                 .email("admin@test.com")
                 .name("Admin User")
                 .role(Role.ADMIN)
-                .currentStreak(5)
-                .longestStreak(10)
                 .lastActiveDate(LocalDate.now())
                 .createdAt(Instant.now())
                 .build();
@@ -104,8 +102,6 @@ class AdminStudentServiceTest {
                 .email("student@test.com")
                 .name("Student User")
                 .role(Role.STUDENT)
-                .currentStreak(2)
-                .longestStreak(4)
                 .lastActiveDate(LocalDate.now())
                 .createdAt(Instant.now())
                 .build();
@@ -277,7 +273,6 @@ class AdminStudentServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getUserId()).isEqualTo(2L);
         assertThat(result.getEmail()).isEqualTo("student@test.com");
-        assertThat(result.getCurrentStreak()).isEqualTo(2);
         assertThat(result.getEnrolledCourses()).hasSize(1);
         assertThat(result.getCompletedLessons()).hasSize(1);
         assertThat(result.getQuizScores()).hasSize(1);

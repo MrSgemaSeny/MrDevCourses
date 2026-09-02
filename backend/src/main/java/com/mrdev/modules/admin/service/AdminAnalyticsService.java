@@ -97,15 +97,9 @@ public class AdminAnalyticsService {
             }
         }
 
-        double averageStreak = students.stream()
-                .mapToInt(User::getCurrentStreak)
-                .average()
-                .orElse(0.0);
-        averageStreak = Math.round(averageStreak * 10.0) / 10.0;
-
         LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
         long activeStudents = students.stream()
-                .filter(u -> u.getCurrentStreak() > 0 || (u.getLastActiveDate() != null && !u.getLastActiveDate().isBefore(sevenDaysAgo)))
+                .filter(u -> u.getLastActiveDate() != null && !u.getLastActiveDate().isBefore(sevenDaysAgo))
                 .count();
 
         double completionRate = totalEnrollments > 0
@@ -117,7 +111,6 @@ public class AdminAnalyticsService {
                 .totalEnrollments(totalEnrollments)
                 .totalCompletions(totalCompletions)
                 .totalLessonsCompleted(totalLessonsCompleted)
-                .averageStreak(averageStreak)
                 .activeStudents(activeStudents)
                 .completionRate(completionRate)
                 .build();
@@ -218,34 +211,6 @@ public class AdminAnalyticsService {
                 .build());
 
         return funnel;
-    }
-
-    @Transactional(readOnly = true)
-    public List<StreakDistributionDto> getStreakDistribution() {
-        List<User> allUsers = userRepository.findAll();
-        List<User> students = allUsers.stream()
-                .filter(u -> u.getRole() == Role.STUDENT)
-                .toList();
-
-        if (students.isEmpty() && !allUsers.isEmpty()) {
-            students = allUsers;
-        }
-
-        long total = students.size();
-
-        long count0 = students.stream().filter(u -> u.getCurrentStreak() == 0).count();
-        long count1to3 = students.stream().filter(u -> u.getCurrentStreak() >= 1 && u.getCurrentStreak() <= 3).count();
-        long count4to7 = students.stream().filter(u -> u.getCurrentStreak() >= 4 && u.getCurrentStreak() <= 7).count();
-        long count8to14 = students.stream().filter(u -> u.getCurrentStreak() >= 8 && u.getCurrentStreak() <= 14).count();
-        long count15plus = students.stream().filter(u -> u.getCurrentStreak() >= 15).count();
-
-        return List.of(
-                createStreakDto("0 дней", count0, total),
-                createStreakDto("1-3 дня", count1to3, total),
-                createStreakDto("4-7 дней", count4to7, total),
-                createStreakDto("8-14 дней", count8to14, total),
-                createStreakDto("15+ дней", count15plus, total)
-        );
     }
 
     @Transactional(readOnly = true)
@@ -536,7 +501,6 @@ public class AdminAnalyticsService {
     @Transactional(readOnly = true)
     public AdminAnalyticsExportDto exportAnalyticsJson(Long courseId) {
         AdminOverviewMetricsDto overview = getOverviewMetrics();
-        List<StreakDistributionDto> streaks = getStreakDistribution();
         AiTutorTelemetryDto aiTutor = getAiTutorSummary();
         List<QuizHotspotDto> quizHotspots = getQuizHotspots();
 
@@ -567,7 +531,6 @@ public class AdminAnalyticsService {
                 .courseTitle(courseTitle)
                 .overview(overview)
                 .funnel(funnel)
-                .streaks(streaks)
                 .retention(retention)
                 .aiTutorSummary(aiTutor)
                 .quizHotspots(quizHotspots)
@@ -590,7 +553,6 @@ public class AdminAnalyticsService {
         sb.append("Total Enrollments,").append(data.getOverview().getTotalEnrollments()).append("\n");
         sb.append("Total Course Completions,").append(data.getOverview().getTotalCompletions()).append("\n");
         sb.append("Total Lessons Completed,").append(data.getOverview().getTotalLessonsCompleted()).append("\n");
-        sb.append("Average Streak (days),").append(data.getOverview().getAverageStreak()).append("\n");
         sb.append("Active Students (7d),").append(data.getOverview().getActiveStudents()).append("\n");
         sb.append("Overall Completion Rate (%),").append(data.getOverview().getCompletionRate()).append("%\n\n");
 
@@ -623,20 +585,8 @@ public class AdminAnalyticsService {
         }
         sb.append("\n");
 
-        // Section 4: Streak Distribution
-        sb.append("=== 4. STREAK DISTRIBUTION ===\n");
-        sb.append("Streak Bucket,Students Count,Percentage (%)\n");
-        if (data.getStreaks() != null) {
-            for (StreakDistributionDto sd : data.getStreaks()) {
-                sb.append(escapeCsv(sd.getRange())).append(",")
-                        .append(sd.getCount()).append(",")
-                        .append(sd.getPercentage()).append("%\n");
-            }
-        }
-        sb.append("\n");
-
-        // Section 5: AI Tutor Telemetry
-        sb.append("=== 5. AI TUTOR TELEMETRY ===\n");
+        // Section 4: AI Tutor Telemetry
+        sb.append("=== 4. AI TUTOR TELEMETRY ===\n");
         sb.append("Metric,Value\n");
         if (data.getAiTutorSummary() != null) {
             sb.append("Total AI Tutor Questions,").append(data.getAiTutorSummary().getTotalQuestions()).append("\n");
@@ -647,8 +597,8 @@ public class AdminAnalyticsService {
         }
         sb.append("\n");
 
-        // Section 6: Quiz Hotspots
-        sb.append("=== 6. QUIZ FAILURE HOTSPOTS ===\n");
+        // Section 5: Quiz Hotspots
+        sb.append("=== 5. QUIZ FAILURE HOTSPOTS ===\n");
         sb.append("Question Text,Quiz Title,Course,Total Attempts,Failures,Failure Rate (%),Pass Rate (%),Common Wrong Option\n");
         if (data.getQuizHotspots() != null) {
             for (QuizHotspotDto qh : data.getQuizHotspots()) {
@@ -664,17 +614,6 @@ public class AdminAnalyticsService {
         }
 
         return sb.toString();
-    }
-
-    private StreakDistributionDto createStreakDto(String range, long count, long total) {
-        double percentage = total > 0
-                ? Math.round(((double) count / total) * 100.0 * 10.0) / 10.0
-                : 0.0;
-        return StreakDistributionDto.builder()
-                .range(range)
-                .count(count)
-                .percentage(percentage)
-                .build();
     }
 
     private String escapeCsv(String value) {

@@ -141,8 +141,6 @@ class AdminStudentControllerTest {
                 .email("mainadmin@test.com")
                 .name("Super Admin")
                 .role(Role.ADMIN)
-                .currentStreak(10)
-                .longestStreak(15)
                 .lastActiveDate(LocalDate.now())
                 .build();
         adminUser = userRepository.save(adminUser);
@@ -152,8 +150,6 @@ class AdminStudentControllerTest {
                 .email("secondaryadmin@test.com")
                 .name("Second Admin")
                 .role(Role.ADMIN)
-                .currentStreak(2)
-                .longestStreak(2)
                 .lastActiveDate(LocalDate.now())
                 .build();
         secondAdmin = userRepository.save(secondAdmin);
@@ -162,8 +158,6 @@ class AdminStudentControllerTest {
                 .email("student1@test.com")
                 .name("Alex Student")
                 .role(Role.STUDENT)
-                .currentStreak(4)
-                .longestStreak(8)
                 .lastActiveDate(LocalDate.now())
                 .build();
         studentUser = userRepository.save(studentUser);
@@ -311,7 +305,6 @@ class AdminStudentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success", is(true)))
                 .andExpect(jsonPath("$.data.userId", is(studentUser.getId().intValue())))
-                .andExpect(jsonPath("$.data.currentStreak", is(4)))
                 .andExpect(jsonPath("$.data.completedLessons", hasSize(1)))
                 .andExpect(jsonPath("$.data.completedLessons[0].lessonId", is(testLesson.getId().intValue())));
     }

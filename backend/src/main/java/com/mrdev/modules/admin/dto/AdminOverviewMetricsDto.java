@@ -14,7 +14,6 @@ public class AdminOverviewMetricsDto {
     private long totalEnrollments;
     private long totalLessonsCompleted;
     private long totalCompletions;
-    private double averageStreak;
     private long activeStudents;
     private double completionRate;
 }

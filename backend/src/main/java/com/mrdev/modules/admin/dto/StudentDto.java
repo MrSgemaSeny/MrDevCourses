@@ -21,8 +21,6 @@ public class StudentDto {
     private String name;
     private String avatarUrl;
     private Role role;
-    private int currentStreak;
-    private int longestStreak;
     private Instant createdAt;
     private List<EnrollmentDto> enrollments;
     private String currentLessonTitle;

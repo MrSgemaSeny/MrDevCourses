@@ -18,7 +18,6 @@ public class AdminAnalyticsExportDto {
     private String courseTitle;
     private AdminOverviewMetricsDto overview;
     private List<CourseFunnelStepDto> funnel;
-    private List<StreakDistributionDto> streaks;
     private CourseRetentionDto retention;
     private AiTutorTelemetryDto aiTutorSummary;
     private List<QuizHotspotDto> quizHotspots;

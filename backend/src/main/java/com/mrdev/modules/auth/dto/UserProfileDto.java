@@ -19,8 +19,6 @@ public class UserProfileDto {
     private String name;
     private String avatarUrl;
     private Role role;
-    private int currentStreak;
-    private int longestStreak;
     private LocalDate lastActiveDate;
     private String telegramUsername;
     private Long telegramChatId;

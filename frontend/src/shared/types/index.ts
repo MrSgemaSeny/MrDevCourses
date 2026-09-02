@@ -6,8 +6,6 @@ export interface User {
   name?: string;
   avatarUrl?: string;
   role: UserRole;
-  currentStreak?: number;
-  longestStreak?: number;
   lastActiveDate?: string;
   createdAt: string;
 }
@@ -137,8 +135,6 @@ export interface Student {
   name?: string;
   avatarUrl?: string;
   role: UserRole;
-  currentStreak?: number;
-  longestStreak?: number;
   lastActiveDate?: string;
   createdAt: string;
   enrollments: Enrollment[];
@@ -199,8 +195,6 @@ export interface StudentProgressDetail {
   name?: string;
   avatarUrl?: string;
   role: UserRole;
-  currentStreak: number;
-  longestStreak: number;
   lastActiveDate?: string;
   createdAt: string;
   enrolledCourses: CourseProgress[];
@@ -445,7 +439,6 @@ export interface AdminAnalytics {
   totalEnrollments: number;
   totalCompletions: number;
   totalCertificates: number;
-  averageStreak: number;
   overallCompletionRate: number;
   funnel: LessonFunnelItem[];
 }

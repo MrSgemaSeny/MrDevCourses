@@ -20,7 +20,6 @@ describe('AdminAnalyticsPage', () => {
       totalEnrollments: 12,
       totalCompletions: 3,
       totalLessonsCompleted: 55,
-      averageStreak: 3.5,
       activeStudents: 8,
       completionRate: 25.0,
     });
@@ -37,7 +36,6 @@ describe('AdminAnalyticsPage', () => {
     ]);
 
     vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getCourseFunnel').mockResolvedValue([]);
-    vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getStreakDistribution').mockResolvedValue([]);
     vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getCourseRetention').mockResolvedValue({
       courseId: 1,
       courseTitle: 'Вайбкодинг с нуля',

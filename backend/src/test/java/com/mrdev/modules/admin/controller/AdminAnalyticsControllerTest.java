@@ -145,7 +145,6 @@ class AdminAnalyticsControllerTest {
                 .email("student@test.com")
                 .name("Student User")
                 .role(Role.STUDENT)
-                .currentStreak(3)
                 .lastActiveDate(LocalDate.now())
                 .build();
         studentUser = userRepository.save(studentUser);
@@ -155,7 +154,6 @@ class AdminAnalyticsControllerTest {
                 .email("admin@test.com")
                 .name("Admin User")
                 .role(Role.ADMIN)
-                .currentStreak(7)
                 .lastActiveDate(LocalDate.now())
                 .build();
         adminUser = userRepository.save(adminUser);
@@ -277,7 +275,6 @@ class AdminAnalyticsControllerTest {
                 .andExpect(jsonPath("$.data.totalEnrollments", is(1)))
                 .andExpect(jsonPath("$.data.totalLessonsCompleted", is(1)))
                 .andExpect(jsonPath("$.data.totalCompletions", is(1)))
-                .andExpect(jsonPath("$.data.averageStreak", is(3.0)))
                 .andExpect(jsonPath("$.data.activeStudents", is(1)))
                 .andExpect(jsonPath("$.data.completionRate", is(100.0)));
     }
@@ -296,19 +293,6 @@ class AdminAnalyticsControllerTest {
                 .andExpect(jsonPath("$.data[1].studentsCount", is(1)))
                 .andExpect(jsonPath("$.data[2].stepName", is("Курс завершен (100%)")))
                 .andExpect(jsonPath("$.data[2].studentsCount", is(1)));
-    }
-
-    @Test
-    @DisplayName("GET /v1/admin/analytics/streaks as ADMIN returns 5 streak buckets")
-    void getStreaks_AsAdmin_ReturnsBuckets() throws Exception {
-        mockMvc.perform(get("/v1/admin/analytics/streaks")
-                        .cookie(new Cookie("MrDev_token", adminToken)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success", is(true)))
-                .andExpect(jsonPath("$.data", hasSize(5)))
-                .andExpect(jsonPath("$.data[1].range", is("1-3 дня")))
-                .andExpect(jsonPath("$.data[1].count", is(1)))
-                .andExpect(jsonPath("$.data[1].percentage", is(100.0)));
     }
 
     @Test
@@ -385,6 +369,6 @@ class AdminAnalyticsControllerTest {
                 .andExpect(content().string(containsString("=== 1. PLATFORM OVERVIEW KPIS ===")))
                 .andExpect(content().string(containsString("=== 2. COURSE FUNNEL DROP-OFF ===")))
                 .andExpect(content().string(containsString("=== 3. LESSON RETENTION MATRIX ===")))
-                .andExpect(content().string(containsString("=== 6. QUIZ FAILURE HOTSPOTS ===")));
+                .andExpect(content().string(containsString("=== 5. QUIZ FAILURE HOTSPOTS ===")));
     }
 }

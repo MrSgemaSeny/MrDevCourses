@@ -253,7 +253,7 @@ public class LessonService {
             progress = lessonProgressRepository.save(progress);
             log.info("User {} marked lesson {} ({}) as complete", userId, lessonId, lesson.getTitle());
 
-            updateUserStreak(user);
+            updateUserLastActive(user);
             auditService.logAction(userId, "LESSON_COMPLETE", "Lesson", lessonId, "Completed lesson: " + lesson.getTitle(), null);
         }
 
@@ -287,20 +287,8 @@ public class LessonService {
         return enrolledAt.plus(Duration.ofDays(dayNumber - 1L));
     }
 
-    private void updateUserStreak(User user) {
+    private void updateUserLastActive(User user) {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
-        LocalDate lastActive = user.getLastActiveDate();
-
-        if (lastActive == null) {
-            user.setCurrentStreak(1);
-            user.setLongestStreak(Math.max(user.getLongestStreak(), 1));
-        } else if (lastActive.equals(today.minusDays(1))) {
-            int newStreak = user.getCurrentStreak() + 1;
-            user.setCurrentStreak(newStreak);
-            user.setLongestStreak(Math.max(user.getLongestStreak(), newStreak));
-        } else if (!lastActive.equals(today)) {
-            user.setCurrentStreak(1);
-        }
         user.setLastActiveDate(today);
         userRepository.save(user);
     }

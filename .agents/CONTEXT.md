@@ -26,7 +26,7 @@
   - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
   - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking.
-- **Verification**: Backend 250/250 JUnit Green | Frontend 78/78 Vitest Green (32 suites) | Build 0 errors (1749 modules).
+- **Verification**: Backend 249/249 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1748 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
@@ -43,7 +43,7 @@
 
 ## Status & Architecture
 - **Project Stage**: Level 3 — Strong Educational MVP (Pre-Release Pilot with 2 live students).
-- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V16), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j.
+- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V28), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j.
 - **Core Modules & Capabilities**:
   - `homework-pipeline`: Human-centric submission (GitHub Repo URL, Live Demo URL, notes) + Admin Review Triage Queue (`/admin/homeworks`) with instant 1-click approve (auto-complete lesson + early drip unlock) or revision feedback.
   - `onboarding`: `WelcomeOnboardingModal` on course entry (outcome goal, Discord invite, tools checklist).
@@ -56,10 +56,10 @@
   - `b2c-discovery`: Modern B2C course catalog (`/courses`) with hover video preview; 2-column B2C landing (`/courses/:slug`) with Syllabus accordion, Sticky card, author badge, and FAQ.
 
 ## Test Verification & Quality Gates
-- **Backend (JUnit)**: 215/215 tests PASSED (100% Green, clean `--rerun-tasks` and `:jacocoTestReport` verified).
-- **Frontend (Vitest)**: 71/71 tests PASSED across 30 test suites (100% Green).
+- **Backend (JUnit)**: 249/249 tests PASSED (100% Green, clean `:jacocoTestReport` verified).
+- **Frontend (Vitest)**: 80/80 tests PASSED across 33 test suites (100% Green).
 - **Security & IDOR Coverage**: IDOR guards on Homework and Help modules, Anti-Cheat option masking on Quizzes, Drip SQL calculation bounds, and Admin RBAC gates thoroughly verified.
-- **Production Build**: `tsc -b && vite build` SUCCESSFUL (1795 modules transformed, 0 errors).
+- **Production Build**: `tsc -b && vite build` SUCCESSFUL (1748 modules transformed, 0 errors).
 - **Phase 0 Status**: 100% COMPLETE (Operational Lesson Card, SOS Ticket persisting + Telegram alerts, Telegram Mentor Bot commands `/hw`, `/approve`, `/reject`, `/status`, `/stuck`, Student Focus Dashboard).
 - **Phase 1 Status**: 100% COMPLETE (Automated Stuck Detection Engine, Public Graduation Project Showcase Wall `/projects` with likes and GitHub/Demo previews, Welcome Onboarding flow).
 

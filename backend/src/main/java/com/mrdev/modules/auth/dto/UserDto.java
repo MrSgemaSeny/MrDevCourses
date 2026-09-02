@@ -20,8 +20,6 @@ public class UserDto {
     private String name;
     private String avatarUrl;
     private Role role;
-    private int currentStreak;
-    private int longestStreak;
     private LocalDate lastActiveDate;
     private Instant createdAt;
 
@@ -33,8 +31,6 @@ public class UserDto {
                 .name(user.getName())
                 .avatarUrl(user.getAvatarUrl())
                 .role(user.getRole())
-                .currentStreak(user.getCurrentStreak())
-                .longestStreak(user.getLongestStreak())
                 .lastActiveDate(user.getLastActiveDate())
                 .createdAt(user.getCreatedAt())
                 .build();

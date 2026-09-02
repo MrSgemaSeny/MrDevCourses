@@ -6,7 +6,6 @@ export interface AdminOverviewMetrics {
   totalEnrollments: number;
   totalCompletions: number;
   totalLessonsCompleted: number;
-  averageStreak: number;
   activeStudents: number;
   completionRate: number;
 }
@@ -20,12 +19,6 @@ export interface CourseFunnelStep {
   studentsCount: number;
   conversionRate: number;
   dropOffRate: number;
-}
-
-export interface StreakDistribution {
-  range: string;
-  count: number;
-  percentage: number;
 }
 
 export interface LessonRetention {
@@ -84,7 +77,6 @@ export interface AdminAnalyticsExportPayload {
   courseTitle: string;
   overview: AdminOverviewMetrics;
   funnel: CourseFunnelStep[];
-  streaks: StreakDistribution[];
   retention: CourseRetention | null;
   aiTutorSummary: AiTutorTelemetry;
   quizHotspots: QuizHotspot[];
@@ -98,11 +90,6 @@ export const adminAnalyticsApi = {
 
   getCourseFunnel: async (courseId: number): Promise<CourseFunnelStep[]> => {
     const res = await apiClient.get<ApiResponse<CourseFunnelStep[]>>(`/v1/admin/analytics/courses/${courseId}/funnel`);
-    return res.data.data;
-  },
-
-  getStreakDistribution: async (): Promise<StreakDistribution[]> => {
-    const res = await apiClient.get<ApiResponse<StreakDistribution[]>>('/v1/admin/analytics/streaks');
     return res.data.data;
   },
 

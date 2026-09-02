@@ -58,8 +58,6 @@ class UserProfileControllerTest {
                 .githubUsername("dias-code")
                 .bio("Junior Full-Stack Engineer learning vibe coding.")
                 .goal("Launch my first AI SaaS")
-                .currentStreak(5)
-                .longestStreak(10)
                 .build());
 
         studentToken = jwtTokenProvider.generateToken(student);

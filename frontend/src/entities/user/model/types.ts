@@ -6,8 +6,6 @@ export interface User {
   name?: string;
   avatarUrl?: string;
   role: UserRole;
-  currentStreak?: number;
-  longestStreak?: number;
   lastActiveDate?: string;
   telegramUsername?: string;
   telegramChatId?: number;

@@ -33,12 +33,6 @@ public class AdminAnalyticsController {
         return ResponseEntity.ok(ApiResponse.success(funnel));
     }
 
-    @GetMapping("/streaks")
-    public ResponseEntity<ApiResponse<List<StreakDistributionDto>>> getStreakDistribution() {
-        List<StreakDistributionDto> streaks = adminAnalyticsService.getStreakDistribution();
-        return ResponseEntity.ok(ApiResponse.success(streaks));
-    }
-
     @GetMapping("/courses/{courseId}/retention")
     public ResponseEntity<ApiResponse<CourseRetentionDto>> getCourseRetention(@PathVariable Long courseId) {
         CourseRetentionDto retention = adminAnalyticsService.getCourseRetention(courseId);

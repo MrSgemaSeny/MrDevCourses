@@ -34,8 +34,6 @@ const mockStudents = {
       email: 'admin@mrdev.com',
       name: 'Admin Master',
       role: 'ADMIN',
-      currentStreak: 10,
-      longestStreak: 15,
       createdAt: '2026-01-01T00:00:00Z',
       enrollments: [],
     },
@@ -44,8 +42,6 @@ const mockStudents = {
       email: 'student@mrdev.com',
       name: 'Elena Student',
       role: 'STUDENT',
-      currentStreak: 4,
-      longestStreak: 7,
       createdAt: '2026-01-10T00:00:00Z',
       enrollments: [
         { id: 10, userId: 2, userEmail: 'student@mrdev.com', courseId: 100, courseTitle: 'Spring Boot 3', courseSlug: 'spring-3', enrolledAt: '2026-01-10T00:00:00Z' }

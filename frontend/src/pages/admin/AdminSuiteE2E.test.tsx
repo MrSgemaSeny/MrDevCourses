@@ -76,7 +76,6 @@ describe('Admin Suite E2E Workflows (Frontend)', () => {
       totalEnrollments: 1,
       totalCompletions: 1,
       totalLessonsCompleted: 6,
-      averageStreak: 7.5,
       activeStudents: 1,
       completionRate: 100.0,
     });
@@ -92,14 +91,6 @@ describe('Admin Suite E2E Workflows (Frontend)', () => {
         conversionRate: 100,
         dropOffRate: 0,
       },
-    ]);
-
-    vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getStreakDistribution').mockResolvedValue([
-      { range: '0 дней', count: 0, percentage: 0 },
-      { range: '1-3 дня', count: 0, percentage: 0 },
-      { range: '4-7 дней', count: 1, percentage: 100 },
-      { range: '8-14 дней', count: 0, percentage: 0 },
-      { range: '15+ дней', count: 0, percentage: 0 },
     ]);
 
     vi.spyOn(adminAnalyticsApiModule.adminAnalyticsApi, 'getCourseRetention').mockResolvedValue({

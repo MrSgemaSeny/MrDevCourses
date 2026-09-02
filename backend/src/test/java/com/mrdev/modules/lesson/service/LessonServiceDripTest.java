@@ -212,7 +212,7 @@ class LessonServiceDripTest {
     }
 
     @Test
-    void completeLesson_WhenAccessible_ShouldSaveProgressAndStreak() {
+    void completeLesson_WhenAccessible_ShouldSaveProgress() {
         Instant enrolledAt = Instant.now().minus(Duration.ofDays(1));
         Enrollment enrollment = Enrollment.builder().id(1L).user(student).course(course).enrolledAt(enrolledAt).build();
 

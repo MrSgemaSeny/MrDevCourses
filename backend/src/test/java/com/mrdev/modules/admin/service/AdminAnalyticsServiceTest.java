@@ -99,7 +99,6 @@ class AdminAnalyticsServiceTest {
                 .id(1L)
                 .email("student1@test.com")
                 .role(Role.STUDENT)
-                .currentStreak(4)
                 .lastActiveDate(LocalDate.now())
                 .build();
 
@@ -107,7 +106,6 @@ class AdminAnalyticsServiceTest {
                 .id(2L)
                 .email("student2@test.com")
                 .role(Role.STUDENT)
-                .currentStreak(0)
                 .lastActiveDate(LocalDate.now().minusDays(10))
                 .build();
 
@@ -115,7 +113,6 @@ class AdminAnalyticsServiceTest {
                 .id(3L)
                 .email("admin@test.com")
                 .role(Role.ADMIN)
-                .currentStreak(10)
                 .build();
 
         course = Course.builder()
@@ -168,7 +165,6 @@ class AdminAnalyticsServiceTest {
         assertThat(metrics.getTotalEnrollments()).isEqualTo(2);
         assertThat(metrics.getTotalLessonsCompleted()).isEqualTo(3);
         assertThat(metrics.getTotalCompletions()).isEqualTo(1);
-        assertThat(metrics.getAverageStreak()).isEqualTo(2.0);
         assertThat(metrics.getActiveStudents()).isEqualTo(1);
         assertThat(metrics.getCompletionRate()).isEqualTo(50.0);
     }
@@ -236,40 +232,7 @@ class AdminAnalyticsServiceTest {
         assertThat(step3.getDropOffRate()).isEqualTo(83.3);
     }
 
-    @Test
-    @DisplayName("getStreakDistribution should partition users into 5 streak buckets")
-    void getStreakDistribution_CalculatesBuckets() {
-        User u1 = User.builder().id(1L).role(Role.STUDENT).currentStreak(0).build();
-        User u2 = User.builder().id(2L).role(Role.STUDENT).currentStreak(2).build();
-        User u3 = User.builder().id(3L).role(Role.STUDENT).currentStreak(6).build();
-        User u4 = User.builder().id(4L).role(Role.STUDENT).currentStreak(10).build();
-        User u5 = User.builder().id(5L).role(Role.STUDENT).currentStreak(20).build();
 
-        when(userRepository.findAll()).thenReturn(List.of(u1, u2, u3, u4, u5));
-
-        List<StreakDistributionDto> streaks = adminAnalyticsService.getStreakDistribution();
-
-        assertThat(streaks).hasSize(5);
-        assertThat(streaks.get(0).getRange()).isEqualTo("0 дней");
-        assertThat(streaks.get(0).getCount()).isEqualTo(1);
-        assertThat(streaks.get(0).getPercentage()).isEqualTo(20.0);
-
-        assertThat(streaks.get(1).getRange()).isEqualTo("1-3 дня");
-        assertThat(streaks.get(1).getCount()).isEqualTo(1);
-        assertThat(streaks.get(1).getPercentage()).isEqualTo(20.0);
-
-        assertThat(streaks.get(2).getRange()).isEqualTo("4-7 дней");
-        assertThat(streaks.get(2).getCount()).isEqualTo(1);
-        assertThat(streaks.get(2).getPercentage()).isEqualTo(20.0);
-
-        assertThat(streaks.get(3).getRange()).isEqualTo("8-14 дней");
-        assertThat(streaks.get(3).getCount()).isEqualTo(1);
-        assertThat(streaks.get(3).getPercentage()).isEqualTo(20.0);
-
-        assertThat(streaks.get(4).getRange()).isEqualTo("15+ дней");
-        assertThat(streaks.get(4).getCount()).isEqualTo(1);
-        assertThat(streaks.get(4).getPercentage()).isEqualTo(20.0);
-    }
 
     @Test
     @DisplayName("getCourseRetention should calculate lesson retention metrics and average completion days")
@@ -466,8 +429,7 @@ class AdminAnalyticsServiceTest {
         assertThat(exportCsv).contains("=== 1. PLATFORM OVERVIEW KPIS ===");
         assertThat(exportCsv).contains("=== 2. COURSE FUNNEL DROP-OFF ===");
         assertThat(exportCsv).contains("=== 3. LESSON RETENTION MATRIX ===");
-        assertThat(exportCsv).contains("=== 4. STREAK DISTRIBUTION ===");
-        assertThat(exportCsv).contains("=== 5. AI TUTOR TELEMETRY ===");
-        assertThat(exportCsv).contains("=== 6. QUIZ FAILURE HOTSPOTS ===");
+        assertThat(exportCsv).contains("=== 4. AI TUTOR TELEMETRY ===");
+        assertThat(exportCsv).contains("=== 5. QUIZ FAILURE HOTSPOTS ===");
     }
 }

@@ -162,7 +162,6 @@ class AdminSuiteE2ETest {
                 .email("lead.admin@mrdevcourses.com")
                 .name("Senior Tech Lead Admin")
                 .role(Role.ADMIN)
-                .currentStreak(10)
                 .lastActiveDate(LocalDate.now())
                 .build());
         primaryAdminToken = jwtTokenProvider.generateToken(primaryAdmin);
@@ -171,7 +170,6 @@ class AdminSuiteE2ETest {
                 .email("ops.admin@mrdevcourses.com")
                 .name("Operations Admin")
                 .role(Role.ADMIN)
-                .currentStreak(5)
                 .lastActiveDate(LocalDate.now())
                 .build());
         secondaryAdminToken = jwtTokenProvider.generateToken(secondaryAdmin);
@@ -180,7 +178,6 @@ class AdminSuiteE2ETest {
                 .email("alex.student@gmail.com")
                 .name("Alex Student")
                 .role(Role.STUDENT)
-                .currentStreak(3)
                 .lastActiveDate(LocalDate.now())
                 .build());
         studentToken = jwtTokenProvider.generateToken(studentUser);
@@ -463,7 +460,7 @@ class AdminSuiteE2ETest {
         }
 
         @Test
-        @DisplayName("F13-F16: Analytics Overview, Step-by-Step Funnel, Streaks, and Retention Matrix")
+        @DisplayName("F13-F16: Analytics Overview, Step-by-Step Funnel, and Retention Matrix")
         void testTelemetryEndpoints() throws Exception {
             Course course = courseRepository.save(Course.builder().title("JVM Internals").slug("jvm-internals").active(true).build());
             Lesson l1 = lessonRepository.save(Lesson.builder().course(course).title("Day 1: Memory Model").dayNumber(1).sortOrder(1).build());
@@ -487,11 +484,6 @@ class AdminSuiteE2ETest {
                     .andExpect(jsonPath("$.data[0].studentsCount", is(1)))
                     .andExpect(jsonPath("$.data[1].studentsCount", is(1)))
                     .andExpect(jsonPath("$.data[2].studentsCount", is(0)));
-
-            // Streaks
-            mockMvc.perform(get("/v1/admin/analytics/streaks").cookie(adminCookie()))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.data", hasSize(5)));
 
             // Retention
             mockMvc.perform(get("/v1/admin/analytics/courses/" + course.getId() + "/retention").cookie(adminCookie()))

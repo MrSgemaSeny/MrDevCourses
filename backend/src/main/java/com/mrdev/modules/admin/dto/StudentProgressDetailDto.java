@@ -21,8 +21,6 @@ public class StudentProgressDetailDto {
     private String name;
     private String avatarUrl;
     private Role role;
-    private int currentStreak;
-    private int longestStreak;
     private LocalDate lastActiveDate;
     private Instant createdAt;
     private List<CourseProgressDto> enrolledCourses;

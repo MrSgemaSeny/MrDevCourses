@@ -51,14 +51,6 @@ public class User {
     @Builder.Default
     private Role role = Role.STUDENT;
 
-    @Column(name = "current_streak", nullable = false)
-    @Builder.Default
-    private int currentStreak = 0;
-
-    @Column(name = "longest_streak", nullable = false)
-    @Builder.Default
-    private int longestStreak = 0;
-
     @Column(name = "last_active_date")
     private LocalDate lastActiveDate;
 

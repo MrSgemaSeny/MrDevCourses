@@ -83,8 +83,6 @@ class TelegramBotCommandServiceTest {
                 .name("Alex Student")
                 .email("alex@test.com")
                 .telegramUsername("alex_tg")
-                .currentStreak(5)
-                .longestStreak(10)
                 .build();
 
         when(userRepository.findByEmailIgnoreCase("alex@test.com")).thenReturn(Optional.of(student));

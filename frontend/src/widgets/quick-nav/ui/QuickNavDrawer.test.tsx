@@ -16,8 +16,6 @@ vi.mock('@/features/auth', () => ({
       email: 'student@example.com',
       name: 'Алексей',
       role: 'STUDENT',
-      currentStreak: 5,
-      longestStreak: 12,
     },
     isAuthenticated: true,
   }),

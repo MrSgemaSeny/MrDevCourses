@@ -9,8 +9,6 @@ const mockStudents: Student[] = [
     email: 'dias@mrdev.com',
     name: 'Dias Student',
     role: 'STUDENT',
-    currentStreak: 12,
-    longestStreak: 20,
     currentLessonTitle: 'Урок 1: Архитектура',
     estimatedFinishDate: '2026-03-01T00:00:00Z',
     createdAt: '2026-01-15T10:00:00Z',
@@ -23,8 +21,6 @@ const mockStudents: Student[] = [
     email: 'alex@mrdev.com',
     name: 'Alex Student',
     role: 'STUDENT',
-    currentStreak: 3,
-    longestStreak: 5,
     currentLessonTitle: 'Не начат',
     createdAt: '2026-02-01T12:00:00Z',
     enrollments: [

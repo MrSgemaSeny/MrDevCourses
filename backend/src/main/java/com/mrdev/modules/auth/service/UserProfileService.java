@@ -117,8 +117,6 @@ public class UserProfileService {
                 .name(user.getName())
                 .avatarUrl(user.getAvatarUrl())
                 .role(user.getRole())
-                .currentStreak(user.getCurrentStreak())
-                .longestStreak(user.getLongestStreak())
                 .lastActiveDate(user.getLastActiveDate())
                 .telegramUsername(user.getTelegramUsername())
                 .telegramChatId(user.getTelegramChatId())
