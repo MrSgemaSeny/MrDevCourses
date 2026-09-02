@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
 
 export const TermsPage: React.FC = () => {
@@ -16,10 +16,6 @@ export const TermsPage: React.FC = () => {
         </Link>
 
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[10px] font-mono bg-[#141418] border border-white/10 text-zinc-300">
-            <FileText className="w-3 h-3" />
-            <span>Условия сервиса</span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Условия использования
           </h1>
