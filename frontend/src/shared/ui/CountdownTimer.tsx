@@ -64,7 +64,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
   }, [targetDate]);
 
   if (timeLeft.isFinished) {
-    return <span className={`text-emerald-400 font-medium ${className}`}>Доступен сейчас</span>;
+    return <span className={`text-zinc-200 font-medium font-mono ${className}`}>Доступен сейчас</span>;
   }
 
   const formatUnit = (value: number, unit: string) => {

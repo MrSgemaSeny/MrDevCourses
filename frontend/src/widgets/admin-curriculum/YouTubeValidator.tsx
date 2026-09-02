@@ -34,9 +34,9 @@ export const YouTubeValidator: React.FC<YouTubeValidatorProps> = ({ url, onChang
           <div className="absolute right-2.5 top-2.5">
             {url.trim().length > 0 && (
               isValid ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 text-white" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-amber-400" />
+                <AlertCircle className="w-4 h-4 text-zinc-400" />
               )
             )}
           </div>
@@ -44,8 +44,8 @@ export const YouTubeValidator: React.FC<YouTubeValidatorProps> = ({ url, onChang
       </div>
 
       {url.trim().length > 0 && !isValid && (
-        <div className="p-2.5 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-2.5 rounded-sm bg-zinc-900 border border-white/20 text-zinc-300 text-xs flex items-center gap-2 font-mono">
+          <AlertCircle className="w-4 h-4 shrink-0 text-zinc-400" />
           <span>Укажите корректный URL видео YouTube (youtube.com/watch?v=ID или youtu.be/ID).</span>
         </div>
       )}

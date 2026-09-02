@@ -351,9 +351,9 @@ export const CohortManagerModal: React.FC<CohortManagerModalProps> = ({
                         <div className="flex items-center gap-2.5">
                           <h4 className="text-sm font-semibold text-zinc-100">{cohort.name}</h4>
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                            className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase font-mono ${
                               cohort.isActive
-                                ? 'bg-emerald-950/50 text-emerald-300 border border-emerald-500/30'
+                                ? 'bg-white/10 text-white border border-white/20'
                                 : 'bg-zinc-800 text-zinc-400 border border-white/5'
                             }`}
                           >

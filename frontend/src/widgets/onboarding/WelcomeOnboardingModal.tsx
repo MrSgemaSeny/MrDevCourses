@@ -36,8 +36,8 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
         {/* Header */}
         <div className="space-y-1.5 pr-6">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold">
+            <div className="w-2 h-2 rounded-full bg-white/80" />
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-300 font-bold">
               старт обучения
             </span>
           </div>
@@ -53,13 +53,13 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
         <div className="space-y-3 pt-1">
           {/* Step 1: Discord */}
           <div className="p-3.5 rounded-sm bg-[#0a0a0c] border border-white/5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#5865F2]/20 border border-[#5865F2]/40 text-[#5865F2] flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 text-zinc-200 flex items-center justify-center shrink-0 mt-0.5">
               <MessageCircle className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-xs font-semibold text-white flex items-center gap-2">
+              <h4 className="text-xs font-semibold text-white flex items-center gap-2 font-mono">
                 <span>1. Закрытый Discord-сервер</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.2 bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 rounded">
+                <span className="text-[9px] font-mono px-1.5 py-0.2 bg-white/10 border border-white/20 text-white rounded">
                   ОБЯЗАТЕЛЬНО
                 </span>
               </h4>
@@ -70,10 +70,10 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
                 href={discordInviteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5865F2] hover:text-[#7289da] mt-2 underline underline-offset-2"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-200 hover:text-white mt-2 underline underline-offset-2 font-mono"
               >
                 <span>Присоединиться к серверу</span>
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3 h-3 text-zinc-400" />
               </a>
             </div>
           </div>
@@ -84,7 +84,7 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
               <Laptop className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-xs font-semibold text-white">2. Базовый сетап</h4>
+              <h4 className="text-xs font-semibold text-white font-mono">2. Базовый сетап</h4>
               <p className="text-[11px] text-zinc-400 mt-0.5">
                 Тебе понадобятся: Git, аккаунт на GitHub и удобный редактор (VS Code или Cursor).
               </p>
@@ -93,11 +93,11 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
 
           {/* Step 3: Homework rule */}
           <div className="p-3.5 rounded-sm bg-[#0a0a0c] border border-white/5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 text-zinc-200 flex items-center justify-center shrink-0 mt-0.5">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-xs font-semibold text-white">3. Как сдавать домашки</h4>
+              <h4 className="text-xs font-semibold text-white font-mono">3. Как сдавать домашки</h4>
               <p className="text-[11px] text-zinc-400 mt-0.5">
                 Сдавай ссылку на GitHub и свой задеплоенный сайт прямо в уроке. Ментор проверяет каждую работу и досрочно открывает следующий день.
               </p>
@@ -113,10 +113,10 @@ export const WelcomeOnboardingModal: React.FC<WelcomeOnboardingModalProps> = ({
               onClose();
               navigate(firstLessonUrl);
             }}
-            className="w-full py-2.5 px-4 rounded-sm bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-emerald-950/40"
+            className="w-full py-2.5 px-4 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-sm font-mono"
           >
             <span>Понятно, начать Урок 1</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-black" />
           </button>
         </div>
       </div>

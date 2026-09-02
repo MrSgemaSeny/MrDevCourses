@@ -145,7 +145,7 @@ export const LessonPitfallsAccordion: React.FC<LessonPitfallsAccordionProps> = (
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
                       <div className="flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        <CheckCircle2 className="w-3 h-3 text-white" />
                         <span>Как исправить:</span>
                       </div>
 
@@ -156,8 +156,8 @@ export const LessonPitfallsAccordion: React.FC<LessonPitfallsAccordionProps> = (
                       >
                         {copiedId === pitfall.id ? (
                           <>
-                            <Check className="w-3 h-3 text-emerald-400" />
-                            <span className="text-emerald-400">Скопировано</span>
+                            <Check className="w-3 h-3 text-white" />
+                            <span className="text-white">Скопировано</span>
                           </>
                         ) : (
                           <>

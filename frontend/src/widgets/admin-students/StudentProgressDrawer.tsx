@@ -243,10 +243,10 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
                       progress.completedLessons.map((l) => (
                         <div
                           key={l.lessonId}
-                          className="flex items-center justify-between p-3 bg-[#18181b] border border-white/5 rounded-xl text-xs"
+                          className="flex items-center justify-between p-3 bg-[#18181b] border border-white/5 rounded-sm text-xs font-mono"
                         >
                           <div className="flex items-start gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-4 h-4 text-white shrink-0 mt-0.5" />
                             <div>
                               <div className="font-medium text-zinc-200">
                                 День {l.dayNumber}: {l.lessonTitle}
@@ -273,16 +273,16 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
 
                 {/* 3. Quizzes Tab */}
                 {activeTab === 'quizzes' && (
-                  <div className="space-y-2">
+                  <div className="space-y-2 font-mono">
                     {progress.quizScores.length === 0 ? (
-                      <div className="p-8 text-center bg-[#18181b] border border-white/5 rounded-xl text-xs text-zinc-500">
+                      <div className="p-8 text-center bg-[#18181b] border border-white/5 rounded-sm text-xs text-zinc-500">
                         Нет попыток прохождения тестов.
                       </div>
                     ) : (
                       progress.quizScores.map((q) => (
                         <div
                           key={q.submissionId}
-                          className="flex items-center justify-between p-3.5 bg-[#18181b] border border-white/5 rounded-xl text-xs"
+                          className="flex items-center justify-between p-3.5 bg-[#18181b] border border-white/5 rounded-sm text-xs"
                         >
                           <div>
                             <div className="font-semibold text-zinc-200">{q.quizTitle}</div>
@@ -296,12 +296,12 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
                             </div>
                           </div>
 
-                          <div className="text-right">
+                          <div className="text-right font-mono">
                             <div
                               className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${
                                 q.passed
-                                  ? 'bg-emerald-950/50 text-emerald-300 border border-emerald-500/30'
-                                  : 'bg-red-950/50 text-red-300 border border-red-500/30'
+                                  ? 'bg-white/10 text-white border border-white/20'
+                                  : 'bg-zinc-800 text-zinc-300 border border-white/10'
                               }`}
                             >
                               {q.passed ? 'СДАН' : 'НЕ СДАН'} • {q.scorePercentage}%
@@ -315,16 +315,16 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
 
                 {/* 4. Homework Tab */}
                 {activeTab === 'homework' && (
-                  <div className="space-y-3">
+                  <div className="space-y-3 font-mono">
                     {progress.homeworkSubmissions.length === 0 ? (
-                      <div className="p-8 text-center bg-[#18181b] border border-white/5 rounded-xl text-xs text-zinc-500">
+                      <div className="p-8 text-center bg-[#18181b] border border-white/5 rounded-sm text-xs text-zinc-500">
                         Нет отправленных практических заданий.
                       </div>
                     ) : (
                       progress.homeworkSubmissions.map((hw) => (
                         <div
                           key={hw.submissionId}
-                          className="p-4 bg-[#18181b] border border-white/5 rounded-xl space-y-2.5 text-xs"
+                          className="p-4 bg-[#18181b] border border-white/5 rounded-sm space-y-2.5 text-xs"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div>
@@ -338,9 +338,9 @@ export const StudentProgressDrawer: React.FC<StudentProgressDrawerProps> = ({
                             <span
                               className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                 hw.status === 'PASSED'
-                                  ? 'bg-emerald-950/50 text-emerald-300 border border-emerald-500/30'
+                                  ? 'bg-white/10 text-white border border-white/20'
                                   : hw.status === 'NEEDS_IMPROVEMENT'
-                                  ? 'bg-amber-950/50 text-amber-300 border border-amber-500/30'
+                                  ? 'bg-zinc-800 text-zinc-300 border border-white/10'
                                   : 'bg-zinc-800 text-zinc-400'
                               }`}
                             >

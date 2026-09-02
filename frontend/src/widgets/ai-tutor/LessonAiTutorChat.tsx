@@ -85,7 +85,7 @@ export const LessonAiTutorChat: React.FC<LessonAiTutorChatProps> = ({
       {/* Header */}
       <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="w-2.5 h-2.5 rounded-full bg-white/80 animate-pulse" />
           <span className="text-xs font-semibold uppercase tracking-wider text-white">
             Senior AI Tutor (Hybrid RAG)
           </span>

@@ -68,7 +68,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                 {!isLast && (
                   <div
                     className={`absolute left-4.5 top-9 bottom-[-16px] w-0.5 ${
-                      lesson.completed ? 'bg-emerald-500/60' : 'bg-zinc-800'
+                      lesson.completed ? 'bg-white/40' : 'bg-zinc-800'
                     }`}
                   />
                 )}
@@ -84,7 +84,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                     lesson.accessible ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-400' : 'cursor-not-allowed'
                   } ${
                     lesson.completed
-                      ? 'bg-emerald-950 border border-emerald-500 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
+                      ? 'bg-white/10 border border-white/30 text-white shadow-sm'
                       : isCurrent
                       ? 'bg-white text-black border-2 border-white shadow-[0_0_16px_rgba(255,255,255,0.4)] animate-pulse'
                       : lesson.accessible
@@ -93,7 +93,7 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
                   }`}
                 >
                   {lesson.completed ? (
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-4 h-4 text-white" />
                   ) : lesson.accessible ? (
                     <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
                   ) : (
@@ -132,9 +132,9 @@ export const VisualRoadmap: React.FC<VisualRoadmapProps> = ({
 
 
                     {lesson.completed ? (
-                      <span className="text-[10px] text-emerald-400 font-medium self-start sm:self-auto">Завершен</span>
+                      <span className="text-[10px] text-white font-medium self-start sm:self-auto font-mono">Завершен</span>
                     ) : lesson.accessible ? (
-                      <span className="text-[10px] text-zinc-300 font-medium self-start sm:self-auto">Открыть урок</span>
+                      <span className="text-[10px] text-zinc-300 font-medium self-start sm:self-auto font-mono">Открыть урок</span>
                     ) : (
                       <div className="self-start sm:self-auto">
                         <CountdownTimer targetDate={lesson.opensAt} />

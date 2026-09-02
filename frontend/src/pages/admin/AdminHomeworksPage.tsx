@@ -99,25 +99,25 @@ export const AdminHomeworksPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setStatusFilter('PASSED')}
-            className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer flex items-center gap-1.5 font-mono ${
               statusFilter === 'PASSED'
-                ? 'bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 font-medium'
+                ? 'bg-white/10 border border-white/20 text-white font-medium'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+            <CheckCircle2 className="w-3 h-3 text-white" />
             <span>Принятые</span>
           </button>
           <button
             type="button"
             onClick={() => setStatusFilter('NEEDS_IMPROVEMENT')}
-            className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 text-xs rounded transition-colors cursor-pointer flex items-center gap-1.5 font-mono ${
               statusFilter === 'NEEDS_IMPROVEMENT'
-                ? 'bg-rose-950/60 border border-rose-800/60 text-rose-300 font-medium'
+                ? 'bg-zinc-800 border border-white/20 text-zinc-200 font-medium'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            <AlertTriangle className="w-3 h-3 text-rose-400" />
+            <AlertTriangle className="w-3 h-3 text-zinc-400" />
             <span>На доработке</span>
           </button>
         </div>
@@ -125,12 +125,12 @@ export const AdminHomeworksPage: React.FC = () => {
 
       {/* List of Submissions */}
       {isLoading ? (
-        <div className="text-center py-20 text-xs text-zinc-500">Загрузка очереди заданий...</div>
+        <div className="text-center py-20 text-xs text-zinc-500 font-mono">Загрузка очереди заданий...</div>
       ) : homeworks.length === 0 ? (
         <div className="text-center py-20 bg-[#0e0e11] border border-white/5 rounded-sm p-8">
           <CheckCircle2 className="w-8 h-8 text-zinc-600 mx-auto mb-2" />
           <h3 className="text-sm font-semibold text-zinc-300">Очередь пуста</h3>
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-zinc-500 mt-1 font-mono">
             Нет работ, соответствующих выбранному фильтру.
           </p>
         </div>
@@ -145,9 +145,9 @@ export const AdminHomeworksPage: React.FC = () => {
                 key={sub.id}
                 className={`p-5 rounded-sm bg-[#0e0e11] border transition-all ${
                   isSubPending
-                    ? 'border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.05)]'
+                    ? 'border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.05)]'
                     : sub.status === 'PASSED'
-                    ? 'border-emerald-500/20'
+                    ? 'border-white/10'
                     : 'border-white/5'
                 }`}
               >
@@ -175,14 +175,14 @@ export const AdminHomeworksPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-mono">
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
                         sub.status === 'PASSED'
-                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                          ? 'bg-white/10 text-white border border-white/20'
                           : sub.status === 'NEEDS_IMPROVEMENT'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                          : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                          ? 'bg-zinc-800 text-zinc-300 border border-white/10'
+                          : 'bg-zinc-800 text-zinc-400 border border-white/10'
                       }`}
                     >
                       {sub.status === 'PASSED'
@@ -191,23 +191,23 @@ export const AdminHomeworksPage: React.FC = () => {
                         ? 'На доработке'
                         : 'Ожидает проверки'}
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-mono">
+                    <span className="text-[10px] text-zinc-500">
                       {new Date(sub.createdAt).toLocaleString('ru-RU')}
                     </span>
                   </div>
                 </div>
 
                 {/* Card Middle: Clickable Links & Student Notes */}
-                <div className="py-4 space-y-3">
+                <div className="py-4 space-y-3 font-mono">
                   <div className="flex flex-wrap items-center gap-3">
                     {sub.liveDemoUrl && (
                       <a
                         href={sub.liveDemoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-800/50 text-emerald-300 text-xs font-semibold flex items-center gap-2 transition-colors"
+                        className="px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-200 text-xs font-semibold flex items-center gap-2 transition-colors"
                       >
-                        <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                        <Globe className="w-3.5 h-3.5 text-zinc-400" />
                         <span>Живой сайт (Демо)</span>
                         <ExternalLink className="w-3 h-3 opacity-70" />
                       </a>
@@ -235,7 +235,7 @@ export const AdminHomeworksPage: React.FC = () => {
                 </div>
 
                 {/* Card Bottom: Mentor Review Actions */}
-                <div className="pt-3 border-t border-white/5 space-y-3">
+                <div className="pt-3 border-t border-white/5 space-y-3 font-mono">
                   <div>
                     <label className="block text-[11px] font-medium text-zinc-400 mb-1">
                       Комментарий ментора студенту:
@@ -254,9 +254,9 @@ export const AdminHomeworksPage: React.FC = () => {
                       type="button"
                       onClick={() => handleReview(sub.id, 'NEEDS_IMPROVEMENT')}
                       disabled={reviewMutation.isPending}
-                      className="px-3.5 py-1.5 rounded-sm bg-rose-950/40 hover:bg-rose-900/50 border border-rose-800/50 text-rose-300 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
+                      className="px-3.5 py-1.5 rounded-sm bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-zinc-300 text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5"
                     >
-                      <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                      <AlertTriangle className="w-3.5 h-3.5 text-zinc-400" />
                       <span>На доработку</span>
                     </button>
 
@@ -264,9 +264,9 @@ export const AdminHomeworksPage: React.FC = () => {
                       type="button"
                       onClick={() => handleReview(sub.id, 'PASSED')}
                       disabled={reviewMutation.isPending}
-                      className="px-4 py-1.5 rounded-sm bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                      className="px-4 py-1.5 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-black" />
                       <span>Принять работу (Зачесть урок)</span>
                     </button>
                   </div>

@@ -156,7 +156,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
                 {module.title}
               </span>
               {module.isFreePreview && (
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/10 text-white border border-white/20">
                   FREE PREVIEW
                 </span>
               )}

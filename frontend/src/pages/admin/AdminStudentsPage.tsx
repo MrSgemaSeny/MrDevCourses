@@ -123,10 +123,10 @@ export const AdminStudentsPage: React.FC = () => {
       {/* Feedback Banner */}
       {feedback && (
         <div
-          className={`p-3.5 rounded-xl border text-xs flex items-center justify-between animate-in slide-in-from-top duration-150 ${
+          className={`p-3.5 rounded-sm border text-xs flex items-center justify-between font-mono animate-in slide-in-from-top duration-150 ${
             feedback.type === 'success'
-              ? 'bg-emerald-950/50 border-emerald-500/30 text-emerald-300'
-              : 'bg-red-950/50 border-red-500/30 text-red-300'
+              ? 'bg-white/10 border-white/20 text-white'
+              : 'bg-zinc-900 border-white/20 text-zinc-200'
           }`}
         >
           <span>{feedback.message}</span>

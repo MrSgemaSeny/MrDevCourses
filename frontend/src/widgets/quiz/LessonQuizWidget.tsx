@@ -127,14 +127,14 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
               className={`p-4 rounded-sm border transition-all ${
                 result
                   ? isCorrect
-                    ? 'bg-emerald-950/15 border-emerald-800/40'
-                    : 'bg-rose-950/15 border-rose-800/40'
+                    ? 'bg-white/5 border-white/20'
+                    : 'bg-zinc-900 border-white/20'
                   : 'bg-[#0a0a0c] border-white/5'
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex items-start gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-[#c9d1d9]">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-300">
                     #{idx + 1}
                   </span>
                   <p className="text-xs font-medium text-white leading-relaxed">
@@ -144,12 +144,12 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                 {result && (
                   <span className="shrink-0">
                     {isCorrect ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Верно
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/10 text-white border border-white/20 flex items-center gap-1 font-mono">
+                        <CheckCircle2 className="w-3 h-3 text-white" /> Верно
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1">
-                        <XCircle className="w-3 h-3" /> Ошибка
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-800 text-zinc-300 border border-white/10 flex items-center gap-1 font-mono">
+                        <XCircle className="w-3 h-3 text-zinc-400" /> Ошибка
                       </span>
                     )}
                   </span>
@@ -168,10 +168,10 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                       type="button"
                       disabled={!!result}
                       onClick={() => handleSelectOption(q.id, opt.id, isMulti)}
-                      className={`w-full text-left p-3 rounded-sm text-xs transition-all flex items-center gap-3 border ${
+                      className={`w-full text-left p-3 rounded-sm text-xs transition-all flex items-center gap-3 border font-mono ${
                         isSelected
-                          ? 'bg-[#1f242c] border-[#58a6ff] text-white shadow-sm'
-                          : 'bg-[#0e0e11] border-white/5 text-[#c9d1d9] hover:border-zinc-500'
+                          ? 'bg-[#18181b] border-white/40 text-white shadow-sm'
+                          : 'bg-[#0e0e11] border-white/5 text-zinc-300 hover:border-zinc-500'
                       }`}
                     >
                       <div
@@ -179,11 +179,11 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
                           isMulti ? 'rounded-md' : 'rounded-full'
                         } border flex items-center justify-center shrink-0 ${
                           isSelected
-                            ? 'bg-[#58a6ff] border-[#58a6ff] text-black font-bold'
-                            : 'border-[#484f58] bg-[#0a0a0c]'
+                            ? 'bg-white border-white text-black font-bold'
+                            : 'border-zinc-600 bg-[#0a0a0c]'
                         }`}
                       >
-                        {isSelected && <span className="text-[10px]">&bull;</span>}
+                        {isSelected && <span className="text-[10px] text-black">&bull;</span>}
                       </div>
                       <span className="flex-1">{opt.optionText}</span>
                     </button>
@@ -193,8 +193,8 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
 
               {/* Explanation note after submission */}
               {result && explanation && (
-                <div className="mt-3 p-2.5 rounded bg-[#0e0e11] border border-white/5 text-xs text-zinc-500">
-                  <strong className="text-zinc-300">Пояснение:</strong> {explanation}
+                <div className="mt-3 p-2.5 rounded bg-[#0e0e11] border border-white/5 text-xs text-zinc-400 font-mono">
+                  <strong className="text-zinc-200">Пояснение:</strong> {explanation}
                 </div>
               )}
             </div>
@@ -204,22 +204,22 @@ export const LessonQuizWidget: React.FC<LessonQuizWidgetProps> = ({
         {/* Result Banner / Submit action */}
         {result ? (
           <div
-            className={`p-4 rounded-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+            className={`p-4 rounded-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono ${
               result.passed
-                ? 'bg-emerald-950/20 border-emerald-800/50 text-emerald-300'
-                : 'bg-rose-950/20 border-rose-800/50 text-rose-300'
+                ? 'bg-white/10 border-white/20 text-white'
+                : 'bg-zinc-900 border-white/20 text-zinc-300'
             }`}
           >
             <div>
               <div className="text-sm font-bold flex items-center gap-2">
                 {result.passed ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-white" />
                     <span>Тест успешно сдан! Результат: {result.scorePercentage}%</span>
                   </>
                 ) : (
                   <>
-                    <AlertTriangle className="w-4 h-4 text-rose-400" />
+                    <AlertTriangle className="w-4 h-4 text-zinc-400" />
                     <span>
                       Не набран проходной балл ({result.scorePercentage}% из{' '}
                       {result.passingScorePercentage}%)

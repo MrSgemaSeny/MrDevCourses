@@ -88,7 +88,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                 {!isLast && (
                   <div
                     className={`absolute left-3.5 top-7 bottom-[-12px] w-0.5 ${
-                      lesson.completed ? 'bg-emerald-600/70' : 'bg-zinc-800'
+                      lesson.completed ? 'bg-white/40' : 'bg-zinc-800'
                     }`}
                   />
                 )}
@@ -100,7 +100,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                     lesson.accessible ? 'cursor-pointer' : 'cursor-not-allowed'
                   } ${
                     lesson.completed
-                      ? 'bg-emerald-950 border border-emerald-500 text-emerald-400'
+                      ? 'bg-white/10 border border-white/30 text-white'
                       : isCurrent
                       ? 'bg-white text-black border border-white ring-2 ring-white/30'
                       : lesson.accessible
@@ -109,7 +109,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                   }`}
                 >
                   {lesson.completed ? (
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                   ) : lesson.accessible ? (
                     <Play className="w-3 h-3 fill-current ml-0.5" />
                   ) : (
@@ -137,11 +137,11 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({
                       Урок {lesson.dayNumber}
                     </span>
                     {lesson.completed ? (
-                      <span className="text-[10px] text-emerald-400 font-medium">Пройден</span>
+                      <span className="text-[10px] text-white font-medium font-mono">Пройден</span>
                     ) : lesson.accessible ? (
-                      <span className="text-[10px] text-zinc-400 font-medium">Доступен</span>
+                      <span className="text-[10px] text-zinc-400 font-medium font-mono">Доступен</span>
                     ) : (
-                      <span className="text-[10px] text-zinc-500">Заблокирован</span>
+                      <span className="text-[10px] text-zinc-500 font-mono">Заблокирован</span>
                     )}
                   </div>
 

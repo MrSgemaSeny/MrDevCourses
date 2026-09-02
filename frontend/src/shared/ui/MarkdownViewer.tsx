@@ -19,7 +19,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
     return parts.map((part, pIdx) => {
       if (part.startsWith('`') && part.endsWith('`') && part.length > 1) {
         return (
-          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/5 font-mono text-[10px] text-emerald-400">
+          <code key={pIdx} className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/10 font-mono text-[10px] text-zinc-200">
             {part.slice(1, -1)}
           </code>
         );
@@ -37,7 +37,7 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
 
   const renderedElements = useMemo(() => {
     if (!content) {
-      return [<div key="empty" className="text-zinc-500 text-xs italic">Конспект к уроку отсутствует.</div>];
+      return [<div key="empty" className="text-zinc-500 text-xs italic font-mono">Конспект к уроку отсутствует.</div>];
     }
 
     const lines = content.split('\n');
@@ -57,8 +57,8 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
           >
             {copiedIndex === idx ? (
               <>
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span className="text-emerald-400">Скопировано</span>
+                <Check className="w-3 h-3 text-white" />
+                <span className="text-white">Скопировано</span>
               </>
             ) : (
               <>
@@ -113,22 +113,22 @@ export const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content = '' }) 
 
         const calloutContent = calloutLines.length > 0 ? calloutLines : [''];
 
-        let containerClass = 'bg-blue-950/30 border-blue-800/40 text-blue-300';
+        let containerClass = 'bg-[#141418] border-white/10 text-zinc-300';
         let IconComponent = Info;
-        let iconClass = 'text-zinc-100';
+        let iconClass = 'text-zinc-400';
 
         if (alertType === 'TIP') {
-          containerClass = 'bg-emerald-950/30 border-emerald-800/40 text-emerald-300';
+          containerClass = 'bg-[#141418] border-white/15 text-zinc-200';
           IconComponent = Lightbulb;
-          iconClass = 'text-emerald-400';
+          iconClass = 'text-white';
         } else if (alertType === 'WARNING' || alertType === 'CAUTION') {
-          containerClass = 'bg-amber-950/30 border-amber-800/40 text-amber-300';
+          containerClass = 'bg-[#141418] border-white/20 text-zinc-200';
           IconComponent = AlertTriangle;
-          iconClass = 'text-amber-400';
+          iconClass = 'text-zinc-300';
         } else if (alertType === 'IMPORTANT') {
-          containerClass = 'bg-purple-950/30 border-purple-800/40 text-purple-300';
+          containerClass = 'bg-[#18181b] border-white/20 text-white';
           IconComponent = ShieldAlert;
-          iconClass = 'text-purple-400';
+          iconClass = 'text-white';
         }
 
         elements.push(

@@ -76,11 +76,11 @@ export const MaterialManagerModal: React.FC<MaterialManagerModalProps> = ({
   const getMaterialIcon = (type: MaterialType) => {
     switch (type) {
       case 'CHEAT_SHEET':
-        return <FileText className="w-4 h-4 text-emerald-400" />;
+        return <FileText className="w-4 h-4 text-zinc-300" />;
       case 'SOURCE_CODE':
-        return <Code className="w-4 h-4 text-cyan-400" />;
+        return <Code className="w-4 h-4 text-white" />;
       case 'REPO_LINK':
-        return <GitBranch className="w-4 h-4 text-purple-400" />;
+        return <GitBranch className="w-4 h-4 text-zinc-300" />;
       default:
         return <Paperclip className="w-4 h-4 text-zinc-400" />;
     }

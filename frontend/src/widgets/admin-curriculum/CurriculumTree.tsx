@@ -255,15 +255,15 @@ export const CurriculumTree: React.FC<CurriculumTreeProps> = ({ course, onCourse
 
       {/* Notifications */}
       {successMessage && (
-        <div className="p-3.5 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 text-xs flex items-center gap-2.5 animate-in fade-in duration-150">
-          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+        <div className="p-3.5 rounded-sm bg-white/10 border border-white/20 text-white text-xs flex items-center gap-2.5 font-mono animate-in fade-in duration-150">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-white" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {error && (
-        <div className="p-3.5 rounded-lg bg-red-950/40 border border-red-800/40 text-red-300 text-xs flex items-center gap-2.5 animate-in fade-in duration-150">
-          <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+        <div className="p-3.5 rounded-sm bg-zinc-900 border border-white/20 text-zinc-200 text-xs flex items-center gap-2.5 font-mono animate-in fade-in duration-150">
+          <AlertCircle className="w-4 h-4 shrink-0 text-zinc-400" />
           <span>{error}</span>
         </div>
       )}
