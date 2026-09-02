@@ -18,7 +18,7 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
 }) => {
   const { openQuickNav } = useQuickNav();
 
-  // Determine relevant terms either from explicit list or by dayNumber / defaults
+  // Determine relevant terms strictly for current day / week
   const resolvedTerms = useMemo(() => {
     if (terms && terms.length > 0) {
       return terms;
@@ -29,10 +29,25 @@ export const LessonContextPanel: React.FC<LessonContextPanelProps> = ({
       if (byDay.length > 0) {
         return byDay.map((t) => t.term);
       }
+
+      // Pedagogical fallback: show only terms from the same week/module
+      const week = Math.ceil(dayNumber / 6);
+      const weekDays = Array.from({ length: 6 }, (_, i) => (week - 1) * 6 + i + 1);
+      const byWeek = GLOSSARY_TERMS.filter((t) =>
+        t.relatedDayNumbers?.some((d) => weekDays.includes(d))
+      );
+      if (byWeek.length > 0) {
+        return byWeek.slice(0, 6).map((t) => t.term);
+      }
     }
 
-    // Default core concepts
-    return ['JWT (JSON Web Token)', 'Bucket4j (Token Bucket Rate Limiting)', 'Row-Level Security & IDOR Defense', 'Drip-Content (Капельный контент)', 'Flyway DB Migration', 'Feature-Sliced Design (FSD)'];
+    // Default introductory concepts
+    return [
+      'Вайбкодинг (Vibe Coding)',
+      'Промпт-инжиниринг (Prompt Engineering)',
+      'Git (Система контроля версий)',
+      'Feature-Sliced Design (FSD)',
+    ];
   }, [terms, dayNumber]);
 
   return (

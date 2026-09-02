@@ -29,9 +29,12 @@ export const DocsPage: React.FC = () => {
   const initialQuery = searchParams.get('q') || '';
   const initialCategory = (searchParams.get('category') as GlossaryCategory | 'all') || 'all';
 
+  type SortMode = 'curriculum' | 'alpha' | 'category';
+
   const [search, setSearch] = useState<string>(initialQuery);
   const [selectedCategory, setSelectedCategory] = useState<GlossaryCategory | 'all'>(initialCategory);
   const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
+  const [sortMode, setSortMode] = useState<SortMode>('curriculum');
   const [copiedTermId, setCopiedTermId] = useState<string | null>(null);
 
   // Synchronize state from URL search params
@@ -98,7 +101,7 @@ export const DocsPage: React.FC = () => {
 
   const filteredTerms = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return GLOSSARY_TERMS.filter((term) => {
+    const list = GLOSSARY_TERMS.filter((term) => {
       // Category filter
       if (selectedCategory !== 'all' && term.category !== selectedCategory) {
         return false;
@@ -118,7 +121,25 @@ export const DocsPage: React.FC = () => {
       }
       return true;
     });
-  }, [search, selectedCategory, selectedTag]);
+
+    return [...list].sort((a, b) => {
+      if (sortMode === 'curriculum') {
+        const aDay = a.relatedDayNumbers && a.relatedDayNumbers.length > 0 ? Math.min(...a.relatedDayNumbers) : 999;
+        const bDay = b.relatedDayNumbers && b.relatedDayNumbers.length > 0 ? Math.min(...b.relatedDayNumbers) : 999;
+        if (aDay !== bDay) return aDay - bDay;
+        return a.term.localeCompare(b.term, 'ru');
+      }
+      if (sortMode === 'alpha') {
+        return a.term.localeCompare(b.term, 'ru');
+      }
+      if (sortMode === 'category') {
+        const catOrder = a.category.localeCompare(b.category);
+        if (catOrder !== 0) return catOrder;
+        return a.term.localeCompare(b.term, 'ru');
+      }
+      return 0;
+    });
+  }, [search, selectedCategory, selectedTag, sortMode]);
 
   const handleCopyCode = (termId: string, code: string) => {
     navigator.clipboard.writeText(code);
@@ -249,14 +270,53 @@ export const DocsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Counter */}
-        <div className="flex items-center justify-between text-xs font-mono text-zinc-500 px-1">
-          <span>Найдено документов: {filteredTerms.length}</span>
-          {selectedTag && (
-            <span className="text-zinc-300">
-              Активный фильтр по хештегу: <span className="text-white font-bold">#{selectedTag}</span>
-            </span>
-          )}
+        {/* Results Counter & Sorting Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono text-zinc-500 px-1">
+          <div className="flex items-center gap-2">
+            <span>Найдено документов: <strong className="text-white">{filteredTerms.length}</strong></span>
+            {selectedTag && (
+              <span className="text-zinc-300">
+                &bull; Тег: <span className="text-white font-bold">#{selectedTag}</span>
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+            <span className="text-zinc-500 text-[11px]">Сортировка:</span>
+            <button
+              type="button"
+              onClick={() => setSortMode('curriculum')}
+              className={`px-2.5 py-1 rounded-sm text-[11px] font-mono transition-colors cursor-pointer ${
+                sortMode === 'curriculum'
+                  ? 'bg-white text-black font-semibold'
+                  : 'bg-[#141418] text-zinc-400 hover:text-white border border-white/5'
+              }`}
+            >
+              По программе курса
+            </button>
+            <button
+              type="button"
+              onClick={() => setSortMode('alpha')}
+              className={`px-2.5 py-1 rounded-sm text-[11px] font-mono transition-colors cursor-pointer ${
+                sortMode === 'alpha'
+                  ? 'bg-white text-black font-semibold'
+                  : 'bg-[#141418] text-zinc-400 hover:text-white border border-white/5'
+              }`}
+            >
+              По алфавиту
+            </button>
+            <button
+              type="button"
+              onClick={() => setSortMode('category')}
+              className={`px-2.5 py-1 rounded-sm text-[11px] font-mono transition-colors cursor-pointer ${
+                sortMode === 'category'
+                  ? 'bg-white text-black font-semibold'
+                  : 'bg-[#141418] text-zinc-400 hover:text-white border border-white/5'
+              }`}
+            >
+              По категориям
+            </button>
+          </div>
         </div>
 
         {/* Concept Documentation Cards List */}

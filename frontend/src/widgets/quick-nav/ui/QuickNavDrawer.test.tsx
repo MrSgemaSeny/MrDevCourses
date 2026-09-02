@@ -268,7 +268,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
   it('deep-links to term from LessonContextPanel into QuickNav drawer with pre-expanded term', async () => {
     renderWithProviders(
       <>
-        <LessonContextPanel dayNumber={1} courseId={1} lessonId={101} />
+        <LessonContextPanel dayNumber={15} courseId={1} lessonId={101} />
         <QuickNavDrawer />
       </>
     );
