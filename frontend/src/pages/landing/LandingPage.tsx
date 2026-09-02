@@ -271,7 +271,7 @@ export const LandingPage: React.FC = () => {
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>25 уроков с видео, конспектами и кодовой базой</span>
+                      <span>30 уроков с видео, конспектами и кодовой базой</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
@@ -345,14 +345,45 @@ export const LandingPage: React.FC = () => {
           {/* Conversion CTA Block */}
           <section className="pt-4 border-t border-white/5">
             <div className="p-8 sm:p-10 rounded-sm bg-[#0e0e11] border border-white/10 hover:border-zinc-600 transition-all flex flex-col md:flex-row md:items-center justify-between gap-8">
-              <div className="max-w-xl space-y-2">
-                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-                  Первый задеплоенный проект уже через 3 дня
-                </h2>
-                <p className="text-xs text-zinc-400 leading-relaxed font-normal">
-                  Фокус на реальном коде, современной архитектуре и практических навыках без абстрактной теории.
-                </p>
+              <div className="max-w-xl space-y-4">
+                <div className="space-y-1">
+                  <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                    Первый задеплоенный проект уже через 3 дня
+                  </h2>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-normal">
+                    Фокус на реальном коде, современной архитектуре и практических навыках без абстрактной теории.
+                  </p>
+                </div>
+
+                {/* Milestones timeline */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex items-center gap-2 text-xs text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                    <span>Первый онлайн-лендинг — <strong>за 3 дня</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shrink-0" />
+                    <span>Первый работающий full-stack сайт — <strong>за 2 недели</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 shrink-0" />
+                    <span>Первое веб-приложение с AI внутри — <strong>за 4 недели</strong></span>
+                  </div>
+                </div>
+
+                {/* Hosting & Deploy chips */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {['GitHub Pages', 'Vercel', 'Render', 'Fly.io', 'Railway'].map((host) => (
+                    <span
+                      key={host}
+                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#0a0a0c] text-zinc-400 border border-white/5"
+                    >
+                      {host}
+                    </span>
+                  ))}
+                </div>
               </div>
+
               <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
                 <Link
                   to="/courses"
