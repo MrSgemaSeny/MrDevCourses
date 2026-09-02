@@ -3,7 +3,7 @@ import { useQuickNav, QuickNavTab } from '../model/QuickNavContext';
 import { GlossaryView } from './GlossaryView';
 import { ProgressView } from './ProgressView';
 import { RoadmapView } from './RoadmapView';
-import { X, BookOpen, Flame, Map, Layers } from 'lucide-react';
+import { X, BookOpen, BarChart2, Map, Layers } from 'lucide-react';
 
 interface QuickNavDrawerProps {
   // Optional overrides if used outside QuickNavContext
@@ -41,7 +41,7 @@ export const QuickNavDrawer: React.FC<QuickNavDrawerProps> = (props) => {
 
   const tabs: { key: QuickNavTab; label: string; icon: React.ReactNode }[] = [
     { key: 'glossary', label: 'Глоссарий', icon: <BookOpen className="w-4 h-4" /> },
-    { key: 'progress', label: 'Прогресс', icon: <Flame className="w-4 h-4" /> },
+    { key: 'progress', label: 'Прогресс', icon: <BarChart2 className="w-4 h-4" /> },
     { key: 'roadmap', label: 'Roadmap', icon: <Map className="w-4 h-4" /> },
   ];
 

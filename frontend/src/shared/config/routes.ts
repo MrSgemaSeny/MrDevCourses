@@ -8,6 +8,8 @@ export const ROUTES = {
   PROJECTS: '/projects',
   LOGIN: '/login',
   ADMIN: '/admin',
+  DOCS: '/docs',
+  GLOSSARY: '/glossary',
   CERTIFICATES_VERIFY: '/certificates/verify',
   AUTH_CALLBACK: '/auth/callback',
   PRIVACY: '/privacy',

@@ -28,8 +28,8 @@ export interface LessonActionCardProps {
 const DEFAULT_TOOLS: SetupTool[] = [
   { name: 'VS Code', url: 'https://code.visualstudio.com/Download', badge: 'IDE', description: 'Основной редактор' },
   { name: 'Git', url: 'https://git-scm.com/downloads', badge: 'SCM', description: 'Контроль версий' },
-  { name: 'Node.js LTS', url: 'https://nodejs.org/', badge: 'Runtime', description: 'Среда выполнения' },
-  { name: 'GitHub Desktop', url: 'https://desktop.github.com/', badge: 'GUI', description: 'Для новичков' },
+  { name: 'Antigravity', url: 'https://antigravity.google/download//', badge: 'Runtime', description: 'Среда разработки' },
+  { name: 'Claude Desktop', url: 'https://claude.com/download/', badge: 'GUI', description: 'Claude прямо в ПК' },
 ];
 
 export const LessonActionCard: React.FC<LessonActionCardProps> = ({

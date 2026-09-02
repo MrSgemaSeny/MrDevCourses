@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth';
 import { ROUTES } from '@/shared/config/routes';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { Logo } from '@/shared/ui/Logo';
-import { BookOpen, LayoutDashboard, Shield, LogIn, Flame, Search, Rocket, Menu, X } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Shield, LogIn, Search, Rocket, FileCode2, Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -85,6 +85,14 @@ export const Header: React.FC = () => {
           </Link>
 
           <Link
+            to={ROUTES.DOCS}
+            className="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
+          >
+            <FileCode2 className="w-4 h-4 text-zinc-400" />
+            <span>Документация</span>
+          </Link>
+
+          <Link
             to={ROUTES.PROJECTS}
             className="text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
           >
@@ -117,17 +125,6 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-3 shrink-0">
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
-              {/* Streak Badge */}
-              {(user.currentStreak ?? 0) > 0 && (
-                <div
-                  title={`Ваш текущий стрик: ${user.currentStreak} дн.`}
-                  className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-900 border border-white/5 text-zinc-300 text-xs font-mono font-medium"
-                >
-                  <Flame className="w-3.5 h-3.5 text-white" />
-                  <span>{user.currentStreak} дн.</span>
-                </div>
-              )}
-
               {/* Profile Dropdown */}
               <UserProfileDropdown />
             </div>
@@ -181,11 +178,19 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
+              to={ROUTES.DOCS}
+              className="px-3 py-2.5 rounded bg-[#141418] text-zinc-200 hover:text-white flex items-center gap-2 border border-white/5"
+            >
+              <FileCode2 className="w-4 h-4 text-zinc-400" />
+              <span>Документация</span>
+            </Link>
+
+            <Link
               to={ROUTES.PROJECTS}
               className="px-3 py-2.5 rounded bg-[#141418] text-zinc-200 hover:text-white flex items-center gap-2 border border-white/5"
             >
               <Rocket className="w-4 h-4 text-zinc-400" />
-              <span>Проекты выпускников</span>
+              <span>Проекты</span>
             </Link>
 
             {isAuthenticated && (

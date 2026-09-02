@@ -202,7 +202,7 @@ describe('QuickNavDrawer and Contextual Navigation System', () => {
     fireEvent.click(screen.getByTestId('quick-nav-tab-progress'));
     expect(await screen.findByText('Прогресс завершения')).toBeInTheDocument();
     expect(screen.getByText('40%')).toBeInTheDocument();
-    expect(screen.getByText(/5 дней/i)).toBeInTheDocument();
+    expect(screen.getByText(/Капельный контент/i)).toBeInTheDocument();
 
     // Switch to Roadmap tab
     fireEvent.click(screen.getByTestId('quick-nav-tab-roadmap'));

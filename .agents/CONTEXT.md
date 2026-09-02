@@ -1,8 +1,10 @@
 # Current Project Context — MrDevCourses
 
 ## Current Operational Focus
-- **Current Operational Focus**: Strict Black & White Monochrome Design & Lesson UX.
+- **Current Operational Focus**: Knowledge Base / Docs Page & Clean Monochrome Experience.
 - **Recent Accomplishments**: 
+  - Removed all streaks and gamification noise across the application (Header, ProgressView, LessonContextPanel, QuickNavDrawer).
+  - Built full-featured Documentation & Hashtag Knowledge Base page (`DocsPage.tsx`, `/docs`, `/glossary`) with search, tag filtering, code copy, and lesson navigation.
   - Enforced strict `BLACK & WHITE ONLY` design rule in `AGENTS.md` and refactored `LessonActionCard`, `StudentHelpModal`, and `LessonPage` removing all green, yellow, and amber accents.
   - Replaced text button «Застрял?» with a clean monochrome `?` action button.
   - Aligned `LessonPage.tsx` layout to exact 75% left-aligned column matching `CourseDetailPage.tsx` with clean right breathing room.

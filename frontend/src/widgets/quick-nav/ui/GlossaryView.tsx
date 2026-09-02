@@ -69,21 +69,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
     }, 2000);
   };
 
-  const getCategoryBadgeClass = (category: GlossaryCategory) => {
-    switch (category) {
-      case 'security':
-        return 'bg-red-950/60 border-red-800/80 text-red-300';
-      case 'backend':
-        return 'bg-blue-950/60 border-blue-800/80 text-blue-300';
-      case 'frontend':
-        return 'bg-purple-950/60 border-purple-800/80 text-purple-300';
-      case 'ai':
-        return 'bg-amber-950/60 border-amber-800/80 text-amber-300';
-      case 'devops':
-        return 'bg-emerald-950/60 border-emerald-800/80 text-emerald-300';
-      default:
-        return 'bg-zinc-800 border-white/5 text-zinc-300';
-    }
+  const getCategoryBadgeClass = (_category: GlossaryCategory) => {
+    return 'bg-white/10 border-white/20 text-white font-mono';
   };
 
   return (
@@ -96,7 +83,7 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Поиск терминов, концепций, тегов..."
-          className="w-full pl-9 pr-8 py-2 text-xs bg-[#0e0e11] border border-white/5 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 transition-colors"
+          className="w-full pl-9 pr-8 py-2 text-xs bg-[#0e0e11] border border-white/10 rounded-sm text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 transition-colors font-mono"
           aria-label="Поиск по глоссарию"
         />
         {search && (
@@ -118,10 +105,10 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
             <button
               key={cat.key}
               onClick={() => setSelectedCategory(cat.key)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-2.5 py-1 rounded-sm text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-zinc-200 text-zinc-900 shadow-sm'
-                  : 'bg-[#0e0e11] border border-white/5 text-zinc-400 hover:text-white hover:border-white/5'
+                  ? 'bg-white text-black font-semibold shadow-sm'
+                  : 'bg-[#0e0e11] border border-white/5 text-zinc-400 hover:text-white hover:border-white/10'
               }`}
             >
               {cat.label}
@@ -130,19 +117,26 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
         })}
       </div>
 
-      {/* Term Counter */}
-      <div className="flex items-center justify-between text-xs text-zinc-400 px-0.5">
+      {/* Term Counter & Docs Page Link */}
+      <div className="flex items-center justify-between text-xs font-mono text-zinc-400 px-0.5">
         <span>Найдено терминов: {filteredTerms.length}</span>
-        {(search || selectedCategory !== 'all') && (
+        {(search || selectedCategory !== 'all') ? (
           <button
             onClick={() => {
               setSearch('');
               setSelectedCategory('all');
             }}
-            className="text-amber-400 hover:underline cursor-pointer"
+            className="text-zinc-400 hover:text-white underline cursor-pointer"
           >
             Сбросить фильтры
           </button>
+        ) : (
+          <a
+            href={`${import.meta.env.BASE_URL}docs`}
+            className="text-zinc-400 hover:text-white underline flex items-center gap-1"
+          >
+            Вся документация &rarr;
+          </a>
         )}
       </div>
 
@@ -223,8 +217,8 @@ export const GlossaryView: React.FC<GlossaryViewProps> = ({ initialSearch, onSel
                           >
                             {isCopied ? (
                               <>
-                                <Check className="w-3 h-3 text-emerald-400" />
-                                <span className="text-emerald-400">Скопировано</span>
+                                <Check className="w-3 h-3 text-white" />
+                                <span className="text-white font-medium">Скопировано</span>
                               </>
                             ) : (
                               <>
