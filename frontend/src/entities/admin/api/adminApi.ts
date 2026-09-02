@@ -248,19 +248,93 @@ export interface PageResponse<T> {
   last: boolean;
 }
 
+export interface HikariPoolStats {
+  poolName: string;
+  activeConnections: number;
+  idleConnections: number;
+  totalConnections: number;
+  threadsAwaitingConnection: number;
+  maxPoolSize: number;
+  minIdle: number;
+}
+
+export interface DatabaseStats {
+  status: string;
+  databaseName: string;
+  databaseVersion: string;
+  uptimeSeconds?: number;
+  postmasterStartTime?: string;
+  responseTimeMs: number;
+}
+
+export interface FlywayStats {
+  currentVersion: string;
+  currentDescription: string;
+  state: string;
+  totalMigrations: number;
+  installedOn: string;
+}
+
+export interface OutboxStats {
+  pendingCount: number;
+  processingCount: number;
+  completedCount: number;
+  failedCount: number;
+  totalCount: number;
+}
+
+export interface JvmStats {
+  totalMemoryBytes: number;
+  freeMemoryBytes: number;
+  usedMemoryBytes: number;
+  maxMemoryBytes: number;
+  availableProcessors: number;
+  activeThreads: number;
+  uptimeMs: number;
+}
+
 export interface SystemHealth {
   status: string;
-  dbStatus: string;
-  uptimeSeconds: number;
-  jvmFreeMemoryMb: number;
-  jvmTotalMemoryMb: number;
-  jvmMaxMemoryMb: number;
-  activeThreads: number;
+  databasePool?: HikariPoolStats;
+  database?: DatabaseStats;
+  flyway?: FlywayStats;
+  outboxQueue?: OutboxStats;
+  jvm?: JvmStats;
+  timestamp?: string;
+
+  // Flattened helpers
+  dbStatus?: string;
+  uptimeSeconds?: number;
+  jvmFreeMemoryMb?: number;
+  jvmTotalMemoryMb?: number;
+  jvmMaxMemoryMb?: number;
+  activeThreads?: number;
+}
+
+export interface RateLimitTier {
+  name: string;
+  capacity: number;
+  refillTokens: number;
+  refillPeriod: string;
+  activeBucketsCount: number;
+  throttledCount: number;
 }
 
 export interface RateLimitTelemetry {
-  authLimitRemaining: number;
-  aiLimitRemaining: number;
-  generalLimitRemaining: number;
-  totalRejectedRequests: number;
+  totalActiveBuckets: number;
+  totalThrottledRequests: number;
+  tiers?: Record<string, RateLimitTier>;
+  recentThrottles?: Array<{
+    ip: string;
+    tier: string;
+    path: string;
+    throttledAt: string;
+  }>;
+  timestamp?: string;
+
+  // Flattened helpers
+  authLimitRemaining?: number;
+  aiLimitRemaining?: number;
+  generalLimitRemaining?: number;
+  totalRejectedRequests?: number;
 }

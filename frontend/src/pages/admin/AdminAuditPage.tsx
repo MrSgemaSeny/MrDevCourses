@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminApi, AuditLog } from '@/entities/admin/api/adminApi';
-import { Shield, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 export const AdminAuditPage: React.FC = () => {
   const [page, setPage] = useState(0);
@@ -20,10 +20,6 @@ export const AdminAuditPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
-            <Shield className="w-3.5 h-3.5" />
-            <span>Security & Compliance</span>
-          </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
             Журнал аудита действий
           </h1>

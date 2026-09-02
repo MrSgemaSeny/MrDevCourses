@@ -210,6 +210,7 @@ public class AdminSystemService {
         long usedMemory = totalMemory - freeMemory;
         long maxMemory = runtime.maxMemory();
         int processors = runtime.availableProcessors();
+        int activeThreads = ManagementFactory.getThreadMXBean().getThreadCount();
         long uptimeMs = ManagementFactory.getRuntimeMXBean().getUptime();
 
         return JvmStatsDto.builder()
@@ -218,6 +219,7 @@ public class AdminSystemService {
                 .usedMemoryBytes(usedMemory)
                 .maxMemoryBytes(maxMemory)
                 .availableProcessors(processors)
+                .activeThreads(activeThreads)
                 .uptimeMs(uptimeMs)
                 .build();
     }

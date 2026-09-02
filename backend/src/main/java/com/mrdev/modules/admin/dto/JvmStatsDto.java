@@ -15,5 +15,6 @@ public class JvmStatsDto {
     private long usedMemoryBytes;
     private long maxMemoryBytes;
     private int availableProcessors;
+    private int activeThreads;
     private long uptimeMs;
 }

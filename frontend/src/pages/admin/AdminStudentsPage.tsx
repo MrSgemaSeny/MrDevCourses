@@ -146,13 +146,7 @@ export const AdminStudentsPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">
               Студенты и когорты
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-zinc-800 text-zinc-300 font-mono">
-              R2 CONSOLE
-            </span>
           </div>
-          <p className="text-xs text-zinc-400 mt-1">
-            Консоль администрирования студентов, инспекция учебного прогресса и когорт
-          </p>
         </div>
 
         {/* Quick Actions */}
