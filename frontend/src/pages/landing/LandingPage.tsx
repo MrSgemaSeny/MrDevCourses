@@ -80,12 +80,9 @@ export const LandingPage: React.FC = () => {
           {/* Functional List Highlights (Extended Features) */}
           <section className="space-y-4">
             <div className="space-y-1">
-              <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
+              <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
                 Архитектурные стандарты
               </h2>
-              <p className="text-xs text-zinc-400">
-                Практический инструментарий и подходы к проектированию сложных систем.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -167,7 +164,7 @@ export const LandingPage: React.FC = () => {
           <section className="space-y-4 pt-4 border-t border-white/5">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
+                <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
                   Доступные программы
                 </h2>
               </div>
@@ -252,7 +249,7 @@ export const LandingPage: React.FC = () => {
           {/* Pricing Section */}
           <section className="space-y-4 pt-4 border-t border-white/5">
             <div className="space-y-1">
-              <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
+              <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
                 Тарифы обучения
               </h2>
             </div>
