@@ -255,9 +255,6 @@ export const LandingPage: React.FC = () => {
               <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
                 Тарифы обучения
               </h2>
-              <p className="text-xs text-zinc-400">
-                Прозрачные условия с доступом ко всем материалам и инструментам платформы.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

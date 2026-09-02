@@ -3,9 +3,9 @@
 [![Backend](https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F?logo=springboot&logoColor=white)](backend)
 [![Frontend](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](frontend)
 [![Database](https://img.shields.io/badge/PostgreSQL-17_%2B_pgvector-4169E1?logo=postgresql&logoColor=white)](backend)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-black?logo=githubpages&logoColor=white)](https://mrsgemaseny.github.io/MrDevCourses/)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)](.github/workflows)
-[![Hosting](https://img.shields.io/badge/Deploy-Render_%2B_Vercel-black?logo=vercel&logoColor=white)](README.md#развертывание-в-production-render--vercel)
-[![Tests](https://img.shields.io/badge/Tests-100%25_Green_(73_Vitest_%2B_241_JUnit)-brightgreen)](README.md#-тестирование-и-контроль-качества)
+[![Tests](https://img.shields.io/badge/Tests-100%25_Green_(80_Vitest_%2B_250_JUnit)-brightgreen)](README.md#-тестирование-и-контроль-качества)
 
 **MrDevCourses** — современная учебная LMS-платформа (Educational MVP, Level 3) для обучения промышленной backend- и fullstack-разработке, архитектурным паттернам и вайбкодингу.
 
@@ -116,6 +116,17 @@
     - Конструктор учебного плана (Curriculum Tree с Drag-and-Drop, Markdown-редактор, валидатор видео, менеджер квизов).
     - Консоль студентов (мгновенный поиск, просмотр текущего урока и даты завершения, ручное зачисление, переключение ролей).
     - Аналитический дашборд (воронки по урокам, stuck-детекция неактивных студентов, неизменяемый журнал системного аудита `/admin/audit`, метрики состояния `/admin/system`).
+
+11. **Obsidian-Style Knowledge Base & Hashtag Glossary (`/docs`, `/glossary`)**:
+    - Интерактивная кластерная карта концепций и связей в стиле Obsidian с инспектором тем.
+    - Полнотекстовый поиск и навигация по хештегам (#JWT, #FSD, #OAuth2, #Flyway, #PostgreSQL, #Bucket4j).
+    - Контекстная выборка терминов в боковой панели Quick-Nav с фокусом на текущий открытый урок.
+
+12. **Subsystem Health & Live Telemetry (`/admin/system`)**:
+    - Мониторинг пула соединений HikariCP (active/idle/total connections).
+    - Задержка ответов PostgreSQL, актуальное состояние и версии миграций Flyway.
+    - Очередь Transactional Outbox (pending, processing, failed) и треды JVM с распределением памяти.
+    - Телеметрия лимитов запросов Token Bucket (Bucket4j tiers).
 
 ---
 
@@ -254,21 +265,21 @@ npm run dev
 cd backend
 ./gradlew test
 ```
-*Результат: **241/241 тестов успешно пройдены (100% Green)**.*
+*Результат: **250/250 тестов успешно пройдены (100% Green)**.*
 
 ### Запуск тестов Frontend (Vitest):
 ```bash
 cd frontend
 npm test -- --run
 ```
-*Результат: **31/31 сьютов успешно пройдены (73/73 теста green)**.*
+*Результат: **33/33 сьютов успешно пройдены (80/80 тестов green)**.*
 
 ### Проверка сборки Frontend (TypeScript + Vite):
 ```bash
 cd frontend
 npm run build
 ```
-*Результат: **1802 модуля собрано без единой ошибки (0 warnings, 0 errors)**.*
+*Результат: **1749 модулей собрано без единой ошибки (0 warnings, 0 errors)**.*
 
 ---
 
@@ -277,5 +288,5 @@ npm run build
 * **Zero N+1 Queries**: Все запросы к связанным сущностям (`Course -> Modules -> Lessons`, `User -> Enrollments`, `LessonProgress`) выполняются пакетами с использованием `@EntityGraph`, JOIN FETCH и `IN (...)` предикатов.
 * **Row-Level Security**: IDOR-защита на уровне сервисов через `SecurityUtils.getCurrentUserId()`.
 * **Stateless Cookies**: Токены хранятся исключительно в защищённых `httpOnly`, `SameSite=Lax` cookies с поддержкой Remember-Me и черного списка отозванных токенов (`JwtBlacklistService`).
-* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V24`), ручное редактирование применённых скриптов строго запрещено.
+* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V28`), ручное редактирование применённых скриптов строго запрещено.
 * **UTC Time Standard**: Строгое хранение всех меток времени в UTC для детерминированного расчёта drip-контента.
