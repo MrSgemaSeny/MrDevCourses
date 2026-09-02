@@ -17,12 +17,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Lock,
-  ArrowLeft,
   BookOpen,
   Layers,
   Code2,
   HelpCircle,
 } from 'lucide-react';
+
+const MODULE_NAMES: Record<number, string> = {
+  1: 'Введение и инструментарий',
+  2: 'Frontend-разработка (Маркетплейс)',
+  3: 'Full-Stack + 3D (Трекер денег)',
+  4: 'CRM: Kanban + Trackers',
+  5: 'Pensee (всё в одном)',
+};
 
 
 const LessonPageContent: React.FC = () => {
@@ -95,20 +102,30 @@ const LessonPageContent: React.FC = () => {
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* 75% Main Column aligned to left */}
       <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
-        {/* Top Breadcrumb & Actions Bar */}
-        <div className="flex items-center justify-between gap-4 pb-4 border-b border-white/5">
-          <Link
-            to={`/courses/${lesson.courseSlug || cId}`}
-            className="text-xs text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors font-mono"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>К курсу: {lesson.courseTitle || 'Назад'}</span>
-          </Link>
+        {/* Top Breadcrumb & Actions Bar (Курс > Модуль/Неделя > Урок) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+          <nav className="flex flex-wrap items-center gap-2 text-xs font-mono text-zinc-500">
+            <Link to="/courses" className="text-zinc-400 hover:text-white transition-colors">
+              Каталог
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <Link to={`/courses/${lesson.courseSlug || cId}`} className="text-zinc-300 hover:text-white transition-colors">
+              {lesson.courseTitle || 'Курс'}
+            </Link>
+            {lesson.moduleTitle && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                <span className="text-zinc-400 truncate max-w-[200px]">{lesson.moduleTitle}</span>
+              </>
+            )}
+            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <span className="text-white font-medium">Урок {lesson.dayNumber}</span>
+          </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => openQuickNav('glossary')}
-              className="px-2.5 py-1 rounded-sm text-xs bg-[#18181b] hover:bg-zinc-800 border border-white/5 hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-sm text-xs bg-[#18181b] hover:bg-zinc-800 border border-white/5 hover:border-zinc-500 text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer font-sans"
               aria-label="Открыть быструю навигацию"
             >
               <Layers className="w-3.5 h-3.5 text-zinc-400" />
@@ -120,8 +137,8 @@ const LessonPageContent: React.FC = () => {
             </span>
 
             {lesson.completed && (
-              <span className="px-2.5 py-0.5 rounded text-[10px] bg-emerald-950/80 border border-emerald-800 text-emerald-400 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" />
+              <span className="px-2.5 py-0.5 rounded text-[10px] bg-white/10 border border-white/20 text-white flex items-center gap-1 font-mono">
+                <CheckCircle2 className="w-3 h-3 text-white" />
                 Пройден
               </span>
             )}
@@ -149,12 +166,18 @@ const LessonPageContent: React.FC = () => {
         {/* Lesson Title, Actions & Interactive Workspace */}
         <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              {lesson.moduleTitle && (
-                <div className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1 font-mono">
-                  {lesson.moduleTitle}
-                </div>
-              )}
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+                <span className="text-zinc-300">{lesson.courseTitle}</span>
+                {lesson.moduleTitle && (
+                  <>
+                    <span className="text-zinc-600">&bull;</span>
+                    <span className="text-zinc-400">{lesson.moduleTitle}</span>
+                  </>
+                )}
+                <span className="text-zinc-600">&bull;</span>
+                <span className="text-zinc-500">Урок {lesson.dayNumber}</span>
+              </div>
               <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight">{lesson.title}</h1>
             </div>
 
@@ -173,11 +196,11 @@ const LessonPageContent: React.FC = () => {
                 disabled={lesson.completed || completeMutation.isPending}
                 className={`px-4 py-2 text-xs font-semibold rounded-sm flex items-center justify-center gap-2 transition-all ${
                   lesson.completed
-                    ? 'bg-[#141418] border border-white/5 text-emerald-400 cursor-default'
+                    ? 'bg-[#141418] border border-white/10 text-zinc-300 cursor-default font-mono'
                     : 'bg-[#fafafa] hover:bg-white text-[#09090b] shadow-[0_0_15px_rgba(255,255,255,0.05)] cursor-pointer'
                 }`}
               >
-                <CheckCircle2 className="w-4 h-4" />
+                <CheckCircle2 className="w-4 h-4 text-zinc-300" />
                 <span>{lesson.completed ? 'Урок пройден' : completeMutation.isPending ? 'Сохранение...' : 'Отметить как пройденный'}</span>
               </button>
             </div>
@@ -294,12 +317,12 @@ const LessonPageContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Curriculum Navigation Section */}
-        <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-4">
+        {/* Curriculum Navigation Section (Grouped by Module/Week) */}
+        <div className="p-6 rounded-sm bg-[#0e0e11] border border-white/5 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-zinc-400" />
-              <span>Уроки программы курса</span>
+              <span>Программа курса: {lesson.courseTitle}</span>
             </h3>
             <span className="text-xs font-mono text-zinc-500">
               {lessons.filter((l) => l.completed).length} / {lessons.length} пройдено
@@ -309,39 +332,58 @@ const LessonPageContent: React.FC = () => {
           {lessonsLoading ? (
             <div className="text-center py-6 text-zinc-500 text-xs font-mono">Загрузка уроков...</div>
           ) : (
-            <div className="space-y-2">
-              {lessons.map((item) => {
-                const isActive = item.id === lId;
+            <div className="space-y-4">
+              {/* Group lessons into chunks or modules */}
+              {Array.from(new Set(lessons.map((l) => l.moduleId || Math.ceil(l.dayNumber / 6)))).map((modId) => {
+                const moduleLessons = lessons.filter((l) => (l.moduleId || Math.ceil(l.dayNumber / 6)) === modId);
+                const weekNumber = Number(modId);
+                const moduleLabel = MODULE_NAMES[weekNumber] || `Модуль ${weekNumber}`;
+
                 return (
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      if (item.accessible) {
-                        navigate(`/courses/${cId}/lessons/${item.id}`);
-                      }
-                    }}
-                    className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
-                      isActive
-                        ? 'bg-[#141418] border-white/30 text-white font-medium shadow-sm'
-                        : item.accessible
-                        ? 'bg-[#0a0a0c] border-white/5 hover:border-zinc-600 text-zinc-300 cursor-pointer'
-                        : 'bg-[#0a0a0c] border-white/5 opacity-50 text-zinc-600 cursor-not-allowed'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {item.completed ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                      ) : item.accessible ? (
-                        <Play className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
-                      ) : (
-                        <Lock className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                      )}
-                      <span className="truncate">Урок {item.dayNumber}: {item.title}</span>
+                  <div key={modId} className="space-y-2">
+                    <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-2 px-1">
+                      <span className="text-zinc-500">Неделя {weekNumber}</span>
+                      <span className="text-zinc-700">&bull;</span>
+                      <span className="text-zinc-300 font-medium">{moduleLabel}</span>
                     </div>
 
-                    <div className="flex items-center gap-2 shrink-0 text-[10px] font-mono text-zinc-500">
-                      {item.durationMinutes && <span>{item.durationMinutes} мин</span>}
-                      {isActive && <span className="px-1.5 py-0.5 rounded bg-white/10 text-white font-semibold">ТЕКУЩИЙ</span>}
+                    <div className="space-y-1.5">
+                      {moduleLessons.map((item) => {
+                        const isActive = item.id === lId;
+                        return (
+                          <div
+                            key={item.id}
+                            onClick={() => {
+                              if (item.accessible) {
+                                navigate(`/courses/${cId}/lessons/${item.id}`);
+                              }
+                            }}
+                            className={`p-3 rounded-sm border text-xs flex items-center justify-between transition-all ${
+                              isActive
+                                ? 'bg-[#141418] border-white/40 text-white font-medium shadow-sm'
+                                : item.accessible
+                                ? 'bg-[#0a0a0c] border-white/5 hover:border-zinc-600 text-zinc-300 cursor-pointer'
+                                : 'bg-[#0a0a0c] border-white/5 opacity-50 text-zinc-600 cursor-not-allowed'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              {item.completed ? (
+                                <CheckCircle2 className="w-4 h-4 text-zinc-300 shrink-0" />
+                              ) : item.accessible ? (
+                                <Play className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
+                              ) : (
+                                <Lock className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                              )}
+                              <span className="truncate">Урок {item.dayNumber}: {item.title}</span>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0 text-[10px] font-mono text-zinc-500">
+                              {item.durationMinutes && <span>{item.durationMinutes} мин</span>}
+                              {isActive && <span className="px-1.5 py-0.5 rounded bg-white/10 text-white font-semibold">ТЕКУЩИЙ</span>}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
