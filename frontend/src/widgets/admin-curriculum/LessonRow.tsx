@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LessonDetail, LessonSummary, LessonType } from '@/shared/types';
 import { adminApi, UpdateLessonPayload } from '@/entities/adminApi';
+import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { LiveMarkdownPreviewModal } from './LiveMarkdownPreviewModal';
 import { MaterialManagerModal } from './MaterialManagerModal';
 import { QuizEditorModal } from './QuizEditorModal';
@@ -30,7 +31,7 @@ interface LessonRowProps {
 
 export const LessonRow: React.FC<LessonRowProps> = ({
   lesson,
-  courseId: _courseId,
+  courseId,
   onUpdated,
   onDelete,
   onDragStart,
@@ -54,15 +55,58 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const targetCourseId = courseId || lesson.courseId || 1;
+
   React.useEffect(() => {
     setTitle(lesson.title);
     setDayNumber(lesson.dayNumber);
     setLessonType(lesson.lessonType || 'VIDEO');
     setDurationMinutes(lesson.durationMinutes || 0);
     setIsPublished(lesson.isPublished !== false);
-    setYoutubeUrl(lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl || '');
-    setContent(lesson.content || (lesson as LessonDetail).content || '');
+    if (lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl) {
+      setYoutubeUrl(lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl || '');
+    }
+    if (lesson.content || (lesson as LessonDetail).content) {
+      setContent(lesson.content || (lesson as LessonDetail).content || '');
+    }
   }, [lesson]);
+
+  const handleOpenMarkdownModal = async () => {
+    setIsLoading(true);
+    try {
+      const detail = await lessonApi.getLessonDetail(targetCourseId, lesson.id);
+      if (detail) {
+        if (detail.content !== undefined) setContent(detail.content);
+        if (detail.youtubeUrl) setYoutubeUrl(detail.youtubeUrl);
+      }
+    } catch (err) {
+      console.error('Failed to fetch lesson detail:', err);
+    } finally {
+      setIsLoading(false);
+      setIsMarkdownModalOpen(true);
+    }
+  };
+
+  const handleOpenEditModal = async () => {
+    setIsLoading(true);
+    try {
+      const detail = await lessonApi.getLessonDetail(targetCourseId, lesson.id);
+      if (detail) {
+        setTitle(detail.title || lesson.title);
+        setDayNumber(detail.dayNumber || lesson.dayNumber);
+        setLessonType(detail.lessonType || 'VIDEO');
+        setDurationMinutes(detail.durationMinutes || 0);
+        setIsPublished(detail.isPublished !== false);
+        if (detail.youtubeUrl) setYoutubeUrl(detail.youtubeUrl);
+        if (detail.content !== undefined) setContent(detail.content);
+      }
+    } catch (err) {
+      console.error('Failed to fetch lesson detail:', err);
+    } finally {
+      setIsLoading(false);
+      setIsEditModalOpen(true);
+    }
+  };
 
   const handleTogglePublish = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -198,8 +242,8 @@ export const LessonRow: React.FC<LessonRowProps> = ({
         <div className="flex items-center gap-1 pl-3 shrink-0">
           <button
             type="button"
-            onClick={() => setIsMarkdownModalOpen(true)}
-            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            onClick={handleOpenMarkdownModal}
+            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Редактор Markdown конспекта"
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -208,7 +252,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
           <button
             type="button"
             onClick={() => setIsMaterialModalOpen(true)}
-            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Материалы и шпаргалки"
           >
             <Paperclip className="w-3.5 h-3.5" />
@@ -217,7 +261,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
           <button
             type="button"
             onClick={() => setIsQuizModalOpen(true)}
-            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Конструктор тестов"
           >
             <HelpCircle className="w-3.5 h-3.5" />
@@ -225,8 +269,8 @@ export const LessonRow: React.FC<LessonRowProps> = ({
 
           <button
             type="button"
-            onClick={() => setIsEditModalOpen(true)}
-            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            onClick={handleOpenEditModal}
+            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Настройки урока"
           >
             <Edit2 className="w-3.5 h-3.5" />
@@ -235,7 +279,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
           <button
             type="button"
             onClick={() => onDelete(lesson.id)}
-            className="p-1.5 rounded text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Удалить урок"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -247,7 +291,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
       {isMarkdownModalOpen && (
         <LiveMarkdownPreviewModal
           isOpen={isMarkdownModalOpen}
-          initialContent={lesson.content || (lesson as LessonDetail).content || content || ''}
+          initialContent={content}
           lessonTitle={lesson.title}
           onSave={handleSaveMarkdown}
           onClose={() => setIsMarkdownModalOpen(false)}
