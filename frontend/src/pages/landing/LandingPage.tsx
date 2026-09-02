@@ -358,11 +358,11 @@ export const LandingPage: React.FC = () => {
                 {/* Milestones timeline */}
                 <div className="space-y-1.5 pt-1">
                   <div className="flex items-center gap-2 text-xs text-zinc-300">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-600 shrink-0" />
                     <span>Первый онлайн-лендинг — <strong>за 3 дня</strong></span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-zinc-300">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shrink-0" />
                     <span>Первый работающий сайт — <strong>за 2 недели</strong></span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-zinc-300">
