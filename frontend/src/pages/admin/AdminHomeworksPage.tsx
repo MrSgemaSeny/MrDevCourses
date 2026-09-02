@@ -66,9 +66,6 @@ export const AdminHomeworksPage: React.FC = () => {
               </span>
             )}
           </div>
-          <p className="text-xs text-zinc-400 mt-1">
-            Проверка ссылок на GitHub и живые демо-сайты студентов. Принятие работы досрочно открывает следующий урок.
-          </p>
         </div>
 
         {/* Filter Tabs */}

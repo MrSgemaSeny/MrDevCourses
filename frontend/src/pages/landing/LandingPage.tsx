@@ -344,11 +344,12 @@ export const LandingPage: React.FC = () => {
             <div className="p-8 sm:p-10 rounded-sm bg-[#0e0e11] border border-white/10 hover:border-zinc-600 transition-all flex flex-col md:flex-row md:items-center justify-between gap-8">
               <div className="max-w-xl space-y-4">
                 <div className="space-y-1">
-                  <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                  <h2 className="text-2xl font-bold tracking-tight text-white leading-tight">
                     Первый задеплоенный проект уже через 3 дня
                   </h2>
                   <p className="text-xs text-zinc-400 leading-relaxed font-normal">
-                    Фокус на реальном коде, современной архитектуре и практических навыках без абстрактной теории.
+                    Фокус на реальных продуктах, современных инструментах,<br />
+                    практических навыках — без лишней теории.
                   </p>
                 </div>
 
