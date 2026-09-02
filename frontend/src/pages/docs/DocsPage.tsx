@@ -1,5 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { AuthContext } from '@/features/auth';
+import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { GLOSSARY_TERMS, GlossaryCategory, GlossaryTerm } from '@/entities/glossary';
 import {
   Search,
@@ -19,6 +22,7 @@ import {
   Bot,
   GitBranch,
   ArrowUpRight,
+  Lock,
 } from 'lucide-react';
 
 const CATEGORIES: { key: GlossaryCategory | 'all'; label: string }[] = [
@@ -164,6 +168,37 @@ export const DocsPage: React.FC = () => {
   const [sortMode, setSortMode] = useState<SortMode>('curriculum');
   const [activeInspectorTerm, setActiveInspectorTerm] = useState<GlossaryTerm | null>(null);
   const [copiedTermId, setCopiedTermId] = useState<string | null>(null);
+  const authContext = useContext(AuthContext);
+  const isAdmin = Boolean(authContext?.isAdmin);
+  const isAuthenticated = Boolean(authContext?.isAuthenticated);
+
+  const { data: userLessons = [] } = useQuery({
+    queryKey: ['lessons', 1],
+    queryFn: () => lessonApi.getLessons(1),
+    enabled: isAuthenticated,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const accessibleLessonsMap = useMemo(() => {
+    const map = new Map<number, { accessible: boolean; id: number; opensAt?: string }>();
+    userLessons.forEach((l) => {
+      map.set(l.dayNumber, {
+        accessible: isAdmin || l.accessible,
+        id: l.id,
+        opensAt: l.opensAt,
+      });
+    });
+    return map;
+  }, [userLessons, isAdmin]);
+
+  const checkLessonAccessible = (dayNumber: number): boolean => {
+    if (isAdmin) return true;
+    if (accessibleLessonsMap.has(dayNumber)) {
+      return Boolean(accessibleLessonsMap.get(dayNumber)?.accessible);
+    }
+    // Fallback: if not loaded or not authenticated, only day 1 is free preview
+    return dayNumber === 1;
+  };
 
   // Synchronize state from URL search params
   useEffect(() => {
@@ -645,17 +680,36 @@ export const DocsPage: React.FC = () => {
                         <div className="flex items-center gap-1.5 shrink-0 flex-wrap">
                           <Calendar className="w-3.5 h-3.5 text-zinc-500" />
                           <span className="text-[11px] font-mono text-zinc-400">Уроки:</span>
-                          <div className="flex gap-1">
-                            {term.relatedDayNumbers.map((day) => (
-                              <Link
-                                key={day}
-                                to={`/courses/1/lessons/${day}`}
-                                className="px-2 py-0.5 rounded bg-[#141418] hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white font-mono text-[11px] transition-colors"
-                                title={`Перейти к Уроку ${day}`}
-                              >
-                                Урок {day}
-                              </Link>
-                            ))}
+                          <div className="flex gap-1 flex-wrap">
+                            {term.relatedDayNumbers.map((day) => {
+                              const isAccessible = checkLessonAccessible(day);
+                              const targetLessonId = accessibleLessonsMap.get(day)?.id || day;
+
+                              if (isAccessible) {
+                                return (
+                                  <Link
+                                    key={day}
+                                    to={`/courses/1/lessons/${targetLessonId}`}
+                                    className="px-2 py-0.5 rounded bg-[#141418] hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white font-mono text-[11px] transition-colors inline-flex items-center gap-1"
+                                    title={`Перейти к Уроку ${day}`}
+                                  >
+                                    <span>Урок {day}</span>
+                                    <ArrowUpRight className="w-2.5 h-2.5 opacity-60" />
+                                  </Link>
+                                );
+                              }
+
+                              return (
+                                <span
+                                  key={day}
+                                  className="px-2 py-0.5 rounded bg-zinc-900 border border-white/5 text-zinc-600 font-mono text-[11px] inline-flex items-center gap-1 cursor-not-allowed select-none"
+                                  title={`Урок ${day} заблокирован графиком обучения`}
+                                >
+                                  <Lock className="w-2.5 h-2.5 text-zinc-600" />
+                                  <span>Урок {day}</span>
+                                </span>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -827,14 +881,36 @@ export const DocsPage: React.FC = () => {
               {/* Modal Footer */}
               <div className="p-3.5 border-t border-white/10 bg-[#141418] flex items-center justify-between">
                 {activeInspectorTerm.relatedDayNumbers && activeInspectorTerm.relatedDayNumbers.length > 0 ? (
-                  <Link
-                    to={`/courses/1/lessons/${activeInspectorTerm.relatedDayNumbers[0]}`}
-                    onClick={() => setActiveInspectorTerm(null)}
-                    className="px-3 py-1.5 rounded-sm bg-white hover:bg-zinc-200 text-black font-semibold text-xs font-mono flex items-center gap-1.5 transition-colors"
-                  >
-                    <span>Перейти к уроку {activeInspectorTerm.relatedDayNumbers[0]}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                  (() => {
+                    const targetDay = activeInspectorTerm.relatedDayNumbers[0];
+                    const isAccessible = checkLessonAccessible(targetDay);
+                    const targetLessonId = accessibleLessonsMap.get(targetDay)?.id || targetDay;
+
+                    if (isAccessible) {
+                      return (
+                        <Link
+                          to={`/courses/1/lessons/${targetLessonId}`}
+                          onClick={() => setActiveInspectorTerm(null)}
+                          className="px-3 py-1.5 rounded-sm bg-white hover:bg-zinc-200 text-black font-semibold text-xs font-mono flex items-center gap-1.5 transition-colors"
+                        >
+                          <span>Перейти к уроку {targetDay}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
+                      );
+                    }
+
+                    return (
+                      <button
+                        type="button"
+                        disabled
+                        className="px-3 py-1.5 rounded-sm bg-zinc-900 border border-white/10 text-zinc-500 font-medium text-xs font-mono flex items-center gap-1.5 cursor-not-allowed select-none"
+                        title="Урок заблокирован графиком обучения"
+                      >
+                        <Lock className="w-3.5 h-3.5 text-zinc-600" />
+                        <span>Урок {targetDay} (Заблокирован)</span>
+                      </button>
+                    );
+                  })()
                 ) : (
                   <div />
                 )}

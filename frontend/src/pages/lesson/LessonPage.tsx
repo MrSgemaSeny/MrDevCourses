@@ -56,23 +56,71 @@ const LessonPageContent: React.FC = () => {
     return match ? `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=0&rel=0&modestbranding=1` : null;
   };
 
+  const formatLockedMessage = (err: any): string => {
+    const rawMessage = err?.response?.data?.message || '';
+    const opensAt = err?.response?.data?.opensAt;
+
+    let isoDate = opensAt;
+    if (!isoDate && rawMessage) {
+      const match = rawMessage.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?/);
+      if (match) {
+        isoDate = match[0];
+      }
+    }
+
+    if (isoDate) {
+      try {
+        const targetDate = new Date(isoDate);
+        if (!isNaN(targetDate.getTime())) {
+          const now = new Date();
+          const diffMs = targetDate.getTime() - now.getTime();
+          const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+          const formattedDate = targetDate.toLocaleString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+
+          const getDaysWord = (d: number) => {
+            const mod10 = d % 10;
+            const mod100 = d % 100;
+            if (mod100 >= 11 && mod100 <= 19) return 'дней';
+            if (mod10 === 1) return 'день';
+            if (mod10 >= 2 && mod10 <= 4) return 'дня';
+            return 'дней';
+          };
+
+          const relativeText = diffDays > 0 ? ` (через ${diffDays} ${getDaysWord(diffDays)})` : '';
+          return `Урок заблокирован. Он станет доступен: ${formattedDate}${relativeText}`;
+        }
+      } catch {
+        // fallback
+      }
+    }
+
+    return rawMessage || 'Этот урок заблокирован согласно вашему графику обучения.';
+  };
+
   if (lessonLoading) {
     return <div className="text-center py-24 text-zinc-500 text-sm font-mono">Загрузка урока...</div>;
   }
 
   if (lessonError || !lesson) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <div className="w-12 h-12 rounded-full bg-red-950/60 border border-red-800 text-red-400 flex items-center justify-center mx-auto mb-4">
-          <Lock className="w-6 h-6" />
+      <div className="max-w-xl mx-auto px-4 py-20 text-center animate-in fade-in duration-200">
+        <div className="w-12 h-12 rounded-full bg-[#141418] border border-white/10 text-white flex items-center justify-center mx-auto mb-4">
+          <Lock className="w-5 h-5 text-zinc-300" />
         </div>
         <h2 className="text-sm font-bold text-white mb-2">Доступ ограничен</h2>
-        <p className="text-xs text-zinc-400 max-w-md mx-auto mb-6">
-          {(lessonError as any)?.response?.data?.message || 'Этот урок заблокирован согласно вашему графику обучения.'}
+        <p className="text-xs text-zinc-400 max-w-md mx-auto mb-6 font-mono leading-relaxed">
+          {formatLockedMessage(lessonError)}
         </p>
         <Link
           to={`/courses`}
-          className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs rounded-sm transition-colors"
+          className="px-4 py-2 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-sm transition-colors inline-block"
         >
           Вернуться к курсам
         </Link>
