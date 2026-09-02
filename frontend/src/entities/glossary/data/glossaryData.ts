@@ -313,7 +313,7 @@ export interface LessonDetailDto {
   dayNumber: number;
   completed: boolean;
 }`,
-    relatedDayNumbers: [7, 13],
+    relatedDayNumbers: [7, 8],
     tags: ['DTO', 'Contract', 'TypeScript', 'Java', 'API'],
   },
   {
@@ -349,7 +349,7 @@ export const apiClient = async <T>(endpoint: string, options: RequestInit = {}):
   if (!res.ok) throw new ApiError(res.status, await res.json());
   return res.json();
 };`,
-    relatedDayNumbers: [7, 13],
+    relatedDayNumbers: [7, 8],
     tags: ['API', 'HTTP', 'Fetch', 'Architecture', 'Frontend'],
   },
   {
@@ -416,7 +416,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 // src/features/     -> User interactions (auth, complete-lesson)
 // src/entities/     -> Business domain models & APIs (course, lesson, glossary)
 // src/shared/       -> Reusable UI primitives, helpers, types`,
-    relatedDayNumbers: [1, 7, 11],
+    relatedDayNumbers: [7],
     tags: ['FSD', 'Architecture', 'CleanCode', 'Frontend', 'TypeScript'],
   },
   {
@@ -442,7 +442,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     codeSnippet: `<button className="px-4 py-2 bg-white text-black font-semibold rounded-sm hover:bg-zinc-200 transition-colors font-mono text-xs">
   Начать обучение
 </button>`,
-    relatedDayNumbers: [2, 7],
+    relatedDayNumbers: [7, 8],
     tags: ['Tailwind', 'CSS', 'DesignSystem', 'UI', 'Frontend'],
   },
   {
@@ -646,7 +646,7 @@ public class Course {
     codeSnippet: `-- V27__attach_supplementary_materials_to_lessons.sql
 INSERT INTO lesson_materials (lesson_id, title, material_type, url, file_size_bytes, sort_order, created_at)
 VALUES (l_id, 'Неделя 1 Урок 3 — Словарь Git', 'CHEAT_SHEET', '/docs?tag=DevOps', 13400, 1, NOW());`,
-    relatedDayNumbers: [1, 4, 13],
+    relatedDayNumbers: [14],
     tags: ['Flyway', 'Database', 'PostgreSQL', 'Migrations', 'DevOps'],
   },
   {
@@ -664,7 +664,7 @@ if (token != null && jwtProvider.validateToken(token)) {
         new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(auth);
 }`,
-    relatedDayNumbers: [1, 2, 13, 15],
+    relatedDayNumbers: [15],
     tags: ['Auth', 'Security', 'JWT', 'Cookie', 'Stateless', 'OAuth2'],
   },
   {
@@ -675,7 +675,7 @@ if (token != null && jwtProvider.validateToken(token)) {
     fullExplanation: 'Используется для хранения временных refresh токенов сессий, распределенных счетчиков rate limiting (10 запросов в минуту), кеширования прав пользователей и одноразовых OAuth2 кодов.',
     codeSnippet: `// Сохранение refresh токена на 30 дней в Redis:
 redisTemplate.opsForValue().set("refresh:" + userId, refreshToken, Duration.ofDays(30));`,
-    relatedDayNumbers: [13, 15],
+    relatedDayNumbers: [15],
     tags: ['Redis', 'Cache', 'Performance', 'RateLimit', 'Backend'],
   },
   {
@@ -689,7 +689,7 @@ redisTemplate.opsForValue().set("refresh:" + userId, refreshToken, Duration.ofDa
 public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(12);
 }`,
-    relatedDayNumbers: [13, 15],
+    relatedDayNumbers: [15],
     tags: ['Security', 'BCrypt', 'Cryptography', 'Passwords', 'SpringSecurity'],
   },
   {
@@ -705,7 +705,7 @@ public PasswordEncoder passwordEncoder() {
         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
         .anyRequest().authenticated())
     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);`,
-    relatedDayNumbers: [1, 13, 15],
+    relatedDayNumbers: [15],
     tags: ['SpringSecurity', 'Auth', 'Filter', 'RBAC', 'Security'],
   },
   {
@@ -750,7 +750,7 @@ public User registerUser(RegisterRequest request) {
 // 2. User confirms permissions -> Google redirects to callback with ?code=XYZ
 // 3. Backend exchanges code for Google ID & Email
 // 4. Backend creates User in DB and returns httpOnly JWT cookie`,
-    relatedDayNumbers: [1, 16],
+    relatedDayNumbers: [16],
     tags: ['OAuth2', 'Google', 'Auth', 'Security', 'SSO'],
   },
 
@@ -865,7 +865,7 @@ if (!probe.isConsumed()) {
     response.setHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(probe.getNanosToWaitForRefill() / 1_000_000_000));
     return;
 }`,
-    relatedDayNumbers: [2, 13],
+    relatedDayNumbers: [22],
     tags: ['RateLimit', 'DDoS', 'Bucket4j', 'Security', 'Middleware'],
   },
   {
@@ -877,7 +877,7 @@ if (!probe.isConsumed()) {
     codeSnippet: `Long currentUserId = SecurityUtils.getCurrentUserId();
 Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(currentUserId, courseId)
     .orElseThrow(() -> new AccessDeniedException("Not enrolled"));`,
-    relatedDayNumbers: [1, 2, 13],
+    relatedDayNumbers: [21],
     tags: ['RLS', 'IDOR', 'PostgreSQL', 'SpringSecurity', 'Isolation'],
   },
   {
@@ -891,7 +891,7 @@ Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(currentUser
 FROM lessons l
 JOIN enrollments e ON e.course_id = l.course_id
 WHERE e.user_id = :userId;`,
-    relatedDayNumbers: [1, 3],
+    relatedDayNumbers: [14],
     tags: ['Drip', 'LMS', 'Scheduling', 'SQL', 'PostgreSQL'],
   },
   {
