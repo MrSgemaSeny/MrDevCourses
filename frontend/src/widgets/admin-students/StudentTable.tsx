@@ -114,32 +114,26 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                   </td>
 
                   {/* Enrolled Courses */}
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 text-[11px] text-zinc-300 font-mono">
                     {enrollCount > 0 ? (
-                      <div className="flex flex-wrap gap-1 max-w-xs">
-                        {student.enrollments.slice(0, 2).map((e) => (
-                          <span
-                            key={e.id}
-                            className="inline-block px-2 py-0.5 rounded bg-zinc-800 border border-white/5 text-[10px] text-zinc-300 truncate max-w-[130px]"
-                            title={e.courseTitle}
-                          >
-                            {e.courseTitle}
-                          </span>
-                        ))}
+                      <div className="flex items-center gap-1.5 max-w-xs truncate" title={student.enrollments.map((e) => e.courseTitle).join(', ')}>
+                        <span className="truncate">
+                          {student.enrollments.slice(0, 2).map((e) => e.courseTitle).join(', ')}
+                        </span>
                         {enrollCount > 2 && (
-                          <span className="inline-block px-1.5 py-0.5 rounded bg-zinc-900 text-[10px] text-zinc-500 font-mono">
+                          <span className="text-[10px] text-zinc-500 font-mono shrink-0">
                             +{enrollCount - 2}
                           </span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-[10px] text-zinc-500 font-mono">Не зачислен</span>
+                      <span className="text-[11px] text-zinc-500 font-mono">—</span>
                     )}
                   </td>
 
                   {/* Current Lesson */}
-                  <td className="py-3.5 px-4">
-                    <span className="inline-block px-2 py-0.5 rounded bg-zinc-800/80 border border-white/5 text-[11px] font-mono text-zinc-300 max-w-[180px] truncate" title={student.currentLessonTitle || 'Не начат'}>
+                  <td className="py-3.5 px-4 text-[11px] text-zinc-300 font-mono">
+                    <span className="block max-w-[220px] truncate" title={student.currentLessonTitle || 'Не начат'}>
                       {student.currentLessonTitle || 'Не начат'}
                     </span>
                   </td>
