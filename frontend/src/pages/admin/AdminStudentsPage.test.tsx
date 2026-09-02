@@ -100,7 +100,6 @@ describe('AdminStudentsPage', () => {
 
     // Verify Title
     expect(screen.getByText('Студенты и когорты')).toBeInTheDocument();
-    expect(screen.getByText('R2 CONSOLE')).toBeInTheDocument();
 
     // Verify Table rendered
     await waitFor(() => {

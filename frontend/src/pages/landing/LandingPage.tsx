@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { courseApi } from '@/entities/course/api/courseApi';
 import { useAuth } from '@/features/auth';
-import { ArrowRight, Code2, Layers, Cpu, Award } from 'lucide-react';
+import { ArrowRight, Code2, Layers, Cpu, Award, Rocket, Brain, Check } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -74,35 +74,77 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Functional List Highlights */}
+      {/* Functional List Highlights (Extended Features) */}
       <section className="py-16 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-4">
-          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
-            <Code2 className="w-5 h-5 text-white shrink-0" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-white mb-2">100% Практический код</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <Code2 className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">100% Практический код</h3>
+              </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                От архитектуры модульных монолитов и Spring Security до FSD на фронтенде и развертывания в облаке.
+                От архитектуры модульных монолитов и Spring Security до FSD на фронтенде и деплоя в облако.
               </p>
             </div>
           </div>
 
-          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
-            <Cpu className="w-5 h-5 text-white shrink-0" />
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-white mb-2">AI Code Reviewer</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <Cpu className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">AI Code Reviewer</h3>
+              </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
                 Мгновенный анализ качества кода и проверка домашних заданий с обратной связью уровня Tech Lead.
               </p>
             </div>
           </div>
 
-          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col sm:flex-row sm:items-center gap-4">
-            <Award className="w-5 h-5 text-white shrink-0" />
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-white mb-2">Сертификация</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <Rocket className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">Деплой с первой недели</h3>
+              </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Цифровой диплом с уникальным идентификатором и публичной верификацией в блокчейне.
+                Реальный задеплоенный проект в открытом интернете уже на 3-й день обучения без откладывания на потом.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <Layers className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">Production-архитектура</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Spring Boot 3, React 19, PostgreSQL, Flyway, JWT, RLS — реальный индустриальный стек без устаревших подходов.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <Brain className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">Second Brain система</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Методология организации контекста задач, документации и базы знаний без потери фокуса при работе.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-6 rounded-sm bg-[#18181b] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <Award className="w-5 h-5 text-white shrink-0" />
+                <h3 className="text-sm font-semibold text-white">Сертификация</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Цифровой диплом с уникальным идентификатором и публичной верификацией подлинности.
               </p>
             </div>
           </div>
@@ -166,6 +208,144 @@ export const LandingPage: React.FC = () => {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-16 border-t border-white/5">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <h2 className="text-sm font-bold text-white tracking-tight uppercase font-mono mb-2">
+              Тарифы обучения
+            </h2>
+            <p className="text-xs text-zinc-400">
+              Прозрачные условия с доступом ко всем материалам и инструментам платформы.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+            {/* Plan 1: Куратор */}
+            <div className="p-6 sm:p-8 rounded-sm bg-[#18181b] border border-white/5 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Куратор</span>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold font-mono text-white">9 990 ₸</div>
+                  <div className="text-xs text-zinc-500 mt-1">полный доступ к курсу и платформе</div>
+                </div>
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                    <span>25 практических уроков с конспектами и видео</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                    <span>AI Code Reviewer на каждом уроке</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                    <span>Проверка домашних заданий куратором</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                    <span>Доступ к базе знаний и документации</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
+                    <span>Цифровой сертификат по завершении</span>
+                  </div>
+                </div>
+              </div>
+              <Link
+                to="/courses"
+                className={`w-full py-3 bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-semibold text-xs rounded-sm text-center transition-colors block ${focusClasses}`}
+              >
+                Выбрать тариф
+              </Link>
+            </div>
+
+            {/* Plan 2: Ментор */}
+            <div className="p-6 sm:p-8 rounded-sm bg-[#18181b] border border-white/20 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-zinc-300 uppercase tracking-wider">Ментор</span>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold font-mono text-white">24 990 ₸</div>
+                  <div className="text-xs text-zinc-500 mt-1">полный доступ + персональные сессии</div>
+                </div>
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
+                    <span>Всё, что входит в тариф «Куратор»</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
+                    <span>Еженедельные 1-на-1 архитектурные сессии</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
+                    <span>Персональное код-ревью и аудит решений</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
+                    <span>Подготовка портфолио к собеседованиям</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-xs text-zinc-300">
+                    <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
+                    <span>Приоритетные ответы и поддержка</span>
+                  </div>
+                </div>
+              </div>
+              <Link
+                to="/courses"
+                className={`w-full py-3 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-sm text-center transition-colors block ${focusClasses}`}
+              >
+                Выбрать тариф
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Conversion CTA Block */}
+      <section className="py-20 border-t border-white/5">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-12 rounded-sm bg-[#18181b] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="max-w-xl space-y-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Первый задеплоенный проект уже через 3 дня
+              </h2>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Фокус на реальном коде, современной архитектуре и практических навыках без абстрактной теории.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
+              <Link
+                to="/courses"
+                className={`w-full sm:w-auto px-6 py-3 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-sm flex items-center justify-center gap-2 transition-colors ${focusClasses}`}
+              >
+                <span>Начать обучение</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              {isAuthenticated ? (
+                <Link
+                  to="/dashboard"
+                  className={`w-full sm:w-auto px-6 py-3 bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-medium text-xs rounded-sm transition-colors text-center ${focusClasses}`}
+                >
+                  Мой кабинет
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className={`w-full sm:w-auto px-6 py-3 bg-white/5 hover:bg-white/10 text-zinc-200 border border-white/10 font-medium text-xs rounded-sm transition-colors text-center ${focusClasses}`}
+                >
+                  Войти через Google
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </section>
     </div>
