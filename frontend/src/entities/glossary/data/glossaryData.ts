@@ -483,7 +483,7 @@ Authorization: Bearer eyJhbGci...
 
 {
   "email": "student@mrdeveloper.io",
-  "password": "secretPassword123"
+  "password": "raw_user_password"
 }`,
     relatedDayNumbers: [13],
     tags: ['HTTP', 'Request', 'Headers', 'JSON', 'Backend'],
@@ -819,7 +819,7 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
     void registerFlowCreatesUserAndSetsCookie() throws Exception {
         mockMvc.perform(post("/api/v1/auth/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\\"email\\":\\"new@dev.io\\",\\"password\\":\\"123456\\"}"))
+            .content("{\\"email\\":\\"new@dev.io\\",\\"password\\":\\"raw_test_pass\\"}"))
             .andExpect(status().isCreated())
             .andExpect(cookie().exists("mrdev_token"));
     }
