@@ -261,36 +261,37 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Plan 1: Куратор */}
+              {/* Plan 1: Куратор / Самостоятельный */}
               <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 hover:border-zinc-600 transition-all flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Куратор</span>
+                    <span className="text-[10px] font-mono text-zinc-500">Самостоятельно</span>
                   </div>
                   <div>
                     <div className="text-3xl font-bold font-mono text-white">9 990 ₸</div>
-                    <div className="text-xs text-zinc-500 mt-1 font-mono">полный доступ к курсу и платформе</div>
+                    <div className="text-xs text-zinc-500 mt-1 font-mono">доступ к платформе и материалам</div>
                   </div>
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>25 практических уроков с конспектами и видео</span>
+                      <span>25 уроков с видео, конспектами и кодовой базой</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>AI Code Reviewer на каждом уроке</span>
+                      <span>AI Code Reviewer и мгновенный анализ решений</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>Проверка домашних заданий куратором</span>
+                      <span>Проверка домашних заданий через систему</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>Доступ к базе знаний и документации</span>
+                      <span>Доступ к базе знаний, документации и сообществу</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5" />
-                      <span>Цифровой сертификат по завершении</span>
+                      <span>Обучение в собственном комфортном темпе</span>
                     </div>
                   </div>
                 </div>
@@ -302,15 +303,16 @@ export const LandingPage: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Plan 2: Ментор */}
+              {/* Plan 2: Ментор / Личное ведение */}
               <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/20 hover:border-zinc-400 transition-all flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-mono text-zinc-200 uppercase tracking-wider">Ментор</span>
+                    <span className="text-[10px] font-mono text-zinc-300">Личное ведение</span>
                   </div>
                   <div>
                     <div className="text-3xl font-bold font-mono text-white">24 990 ₸</div>
-                    <div className="text-xs text-zinc-500 mt-1 font-mono">полный доступ + персональные сессии</div>
+                    <div className="text-xs text-zinc-500 mt-1 font-mono">веду тебя лично от идеи до деплоя</div>
                   </div>
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
@@ -319,19 +321,19 @@ export const LandingPage: React.FC = () => {
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
-                      <span>Еженедельные 1-на-1 архитектурные сессии</span>
+                      <span>Лично веду тебя за руку от первого коммита до деплоя</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
-                      <span>Персональное код-ревью и аудит решений</span>
+                      <span>Прямой личный Telegram-чат со мной без ограничений</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
-                      <span>Подготовка портфолио к собеседованиям</span>
+                      <span>Индивидуальный разбор твоих PR, багов и архитектуры</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
-                      <span>Приоритетные ответы и поддержка</span>
+                      <span>Совместный запуск твоего проекта в рабочий прод</span>
                     </div>
                   </div>
                 </div>
