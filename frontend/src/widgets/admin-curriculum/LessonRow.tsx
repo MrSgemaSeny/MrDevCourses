@@ -247,7 +247,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
       {isMarkdownModalOpen && (
         <LiveMarkdownPreviewModal
           isOpen={isMarkdownModalOpen}
-          initialContent={(lesson as LessonDetail).content || content || ''}
+          initialContent={lesson.content || (lesson as LessonDetail).content || content || ''}
           lessonTitle={lesson.title}
           onSave={handleSaveMarkdown}
           onClose={() => setIsMarkdownModalOpen(false)}
