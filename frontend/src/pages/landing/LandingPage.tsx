@@ -270,7 +270,6 @@ export const LandingPage: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-3xl font-bold font-mono text-white">9 990 ₸</div>
-                    <div className="text-xs text-zinc-500 mt-1 font-mono">доступ к платформе и материалам</div>
                   </div>
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
@@ -312,7 +311,6 @@ export const LandingPage: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-3xl font-bold font-mono text-white">24 990 ₸</div>
-                    <div className="text-xs text-zinc-500 mt-1 font-mono">веду тебя лично от идеи до деплоя</div>
                   </div>
                   <div className="pt-4 border-t border-white/5 space-y-3">
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
@@ -321,7 +319,7 @@ export const LandingPage: React.FC = () => {
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
-                      <span>Лично веду тебя за руку от первого коммита до деплоя</span>
+                      <span>Лично веду тебя от первого коммита до деплоя</span>
                     </div>
                     <div className="flex items-start gap-3 text-xs text-zinc-300">
                       <Check className="w-4 h-4 text-white shrink-0 mt-0.5" />
