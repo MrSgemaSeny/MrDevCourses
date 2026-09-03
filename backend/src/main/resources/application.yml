@@ -16,6 +16,8 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    placeholder-replacement: false
+    out-of-order: true
     locations: classpath:db/migration
 
 server:
