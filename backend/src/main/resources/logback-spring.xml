@@ -40,6 +40,7 @@
         </root>
         <logger name="com.mrdev" level="DEBUG"/>
         <logger name="org.springframework.security" level="INFO"/>
+        <logger name="org.apache.tomcat.util.http.parser.Cookie" level="WARN"/>
     </springProfile>
 
     <!-- Production Profile: Structured JSON -->

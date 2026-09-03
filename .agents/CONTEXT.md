@@ -26,7 +26,7 @@
   - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
   - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking.
-- **Verification**: Backend 249/249 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1748 modules).
+- **Verification**: Backend 250/250 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1748 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
@@ -56,7 +56,7 @@
   - `b2c-discovery`: Modern B2C course catalog (`/courses`) with hover video preview; 2-column B2C landing (`/courses/:slug`) with Syllabus accordion, Sticky card, author badge, and FAQ.
 
 ## Test Verification & Quality Gates
-- **Backend (JUnit)**: 249/249 tests PASSED (100% Green, clean `:jacocoTestReport` verified).
+- **Backend (JUnit)**: 250/250 tests PASSED (100% Green, clean `:jacocoTestReport` verified).
 - **Frontend (Vitest)**: 80/80 tests PASSED across 33 test suites (100% Green).
 - **Security & IDOR Coverage**: IDOR guards on Homework and Help modules, Anti-Cheat option masking on Quizzes, Drip SQL calculation bounds, and Admin RBAC gates thoroughly verified.
 - **Production Build**: `tsc -b && vite build` SUCCESSFUL (1748 modules transformed, 0 errors).

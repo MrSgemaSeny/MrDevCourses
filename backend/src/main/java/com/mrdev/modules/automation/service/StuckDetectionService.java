@@ -45,11 +45,18 @@ public class StuckDetectionService {
             User student = enrollment.getUser();
             Course course = enrollment.getCourse();
             if (student == null || course == null) continue;
+            if (student.getRole() == com.mrdev.modules.auth.model.Role.ADMIN) continue;
 
-            LocalDate lastActive = student.getLastActiveDate();
-            long daysInactive = (lastActive != null)
-                    ? ChronoUnit.DAYS.between(lastActive, now)
-                    : 99;
+            LocalDate referenceDate = student.getLastActiveDate();
+            if (referenceDate == null && enrollment.getEnrolledAt() != null) {
+                referenceDate = enrollment.getEnrolledAt().atZone(java.time.ZoneOffset.UTC).toLocalDate();
+            }
+            if (referenceDate == null && student.getCreatedAt() != null) {
+                referenceDate = student.getCreatedAt().atZone(java.time.ZoneOffset.UTC).toLocalDate();
+            }
+            long daysInactive = (referenceDate != null)
+                    ? Math.max(0, ChronoUnit.DAYS.between(referenceDate, now))
+                    : 0;
 
             if (daysInactive >= 3) {
                 StuckStudentAlertDto dto = StuckStudentAlertDto.builder()
@@ -59,14 +66,14 @@ public class StuckDetectionService {
                         .courseId(course.getId())
                         .courseTitle(course.getTitle())
                         .daysInactive(daysInactive)
-                        .lastActiveDate(lastActive)
+                        .lastActiveDate(referenceDate)
                         .build();
 
                 stuckList.add(dto);
 
                 // Send Telegram alert to mentor
                 String details = String.format(
-                        "👤 *Студент:* %s (`%s`)\n*Курс:* %s\n*Неактивен:* %d дн.\n*Рекомендация:* Напишите студенту в Discord для поддержки!",
+                        "Студент: %s (`%s`)\n*Курс:* %s\n*Неактивен:* %d дн.\n*Рекомендация:* Напишите студенту в Discord для поддержки!",
                         dto.getStudentName(),
                         dto.getStudentEmail(),
                         dto.getCourseTitle(),

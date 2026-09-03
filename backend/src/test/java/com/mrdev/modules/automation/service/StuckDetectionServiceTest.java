@@ -112,4 +112,26 @@ class StuckDetectionServiceTest {
         assertThat(result).isEmpty();
         verifyNoInteractions(telegramNotificationService);
     }
+
+    @Test
+    @DisplayName("Should skip administrators even if they have no recent activity")
+    void detectStuckStudents_SkipsAdminsEvenIfInactive() {
+        User adminUser = User.builder()
+                .id(99L)
+                .name("Admin User")
+                .email("admin@test.com")
+                .role(Role.ADMIN)
+                .lastActiveDate(LocalDate.now().minusDays(30))
+                .build();
+
+        Course course = Course.builder().id(10L).title("Курс").build();
+        Enrollment e = Enrollment.builder().user(adminUser).course(course).build();
+
+        when(enrollmentRepository.findAllWithCourseAndUser()).thenReturn(List.of(e));
+
+        List<StuckStudentAlertDto> result = stuckDetectionService.runStuckCheck();
+
+        assertThat(result).isEmpty();
+        verifyNoInteractions(telegramNotificationService);
+    }
 }
