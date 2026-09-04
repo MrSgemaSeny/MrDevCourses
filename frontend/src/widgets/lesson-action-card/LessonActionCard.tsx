@@ -22,6 +22,7 @@ export interface LessonActionCardProps {
   lessonTitle: string;
   dayNumber: number;
   starterPrompt?: string;
+  checklist?: string;
   onOpenHelp: (stepId: string, stepTitle: string) => void;
 }
 
@@ -32,30 +33,80 @@ const DEFAULT_TOOLS: SetupTool[] = [
   { name: 'Claude Desktop', url: 'https://claude.com/download/', badge: 'GUI', description: 'Claude прямо в ПК' },
 ];
 
+const DEFAULT_STEPS = [
+  { id: 'step_1', title: 'Шаг 1: Скачать и открыть стартовый шаблон', done: false },
+  { id: 'step_2', title: 'Шаг 2: Выполнить установку зависимостей (npm install)', done: false },
+  { id: 'step_3', title: 'Шаг 3: Написать код по видео-разбору', done: false },
+  { id: 'step_4', title: 'Шаг 4: Задеплоить на Vercel / GitHub Pages', done: false },
+];
+
 export const LessonActionCard: React.FC<LessonActionCardProps> = ({
   lessonId,
   lessonTitle,
   dayNumber,
   starterPrompt = 'Напиши React-компонент карточки курса на Tailwind CSS и TypeScript...',
+  checklist,
   onOpenHelp,
 }) => {
   const storageKey = `mrdev_lesson_checklist_${lessonId}`;
 
-  const defaultSteps = [
-    { id: 'step_1', title: 'Шаг 1: Скачать и открыть стартовый шаблон', done: false },
-    { id: 'step_2', title: 'Шаг 2: Выполнить установку зависимостей (npm install)', done: false },
-    { id: 'step_3', title: 'Шаг 3: Написать код по видео-разбору', done: false },
-    { id: 'step_4', title: 'Шаг 4: Задеплоить на Vercel / GitHub Pages', done: false },
-  ];
+  const parseChecklist = (raw?: string) => {
+    if (!raw || raw.trim().length === 0) return DEFAULT_STEPS;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map((item: any, idx: number) => ({
+          id: item.id || `step_${idx + 1}`,
+          title: typeof item === 'string' ? item : item.title || `Шаг ${idx + 1}`,
+          done: false,
+        }));
+      }
+    } catch {
+      const lines = raw
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+      if (lines.length > 0) {
+        return lines.map((line, idx) => ({
+          id: `step_${idx + 1}`,
+          title: line.replace(/^-\s*\[\s*\]\s*/, ''),
+          done: false,
+        }));
+      }
+    }
+    return DEFAULT_STEPS;
+  };
 
   const [steps, setSteps] = useState<{ id: string; title: string; done: boolean }[]>(() => {
+    const baseSteps = parseChecklist(checklist);
     try {
       const saved = localStorage.getItem(storageKey);
-      return saved ? JSON.parse(saved) : defaultSteps;
+      if (saved) {
+        const savedSteps: { id: string; done: boolean }[] = JSON.parse(saved);
+        const doneMap = new Map(savedSteps.map((s) => [s.id, s.done]));
+        return baseSteps.map((s) => ({ ...s, done: doneMap.get(s.id) ?? false }));
+      }
+      return baseSteps;
     } catch {
-      return defaultSteps;
+      return baseSteps;
     }
   });
+
+  useEffect(() => {
+    const baseSteps = parseChecklist(checklist);
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const savedSteps: { id: string; done: boolean }[] = JSON.parse(saved);
+        const doneMap = new Map(savedSteps.map((s) => [s.id, s.done]));
+        setSteps(baseSteps.map((s) => ({ ...s, done: doneMap.get(s.id) ?? false })));
+      } else {
+        setSteps(baseSteps);
+      }
+    } catch {
+      setSteps(baseSteps);
+    }
+  }, [checklist, storageKey]);
 
   const [copiedPrompt, setCopiedPrompt] = useState(false);
 

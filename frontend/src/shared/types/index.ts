@@ -43,6 +43,7 @@ export interface LessonSummary {
   isFreePreview?: boolean;
   isPublished?: boolean;
   content?: string;
+  checklist?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder: number;
@@ -91,6 +92,7 @@ export interface LessonDetail {
   isFreePreview?: boolean;
   isPublished?: boolean;
   content?: string;
+  checklist?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder: number;

@@ -5,3 +5,4 @@ export { LiveMarkdownPreviewModal } from './LiveMarkdownPreviewModal';
 export { YouTubeValidator, extractYouTubeId } from './YouTubeValidator';
 export { QuizEditorModal } from './QuizEditorModal';
 export { MaterialManagerModal } from './MaterialManagerModal';
+export { ChecklistEditorModal } from './ChecklistEditorModal';

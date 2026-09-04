@@ -56,6 +56,9 @@ public class Lesson {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
+    private String checklist;
+
     @Column(name = "youtube_url", length = 500)
     private String youtubeUrl;
 

@@ -21,6 +21,8 @@ public class CreateLessonRequest {
 
     private String content;
 
+    private String checklist;
+
     @Size(max = 500, message = "YouTube URL must not exceed 500 characters")
     private String youtubeUrl;
 

@@ -43,7 +43,7 @@
 
 ## Status & Architecture
 - **Project Stage**: Level 3 — Strong Educational MVP (Pre-Release Pilot with 2 live students).
-- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V66 with rich mentor curriculum), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j.
+- **Stack**: Java 17, Spring Boot 3.3.0, PostgreSQL 17 (pgvector, pg_trgm), Flyway (V1..V67 with rich mentor curriculum), React 19, TypeScript, Vite, FSD Architecture, Tailwind CSS v4, TanStack React Query v5, Bucket4j.
 - **Core Modules & Capabilities**:
   - `homework-pipeline`: Human-centric submission (GitHub Repo URL, Live Demo URL, notes) + Admin Review Triage Queue (`/admin/homeworks`) with instant 1-click approve (auto-complete lesson + early drip unlock) or revision feedback.
   - `onboarding`: `WelcomeOnboardingModal` on course entry (outcome goal, Discord invite, tools checklist).
@@ -52,7 +52,7 @@
   - `materials`: Per-lesson downloadable resources (`CHEAT_SHEET`, `SOURCE_CODE`, `REPO_LINK`, `PDF`).
   - `auth`: Google OAuth2 + Email/Password, JWT stateless session in httpOnly cookie (`MrDev_token`), custom rate limiting.
   - `ratelimit`: Token Bucket (Bucket4j + Caffeine) with 3 tiers: Auth (10 req/15m/IP), AI (5 req/min/user), General (60 req/min/user/IP).
-  - `admin-suite`: Complete management console (Curriculum Tree, Drip schedule, Module reordering, Markdown authoring, Material manager, Quiz builder, Student triage & Role toggle, Cohort manager, Telemetry & Audit logs).
+  - `admin-suite`: Complete management console (Curriculum Tree, Drip schedule, Module reordering, Markdown authoring, ChecklistEditorModal, Material manager, Quiz builder, Student triage & Role toggle, Cohort manager, Telemetry & Audit logs).
   - `b2c-discovery`: Modern B2C course catalog (`/courses`) with hover video preview; 2-column B2C landing (`/courses/:slug`) with Syllabus accordion, Sticky card, author badge, and FAQ.
 
 ## Test Verification & Quality Gates

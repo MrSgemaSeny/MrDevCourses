@@ -211,6 +211,7 @@ public class AdminCurriculumService {
                 .isFreePreview(Boolean.TRUE.equals(request.getIsFreePreview()))
                 .isPublished(request.getIsPublished() == null || Boolean.TRUE.equals(request.getIsPublished()))
                 .content(request.getContent())
+                .checklist(request.getChecklist())
                 .youtubeUrl(request.getYoutubeUrl())
                 .dayNumber(dayNumber)
                 .sortOrder(request.getSortOrder() > 0 ? request.getSortOrder() : dayNumber)
@@ -241,6 +242,9 @@ public class AdminCurriculumService {
         lesson.setTitle(request.getTitle());
         if (request.getContent() != null) {
             lesson.setContent(request.getContent());
+        }
+        if (request.getChecklist() != null) {
+            lesson.setChecklist(request.getChecklist());
         }
         if (request.getYoutubeUrl() != null) {
             lesson.setYoutubeUrl(request.getYoutubeUrl());
@@ -548,6 +552,7 @@ public class AdminCurriculumService {
                 .isFreePreview(lesson.getIsFreePreview())
                 .isPublished(lesson.getIsPublished() != null ? lesson.getIsPublished() : true)
                 .content(lesson.getContent())
+                .checklist(lesson.getChecklist())
                 .youtubeUrl(lesson.getYoutubeUrl())
                 .dayNumber(lesson.getDayNumber())
                 .sortOrder(lesson.getSortOrder())

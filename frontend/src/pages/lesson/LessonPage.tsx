@@ -293,6 +293,7 @@ const LessonPageContent: React.FC = () => {
                   courseTitle={lesson.courseTitle}
                   lessonTitle={lesson.title}
                   dayNumber={lesson.dayNumber}
+                  checklist={lesson.checklist}
                   onOpenHelp={() => setIsHelpModalOpen(true)}
                 />
                 <LessonPitfallsAccordion courseId={cId} lessonId={lId} />

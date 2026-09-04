@@ -125,6 +125,7 @@ public class AdminService {
                 .course(course)
                 .title(request.getTitle())
                 .content(request.getContent())
+                .checklist(request.getChecklist())
                 .youtubeUrl(request.getYoutubeUrl())
                 .dayNumber(request.getDayNumber())
                 .sortOrder(request.getSortOrder() > 0 ? request.getSortOrder() : request.getDayNumber())
@@ -149,6 +150,9 @@ public class AdminService {
 
         lesson.setTitle(request.getTitle());
         lesson.setContent(request.getContent());
+        if (request.getChecklist() != null) {
+            lesson.setChecklist(request.getChecklist());
+        }
         lesson.setYoutubeUrl(request.getYoutubeUrl());
         lesson.setDayNumber(request.getDayNumber());
         lesson.setSortOrder(request.getSortOrder());
@@ -257,6 +261,7 @@ public class AdminService {
                 .courseSlug(course.getSlug())
                 .title(lesson.getTitle())
                 .content(lesson.getContent())
+                .checklist(lesson.getChecklist())
                 .youtubeUrl(lesson.getYoutubeUrl())
                 .dayNumber(lesson.getDayNumber())
                 .sortOrder(lesson.getSortOrder())

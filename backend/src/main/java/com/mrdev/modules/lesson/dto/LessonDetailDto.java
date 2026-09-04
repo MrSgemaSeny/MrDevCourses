@@ -27,6 +27,7 @@ public class LessonDetailDto {
     @Builder.Default
     private boolean isPublished = true;
     private String content;
+    private String checklist;
     private String youtubeUrl;
     private int dayNumber;
     private int sortOrder;

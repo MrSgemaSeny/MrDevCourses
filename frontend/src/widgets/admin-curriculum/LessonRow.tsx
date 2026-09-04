@@ -10,6 +10,7 @@ import {
   Trash2,
   Paperclip,
   BookOpen,
+  CheckSquare,
 } from 'lucide-react';
 import { LessonDetail, LessonSummary, LessonType } from '@/shared/types';
 import { adminApi, UpdateLessonPayload } from '@/entities/adminApi';
@@ -17,6 +18,7 @@ import { lessonApi } from '@/entities/lesson/api/lessonApi';
 import { LiveMarkdownPreviewModal } from './LiveMarkdownPreviewModal';
 import { MaterialManagerModal } from './MaterialManagerModal';
 import { QuizEditorModal } from './QuizEditorModal';
+import { ChecklistEditorModal } from './ChecklistEditorModal';
 import { YouTubeValidator } from './YouTubeValidator';
 
 interface LessonRowProps {
@@ -40,6 +42,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isMarkdownModalOpen, setIsMarkdownModalOpen] = useState(false);
+  const [isChecklistModalOpen, setIsChecklistModalOpen] = useState(false);
   const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
 
@@ -52,6 +55,7 @@ export const LessonRow: React.FC<LessonRowProps> = ({
   const [isPublished, setIsPublished] = useState(lesson.isPublished !== false);
   const [youtubeUrl, setYoutubeUrl] = useState(lesson.youtubeUrl || (lesson as LessonDetail).youtubeUrl || '');
   const [content, setContent] = useState(lesson.content || (lesson as LessonDetail).content || '');
+  const [checklist, setChecklist] = useState((lesson as LessonDetail).checklist || '');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,6 +73,9 @@ export const LessonRow: React.FC<LessonRowProps> = ({
     if (lesson.content || (lesson as LessonDetail).content) {
       setContent(lesson.content || (lesson as LessonDetail).content || '');
     }
+    if ((lesson as LessonDetail).checklist) {
+      setChecklist((lesson as LessonDetail).checklist || '');
+    }
   }, [lesson]);
 
   const handleOpenMarkdownModal = async () => {
@@ -78,12 +85,28 @@ export const LessonRow: React.FC<LessonRowProps> = ({
       if (detail) {
         if (detail.content !== undefined) setContent(detail.content);
         if (detail.youtubeUrl) setYoutubeUrl(detail.youtubeUrl);
+        if (detail.checklist !== undefined) setChecklist(detail.checklist || '');
       }
     } catch (err) {
       console.error('Failed to fetch lesson detail:', err);
     } finally {
       setIsLoading(false);
       setIsMarkdownModalOpen(true);
+    }
+  };
+
+  const handleOpenChecklistModal = async () => {
+    setIsLoading(true);
+    try {
+      const detail = await lessonApi.getLessonDetail(targetCourseId, lesson.id);
+      if (detail) {
+        if (detail.checklist !== undefined) setChecklist(detail.checklist || '');
+      }
+    } catch (err) {
+      console.error('Failed to fetch lesson detail for checklist:', err);
+    } finally {
+      setIsLoading(false);
+      setIsChecklistModalOpen(true);
     }
   };
 
@@ -163,6 +186,21 @@ export const LessonRow: React.FC<LessonRowProps> = ({
       onUpdated();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleSaveChecklist = async (newChecklistJson: string) => {
+    setChecklist(newChecklistJson);
+    try {
+      await adminApi.updateLesson(lesson.id, {
+        title: lesson.title,
+        dayNumber: lesson.dayNumber,
+        sortOrder: lesson.sortOrder,
+        checklist: newChecklistJson,
+      });
+      onUpdated();
+    } catch (err) {
+      console.error('Failed to save checklist:', err);
     }
   };
 
@@ -251,6 +289,15 @@ export const LessonRow: React.FC<LessonRowProps> = ({
 
           <button
             type="button"
+            onClick={handleOpenChecklistModal}
+            className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+            title="Пошаговый чеклист урока"
+          >
+            <CheckSquare className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            type="button"
             onClick={() => setIsMaterialModalOpen(true)}
             className="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             title="Материалы и шпаргалки"
@@ -295,6 +342,17 @@ export const LessonRow: React.FC<LessonRowProps> = ({
           lessonTitle={lesson.title}
           onSave={handleSaveMarkdown}
           onClose={() => setIsMarkdownModalOpen(false)}
+        />
+      )}
+
+      {/* Step-by-Step Checklist Modal */}
+      {isChecklistModalOpen && (
+        <ChecklistEditorModal
+          isOpen={isChecklistModalOpen}
+          initialChecklist={checklist}
+          lessonTitle={lesson.title}
+          onSave={handleSaveChecklist}
+          onClose={() => setIsChecklistModalOpen(false)}
         />
       )}
 

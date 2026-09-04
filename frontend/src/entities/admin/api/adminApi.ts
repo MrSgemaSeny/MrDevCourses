@@ -38,6 +38,7 @@ export interface ReorderItemPayload {
 export interface CreateLessonPayload {
   title: string;
   content?: string;
+  checklist?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder?: number;
@@ -51,6 +52,7 @@ export interface CreateLessonPayload {
 export interface UpdateLessonPayload {
   title: string;
   content?: string;
+  checklist?: string;
   youtubeUrl?: string;
   dayNumber: number;
   sortOrder?: number;
