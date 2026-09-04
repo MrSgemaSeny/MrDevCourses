@@ -44,7 +44,7 @@ jobs:
           cd frontend
           npm run build
         env:
-          VITE_BASE_PATH: /MrDevCourses/
+          VITE_BASE_PATH: /
 
       - name: Create 404.html fallback for SPA routing
         run: |
