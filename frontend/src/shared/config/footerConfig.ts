@@ -71,6 +71,7 @@ export const FOOTER_CONFIG: FooterConfig = {
     links: [
       { label: 'Конфиденциальность', to: ROUTES.PRIVACY },
       { label: 'Условия', to: ROUTES.TERMS },
+      { label: 'Возврат средств', to: ROUTES.REFUND },
     ],
   },
 };

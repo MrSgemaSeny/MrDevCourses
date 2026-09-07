@@ -60,6 +60,17 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
     },
   });
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const currentStepObj = PRESET_STEPS.find((s) => s.id === selectedStep) || PRESET_STEPS[0];
@@ -78,7 +89,12 @@ export const StudentHelpModal: React.FC<StudentHelpModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-[#0e0e11] border border-white/10 rounded-sm shadow-2xl p-6 space-y-5 text-white">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="student-help-modal-title"
+        className="relative w-full max-w-lg bg-[#0e0e11] border border-white/10 rounded-sm shadow-2xl p-6 space-y-5 text-white"
+      >
         {/* Close button */}
         <button
           type="button"

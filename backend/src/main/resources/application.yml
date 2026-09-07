@@ -28,7 +28,7 @@ server:
 
 app:
   jwt:
-    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    secret: ${JWT_SECRET}
     expiration-ms: ${JWT_EXPIRATION_MS:604800000} # 7 days (7 * 24 * 60 * 60 * 1000)
     remember-me-expiration-ms: ${JWT_REMEMBER_ME_EXPIRATION_MS:2592000000} # 30 days (30 * 24 * 60 * 60 * 1000)
     cookie-name: ${JWT_COOKIE_NAME:MrDev_token}

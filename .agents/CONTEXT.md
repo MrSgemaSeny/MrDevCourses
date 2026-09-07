@@ -25,8 +25,10 @@
   - Eliminated OAuth Account Preemption/Takeover in `CustomOAuth2UserService` by neutralizing unverified password hashes on Google account linking.
   - Added JWT revocation on logout via `jti` (UUID claim) and `JwtBlacklistService` with TTL eviction.
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
-  - Telegram Bot mentor command suite (`/hw`, `/approve`, `/reject`, `/status`, `/stuck`, `/progress`, `/broadcast`) and student deep linking.
-- **Verification**: Backend 250/250 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1748 modules).
+  - Security & Legal Audit Remediation: Eliminated hardcoded JWT fallback in `application.yml`, introduced `.env.example`, isolated test JWT secret in `application-test.yml`, fortified `.gitignore`.
+  - Legal & UX Compliance: Created `RefundPolicyPage.tsx` (`/refund`, 14-day policy per KZ consumer protection law), updated `PrivacyPage.tsx` with KZ Law No 94-V and explicit Cookies Policy, added business credentials and location to `Footer.tsx`.
+  - User Consent & Accessibility: Added mandatory Terms/Privacy consent checkbox to `EmailAuthForm.tsx`, created global `CookieConsentBanner.tsx`, added Escape key dismissal and dialog roles to `StudentHelpModal.tsx` and `WelcomeOnboardingModal.tsx`, improved WCAG AAA text contrast.
+- **Verification**: Backend 250/250 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1751 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).

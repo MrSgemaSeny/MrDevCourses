@@ -36,6 +36,7 @@ const ProfilePage = React.lazy(() => import('@/pages/profile/ProfilePage').then(
 const DocsPage = React.lazy(() => import('@/pages/docs/DocsPage').then((m) => ({ default: m.DocsPage })));
 const PrivacyPage = React.lazy(() => import('@/pages/legal/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
 const TermsPage = React.lazy(() => import('@/pages/legal/TermsPage').then((m) => ({ default: m.TermsPage })));
+const RefundPolicyPage = React.lazy(() => import('@/pages/legal/RefundPolicyPage').then((m) => ({ default: m.RefundPolicyPage })));
 
 const wrap = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },
       { path: 'privacy', element: wrap(<PrivacyPage />) },
       { path: 'terms', element: wrap(<TermsPage />) },
+      { path: 'refund', element: wrap(<RefundPolicyPage />) },
 
       // ── Protected Student/Core App Pages (Auth Required) ───────────
       {

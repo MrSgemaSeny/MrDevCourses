@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../model/authContext';
 import { GoogleLoginButton } from './GoogleLoginButton';
 
@@ -14,6 +14,7 @@ interface FormErrors {
   email?: string;
   name?: string;
   password?: string;
+  consent?: string;
   general?: string;
 }
 
@@ -29,6 +30,7 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [agreeConsent, setAgreeConsent] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,6 +44,9 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
     if (mode === 'register') {
       if (!name || name.trim().length < 2) {
         newErrors.name = 'Имя должно содержать минимум 2 символа';
+      }
+      if (!agreeConsent) {
+        newErrors.consent = 'Необходимо согласие с условиями и политикой конфиденциальности';
       }
     }
     if (!password || password.length < 8) {
@@ -150,6 +155,30 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
           </span>
         </label>
       </div>
+
+      {mode === 'register' && (
+        <div className="space-y-1 pt-1">
+          <label className="flex items-start gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={agreeConsent}
+              onChange={(e) => setAgreeConsent(e.target.checked)}
+              className="mt-0.5 w-3.5 h-3.5 rounded-xs bg-[#0a0a0c] border border-white/20 text-white accent-white focus:ring-0 cursor-pointer"
+            />
+            <span className="text-[11px] text-zinc-400 leading-tight">
+              Я согласен с{' '}
+              <Link to="/terms" target="_blank" className="text-white underline hover:text-zinc-200">
+                Условиями
+              </Link>{' '}
+              и{' '}
+              <Link to="/privacy" target="_blank" className="text-white underline hover:text-zinc-200">
+                Политикой конфиденциальности
+              </Link>
+            </span>
+          </label>
+          {errors.consent && <p className="text-[11px] text-red-400">{errors.consent}</p>}
+        </div>
+      )}
 
       <button
         type="submit"

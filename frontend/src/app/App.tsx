@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from '@/widgets/header/Header';
 import { Footer } from '@/widgets/footer/Footer';
+import { CookieConsentBanner } from '@/widgets/cookie-consent/CookieConsentBanner';
 import { ScrollToTop } from './providers/ScrollToTop';
 
 export const App: React.FC = () => {
@@ -14,6 +15,7 @@ export const App: React.FC = () => {
         <Outlet />
       </main>
 
+      <CookieConsentBanner />
       <Footer />
     </div>
   );

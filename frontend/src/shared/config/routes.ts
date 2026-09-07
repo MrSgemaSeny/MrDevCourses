@@ -14,4 +14,5 @@ export const ROUTES = {
   AUTH_CALLBACK: '/auth/callback',
   PRIVACY: '/privacy',
   TERMS: '/terms',
+  REFUND: '/refund',
 } as const;

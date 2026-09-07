@@ -67,25 +67,45 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Нижний бар: Ссылки на условия и конфиденциальность */}
-          {legal.links.length > 0 && (
-            <div className="pt-6 border-t border-white/5 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
-              <div className="flex items-center gap-4">
-                {legal.links.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.to}
-                    className="hover:text-zinc-300 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+          {/* Юридическая информация и реквизиты */}
+          <div className="pt-6 border-t border-white/5 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-zinc-400 font-mono">
+              <div>
+                <span className="text-zinc-300 font-medium">Исполнитель:</span> Орынбасар Мурат (Mr Developer)
+                <span className="mx-2 text-zinc-600">|</span>
+                <span>Республика Казахстан, г. Шымкент</span>
               </div>
-              <span className="text-[10px] text-zinc-600 font-sans">
-                &copy; {legal.copyrightYear} {legal.copyrightHolder}. Все права защищены.
-              </span>
+              <div className="flex items-center gap-3">
+                <a href="mailto:muratorynbasar0@gmail.com" className="text-zinc-400 hover:text-white transition-colors">
+                  muratorynbasar0@gmail.com
+                </a>
+                <span className="text-zinc-600">|</span>
+                <a href="tel:+77750584021" className="text-zinc-400 hover:text-white transition-colors">
+                  +7 775 058 40 21
+                </a>
+              </div>
             </div>
-          )}
+
+            {/* Нижний бар: Ссылки на условия, конфиденциальность и возврат */}
+            {legal.links.length > 0 && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-zinc-500 font-mono">
+                <div className="flex flex-wrap items-center gap-4">
+                  {legal.links.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      className="hover:text-zinc-300 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+                <span className="text-[10px] text-zinc-500 font-sans">
+                  &copy; {legal.copyrightYear} {legal.copyrightHolder}. Все права защищены.
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </footer>

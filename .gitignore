@@ -11,13 +11,21 @@ Thumbs.db
 # Logs
 *.log
 
-# Environment variables
+# Environment variables & Secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+*.env
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
 *.local.ps1
 run-local.ps1
-backend/.env
+*.pem
+*.key
+*.p12
+*.jks
 
 # Gradle
 .gradle/

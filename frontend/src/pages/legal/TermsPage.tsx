@@ -19,8 +19,8 @@ export const TermsPage: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Условия использования
           </h1>
-          <p className="text-xs font-mono text-zinc-500">
-            Последнее обновление: 1 сентября 2026 г.
+          <p className="text-xs font-mono text-zinc-400">
+            Последнее обновление: 1 сентября 2026 г. | Юрисдикция: Республика Казахстан
           </p>
         </div>
 
