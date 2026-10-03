@@ -3,7 +3,8 @@
 [![Backend](https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F?logo=springboot&logoColor=white)](backend)
 [![Frontend](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](frontend)
 [![Database](https://img.shields.io/badge/PostgreSQL-17_%2B_pgvector-4169E1?logo=postgresql&logoColor=white)](backend)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-black?logo=githubpages&logoColor=white)](https://mrsgemaseny.github.io/MrDevCourses/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-courses.mrsgemaseny.com-black?logo=vercel&logoColor=white)](https://courses.mrsgemaseny.com/)
+[![Backend Live](https://img.shields.io/badge/Backend_Live-Render-46E3B7?logo=render&logoColor=black)](https://mrdevcourses.onrender.com)
 [![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF?logo=githubactions&logoColor=white)](.github/workflows)
 [![Tests](https://img.shields.io/badge/Tests-100%25_Green_(80_Vitest_%2B_250_JUnit)-brightgreen)](README.md#-тестирование-и-контроль-качества)
 
@@ -50,7 +51,7 @@
 
 ### Backend (Spring Boot 3)
 - **Core Platform**: Java 17, Spring Boot 3.3.0, Spring Data JPA, Spring Security 6.
-- **Database & Migrations**: PostgreSQL 17 с расширениями `pgvector` (векторный поиск) и `pg_trgm` (триграммный поиск), Flyway (цепочка миграций `V1..V24`).
+- **Database & Migrations**: PostgreSQL 17 с расширениями `pgvector` (векторный поиск) и `pg_trgm` (триграммный поиск), Flyway (цепочка миграций `V1..V67`).
 - **AI & RAG Subsystem**: Groq API (Llama 3.3 70B), гибридный поиск Dense Vector HNSW + Sparse FTS через алгоритм Reciprocal Rank Fusion (RRF), AST-aware Markdown Chunker.
 - **Security & RBAC**: Stateless JWT сессии в `httpOnly` + `SameSite=Lax` cookies, Row-Level Security через `SecurityUtils.getCurrentUserId()`, метод-левел авторизация `@PreAuthorize("hasRole('ADMIN')")`.
 - **Rate Limiting**: 3-уровневый Token Bucket (Bucket4j + Caffeine Cache):
@@ -158,9 +159,9 @@ MrDevCourses/
 │   │       ├── telegram/             # Telegram Bot Polling Runner, Linking & Command Service
 │   │       └── user/                 # User Profile & Aggregated Metrics
 │   ├── src/main/resources/
-│   │   ├── db/migration/             # Flyway миграции (V1..V24)
+│   │   ├── db/migration/             # Flyway миграции (V1..V67)
 │   │   └── templates/                # Thymeleaf HTML-шаблоны сертификатов и писем
-│   └── src/test/java/com/mrdev/      # JUnit 5 & MockMvc E2E тесты (241 тест)
+│   └── src/test/java/com/mrdev/      # JUnit 5 & MockMvc E2E тесты (250 тестов)
 ├── frontend/                         # React 19 + TypeScript + Vite SPA
 │   ├── src/
 │   │   ├── app/                      # Роутер (изолированный AdminLayout), провайдеры (React Query, Auth)
@@ -214,13 +215,13 @@ npm run dev
 - [x] **Реальный прогресс и аттестация**: Реальные метрики студента вместо геймификации стриков (суммарное время обучения и количество завершённых проектов), автоматическая векторная генерация PDF-сертификатов с онлайн-верификацией.
 - [x] **Telegram-ассистент и алертинг**: Telegram-бот с русскими алиасами команд, умным парсингом ID, dual-alerts (Telegram + Email) и защитой от Exception-leak.
 - [x] **Административный контур**: Изолированная консоль `AdminLayout` со своим сайдбаром (вынесена из public-shell), Drag-and-Drop редактор программ, очередь проверки ДЗ, управление студентами и системная телеметрия (`/admin/system`, `/admin/audit`, `/admin/analytics`).
-- [x] **Отказоустойчивость**: 3-уровневый Rate Limiting (Bucket4j), Transactional Outbox для фоновых событий, 100% зеленые тесты (241 JUnit + 73 Vitest).
+- [x] **Отказоустойчивость**: 3-уровневый Rate Limiting (Bucket4j), Transactional Outbox для фоновых событий, 100% зеленые тесты (250 JUnit + 80 Vitest).
 
 ---
 
 ## Развертывание в Production (Render + Vercel)
 
-Платформа спроектирована для надежного и экономичного деплоя в связке **Render (Backend & PostgreSQL)** + **Vercel (Frontend SPA)** после прохождения CI/CD проверок в GitHub Actions:
+Платформа развернута в связке **Render (Backend Web Service & PostgreSQL)** + **Vercel (Frontend SPA)**:
 
 ```
 [Пользователь / Браузер]
@@ -229,32 +230,37 @@ npm run dev
     |                                  | (HTTPS)
     v                                  v
 [Vercel Edge Network]           [Render Web Service]
-(React 19 SPA / Static CDN)     (Spring Boot 3 App)
+courses.mrsgemaseny.com         mrdevcourses.onrender.com
+(React 19 SPA / Vite)           (Spring Boot 3 App)
                                        |
                                        v
                                 [Render PostgreSQL 17] (pgvector + pg_trgm)
 ```
 
-### GitHub Actions CI/CD Pipeline
-Пайплайн в `.github/workflows/ci.yml` автоматически запускается на каждый push/PR в ветку `main`:
-1. **Backend Job**: запуск JUnit 5 тестов (`./gradlew test`), валидация схемы БД, проверка сборки JAR.
-2. **Frontend Job**: проверка типов (`tsc -b`), запуск Vitest тестов (`npm run test`), сборка production бандла (`npm run build`).
-3. **Deploy Trigger**: автоматический триггер деплоя в Vercel и Render только при 100% прохождении тестов.
+### Домены Системы
+- **Production Frontend**: [`https://courses.mrsgemaseny.com`](https://courses.mrsgemaseny.com) (зеркало: [`https://mr-dev-courses.vercel.app`](https://mr-dev-courses.vercel.app))
+- **Production Backend API**: [`https://mrdevcourses.onrender.com`](https://mrdevcourses.onrender.com) (базовый путь `/api/v1`)
 
-### Конфигурация Переменных Окружения (Production Secrets)
+### GitHub Actions CI/CD Pipeline
+Пайплайн в `.github/workflows/deploy-pages.yml` и CI автоматически запускается на каждый push/PR в ветку `main`:
+1. **Backend Job**: запуск 250 тестов JUnit 5 (`./gradlew test`), валидация схемы БД, проверка сборки JAR.
+2. **Frontend Job**: проверка типов (`tsc -b`), запуск 80 тестов Vitest (`npm run test`), сборка production бандла (`npm run build`).
+
+### Конфигурация Переменных Окружения (Render Production Environment)
 
 | Переменная | Назначение | Пример значения |
 | :--- | :--- | :--- |
-| `SPRING_DATASOURCE_URL` | Подключение к Render PostgreSQL | `jdbc:postgresql://dpg-xxx.render.com/mrdevcourses_db` |
-| `SPRING_DATASOURCE_USERNAME` | Пользователь БД | `mrdev_user` |
-| `SPRING_DATASOURCE_PASSWORD` | Пароль к БД | `${DATABASE_PASSWORD}` |
+| `SPRING_PROFILES_ACTIVE` | Активация продакшен профиля | `prod` |
+| `DATABASE_URL` | JDBC подключение к Render PostgreSQL | `jdbc:postgresql://dpg-xxx/mrdevcourses` |
+| `DATABASE_USERNAME` | Пользователь БД | `mrdev` |
+| `DATABASE_PASSWORD` | Пароль к БД | `${DATABASE_PASSWORD}` |
 | `JWT_SECRET` | 256-битный ключ подписи токенов | `${RANDOM_HEX_64_CHARS}` |
 | `GOOGLE_CLIENT_ID` | OAuth2 Google Client ID | `*.apps.googleusercontent.com` |
 | `GOOGLE_CLIENT_SECRET` | OAuth2 Google Secret | `${GOOGLE_CLIENT_SECRET}` |
 | `TELEGRAM_BOT_TOKEN` | Токен Telegram-бота платформы | `${TELEGRAM_BOT_TOKEN}` |
 | `TELEGRAM_CHAT_ID` | Chat ID ментора для алертов и пульта | `${TELEGRAM_CHAT_ID}` |
-| `CORS_ALLOWED_ORIGINS` | Разрешенные фронтенд-домены | `https://mrdevcourses.vercel.app` |
-| `FRONTEND_URL` | URL фронтенда для редиректов OAuth2 | `https://mrdevcourses.vercel.app` |
+| `CORS_ALLOWED_ORIGINS` | Разрешенные фронтенд-домены | `https://courses.mrsgemaseny.com,https://mr-dev-courses.vercel.app` |
+| `FRONTEND_URL` | URL фронтенда для редиректов OAuth2 | `https://courses.mrsgemaseny.com` |
 
 ---
 
@@ -288,5 +294,5 @@ npm run build
 * **Zero N+1 Queries**: Все запросы к связанным сущностям (`Course -> Modules -> Lessons`, `User -> Enrollments`, `LessonProgress`) выполняются пакетами с использованием `@EntityGraph`, JOIN FETCH и `IN (...)` предикатов.
 * **Row-Level Security**: IDOR-защита на уровне сервисов через `SecurityUtils.getCurrentUserId()`.
 * **Stateless Cookies**: Токены хранятся исключительно в защищённых `httpOnly`, `SameSite=Lax` cookies с поддержкой Remember-Me и черного списка отозванных токенов (`JwtBlacklistService`).
-* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V28`), ручное редактирование применённых скриптов строго запрещено.
+* **Идемпотентность миграций**: Все изменения схемы базы данных версионируются через Flyway (`V1..V67`), ручное редактирование применённых скриптов строго запрещено.
 * **UTC Time Standard**: Строгое хранение всех меток времени в UTC для детерминированного расчёта drip-контента.
