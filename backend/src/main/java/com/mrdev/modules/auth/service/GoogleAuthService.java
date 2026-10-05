@@ -63,6 +63,9 @@ public class GoogleAuthService {
             }
 
             return idToken.getPayload();
+        } catch (IllegalArgumentException e) {
+            log.warn("[GoogleAuth] Malformed Google ID token received: {}", e.getMessage());
+            throw new ApiException("Некорректный формат токена Google", HttpStatus.BAD_REQUEST);
         } catch (IOException | GeneralSecurityException e) {
             log.error("[GoogleAuth] Failed to verify Google ID token: {}", e.getMessage(), e);
             throw new ApiException("Ошибка проверки токена Google: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
