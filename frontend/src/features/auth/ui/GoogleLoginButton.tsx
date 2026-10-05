@@ -5,12 +5,14 @@ interface GoogleLoginButtonProps {
   text?: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   className = '',
   text = 'Войти через Google',
 }) => {
   const handleLogin = () => {
-    window.location.href = '/api/oauth2/authorization/google';
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
   };
 
   return (

@@ -32,7 +32,7 @@ export interface ApiResponseContainer<T> {
   requestId?: string;
 }
 
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 function generateRequestId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {

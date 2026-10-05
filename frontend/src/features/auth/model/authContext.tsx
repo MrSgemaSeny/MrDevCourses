@@ -63,9 +63,11 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     checkAuth();
   }, [checkAuth]);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
   const loginWithGoogle = useCallback(() => {
-    window.location.href = '/api/oauth2/authorization/google';
-  }, []);
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
+  }, [API_BASE_URL]);
 
   const loginWithEmail = useCallback(async (email: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const userData = await userApi.loginWithEmail(email, password, rememberMe);
