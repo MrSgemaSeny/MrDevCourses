@@ -41,6 +41,13 @@ export const userApi = {
     return response.data.data;
   },
 
+  loginWithGoogle: async (credential: string): Promise<User> => {
+    const response = await apiClient.post<ApiResponse<User>>('/v1/auth/google', {
+      credential,
+    });
+    return response.data.data;
+  },
+
   getTelegramLinkToken: async (): Promise<{ token: string; botUsername: string; linkUrl: string }> => {
     const response = await apiClient.post<ApiResponse<{ token: string; botUsername: string; linkUrl: string }>>('/v1/telegram/link-token');
     return response.data.data;

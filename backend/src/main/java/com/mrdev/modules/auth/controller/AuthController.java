@@ -29,6 +29,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtCookieHelper jwtCookieHelper;
     private final EmailAuthService emailAuthService;
+    private final com.mrdev.modules.auth.service.GoogleAuthService googleAuthService;
     private final AuthRateLimiter authRateLimiter;
     private final JwtBlacklistService jwtBlacklistService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -77,6 +78,16 @@ public class AuthController {
         User user = userRepository.findByEmail(request.getEmail().trim().toLowerCase())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
         return ResponseEntity.ok(ApiResponse.success(UserDto.fromEntity(user)));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse<UserDto>> loginWithGoogle(
+            @Valid @RequestBody com.mrdev.modules.auth.dto.GoogleAuthRequest request,
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse) {
+        authRateLimiter.checkAndConsume(ipResolver.resolveClientIp(httpRequest));
+        UserDto userDto = googleAuthService.loginWithGoogle(request.credential(), httpResponse);
+        return ResponseEntity.ok(ApiResponse.success(userDto));
     }
 
     @PostMapping("/logout")

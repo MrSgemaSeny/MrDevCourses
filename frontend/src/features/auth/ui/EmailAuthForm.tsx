@@ -205,7 +205,7 @@ export const EmailAuthForm: React.FC<EmailAuthFormProps> = ({
       </div>
 
       {/* Google Login Button */}
-      <GoogleLoginButton text="Войти через Google" />
+      <GoogleLoginButton onError={(err) => setErrors({ general: err })} />
     </form>
   );
 };

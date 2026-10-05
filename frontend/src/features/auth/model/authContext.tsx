@@ -8,6 +8,7 @@ export interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   loginWithGoogle: () => void;
+  loginWithGoogleCredential?: (credential: string) => Promise<User>;
   loginWithEmail: (email: string, password: string, rememberMe?: boolean) => Promise<User>;
   register: (email: string, name: string, password: string, rememberMe?: boolean) => Promise<User>;
   logout: () => Promise<void>;
@@ -69,6 +70,15 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
   }, [API_BASE_URL]);
 
+  const loginWithGoogleCredential = useCallback(async (credential: string): Promise<User> => {
+    const userData = await userApi.loginWithGoogle(credential);
+    setUser(userData);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
+    }
+    return userData;
+  }, []);
+
   const loginWithEmail = useCallback(async (email: string, password: string, rememberMe: boolean = true): Promise<User> => {
     const userData = await userApi.loginWithEmail(email, password, rememberMe);
     setUser(userData);
@@ -104,6 +114,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     isAdmin: user?.role === 'ADMIN',
     isLoading,
     loginWithGoogle,
+    loginWithGoogleCredential,
     loginWithEmail,
     register,
     logout,

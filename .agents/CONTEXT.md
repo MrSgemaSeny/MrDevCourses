@@ -27,8 +27,10 @@
   - Guarded `DataSeeder` with `@Profile("!prod")` and set `JWT_COOKIE_SECURE: true` default.
   - Security & Legal Audit Remediation: Eliminated hardcoded JWT fallback in `application.yml`, introduced `.env.example`, isolated test JWT secret in `application-test.yml`, fortified `.gitignore`.
   - Legal & UX Compliance: Created `RefundPolicyPage.tsx` (`/refund`, 14-day policy per KZ consumer protection law), updated `PrivacyPage.tsx` with KZ Law No 94-V and explicit Cookies Policy, added business credentials and location to `Footer.tsx`.
-  - User Consent & Accessibility: Added mandatory Terms/Privacy consent checkbox to `EmailAuthForm.tsx`, created global `CookieConsentBanner.tsx`, added Escape key dismissal and dialog roles to `StudentHelpModal.tsx` and `WelcomeOnboardingModal.tsx`, improved WCAG AAA text contrast.
-- **Verification**: Backend 250/250 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1751 modules).
+  - Implemented Google Identity Services (ID Token Flow) based on JF-1C pattern with `com.google.api-client:google-api-client:2.2.0`, `GoogleAuthService`, `GoogleAuthRequest`, and `POST /v1/auth/google`, fully resolving `authorization_request_not_found` and cross-domain redirect issues.
+  - Wrapped frontend root in `<GoogleOAuthProvider>` and enhanced `GoogleLoginButton.tsx` with `@react-oauth/google` popup and seamless redirect fallback.
+  - Hardened `CookieUtils.java` with `SameSite=Lax` and reliable cookie clearing, and routed production OAuth redirect URI through `${FRONTEND_URL}`.
+- **Verification**: Backend 251/251 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1752 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).

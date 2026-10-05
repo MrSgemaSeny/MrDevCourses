@@ -119,4 +119,13 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status", is(401)));
     }
+
+    @Test
+    @DisplayName("POST /v1/auth/google should validate blank credential")
+    void testGoogleLoginBlankCredential() throws Exception {
+        mockMvc.perform(post("/v1/auth/google")
+                        .contentType("application/json")
+                        .content("{\"credential\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }
