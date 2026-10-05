@@ -25,7 +25,7 @@ public class OriginValidationFilter extends OncePerRequestFilter {
 
     private final Set<String> allowedOriginsSet;
 
-    public OriginValidationFilter(@Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173}") String allowedOrigins) {
+    public OriginValidationFilter(@Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,https://courses.mrsgemaseny.com,https://mr-dev-courses.vercel.app}") String allowedOrigins) {
         this.allowedOriginsSet = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(StringUtils::hasText)
@@ -56,7 +56,7 @@ public class OriginValidationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(origin)) {
             String normalizedOrigin = normalizeOrigin(origin);
-            if (!allowedOriginsSet.contains(normalizedOrigin) && !isLocalhostOrDev(normalizedOrigin)) {
+            if (!isAllowedOrigin(normalizedOrigin, request)) {
                 log.warn("Rejected state-changing request from unauthorized Origin/Referer: {}", origin);
                 writeForbiddenResponse(response, "Cross-Origin request blocked by Origin validation");
                 return;
@@ -95,6 +95,39 @@ public class OriginValidationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             return origin.trim().toLowerCase();
         }
+    }
+
+    private boolean isAllowedOrigin(String origin, HttpServletRequest request) {
+        if (!StringUtils.hasText(origin)) {
+            return false;
+        }
+        if (allowedOriginsSet.contains(origin)) {
+            return true;
+        }
+        if (isLocalhostOrDev(origin)) {
+            return true;
+        }
+        try {
+            URI uri = URI.create(origin);
+            String host = uri.getHost();
+            if (host != null) {
+                host = host.toLowerCase();
+                if (request != null && host.equalsIgnoreCase(request.getServerName())) {
+                    return true;
+                }
+                if (host.equals("courses.mrsgemaseny.com") || host.endsWith(".mrsgemaseny.com") || host.equals("mrsgemaseny.com")) {
+                    return true;
+                }
+                if (host.equals("mr-dev-courses.vercel.app") || host.endsWith(".vercel.app")) {
+                    return true;
+                }
+                if (host.equals("onrender.com") || host.endsWith(".onrender.com")) {
+                    return true;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 
     private boolean isLocalhostOrDev(String origin) {

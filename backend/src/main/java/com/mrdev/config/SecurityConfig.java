@@ -40,7 +40,7 @@ public class SecurityConfig {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173}")
+    @Value("${app.cors.allowed-origins:http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,https://courses.mrsgemaseny.com,https://mr-dev-courses.vercel.app}")
     private String allowedOrigins;
 
     @Value("${app.cors.allowed-methods:GET,POST,PUT,PATCH,DELETE,OPTIONS}")
@@ -65,14 +65,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/v1/courses", "/v1/courses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/projects", "/v1/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/certificates/verify/**", "/v1/certificates/*/pdf").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/logout", "/v1/auth/register", "/v1/auth/login", "/v1/auth/google").permitAll()
-                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/v1/auth/me").authenticated()
+                        .requestMatchers("/v1/auth/**").permitAll()
+                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
-                                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                                 .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                         )
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
@@ -89,11 +89,23 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+        List<String> origins = new java.util.ArrayList<>(Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
-                .toList();
-        configuration.setAllowedOrigins(origins);
+                .toList());
+
+        if (!origins.contains("https://courses.mrsgemaseny.com")) {
+            origins.add("https://courses.mrsgemaseny.com");
+        }
+        if (!origins.contains("https://mr-dev-courses.vercel.app")) {
+            origins.add("https://mr-dev-courses.vercel.app");
+        }
+        origins.add("https://*.vercel.app");
+        origins.add("https://*.mrsgemaseny.com");
+        origins.add("http://localhost:*");
+        origins.add("http://127.0.0.1:*");
+
+        configuration.setAllowedOriginPatterns(origins.stream().distinct().toList());
 
         List<String> methods = Arrays.stream(allowedMethods.split(","))
                 .map(String::trim)

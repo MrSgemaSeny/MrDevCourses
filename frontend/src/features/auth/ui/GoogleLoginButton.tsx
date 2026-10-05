@@ -21,6 +21,25 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (Boolean((window as unknown as { google?: unknown }).google)) {
+      setUseGis(true);
+      return;
+    }
+    const interval = setInterval(() => {
+      if (Boolean((window as unknown as { google?: unknown }).google)) {
+        setUseGis(true);
+        clearInterval(interval);
+      }
+    }, 100);
+    const timeout = setTimeout(() => clearInterval(interval), 4000);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   const handleRedirect = () => {
     window.location.href = `${API_BASE_URL}/oauth2/authorization/google`;
   };
@@ -41,7 +60,6 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Ошибка входа через Google';
       onError?.(msg);
-      setUseGis(false);
     } finally {
       setIsLoading(false);
     }

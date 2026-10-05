@@ -18,13 +18,16 @@ spring:
               - openid
               - profile
               - email
-            redirect-uri: "${FRONTEND_URL}/api/login/oauth2/code/{registrationId}"
+            redirect-uri: "${FRONTEND_URL:https://courses.mrsgemaseny.com}/api/login/oauth2/code/{registrationId}"
 
 app:
   jwt:
     secret: ${JWT_SECRET}
     cookie-secure: true
-    cookie-same-site: None
+    cookie-same-site: ${JWT_COOKIE_SAME_SITE:Lax}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://courses.mrsgemaseny.com,https://mr-dev-courses.vercel.app,http://localhost:5173,http://localhost:3000}
+  frontend-url: ${FRONTEND_URL:https://courses.mrsgemaseny.com}
   telegram:
     bot-token: ${TELEGRAM_BOT_TOKEN}
     chat-id: ${TELEGRAM_CHAT_ID}

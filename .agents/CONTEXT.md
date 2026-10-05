@@ -28,8 +28,9 @@
   - Security & Legal Audit Remediation: Eliminated hardcoded JWT fallback in `application.yml`, introduced `.env.example`, isolated test JWT secret in `application-test.yml`, fortified `.gitignore`.
   - Legal & UX Compliance: Created `RefundPolicyPage.tsx` (`/refund`, 14-day policy per KZ consumer protection law), updated `PrivacyPage.tsx` with KZ Law No 94-V and explicit Cookies Policy, added business credentials and location to `Footer.tsx`.
   - Implemented Google Identity Services (ID Token Flow) based on JF-1C pattern with `com.google.api-client:google-api-client:2.2.0`, `GoogleAuthService`, `GoogleAuthRequest`, and `POST /v1/auth/google`, fully resolving `authorization_request_not_found` and cross-domain redirect issues.
-  - Wrapped frontend root in `<GoogleOAuthProvider>` and enhanced `GoogleLoginButton.tsx` with `@react-oauth/google` popup and seamless redirect fallback.
-  - Hardened `CookieUtils.java` with `SameSite=Lax` and reliable cookie clearing, and routed production OAuth redirect URI through `${FRONTEND_URL}`.
+  - Resolved `HTTP Error 403` on `POST /api/v1/auth/google` by updating `OriginValidationFilter.java` and `SecurityConfig.java` to permit requests from `courses.mrsgemaseny.com`, `*.mrsgemaseny.com`, and `*.vercel.app`.
+  - Added `Cross-Origin-Opener-Policy: same-origin-allow-popups` to `SecurityHeadersFilter.java` and `vercel.json` to prevent browser COOP blocking on Google Identity popup communication.
+  - Enhanced `GoogleLoginButton.tsx` with dynamic `window.google` detection while maintaining full compatibility with isolated unit tests.
 - **Verification**: Backend 251/251 JUnit Green | Frontend 80/80 Vitest Green (33 suites) | Build 0 errors (1752 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
