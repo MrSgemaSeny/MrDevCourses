@@ -57,7 +57,7 @@ const LessonPageContent: React.FC = () => {
   });
 
   const getEmbedUrl = (url?: string) => {
-    const targetUrl = url || 'https://youtu.be/qnYl2ibf-rQ?si=_3UjIZihZ-z_MC6_';
+    const targetUrl = url || 'https://youtu.be/WSVQ4Qqh7uo?si=LbMmX-OpnDsZ4bUZ';
     const match = targetUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
     return match ? `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=0&rel=0&modestbranding=1` : null;
   };

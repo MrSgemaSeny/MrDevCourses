@@ -45,7 +45,7 @@ export const CourseStickyCard: React.FC<CourseStickyCardProps> = ({
       {/* Video Preview with immediate autoplay */}
       <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden border-b border-white/5">
         <iframe
-          src="https://www.youtube-nocookie.com/embed/qnYl2ibf-rQ?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&playsinline=1"
+          src="https://www.youtube-nocookie.com/embed/WSVQ4Qqh7uo?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&playsinline=1"
           title="Course Video Preview"
           className="w-full h-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

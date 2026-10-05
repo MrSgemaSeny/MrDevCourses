@@ -355,7 +355,7 @@ public class DataSeeder {
                 .lessonType(type)
                 .durationMinutes(durationMinutes)
                 .isFreePreview(isFree)
-                .youtubeUrl("https://youtu.be/qnYl2ibf-rQ?si=_3UjIZihZ-z_MC6_")
+                .youtubeUrl("https://youtu.be/WSVQ4Qqh7uo?si=LbMmX-OpnDsZ4bUZ")
                 .content(content)
                 .build();
     }
