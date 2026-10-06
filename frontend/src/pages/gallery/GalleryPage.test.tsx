@@ -18,6 +18,10 @@ describe('GalleryPage Component', () => {
     expect(screen.getByText('Как войти в IT-индустрию с нуля (YouTube)')).toBeInTheDocument();
     expect(screen.getByText('Как войти в IT-индустрию с нуля (Reels & Stories)')).toBeInTheDocument();
     expect(screen.getByText('Фирменный стиль и маскот Mr Developer')).toBeInTheDocument();
+    expect(screen.getByText('Минималистичный логотип MrDEV')).toBeInTheDocument();
+    expect(screen.getByText('Портрет маскота MrDev в рамке')).toBeInTheDocument();
+    expect(screen.getByText('Графический баннер со взглядом')).toBeInTheDocument();
+    expect(screen.getByText('Маскот Mr Developer в худи')).toBeInTheDocument();
   });
 
   it('filters gallery items when switching category tabs', () => {
