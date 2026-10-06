@@ -11,9 +11,12 @@ describe('GalleryPage Component', () => {
     expect(screen.getByRole('button', { name: /Все материалы/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Интерфейс/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Бренд и арт/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Промо и медиа/i })).toBeInTheDocument();
 
     // Check images exist
     expect(screen.getByText('Главная страница и видео-курс Вайбкодинг')).toBeInTheDocument();
+    expect(screen.getByText('Как войти в IT-индустрию с нуля (YouTube)')).toBeInTheDocument();
+    expect(screen.getByText('Как войти в IT-индустрию с нуля (Reels & Stories)')).toBeInTheDocument();
     expect(screen.getByText('Фирменный стиль и маскот Mr Developer')).toBeInTheDocument();
   });
 
@@ -24,6 +27,12 @@ describe('GalleryPage Component', () => {
     fireEvent.click(screen.getByRole('button', { name: /Интерфейс/i }));
     expect(screen.getByText('Главная страница и видео-курс Вайбкодинг')).toBeInTheDocument();
     expect(screen.queryByText('Фирменный стиль и маскот Mr Developer')).not.toBeInTheDocument();
+
+    // Switch to Promo category
+    fireEvent.click(screen.getByRole('button', { name: /Промо и медиа/i }));
+    expect(screen.getByText('Как войти в IT-индустрию с нуля (YouTube)')).toBeInTheDocument();
+    expect(screen.getByText('Как войти в IT-индустрию с нуля (Reels & Stories)')).toBeInTheDocument();
+    expect(screen.queryByText('Главная страница и видео-курс Вайбкодинг')).not.toBeInTheDocument();
 
     // Switch to Brand category
     fireEvent.click(screen.getByRole('button', { name: /Бренд и арт/i }));
@@ -63,9 +72,9 @@ describe('GalleryPage Component', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-    // Navigate right
+    // Navigate right to second item
     fireEvent.keyDown(window, { key: 'ArrowRight' });
-    expect(screen.getByText('Разрешение: 1024 × 1024')).toBeInTheDocument();
+    expect(screen.getByText('Разрешение: 1280 × 720')).toBeInTheDocument();
 
     // Close with Escape
     fireEvent.keyDown(window, { key: 'Escape' });

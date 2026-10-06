@@ -9,12 +9,13 @@ import {
   Sparkles,
   Layers,
   Download,
+  Video,
 } from 'lucide-react';
 
 interface GalleryItem {
   id: string;
   title: string;
-  category: 'all' | 'ui' | 'brand';
+  category: 'all' | 'ui' | 'brand' | 'promo';
   categoryLabel: string;
   description: string;
   src: string;
@@ -34,6 +35,26 @@ const GALLERY_ITEMS: GalleryItem[] = [
     resolution: '1920 × 890',
   },
   {
+    id: 'how-to-enter-it-horizontal',
+    title: 'Как войти в IT-индустрию с нуля (YouTube)',
+    category: 'promo',
+    categoryLabel: 'Промо и медиа',
+    description: 'Официальная промо-обложка YouTube-выпуска блога Mr Developer: «Как войти в IT-индустрию с нуля? Это проще, чем ты думаешь» с маскотом и кодом.',
+    src: `${import.meta.env.BASE_URL}gallery/how-to-enter-it-horizontal.jpg`,
+    badge: 'YouTube Cover / 16:9',
+    resolution: '1280 × 720',
+  },
+  {
+    id: 'how-to-enter-it-vertical',
+    title: 'Как войти в IT-индустрию с нуля (Reels & Stories)',
+    category: 'promo',
+    categoryLabel: 'Промо и медиа',
+    description: 'Вертикальный постер блога Mr Developer для Instagram Reels, Shorts и Stories: «Реальный путь в IT с нуля» с маскотом и архитектурой проекта.',
+    src: `${import.meta.env.BASE_URL}gallery/how-to-enter-it-vertical.png`,
+    badge: 'Reels & Stories / 9:16',
+    resolution: '1080 × 1920',
+  },
+  {
     id: 'author-avatar',
     title: 'Фирменный стиль и маскот Mr Developer',
     category: 'brand',
@@ -46,7 +67,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
 ];
 
 export const GalleryPage: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'ui' | 'brand'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'ui' | 'brand' | 'promo'>('all');
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
   const filteredItems = GALLERY_ITEMS.filter((item) => {
@@ -155,6 +176,19 @@ export const GalleryPage: React.FC = () => {
             >
               <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
               <span>Бренд и арт</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveCategory('promo')}
+              className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
+                activeCategory === 'promo'
+                  ? 'bg-white text-black font-semibold'
+                  : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
+              }`}
+            >
+              <Video className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Промо и медиа</span>
             </button>
           </div>
 
