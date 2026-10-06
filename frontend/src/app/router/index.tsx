@@ -34,6 +34,7 @@ const CertificateVerifyPage = React.lazy(() => import('@/pages/certificate/Certi
 const ProjectsPage = React.lazy(() => import('@/pages/projects/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
 const ProfilePage = React.lazy(() => import('@/pages/profile/ProfilePage').then((m) => ({ default: m.ProfilePage })));
 const DocsPage = React.lazy(() => import('@/pages/docs/DocsPage').then((m) => ({ default: m.DocsPage })));
+const GalleryPage = React.lazy(() => import('@/pages/gallery/GalleryPage').then((m) => ({ default: m.GalleryPage })));
 const PrivacyPage = React.lazy(() => import('@/pages/legal/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
 const TermsPage = React.lazy(() => import('@/pages/legal/TermsPage').then((m) => ({ default: m.TermsPage })));
 const RefundPolicyPage = React.lazy(() => import('@/pages/legal/RefundPolicyPage').then((m) => ({ default: m.RefundPolicyPage })));
@@ -59,6 +60,7 @@ export const router = createBrowserRouter([
       // ── Public Pages ───────────────────────────────────────────────
       { index: true, element: wrap(<LandingPage />) },
       { path: 'projects', element: wrap(<ProjectsPage />) },
+      { path: 'gallery', element: wrap(<GalleryPage />) },
       { path: 'docs', element: wrap(<DocsPage />) },
       { path: 'glossary', element: wrap(<DocsPage />) },
       { path: 'certificates/verify/:code', element: wrap(<CertificateVerifyPage />) },

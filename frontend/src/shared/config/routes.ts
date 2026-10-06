@@ -10,6 +10,7 @@ export const ROUTES = {
   ADMIN: '/admin',
   DOCS: '/docs',
   GLOSSARY: '/glossary',
+  GALLERY: '/gallery',
   CERTIFICATES_VERIFY: '/certificates/verify',
   AUTH_CALLBACK: '/auth/callback',
   PRIVACY: '/privacy',

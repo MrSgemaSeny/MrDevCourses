@@ -38,6 +38,7 @@ export const FOOTER_CONFIG: FooterConfig = {
       links: [
         { label: 'Каталог курсов', to: ROUTES.COURSES },
         { label: 'Моё обучение', to: ROUTES.DASHBOARD },
+        { label: 'Галерея', to: ROUTES.GALLERY },
         { label: 'Проверка сертификата', to: ROUTES.CERTIFICATES_VERIFY },
       ],
     },
