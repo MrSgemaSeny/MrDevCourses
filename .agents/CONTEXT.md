@@ -31,8 +31,8 @@
   - Resolved `HTTP Error 403` on `POST /api/v1/auth/google` by updating `OriginValidationFilter.java` and `SecurityConfig.java` to permit requests from `courses.mrsgemaseny.com`, `*.mrsgemaseny.com`, and `*.vercel.app`.
   - Added `Cross-Origin-Opener-Policy: same-origin-allow-popups` to `SecurityHeadersFilter.java` and `vercel.json` to prevent browser COOP blocking on Google Identity popup communication.
   - Enhanced `GoogleLoginButton.tsx` with dynamic `window.google` detection while maintaining full compatibility with isolated unit tests.
-  - Implemented Gallery Page (`/gallery`, `GalleryPage.tsx`) showcasing platform screenshot and mascot artwork with category filters, keyboard navigation, and full-screen lightbox modal viewer. Added "Галерея" to Header and Footer.
-- **Verification**: Backend 251/251 JUnit Green | Frontend 84/84 Vitest Green (34 suites) | Build 0 errors (1753 modules).
+  - Implemented Gallery Page (`/gallery`, `GalleryPage.tsx`) with full folder browser (`galleryData.ts`), supporting original Brand & Ryo 111-file archive (`gallery/full/`), stickers, YouTube covers, animations (GIF/MP4), search, pagination, and Lightbox viewer. Removed `hero-preview.png`.
+- **Verification**: Backend 251/251 JUnit Green | Frontend 85/85 Vitest Green (34 suites) | Build 0 errors (1754 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)
 - **Master Roadmap File**: `C:\Users\murat\Downloads\mrdevcourses_roadmap.md` (копия во Втором Мозге: `Brain's protocol - second brain/projects/mrdevcourses/mrdevcourses_roadmap.md`).
@@ -63,9 +63,9 @@
 
 ## Test Verification & Quality Gates
 - **Backend (JUnit)**: 250/250 tests PASSED (100% Green, clean `:jacocoTestReport` verified).
-- **Frontend (Vitest)**: 84/84 tests PASSED across 34 test suites (100% Green).
+- **Frontend (Vitest)**: 85/85 tests PASSED across 34 test suites (100% Green).
 - **Security & IDOR Coverage**: IDOR guards on Homework and Help modules, Anti-Cheat option masking on Quizzes, Drip SQL calculation bounds, and Admin RBAC gates thoroughly verified.
-- **Production Build**: `tsc -b && vite build` SUCCESSFUL (1753 modules transformed, 0 errors).
+- **Production Build**: `tsc -b && vite build` SUCCESSFUL (1754 modules transformed, 0 errors).
 - **Phase 0 Status**: 100% COMPLETE (Operational Lesson Card, SOS Ticket persisting + Telegram alerts, Telegram Mentor Bot commands `/hw`, `/approve`, `/reject`, `/status`, `/stuck`, Student Focus Dashboard).
 - **Phase 1 Status**: 100% COMPLETE (Automated Stuck Detection Engine, Public Graduation Project Showcase Wall `/projects` with likes and GitHub/Demo previews, Welcome Onboarding flow).
 

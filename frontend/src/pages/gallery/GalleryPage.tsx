@@ -1,121 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
+  Folder,
+  FolderOpen,
   Image as ImageIcon,
   ExternalLink,
   Maximize2,
   X,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
-  Layers,
+  Search,
   Download,
-  Video,
+  Film,
+  Smile,
+  Layers,
+  Sparkles,
+  Play,
 } from 'lucide-react';
-
-interface GalleryItem {
-  id: string;
-  title: string;
-  category: 'all' | 'ui' | 'brand' | 'promo';
-  categoryLabel: string;
-  description: string;
-  src: string;
-  badge: string;
-  resolution: string;
-}
-
-const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    id: 'hero-preview',
-    title: 'Главная страница и видео-курс Вайбкодинг',
-    category: 'ui',
-    categoryLabel: 'Интерфейс',
-    description: 'Скриншот платформы: практическая разработка промышленных систем, каталог курсов и интерактивный курс по вайбкодингу (уроки 1-25).',
-    src: `${import.meta.env.BASE_URL}gallery/hero-preview.png`,
-    badge: 'Web UI / Скриншот',
-    resolution: '1920 × 890',
-  },
-  {
-    id: 'how-to-enter-it-horizontal',
-    title: 'Как войти в IT-индустрию с нуля (YouTube)',
-    category: 'promo',
-    categoryLabel: 'Промо и медиа',
-    description: 'Официальная промо-обложка YouTube-выпуска блога Mr Developer: «Как войти в IT-индустрию с нуля? Это проще, чем ты думаешь» с маскотом и кодом.',
-    src: `${import.meta.env.BASE_URL}gallery/how-to-enter-it-horizontal.jpg`,
-    badge: 'YouTube Cover / 16:9',
-    resolution: '1280 × 720',
-  },
-  {
-    id: 'how-to-enter-it-vertical',
-    title: 'Как войти в IT-индустрию с нуля (Reels & Stories)',
-    category: 'promo',
-    categoryLabel: 'Промо и медиа',
-    description: 'Вертикальный постер блога Mr Developer для Instagram Reels, Shorts и Stories: «Реальный путь в IT с нуля» с маскотом и архитектурой проекта.',
-    src: `${import.meta.env.BASE_URL}gallery/how-to-enter-it-vertical.png`,
-    badge: 'Reels & Stories / 9:16',
-    resolution: '1080 × 1920',
-  },
-  {
-    id: 'author-avatar',
-    title: 'Фирменный стиль и маскот Mr Developer',
-    category: 'brand',
-    categoryLabel: 'Бренд и арт',
-    description: 'Официальный маскот и визуальный стиль бренда Mr Developer Вайбкодинг в эстетике темного интерфейса.',
-    src: `${import.meta.env.BASE_URL}author-avatar.png`,
-    badge: 'Mascot / Brand',
-    resolution: '1024 × 1024',
-  },
-  {
-    id: 'mrdev-bracket-logo',
-    title: 'Минималистичный логотип MrDEV',
-    category: 'brand',
-    categoryLabel: 'Бренд и арт',
-    description: 'Фирменный шрифтовой логотип MrDEV с синим акцентом и символическими скобками кода.',
-    src: `${import.meta.env.BASE_URL}gallery/mrdev-bracket-logo.jpg`,
-    badge: 'Logo / Minimal',
-    resolution: '1280 × 960',
-  },
-  {
-    id: 'mrdev-mascot-portrait',
-    title: 'Портрет маскота MrDev в рамке',
-    category: 'brand',
-    categoryLabel: 'Бренд и арт',
-    description: 'Концепт-арт персонажа MrDev: синие волосы, янтарные глаза и стилизованная геометрическая рамка.',
-    src: `${import.meta.env.BASE_URL}gallery/mrdev-mascot-portrait.jpg`,
-    badge: 'Artwork / 1:1',
-    resolution: '1024 × 1024',
-  },
-  {
-    id: 'mrdev-eyes-banner',
-    title: 'Графический баннер со взглядом',
-    category: 'brand',
-    categoryLabel: 'Бренд и арт',
-    description: 'Широкоформатный баннер-иллюстрация с акцентом на глаза персонажа и шрифтовой блок MR DEVELOPER.',
-    src: `${import.meta.env.BASE_URL}gallery/mrdev-eyes-banner.jpg`,
-    badge: 'Banner / Typography',
-    resolution: '1024 × 1024',
-  },
-  {
-    id: 'mrdev-mascot-hoodie',
-    title: 'Маскот Mr Developer в худи',
-    category: 'brand',
-    categoryLabel: 'Бренд и арт',
-    description: 'Фирменный арт маскота в черном худи на темном фоне с угловыми элементами интерфейса.',
-    src: `${import.meta.env.BASE_URL}gallery/mrdev-mascot-hoodie.jpg`,
-    badge: 'Concept Art / 1:1',
-    resolution: '1024 × 1024',
-  },
-];
+import {
+  GALLERY_ITEMS,
+  GALLERY_FOLDERS,
+  GalleryItem,
+} from './galleryData';
 
 export const GalleryPage: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'ui' | 'brand' | 'promo'>('all');
+  const [activeFolderId, setActiveFolderId] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
-  const filteredItems = GALLERY_ITEMS.filter((item) => {
-    if (activeCategory === 'all') return true;
-    return item.category === activeCategory;
-  });
+  // Filter items based on active folder and search query
+  const filteredItems = useMemo(() => {
+    return GALLERY_ITEMS.filter((item) => {
+      // Folder filter
+      if (activeFolderId === 'full_folder') {
+        if (!item.isFromFull) return false;
+      } else if (activeFolderId !== 'all') {
+        if (item.folderId !== activeFolderId) return false;
+      }
 
-  // Handle keyboard navigation for modal lightbox
+      // Search query filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesTitle = item.title.toLowerCase().includes(q);
+        const matchesFile = item.fileName.toLowerCase().includes(q);
+        const matchesFolder = item.folderName.toLowerCase().includes(q);
+        if (!matchesTitle && !matchesFile && !matchesFolder) return false;
+      }
+
+      return true;
+    });
+  }, [activeFolderId, searchQuery]);
+
+  const [visibleCount, setVisibleCount] = useState<number>(32);
+
+  // Reset pagination when folder or search changes
+  useEffect(() => {
+    setVisibleCount(32);
+  }, [activeFolderId, searchQuery]);
+
+  const activeFolder = useMemo(() => {
+    return GALLERY_FOLDERS.find((f) => f.id === activeFolderId) || GALLERY_FOLDERS[0];
+  }, [activeFolderId]);
+
+  const visibleItems = useMemo(() => {
+    return filteredItems.slice(0, visibleCount);
+  }, [filteredItems, visibleCount]);
+
+  // Keyboard navigation for Lightbox
   useEffect(() => {
     if (!selectedItem) return;
 
@@ -157,10 +107,26 @@ export const GalleryPage: React.FC = () => {
     }
   };
 
+  const getFolderIcon = (folderId: string) => {
+    switch (folderId) {
+      case 'stickers':
+        return <Smile className="w-3.5 h-3.5" />;
+      case 'youtube':
+        return <Film className="w-3.5 h-3.5" />;
+      case 'animations':
+        return <Play className="w-3.5 h-3.5" />;
+      case 'poses':
+        return <Layers className="w-3.5 h-3.5" />;
+      case 'artworks':
+        return <Sparkles className="w-3.5 h-3.5" />;
+      default:
+        return <Folder className="w-3.5 h-3.5" />;
+    }
+  };
+
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* 75% Main Column aligned to left */}
-      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
+      <div className="w-full lg:w-[85%] max-w-[1200px] space-y-8">
         {/* Header Banner */}
         <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <div className="space-y-2">
@@ -172,157 +138,235 @@ export const GalleryPage: React.FC = () => {
               Галерея
             </h1>
             <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
-              Визуальные материалы, скриншоты интерфейса и дизайн-артефакты образовательной платформы MrDevCourses.
+              Архив визуальных материалов, стикерпак MrDev, арт-концепты Ryo, YouTube-обложки и анимации.
             </p>
           </div>
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="flex items-center justify-between gap-4 pb-4 border-b border-white/5">
+        {/* Folder Explorer Section */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 font-bold">
+              <FolderOpen className="w-4 h-4 text-zinc-300" />
+              <span>Папки и альбомы</span>
+            </div>
+            <span className="text-xs font-mono text-zinc-500">
+              {GALLERY_FOLDERS.length} разделов
+            </span>
+          </div>
+
           <div className="flex items-center gap-2 flex-wrap">
-            <button
-              type="button"
-              onClick={() => setActiveCategory('all')}
-              className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors cursor-pointer ${
-                activeCategory === 'all'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
-              }`}
-            >
-              Все материалы ({GALLERY_ITEMS.length})
-            </button>
+            {GALLERY_FOLDERS.map((folder) => {
+              const isActive = activeFolderId === folder.id;
+              return (
+                <button
+                  key={folder.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveFolderId(folder.id);
+                  }}
+                  className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    isActive
+                      ? 'bg-white text-black font-semibold shadow-sm'
+                      : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
+                  }`}
+                >
+                  {getFolderIcon(folder.id)}
+                  <span>{folder.name}</span>
+                  <span
+                    className={`ml-1 text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                      isActive ? 'bg-black/10 text-black' : 'bg-white/5 text-zinc-500'
+                    }`}
+                  >
+                    {folder.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-            <button
-              type="button"
-              onClick={() => setActiveCategory('ui')}
-              className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
-                activeCategory === 'ui'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Интерфейс</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveCategory('brand')}
-              className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
-                activeCategory === 'brand'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Бренд и арт</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveCategory('promo')}
-              className={`px-3 py-1.5 rounded-sm text-xs font-medium font-mono uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer ${
-                activeCategory === 'promo'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
-              }`}
-            >
-              <Video className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Промо и медиа</span>
-            </button>
+        {/* Current Folder Info & Search Bar */}
+        <div className="p-4 rounded-sm bg-[#0e0e11] border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/5 border border-white/10 text-zinc-300">
+                Папка
+              </span>
+              <h2 className="text-sm font-bold text-white">
+                {activeFolder.name}
+              </h2>
+            </div>
+            <p className="text-xs text-zinc-400">
+              {activeFolder.description}
+            </p>
           </div>
 
-          <div className="text-xs text-zinc-500 font-mono hidden sm:block">
-            {filteredItems.length} {filteredItems.length === 1 ? 'объект' : 'объекта'}
+          {/* Search inside folder */}
+          <div className="relative w-full md:w-64 shrink-0">
+            <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Поиск по файлам..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#141418] border border-white/10 rounded-sm pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 font-mono"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                aria-label="Очистить поиск"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
           </div>
+        </div>
+
+        {/* Results Counter */}
+        <div className="flex items-center justify-between text-xs text-zinc-500 font-mono pb-2 border-b border-white/5">
+          <span>
+            Показано: {filteredItems.length} {filteredItems.length === 1 ? 'файл' : 'файлов'}
+          </span>
+          {activeFolderId !== 'all' && (
+            <button
+              type="button"
+              onClick={() => setActiveFolderId('all')}
+              className="hover:text-zinc-300 transition-colors cursor-pointer"
+            >
+              Сбросить фильтр папки
+            </button>
+          )}
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              className="rounded-sm bg-[#0e0e11] border border-white/5 hover:border-white/20 transition-all flex flex-col justify-between overflow-hidden group shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
-            >
-              {/* Image Container with Preview Hover */}
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelectedItem(item)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    setSelectedItem(item);
-                  }
-                }}
-                className="relative aspect-video bg-[#050507] overflow-hidden cursor-pointer border-b border-white/5 flex items-center justify-center"
-              >
-                <img
-                  src={item.src}
-                  alt={item.title}
-                  loading="lazy"
-                  className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-300"
-                />
+        {filteredItems.length === 0 ? (
+          <div className="p-12 text-center rounded-sm bg-[#0e0e11] border border-white/5 space-y-3">
+            <Folder className="w-8 h-8 text-zinc-600 mx-auto" />
+            <h3 className="text-sm font-semibold text-white">В этой папке ничего не найдено</h3>
+            <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+              Попробуйте изменить поисковый запрос или переключиться на другую папку.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {visibleItems.map((item) => {
+                const fullSrc = `${import.meta.env.BASE_URL}${item.src}`;
 
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <div className="px-3 py-1.5 rounded bg-black/80 border border-white/20 text-white text-xs font-medium flex items-center gap-1.5 shadow-lg backdrop-blur-sm">
-                    <Maximize2 className="w-3.5 h-3.5" />
-                    <span>Увеличить</span>
-                  </div>
-                </div>
-
-                {/* Resolution Pill */}
-                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded text-[10px] font-mono bg-black/70 border border-white/10 text-zinc-400 backdrop-blur-sm">
-                  {item.resolution}
-                </div>
-              </div>
-
-              {/* Card Meta Content */}
-              <div className="p-5 space-y-2.5 flex-1 flex flex-col justify-between">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                      {item.badge}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-500">
-                      {item.categoryLabel}
-                    </span>
-                  </div>
-                  <h2 className="text-base font-bold text-white group-hover:text-zinc-200 transition-colors">
-                    {item.title}
-                  </h2>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedItem(item)}
-                    className="px-3 py-1.5 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                return (
+                  <div
+                    key={item.id}
+                    className="rounded-sm bg-[#0e0e11] border border-white/5 hover:border-white/20 transition-all flex flex-col justify-between overflow-hidden group shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
                   >
-                    <Maximize2 className="w-3 h-3" />
-                    <span>Просмотр</span>
-                  </button>
+                    {/* Media Viewport */}
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setSelectedItem(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setSelectedItem(item);
+                        }
+                      }}
+                      className="relative aspect-square bg-[#050507] overflow-hidden cursor-pointer border-b border-white/5 flex items-center justify-center"
+                    >
+                      {item.fileType === 'video' ? (
+                        <div className="relative w-full h-full flex items-center justify-center bg-black">
+                          <video
+                            src={fullSrc}
+                            muted
+                            playsInline
+                            className="w-full h-full object-contain pointer-events-none"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white">
+                              <Play className="w-4 h-4 ml-0.5" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <img
+                          src={fullSrc}
+                          alt={item.title}
+                          loading="lazy"
+                          className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-200"
+                        />
+                      )}
 
-                  <a
-                    href={item.src}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-sm text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
-                    title="Открыть оригинал в новой вкладке"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 p-2">
+                        <div className="px-2.5 py-1 rounded bg-black/80 border border-white/20 text-white text-[11px] font-medium flex items-center gap-1 shadow-lg backdrop-blur-sm">
+                          <Maximize2 className="w-3 h-3" />
+                          <span>Открыть</span>
+                        </div>
+                      </div>
+
+                      {/* Badge */}
+                      <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-mono bg-black/80 border border-white/10 text-zinc-400 backdrop-blur-sm">
+                        {item.badge}
+                      </div>
+                    </div>
+
+                    {/* Card Title & Meta */}
+                    <div className="p-3 space-y-1.5 flex flex-col justify-between flex-1">
+                      <div>
+                        <h3
+                          className="text-xs font-semibold text-white truncate group-hover:text-zinc-200 transition-colors"
+                          title={item.title}
+                        >
+                          {item.title}
+                        </h3>
+                        <p className="text-[10px] font-mono text-zinc-500 truncate">
+                          {item.folderName}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-white/5 flex items-center justify-between gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedItem(item)}
+                          className="text-[10px] font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                        >
+                          <Maximize2 className="w-2.5 h-2.5" />
+                          <span>Просмотр</span>
+                        </button>
+
+                        <a
+                          href={fullSrc}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded text-zinc-500 hover:text-white transition-colors cursor-pointer"
+                          title="Открыть оригинал"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+
+            {/* Load More Button */}
+            {visibleCount < filteredItems.length && (
+              <div className="pt-2 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((prev) => prev + 32)}
+                  className="px-5 py-2 rounded-sm bg-[#141418] hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer shadow-sm"
+                >
+                  Показать еще (осталось {filteredItems.length - visibleCount})
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Lightbox / Modal Viewer */}
+      {/* Lightbox Modal */}
       {selectedItem && (
         <div
           role="dialog"
@@ -341,24 +385,29 @@ export const GalleryPage: React.FC = () => {
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-white/5 border border-white/10 text-zinc-300 shrink-0">
                   {selectedItem.badge}
                 </span>
-                <h3 className="text-sm font-semibold text-white truncate">
-                  {selectedItem.title}
-                </h3>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-semibold text-white truncate">
+                    {selectedItem.title}
+                  </h3>
+                  <p className="text-[10px] font-mono text-zinc-500 truncate">
+                    {selectedItem.fileName}
+                  </p>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
                 <a
-                  href={selectedItem.src}
+                  href={`${import.meta.env.BASE_URL}${selectedItem.src}`}
                   download
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 rounded text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
-                  title="Скачать изображение"
+                  title="Скачать файл"
                 >
                   <Download className="w-4 h-4" />
                 </a>
                 <a
-                  href={selectedItem.src}
+                  href={`${import.meta.env.BASE_URL}${selectedItem.src}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 rounded text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
@@ -377,13 +426,24 @@ export const GalleryPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Modal Image Viewport */}
-            <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#050507] flex items-center justify-center p-4 overflow-hidden">
-              <img
-                src={selectedItem.src}
-                alt={selectedItem.title}
-                className="max-h-[70vh] max-w-full object-contain rounded-sm"
-              />
+            {/* Modal Viewport */}
+            <div className="relative flex-1 min-h-[300px] sm:min-h-[480px] bg-[#050507] flex items-center justify-center p-4 overflow-hidden">
+              {selectedItem.fileType === 'video' ? (
+                <video
+                  src={`${import.meta.env.BASE_URL}${selectedItem.src}`}
+                  controls
+                  autoPlay
+                  loop
+                  playsInline
+                  className="max-h-[72vh] max-w-full rounded-sm"
+                />
+              ) : (
+                <img
+                  src={`${import.meta.env.BASE_URL}${selectedItem.src}`}
+                  alt={selectedItem.title}
+                  className="max-h-[72vh] max-w-full object-contain rounded-sm"
+                />
+              )}
 
               {/* Prev Button */}
               {currentIndex > 0 && (
@@ -391,7 +451,7 @@ export const GalleryPage: React.FC = () => {
                   type="button"
                   onClick={handlePrev}
                   className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/70 hover:bg-black border border-white/15 text-white transition-colors cursor-pointer"
-                  aria-label="Предыдущее фото"
+                  aria-label="Предыдущий файл"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -403,21 +463,21 @@ export const GalleryPage: React.FC = () => {
                   type="button"
                   onClick={handleNext}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/70 hover:bg-black border border-white/15 text-white transition-colors cursor-pointer"
-                  aria-label="Следующее фото"
+                  aria-label="Следующий файл"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
               )}
             </div>
 
-            {/* Modal Footer Description */}
-            <div className="p-4 bg-[#0a0a0c] border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-zinc-400">
-              <p className="max-w-2xl leading-relaxed">
-                {selectedItem.description}
-              </p>
-              <div className="font-mono text-[11px] text-zinc-500 shrink-0">
-                Разрешение: {selectedItem.resolution}
-              </div>
+            {/* Modal Footer */}
+            <div className="p-3 bg-[#0a0a0c] border-t border-white/10 flex items-center justify-between gap-3 text-xs text-zinc-400 font-mono">
+              <span className="text-[11px] text-zinc-500">
+                Папка: {selectedItem.folderName}
+              </span>
+              <span className="text-[11px] text-zinc-500">
+                {currentIndex + 1} из {filteredItems.length}
+              </span>
             </div>
           </div>
         </div>

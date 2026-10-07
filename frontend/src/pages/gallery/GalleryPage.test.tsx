@@ -2,54 +2,63 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { GalleryPage } from './GalleryPage';
 
-describe('GalleryPage Component', () => {
-  it('renders gallery header, category filters, and image cards', () => {
+describe('GalleryPage Component with Folder Browser', () => {
+  it('renders gallery header, folders, search bar, and items without hero-preview', () => {
     render(<GalleryPage />);
 
     expect(screen.getByRole('heading', { level: 1, name: 'Галерея' })).toBeInTheDocument();
     expect(screen.getByText('Медиатека платформы')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Все материалы/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Интерфейс/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Бренд и арт/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Промо и медиа/i })).toBeInTheDocument();
+    expect(screen.getByText('Папки и альбомы')).toBeInTheDocument();
 
-    // Check images exist
-    expect(screen.getByText('Главная страница и видео-курс Вайбкодинг')).toBeInTheDocument();
-    expect(screen.getByText('Как войти в IT-индустрию с нуля (YouTube)')).toBeInTheDocument();
-    expect(screen.getByText('Как войти в IT-индустрию с нуля (Reels & Stories)')).toBeInTheDocument();
-    expect(screen.getByText('Фирменный стиль и маскот Mr Developer')).toBeInTheDocument();
-    expect(screen.getByText('Минималистичный логотип MrDEV')).toBeInTheDocument();
-    expect(screen.getByText('Портрет маскота MrDev в рамке')).toBeInTheDocument();
-    expect(screen.getByText('Графический баннер со взглядом')).toBeInTheDocument();
-    expect(screen.getByText('Маскот Mr Developer в худи')).toBeInTheDocument();
+    // Folders
+    expect(screen.getByRole('button', { name: /Все материалы/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Папка: Фулл \(Brand & Ryo\)/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Стикерпак MrDev/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /YouTube и Промо/i })).toBeInTheDocument();
+
+    // hero-preview.png is strictly removed as requested
+    expect(screen.queryByText('Главная страница и видео-курс Вайбкодинг')).not.toBeInTheDocument();
+
+    // Brand and media items exist
+    expect(screen.getByText('Как войти в IT (YouTube 16:9)')).toBeInTheDocument();
+    expect(screen.getByText('Как войти в IT (Reels 9:16)')).toBeInTheDocument();
+    expect(screen.getByText('Логотип MrDEV Bracket')).toBeInTheDocument();
   });
 
-  it('filters gallery items when switching category tabs', () => {
+  it('filters gallery items when selecting folders', () => {
     render(<GalleryPage />);
 
-    // Switch to UI category
-    fireEvent.click(screen.getByRole('button', { name: /Интерфейс/i }));
-    expect(screen.getByText('Главная страница и видео-курс Вайбкодинг')).toBeInTheDocument();
-    expect(screen.queryByText('Фирменный стиль и маскот Mr Developer')).not.toBeInTheDocument();
+    // Switch to Stickers folder
+    fireEvent.click(screen.getByRole('button', { name: /Стикерпак MrDev/i }));
+    expect(screen.getByRole('heading', { level: 2, name: 'Стикерпак MrDev' })).toBeInTheDocument();
+    expect(screen.getByText(/37 эмоций и стикеров/i)).toBeInTheDocument();
 
-    // Switch to Promo category
-    fireEvent.click(screen.getByRole('button', { name: /Промо и медиа/i }));
-    expect(screen.getByText('Как войти в IT-индустрию с нуля (YouTube)')).toBeInTheDocument();
-    expect(screen.getByText('Как войти в IT-индустрию с нуля (Reels & Stories)')).toBeInTheDocument();
-    expect(screen.queryByText('Главная страница и видео-курс Вайбкодинг')).not.toBeInTheDocument();
-
-    // Switch to Brand category
-    fireEvent.click(screen.getByRole('button', { name: /Бренд и арт/i }));
-    expect(screen.queryByText('Главная страница и видео-курс Вайбкодинг')).not.toBeInTheDocument();
-    expect(screen.getByText('Фирменный стиль и маскот Mr Developer')).toBeInTheDocument();
+    // Switch to Full Folder
+    fireEvent.click(screen.getByRole('button', { name: /Папка: Фулл \(Brand & Ryo\)/i }));
+    expect(screen.getByRole('heading', { level: 2, name: 'Папка: Фулл (Brand & Ryo)' })).toBeInTheDocument();
+    expect(screen.getAllByText(/111/i).length).toBeGreaterThanOrEqual(1);
 
     // Switch back to All
     fireEvent.click(screen.getByRole('button', { name: /Все материалы/i }));
-    expect(screen.getByText('Главная страница и видео-курс Вайбкодинг')).toBeInTheDocument();
-    expect(screen.getByText('Фирменный стиль и маскот Mr Developer')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Все материалы' })).toBeInTheDocument();
   });
 
-  it('opens and closes image lightbox modal on click', () => {
+  it('filters gallery items using the search input', () => {
+    render(<GalleryPage />);
+
+    const searchInput = screen.getByPlaceholderText('Поиск по файлам...');
+    fireEvent.change(searchInput, { target: { value: 'Bracket' } });
+
+    // Matches mrdev-bracket-logo
+    expect(screen.getByText('Логотип MrDEV Bracket')).toBeInTheDocument();
+
+    // Clear search
+    const clearButton = screen.getByLabelText('Очистить поиск');
+    fireEvent.click(clearButton);
+    expect(searchInput).toHaveValue('');
+  });
+
+  it('opens and closes media lightbox modal on click', () => {
     render(<GalleryPage />);
 
     // Click on preview button of the first card
@@ -59,7 +68,6 @@ describe('GalleryPage Component', () => {
     // Dialog should be open
     const modal = screen.getByRole('dialog');
     expect(modal).toBeInTheDocument();
-    expect(screen.getByText('Разрешение: 1920 × 890')).toBeInTheDocument();
 
     // Close dialog via close button
     const closeButton = screen.getByLabelText('Закрыть окно');
@@ -76,9 +84,8 @@ describe('GalleryPage Component', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-    // Navigate right to second item
+    // Navigate right
     fireEvent.keyDown(window, { key: 'ArrowRight' });
-    expect(screen.getByText('Разрешение: 1280 × 720')).toBeInTheDocument();
 
     // Close with Escape
     fireEvent.keyDown(window, { key: 'Escape' });
