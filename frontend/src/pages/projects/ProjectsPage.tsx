@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectApi } from '@/entities/project/api/projectApi';
+import { DEFAULT_STUDENT_PROJECTS } from '@/entities/project/model/defaultProjects';
 import { useAuth } from '@/features/auth';
 import { ROUTES } from '@/shared/config/routes';
 import { AddProjectModal } from '@/features/project-showcase/ui/AddProjectModal';
@@ -23,10 +24,12 @@ export const ProjectsPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'featured' | 'popular'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: apiProjects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: projectApi.getAllProjects,
   });
+
+  const projects = apiProjects && apiProjects.length > 0 ? apiProjects : DEFAULT_STUDENT_PROJECTS;
 
   const likeMutation = useMutation({
     mutationFn: (projectId: number) => projectApi.likeProject(projectId),
@@ -98,7 +101,7 @@ export const ProjectsPage: React.FC = () => {
                 : 'text-zinc-400 hover:text-white bg-[#0e0e11] border border-white/5'
             }`}
           >
-            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <Star className={`w-3.5 h-3.5 ${filter === 'featured' ? 'text-black fill-black' : 'text-zinc-300 fill-zinc-300'}`} />
             <span>Избранные</span>
           </button>
 
@@ -156,8 +159,8 @@ export const ProjectsPage: React.FC = () => {
                   </div>
 
                   {project.featured && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-amber-950/60 border border-amber-800/60 text-amber-300 flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-400" />
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-white/10 border border-white/20 text-zinc-100 flex items-center gap-1 font-semibold">
+                      <Star className="w-3 h-3 fill-white text-white" />
                       <span>TOP</span>
                     </span>
                   )}
@@ -224,12 +227,12 @@ export const ProjectsPage: React.FC = () => {
                   }}
                   className={`flex items-center gap-1.5 text-xs transition-colors px-2 py-1 rounded cursor-pointer ${
                     project.hasLiked
-                      ? 'text-rose-400 bg-rose-950/40 border border-rose-800/60 shadow-[0_0_12px_rgba(244,63,94,0.15)]'
-                      : 'text-zinc-400 hover:text-rose-400 bg-white/5 hover:bg-white/10'
+                      ? 'text-white bg-white/20 border border-white/30'
+                      : 'text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-transparent'
                   }`}
                   aria-label={project.hasLiked ? 'Убрать лайк' : 'Поставить лайк'}
                 >
-                  <Heart className={`w-3.5 h-3.5 ${project.hasLiked ? 'fill-rose-400 text-rose-400' : 'fill-none text-zinc-400'}`} />
+                  <Heart className={`w-3.5 h-3.5 ${project.hasLiked ? 'fill-white text-white' : 'fill-none text-zinc-400'}`} />
                   <span className="font-mono">{project.likesCount}</span>
                 </button>
               </div>

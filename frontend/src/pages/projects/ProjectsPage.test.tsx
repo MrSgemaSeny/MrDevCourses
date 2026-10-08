@@ -63,4 +63,41 @@ describe('ProjectsPage Component', () => {
     expect(screen.getByText('Murat Graduate')).toBeInTheDocument();
     expect(screen.getByText('Live Demo')).toBeInTheDocument();
   });
+
+  it('renders default student projects when api returns empty array', async () => {
+    const { projectApi } = await import('@/entities/project/api/projectApi');
+    vi.mocked(projectApi.getAllProjects).mockResolvedValueOnce([]);
+
+    const emptyQueryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+
+    render(
+      <MemoryRouter>
+        <QueryClientProvider client={emptyQueryClient}>
+          <AuthContext.Provider
+            value={{
+              user: null,
+              isAuthenticated: false,
+              isAdmin: false,
+              isLoading: false,
+              loginWithGoogle: vi.fn(),
+              loginWithEmail: vi.fn(),
+              register: vi.fn(),
+              logout: vi.fn(),
+              checkAuth: vi.fn(),
+            }}
+          >
+            <ProjectsPage />
+          </AuthContext.Provider>
+        </QueryClientProvider>
+      </MemoryRouter>
+    );
+
+    const tanda = await screen.findByText(/Таңда \(Tanda\)/i);
+    expect(tanda).toBeInTheDocument();
+    expect(screen.getByText('QazaqMarket — Онлайн маркетплейс книг')).toBeInTheDocument();
+    expect(screen.getAllByText('Усман Сулейманов').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Ратмир Мекенов').length).toBeGreaterThan(0);
+  });
 });
