@@ -33,9 +33,9 @@
   - Enhanced `GoogleLoginButton.tsx` with dynamic `window.google` detection while maintaining full compatibility with isolated unit tests.
   - Implemented Gallery Page (`/gallery`, `GalleryPage.tsx`) with full folder browser (`galleryData.ts`), supporting original Brand & Ryo 111-file archive (`gallery/full/`), stickers, YouTube covers, animations (GIF/MP4), search, pagination, and Lightbox viewer. Removed `hero-preview.png`.
   - Populated Public Graduation Projects Showcase Wall (`/projects`, `courses.mrsgemaseny.com/projects`) with 5 real deployed student projects: Tandamen.kz (Commercial live startup by Usman Sulaimanov), QazaqMarket (Book marketplace by Ratmir Mekenov), KitapAll (Apparel/Book marketplace by Usman), Global Coffee (Coffee shop landing by Usman), and Digital Projects Hub (Spotify & MindCheck by Ratmir).
-  - Created Flyway migration `V69__seed_student_projects.sql` ensuring student accounts and showcases persist in PostgreSQL.
+  - Created Flyway migration `V69__seed_student_projects.sql` ensuring student accounts and showcases persist in PostgreSQL, and `V70__remove_featured_and_likes_from_showcases.sql` resetting featured/like flags.
   - Added frontend `defaultProjects.ts` fallback ensuring immediate zero-latency rendering even during cold starts.
-  - Converted all `ProjectsPage.tsx` badges, stars, and like buttons to strict Black & White Only monochrome design.
+  - Completely removed all gamification, likes, TOP/featured badges, and filter tabs from `ProjectsPage.tsx` in favor of a clean, egalitarian, minimalist layout.
 - **Verification**: Backend 251/251 JUnit Green | Frontend 86/86 Vitest Green (34 suites) | Build 0 errors (1755 modules).
 
 ## Roadmap & Product Philosophy (Первоисточник)

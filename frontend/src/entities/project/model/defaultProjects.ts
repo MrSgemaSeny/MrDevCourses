@@ -12,8 +12,8 @@ export const DEFAULT_STUDENT_PROJECTS: ProjectShowcase[] = [
     authorName: 'Усман Сулейманов',
     authorAvatarUrl: 'https://github.com/usmansulaimanov.png',
     techStack: 'React, TypeScript, PWA, Audio Stream, SEO',
-    featured: true,
-    likesCount: 14,
+    featured: false,
+    likesCount: 0,
     createdAt: '2026-09-01T12:00:00Z',
   },
   {
@@ -27,8 +27,8 @@ export const DEFAULT_STUDENT_PROJECTS: ProjectShowcase[] = [
     authorName: 'Ратмир Мекенов',
     authorAvatarUrl: 'https://github.com/rmekenov-pixel.png',
     techStack: 'React 19, Vite, TypeScript, Tailwind CSS',
-    featured: true,
-    likesCount: 9,
+    featured: false,
+    likesCount: 0,
     createdAt: '2026-09-02T14:30:00Z',
   },
   {
@@ -43,7 +43,7 @@ export const DEFAULT_STUDENT_PROJECTS: ProjectShowcase[] = [
     authorAvatarUrl: 'https://github.com/usmansulaimanov.png',
     techStack: 'React 19, Vite, TypeScript, Tailwind CSS',
     featured: false,
-    likesCount: 7,
+    likesCount: 0,
     createdAt: '2026-09-03T10:15:00Z',
   },
   {
@@ -58,7 +58,7 @@ export const DEFAULT_STUDENT_PROJECTS: ProjectShowcase[] = [
     authorAvatarUrl: 'https://github.com/usmansulaimanov.png',
     techStack: 'HTML5, CSS3, JavaScript, Glassmorphism',
     featured: false,
-    likesCount: 5,
+    likesCount: 0,
     createdAt: '2026-09-04T11:00:00Z',
   },
   {
@@ -73,7 +73,7 @@ export const DEFAULT_STUDENT_PROJECTS: ProjectShowcase[] = [
     authorAvatarUrl: 'https://github.com/rmekenov-pixel.png',
     techStack: 'HTML5, CSS3, JavaScript, Spotify API',
     featured: false,
-    likesCount: 6,
+    likesCount: 0,
     createdAt: '2026-09-05T09:45:00Z',
   },
 ];
