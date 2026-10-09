@@ -54,10 +54,6 @@ describe('ProjectsPage Component', () => {
         </QueryClientProvider>
       </MemoryRouter>
     );
-
-    expect(screen.getByText(/Стена проектов выпускников/i)).toBeInTheDocument();
-    expect(screen.getByText('Добавить свой проект')).toBeInTheDocument();
-
     const projectTitle = await screen.findByText('Habit Tracker Pro');
     expect(projectTitle).toBeInTheDocument();
     expect(screen.getByText('Murat Graduate')).toBeInTheDocument();

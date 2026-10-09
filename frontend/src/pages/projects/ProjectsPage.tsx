@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { projectApi } from '@/entities/project/api/projectApi';
 import { DEFAULT_STUDENT_PROJECTS } from '@/entities/project/model/defaultProjects';
-import { AddProjectModal } from '@/features/project-showcase/ui/AddProjectModal';
 import {
   ExternalLink,
   Github,
-  Plus,
-  Rocket,
   Layers,
 } from 'lucide-react';
 
@@ -32,8 +29,6 @@ const getGithubHandle = (url: string, authorName: string): string => {
 };
 
 export const ProjectsPage: React.FC = () => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
   const { data: apiProjects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: projectApi.getAllProjects,
@@ -44,41 +39,7 @@ export const ProjectsPage: React.FC = () => {
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* 75% Main Column aligned to left */}
-      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-8">
-        {/* Header Banner */}
-        <div className="p-6 sm:p-8 rounded-sm bg-[#0e0e11] border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs text-zinc-400 font-mono uppercase tracking-wider font-bold">
-                <Rocket className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Стена проектов выпускников</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                Работающие веб-сервисы студентов
-              </h1>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
-                Каждый проект в этой галерее написан с нуля и задеплоен онлайн студентами MrDevCourses за 5 дней обучения вайбкодингу.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsAddModalOpen(true)}
-              className="px-5 py-2.5 rounded-sm bg-white hover:bg-zinc-200 text-black text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer self-start md:self-auto shrink-0 shadow-lg shadow-black/40"
-            >
-              <Plus className="w-4 h-4 text-black" />
-              <span>Добавить свой проект</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Projects Count Subheader */}
-        <div className="flex items-center justify-between gap-4 pb-2 border-b border-white/5">
-          <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">
-            Все проекты ({projects.length})
-          </span>
-        </div>
-
+      <div className="w-full lg:w-[75%] max-w-[1080px] space-y-6">
         {/* Projects Grid */}
         {isLoading ? (
           <div className="text-center py-24 text-zinc-500 text-xs font-mono">Загрузка проектов...</div>
@@ -181,12 +142,6 @@ export const ProjectsPage: React.FC = () => {
             ))}
           </div>
         )}
-
-        {/* Add Project Modal */}
-        <AddProjectModal
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-        />
       </div>
     </div>
   );
